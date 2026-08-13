@@ -1,6 +1,6 @@
-# Linux Gaming Hub
+# Stray Linux
 
-O **Linux Gaming Hub** é uma plataforma técnica para descoberta de jogos, compatibilidade Linux, benchmarks rastreáveis, wiki de distribuições, Linux Setup, LinuxFix, perfis de hardware e moderação comunitária. A interface web é React/TypeScript, o backend é Express/tRPC e a persistência usa Drizzle com MySQL/TiDB. O projeto também inclui um wrapper Electron para Windows.
+O **Stray Linux**, criado por **Pedro Henrique Gouveia Araújo de Souza** no Brasil, é uma plataforma técnica para descoberta de jogos, compatibilidade Linux, benchmarks rastreáveis, Atlas de distribuições, Linux Setup, LinuxFix, perfis de hardware e moderação comunitária. A interface web é React/TypeScript, o backend é Express/tRPC e a persistência usa Drizzle com MySQL/TiDB. O projeto também inclui um wrapper Electron com SQLite local.
 
 > A plataforma não apresenta FPS como medição se não houver proveniência. Benchmarks são classificados como **Verified**, **Community**, **Estimated** ou **Unknown**; a ausência de evidência é exibida como indisponibilidade, e não substituída por dados fictícios.
 
@@ -11,11 +11,12 @@ O **Linux Gaming Hub** é uma plataforma técnica para descoberta de jogos, comp
 | GameHub | Catálogo pesquisável com 1.500 jogos importados de snapshot licenciado, filtros server-side e páginas de detalhe. |
 | Compatibilidade | Modelo por jogo, distro, versão, kernel, CPU/GPU, drivers e Proton/Wine, com níveis de compatibilidade e proveniência. |
 | Benchmarks | Workflow de submissão, evidência obrigatória, revisão por MODERATOR/ADMIN e estimativa apenas a partir de benchmarks verificados com ambiente exato. |
-| Wiki e Setup | Wiki para 14 distribuições, guias versionados e comandos copiáveis com avisos e fonte registrada. |
+| Wiki e Setup | Wiki para 17 distribuições, 36 guias versionados e comandos copiáveis com avisos e fonte registrada. |
+| Atlas de Distribuições | Registro pesquisável de 753 entradas únicas da lista editorial, separado entre família de pacote, variante histórica, referência não Linux e avaliação necessária. |
 | LinuxFix | Soluções categorizadas com sintomas, causas, confiança, origem, comandos e alertas. |
 | Conta e moderação | Roles USER/MODERATOR/ADMIN, perfil de hardware, favoritos, guias salvos, reports, fila de benchmark e audit log. |
 | Assistente | Chat contextual com recuperação de conteúdo interno; opção de modelo local via Ollama. |
-| Desktop | Electron inicia o servidor Node local e oferece script para criar Setup Windows. |
+| Desktop | Electron inicia o servidor Node local com SQLite, sem `DATABASE_URL`, e oferece pacotes Windows e Linux por formato compatível. |
 
 ## Dados e proveniência
 
@@ -48,7 +49,7 @@ O modo **Plataforma** chama o modelo apenas no servidor e entrega ao modelo trec
 
 O modo **Ollama local** consulta `http://127.0.0.1:11434` por padrão e não usa token remoto. Instale e execute um modelo local antes de selecioná-lo. No navegador, a máquina deve permitir que a página alcance o endpoint local; no Electron, esse é o fluxo recomendado.
 
-## Windows / Electron
+## Desktop, Windows e Linux
 
 O comando abaixo cria um instalador Windows com NSIS:
 
@@ -56,11 +57,13 @@ O comando abaixo cria um instalador Windows com NSIS:
 pnpm desktop:build
 ```
 
-O instalador gerado é `dist/Linux-Gaming-Hub-<versão>-Setup.exe`. A configuração desktop é criada em `linux-gaming-hub.config.json` na pasta de dados do aplicativo. Consulte [`docs/ELECTRON.md`](docs/ELECTRON.md) para as limitações atuais de banco local: a camada atual usa MySQL/TiDB, portanto um banco realmente embarcado exige uma migração para SQLite ou a inclusão explícita de um serviço MySQL/MariaDB.
+O instalador gerado é `dist/Stray-Linux-<versão>-Setup.exe`. A configuração desktop é criada em `stray-linux.config.json` na pasta de dados do aplicativo; uma configuração antiga é migrada na abertura. O modo desktop usa SQLite local e não exige `DATABASE_URL`.
+
+Os alvos Linux são escolhidos por família: `.deb` para Debian/Ubuntu e derivadas, `.rpm` para Fedora/RHEL/openSUSE, `.pacman` para Arch e derivadas e `.AppImage` como rota portátil. O comando e o artefato devem corresponder à release e à arquitetura detectadas; variantes imutáveis são orientadas ao fluxo portátil. Consulte [`docs/sources-installers.md`](docs/sources-installers.md) e o Atlas no aplicativo.
 
 ## Limitações deliberadas
 
-O repositório não finge que possui dados que ainda não foram pesquisados. Na primeira versão, há um único guia Steam via Flatpak e uma correção LinuxFix, ambos com fonte. O schema, a administração e os fluxos de publicação permitem expansão por moderadores sem remover a exigência de origem. Não há benchmark verificado de exemplo nem avaliação de usuário simulada.
+O repositório não finge que possui dados que ainda não foram pesquisados. Não há benchmark verificado de exemplo nem avaliação de usuário simulada. O Atlas não fornece comandos nativos para projetos descontinuados, sistemas não Linux ou formatos sem artefato publicado e validado; nesses casos, o produto apresenta o limite explicitamente.
 
 Os workflows de revisão estão em [`docs/MODERATION.md`](docs/MODERATION.md) e as regras para contribuir no repositório estão em [`CONTRIBUTING.md`](CONTRIBUTING.md).
 

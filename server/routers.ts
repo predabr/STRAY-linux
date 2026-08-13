@@ -3,6 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { benchmarksRouter } from "./routers/benchmarks";
+import { brandRouter } from "./routers/brand";
 import { adminRouter } from "./routers/admin";
 import { chatRouter } from "./routers/chat";
 import { compatibilityRouter } from "./routers/compatibility";
@@ -12,6 +13,7 @@ import { userRouter } from "./routers/user";
 
 export const appRouter = router({
   system: systemRouter,
+  brand: brandRouter,
   admin: adminRouter,
   auth: router({
     me: publicProcedure.query(({ ctx }) => ctx.user),

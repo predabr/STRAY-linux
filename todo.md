@@ -54,3 +54,12 @@
 - [x] Criar perfis wiki específicos por distribuição com referências de release, driver e otimização verificáveis.
 - [x] Cobrir procedimentos tRPC de moderação e administração com testes de integração de router/contexto.
 - [x] Exercitar e registrar as ações pessoais e de moderação com uma validação funcional isolada antes da entrega.
+- [x] Auditar a lista fornecida de distribuições, classificando versões, variantes, projetos descontinuados e famílias de empacotamento.
+- [x] Ampliar o catálogo editorial do Stray Linux com páginas wiki e comandos explicitamente separados por distribuição ou família tecnicamente compatível.
+- [x] Rebatizar o produto para Stray Linux e aplicar o crédito público de criação informado pelo usuário.
+- [x] Incorporar a imagem enviada como marca do aplicativo, ícone e identidade dos instaladores.
+- [x] Substituir o painel inicial atual por uma apresentação cinematográfica acessível, fluida e ignorável.
+- [x] Criar uma porta de entrada autenticada baseada no fluxo OAuth seguro já disponível, sem alegar suporte a provedor Google sem configuração verificável.
+- [x] Melhorar hierarquia, botões, animações, gráficos e organização das principais telas do Stray Linux.
+- [x] Configurar e validar pacotes Linux por família de distribuição (Debian/Ubuntu, Arch, Fedora/RHEL, openSUSE e AppImage), documentando escopo e comandos corretos.
+- [x] Atualizar o pacote Windows, validar os builds e entregar os artefatos rebatizados.

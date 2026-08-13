@@ -8,10 +8,13 @@ let mainWindow;
 const preferredPort = Number(process.env.LGH_PORT || 43819);
 
 function loadDesktopConfig() {
-  const configPath = path.join(app.getPath("userData"), "linux-gaming-hub.config.json");
+  const configPath = path.join(app.getPath("userData"), "stray-linux.config.json");
   const defaults = { port: preferredPort, ollamaEndpoint: "http://127.0.0.1:11434" };
   try {
-    const stored = JSON.parse(fs.readFileSync(configPath, "utf8"));
+    const legacyPath = path.join(app.getPath("userData"), "linux-gaming-hub.config.json");
+    const sourcePath = fs.existsSync(configPath) ? configPath : legacyPath;
+    const stored = JSON.parse(fs.readFileSync(sourcePath, "utf8"));
+    if (sourcePath !== configPath) fs.writeFileSync(configPath, JSON.stringify({ ...defaults, ...stored }, null, 2));
     return { ...defaults, ...stored };
   } catch {
     fs.writeFileSync(configPath, JSON.stringify(defaults, null, 2));
@@ -61,7 +64,7 @@ function createWindow(port) {
     minWidth: 1024,
     minHeight: 720,
     backgroundColor: "#09090b",
-    title: "Linux Gaming Hub",
+    title: "Stray Linux",
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true },
   });
   mainWindow.loadURL(`http://127.0.0.1:${port}`);
@@ -74,7 +77,7 @@ app.whenReady().then(async () => {
     await waitForServer(config.port);
     createWindow(config.port);
   } catch (error) {
-    dialog.showErrorBox("Linux Gaming Hub", `${error.message}\n\nO aplicativo não exige DATABASE_URL. Verifique se o diretório local possui permissão de escrita e tente abrir novamente.`);
+    dialog.showErrorBox("Stray Linux", `${error.message}\n\nO aplicativo não exige DATABASE_URL. Verifique se o diretório local possui permissão de escrita e tente abrir novamente.`);
     app.quit();
   }
 });

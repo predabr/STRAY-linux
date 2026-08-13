@@ -1,8 +1,10 @@
 {
-  "name": "linux-gaming-hub",
+  "name": "stray-linux",
   "version": "1.0.0",
-  "description": "Linux gaming knowledge platform with provenance-aware compatibility and benchmarks.",
-  "author": "Linux Gaming Hub contributors",
+  "description": "Stray Linux: central de gaming, compatibilidade, guias e configuração Linux com proveniência.",
+  "author": "Pedro Henrique Gouveia Araújo de Souza (Brasil)",
+  "homepage": "https://straylinux.local",
+  "desktopName": "br.straylinux.desktop",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -113,24 +115,77 @@
   },
   "main": "desktop/main.cjs",
   "build": {
-    "appId": "im.linuxgaminghub.desktop",
-    "productName": "Linux Gaming Hub",
+    "appId": "br.straylinux.desktop",
+    "productName": "Stray Linux",
+    "directories": {
+      "buildResources": "../webdev-static-assets/stray-linux/build-assets"
+    },
     "asar": true,
     "files": [
-      "dist/**/*",
-      "!dist/win-unpacked{,/**}",
-      "!dist/*.exe",
-      "!dist/*.blockmap",
-      "!dist/builder-effective-config.yaml",
+      "dist/index.js",
+      "dist/public/**/*",
       "desktop/**/*",
       "package.json"
     ],
     "win": {
+      "icon": "icon.ico",
       "target": [
         "nsis"
       ],
-      "artifactName": "Linux-Gaming-Hub-${version}-Setup.${ext}",
+      "artifactName": "Stray-Linux-${version}-Setup.${ext}",
       "signAndEditExecutable": false
+    },
+    "linux": {
+      "icon": "icons",
+      "category": "Game",
+      "syncDesktopName": true,
+      "executableName": "stray-linux",
+      "maintainer": "Pedro Henrique Gouveia Araújo de Souza <creator@straylinux.local>",
+      "synopsis": "Central de gaming, compatibilidade e configuração Linux.",
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm",
+        "pacman"
+      ],
+      "artifactName": "Stray-Linux-${version}-${arch}.${ext}"
+    },
+    "deb": {
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils",
+        "libatspi2.0-0",
+        "libuuid1"
+      ]
+    },
+    "rpm": {
+      "depends": [
+        "gtk3",
+        "libnotify",
+        "libXScrnSaver",
+        "nss"
+      ]
+    },
+    "pacman": {
+      "compression": "gz",
+      "depends": [
+        "gtk3",
+        "libnotify",
+        "nss",
+        "libxss",
+        "libxtst",
+        "xdg-utils",
+        "at-spi2-core",
+        "libsecret"
+      ]
+    },
+    "appImage": {
+      "artifactName": "Stray-Linux-${version}-${arch}.AppImage",
+      "compression": "zstd"
     }
   },
   "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
