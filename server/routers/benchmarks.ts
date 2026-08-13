@@ -76,6 +76,14 @@ export const benchmarksRouter = router({
     return { id: benchmarkId, status: "submitted" as const };
   }),
 
+  mine: activeUserProcedure.query(async ({ ctx }) => {
+    const db = await requireDatabase();
+    const rows = await db.select({ benchmark: benchmarks, gameTitle: games.title, gameSlug: games.slug }).from(benchmarks).innerJoin(games, eq(benchmarks.gameId, games.id)).where(eq(benchmarks.userId, ctx.user.id)).orderBy(desc(benchmarks.createdAt)).limit(100);
+    const ids = rows.map((row) => row.benchmark.id);
+    const resultRows = ids.length ? await db.select().from(benchmarkResults).where(sql`${benchmarkResults.benchmarkId} in (${sql.join(ids.map((id) => sql`${id}`), sql`, `)})`) : [];
+    return rows.map((row) => ({ ...row, results: resultRows.filter((result) => result.benchmarkId === row.benchmark.id) }));
+  }),
+
   review: moderatorProcedure.input(z.object({ id: z.number().int().positive(), decision: z.enum(["verified", "rejected"]), reviewNote: z.string().trim().min(4).max(4000) })).mutation(async ({ ctx, input }) => {
     const db = await requireDatabase();
     const isVerified = input.decision === "verified";

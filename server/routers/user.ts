@@ -2,8 +2,12 @@ import { and, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import {
   favorites,
+  compatibilityRecords,
   games,
   hardwareItems,
+  linuxFixes,
+  linuxFixHistory,
+  reports,
   savedGuides,
   setupGuides,
   userHardwareProfiles,
@@ -77,6 +81,56 @@ export const userRouter = router({
       await db.insert(favorites).values({ userId: ctx.user.id, gameId: input.gameId });
       return { favorited: true };
     }),
+  }),
+
+  savedGuides: router({
+    list: activeUserProcedure.query(async ({ ctx }) => {
+      const db = await requireDatabase();
+      return db.select({ guide: setupGuides }).from(savedGuides).innerJoin(setupGuides, eq(savedGuides.guideId, setupGuides.id)).where(eq(savedGuides.userId, ctx.user.id)).orderBy(desc(savedGuides.createdAt));
+    }),
+    toggle: activeUserProcedure.input(z.object({ guideId: z.number().int().positive() })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      const existing = (await db.select({ id: savedGuides.id }).from(savedGuides).where(and(eq(savedGuides.userId, ctx.user.id), eq(savedGuides.guideId, input.guideId))).limit(1))[0];
+      if (existing) { await db.delete(savedGuides).where(eq(savedGuides.id, existing.id)); return { saved: false }; }
+      await db.insert(savedGuides).values({ userId: ctx.user.id, guideId: input.guideId });
+      return { saved: true };
+    }),
+  }),
+
+  linuxFixHistory: router({
+    list: activeUserProcedure.query(async ({ ctx }) => {
+      const db = await requireDatabase();
+      return db.select({ fix: linuxFixes, viewedAt: linuxFixHistory.viewedAt }).from(linuxFixHistory).innerJoin(linuxFixes, eq(linuxFixHistory.fixId, linuxFixes.id)).where(eq(linuxFixHistory.userId, ctx.user.id)).orderBy(desc(linuxFixHistory.viewedAt)).limit(100);
+    }),
+    record: activeUserProcedure.input(z.object({ fixId: z.number().int().positive() })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      await db.insert(linuxFixHistory).values({ userId: ctx.user.id, fixId: input.fixId });
+      return { success: true };
+    }),
+  }),
+
+  reports: router({
+    list: activeUserProcedure.query(async ({ ctx }) => {
+      const db = await requireDatabase();
+      return db.select().from(reports).where(eq(reports.reporterId, ctx.user.id)).orderBy(desc(reports.updatedAt));
+    }),
+    create: activeUserProcedure.input(z.object({ subjectType: z.string().trim().min(2).max(80), subjectId: z.number().int().positive(), type: z.enum(["incorrect_information", "invalid_benchmark", "duplicate", "broken_link", "inappropriate_content", "spam", "other"]), description: z.string().trim().min(8).max(6000) })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      const result = await db.insert(reports).values({ ...input, reporterId: ctx.user.id });
+      return { id: Number(result[0].insertId), status: "open" as const };
+    }),
+  }),
+
+  compatibilityForActiveProfile: activeUserProcedure.input(z.object({ gameId: z.number().int().positive() })).query(async ({ ctx, input }) => {
+    const db = await requireDatabase();
+    const profile = (await db.select().from(userHardwareProfiles).where(and(eq(userHardwareProfiles.userId, ctx.user.id), eq(userHardwareProfiles.isActive, true))).limit(1))[0];
+    if (!profile) return { profile: null, records: [] };
+    const conditions = [eq(compatibilityRecords.gameId, input.gameId)];
+    if (profile.distributionId) conditions.push(eq(compatibilityRecords.distributionId, profile.distributionId));
+    if (profile.cpuId) conditions.push(eq(compatibilityRecords.cpuId, profile.cpuId));
+    if (profile.gpuId) conditions.push(eq(compatibilityRecords.gpuId, profile.gpuId));
+    const records = await db.select().from(compatibilityRecords).where(and(...conditions)).orderBy(desc(compatibilityRecords.reviewedAt)).limit(12);
+    return { profile, records };
   }),
 
   hardwareOptions: activeUserProcedure.query(async () => {

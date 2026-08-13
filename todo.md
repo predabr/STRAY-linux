@@ -14,8 +14,8 @@
 - [ ] Criar wiki de distribuições incluindo Arch, CachyOS, Fedora, Nobara, Ubuntu, Bazzite, Pop!_OS, Linux Mint, Debian, openSUSE e EndeavourOS, com fontes, versões, drivers e orientações de otimização.
 - [ ] Construir Linux Setup com guias versionados, passos, comandos copiáveis, avisos, nível de dificuldade e filtros por distribuição.
 - [ ] Construir LinuxFix com categorias, sintomas, causas, soluções, confiança, origem, filtros e reports comunitários.
-- [ ] Criar dashboard autenticado com My Games, My PC, My Benchmarks, Saved Guides, LinuxFix History, Favorites, Reports e Settings.
-- [ ] Implementar perfil de hardware e personalização de compatibilidade vinculada ao perfil ativo do usuário.
+- [ ] Concluir dashboard autenticado com My Games, My PC, My Benchmarks, Saved Guides, LinuxFix History, Favorites, Reports e Settings, incluindo as ações públicas que alimentam cada seção.
+- [ ] Concluir personalização de compatibilidade vinculada ao perfil ativo do usuário e exibi-la no detalhe do jogo/benchmark.
 - [x] Integrar chat com recuperação de contexto dos conteúdos internos e suporte opcional a um provedor de IA local compatível com Ollama.
 - [x] Construir navegação, tema dark/light/system, responsividade, acessibilidade, estados de carregamento/erro/vazio e SEO básico.
 - [ ] Criar testes Vitest para roles, validações, proveniência de benchmark, compatibilidade, filtros e procedimentos críticos.
