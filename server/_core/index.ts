@@ -38,6 +38,16 @@ async function startServer() {
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   app.get("/api/health", (_req, res) => res.json({ ok: true, mode: process.env.DESKTOP_MODE === "1" ? "desktop" : "web" }));
+  app.get("/robots.txt", (req, res) => {
+    const origin = `${req.protocol}://${req.get("host")}`;
+    res.type("text/plain").send(`User-agent: *\nAllow: /\nDisallow: /dashboard\nDisallow: /admin\nDisallow: /api/\nSitemap: ${origin}/sitemap.xml\n`);
+  });
+  app.get("/sitemap.xml", (req, res) => {
+    const origin = `${req.protocol}://${req.get("host")}`;
+    const paths = ["/", "/games", "/benchmark", "/distros", "/wiki", "/setup", "/linuxfix", "/assistant"];
+    const body = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((path) => `<url><loc>${origin}${path}</loc></url>`).join("")}</urlset>`;
+    res.type("application/xml").send(body);
+  });
   if (process.env.DESKTOP_MODE !== "1") {
     registerStorageProxy(app);
     registerOAuthRoutes(app);

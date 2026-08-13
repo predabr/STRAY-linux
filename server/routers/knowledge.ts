@@ -2,6 +2,7 @@ import { and, asc, desc, eq, isNull, like, or } from "drizzle-orm";
 import { z } from "zod";
 import {
   distributions,
+  games,
   linuxFixes,
   linuxFixSolutions,
   setupGuideSteps,
@@ -42,8 +43,12 @@ export const knowledgeRouter = router({
       const db = await requireDatabase();
       const guide = (await db.select().from(setupGuides).where(and(eq(setupGuides.slug, input.slug), eq(setupGuides.status, "published"), isNull(setupGuides.deletedAt))).limit(1))[0];
       if (!guide) return null;
-      const steps = await db.select().from(setupGuideSteps).where(eq(setupGuideSteps.guideId, guide.id)).orderBy(asc(setupGuideSteps.stepOrder));
-      return { ...guide, steps };
+      const [steps, relatedGame, relatedDistribution] = await Promise.all([
+        db.select().from(setupGuideSteps).where(eq(setupGuideSteps.guideId, guide.id)).orderBy(asc(setupGuideSteps.stepOrder)),
+        guide.gameId ? db.select({ slug: games.slug, title: games.title }).from(games).where(eq(games.id, guide.gameId)).limit(1) : [],
+        guide.distributionId ? db.select({ slug: distributions.slug, name: distributions.name }).from(distributions).where(eq(distributions.id, guide.distributionId)).limit(1) : [],
+      ]);
+      return { ...guide, steps, relatedGame: relatedGame[0] ?? null, relatedDistribution: relatedDistribution[0] ?? null };
     }),
   }),
 
@@ -60,8 +65,12 @@ export const knowledgeRouter = router({
       const db = await requireDatabase();
       const fix = (await db.select().from(linuxFixes).where(and(eq(linuxFixes.slug, input.slug), eq(linuxFixes.status, "published"), isNull(linuxFixes.deletedAt))).limit(1))[0];
       if (!fix) return null;
-      const solutions = await db.select().from(linuxFixSolutions).where(eq(linuxFixSolutions.fixId, fix.id)).orderBy(asc(linuxFixSolutions.stepOrder));
-      return { ...fix, solutions };
+      const [solutions, relatedGame, relatedDistribution] = await Promise.all([
+        db.select().from(linuxFixSolutions).where(eq(linuxFixSolutions.fixId, fix.id)).orderBy(asc(linuxFixSolutions.stepOrder)),
+        fix.gameId ? db.select({ slug: games.slug, title: games.title }).from(games).where(eq(games.id, fix.gameId)).limit(1) : [],
+        fix.distributionId ? db.select({ slug: distributions.slug, name: distributions.name }).from(distributions).where(eq(distributions.id, fix.distributionId)).limit(1) : [],
+      ]);
+      return { ...fix, solutions, relatedGame: relatedGame[0] ?? null, relatedDistribution: relatedDistribution[0] ?? null };
     }),
   }),
 });

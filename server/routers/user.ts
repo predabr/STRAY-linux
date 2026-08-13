@@ -27,6 +27,8 @@ const profileInput = z.object({
   protonVersion: z.string().trim().max(160).nullable().optional(),
   wineVersion: z.string().trim().max(160).nullable().optional(),
   runtimeVersion: z.string().trim().max(160).nullable().optional(),
+  storageDescription: z.string().trim().max(255).nullable().optional(),
+  monitorDescription: z.string().trim().max(255).nullable().optional(),
   isActive: z.boolean().default(false),
 });
 
@@ -39,6 +41,19 @@ export const userRouter = router({
       db.select({ guide: setupGuides }).from(savedGuides).innerJoin(setupGuides, eq(savedGuides.guideId, setupGuides.id)).where(eq(savedGuides.userId, ctx.user.id)).orderBy(desc(savedGuides.createdAt)).limit(12),
     ]);
     return { user: ctx.user, profiles, favorites: favoriteRows.map((row) => row.game), savedGuides: savedGuideRows.map((row) => row.guide) };
+  }),
+
+  recommendations: activeUserProcedure.query(async ({ ctx }) => {
+    const db = await requireDatabase();
+    const profile = (await db.select().from(userHardwareProfiles).where(and(eq(userHardwareProfiles.userId, ctx.user.id), eq(userHardwareProfiles.isActive, true))).limit(1))[0];
+    if (!profile) return { profile: null, items: [] };
+    const conditions = [eq(compatibilityRecords.provenance, "verified")];
+    if (profile.distributionId) conditions.push(eq(compatibilityRecords.distributionId, profile.distributionId));
+    if (profile.cpuId) conditions.push(eq(compatibilityRecords.cpuId, profile.cpuId));
+    if (profile.gpuId) conditions.push(eq(compatibilityRecords.gpuId, profile.gpuId));
+    if (profile.protonVersion) conditions.push(eq(compatibilityRecords.protonVersion, profile.protonVersion));
+    const items = await db.select({ game: games, record: compatibilityRecords }).from(compatibilityRecords).innerJoin(games, eq(compatibilityRecords.gameId, games.id)).where(and(...conditions)).orderBy(desc(compatibilityRecords.reviewedAt)).limit(8);
+    return { profile, items };
   }),
 
   profiles: router({

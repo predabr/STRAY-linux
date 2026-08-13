@@ -8,6 +8,7 @@ import {
   gameTags,
   games,
   hardwareItems,
+  linuxFixes,
   setupGuides,
   tags,
 } from "../../drizzle/schema";
@@ -90,14 +91,36 @@ export const gamesRouter = router({
     const game = (await db.select().from(games).where(and(eq(games.slug, input.slug), eq(games.status, "published"), isNull(games.deletedAt))).limit(1))[0];
     if (!game) return null;
 
-    const [platforms, tagRows, compatibility, guides] = await Promise.all([
+    const [platforms, tagRows, compatibility, guides, fixes] = await Promise.all([
       db.select().from(gamePlatforms).where(eq(gamePlatforms.gameId, game.id)),
       db.select({ slug: tags.slug, name: tags.name, kind: tags.kind }).from(gameTags).innerJoin(tags, eq(gameTags.tagId, tags.id)).where(eq(gameTags.gameId, game.id)),
       db.select().from(compatibilityRecords).where(eq(compatibilityRecords.gameId, game.id)).orderBy(desc(compatibilityRecords.reviewedAt)).limit(24),
       db.select().from(setupGuides).where(and(eq(setupGuides.gameId, game.id), eq(setupGuides.status, "published"))).limit(12),
+      db.select().from(linuxFixes).where(and(eq(linuxFixes.gameId, game.id), eq(linuxFixes.status, "published"), isNull(linuxFixes.deletedAt))).orderBy(desc(linuxFixes.updatedAt)).limit(12),
     ]);
 
-    return { ...game, platforms, tags: tagRows, compatibility, guides };
+    const distributionIds = compatibility.flatMap((record) => record.distributionId ? [record.distributionId] : []);
+    const hardwareIds = compatibility.flatMap((record) => [record.cpuId, record.gpuId].filter((id): id is number => Boolean(id)));
+    const [compatibilityDistributions, compatibilityHardware] = await Promise.all([
+      distributionIds.length ? db.select({ id: distributions.id, name: distributions.name }).from(distributions).where(inArray(distributions.id, distributionIds)) : [],
+      hardwareIds.length ? db.select({ id: hardwareItems.id, manufacturer: hardwareItems.manufacturer, model: hardwareItems.model }).from(hardwareItems).where(inArray(hardwareItems.id, hardwareIds)) : [],
+    ]);
+    const distributionNames = new Map(compatibilityDistributions.map((item) => [item.id, item.name]));
+    const hardwareNames = new Map(compatibilityHardware.map((item) => [item.id, `${item.manufacturer} ${item.model}`]));
+
+    return {
+      ...game,
+      platforms,
+      tags: tagRows,
+      compatibility: compatibility.map((record) => ({
+        ...record,
+        distributionName: record.distributionId ? distributionNames.get(record.distributionId) ?? "Distribuição não publicada" : "Sem distribuição declarada",
+        cpuName: record.cpuId ? hardwareNames.get(record.cpuId) ?? "CPU não publicada" : "Sem CPU declarada",
+        gpuName: record.gpuId ? hardwareNames.get(record.gpuId) ?? "GPU não publicada" : "Sem GPU declarada",
+      })),
+      guides,
+      fixes,
+    };
   }),
 
   filterOptions: publicProcedure.query(async () => {

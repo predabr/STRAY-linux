@@ -7,6 +7,7 @@ import { brandRouter } from "./routers/brand";
 import { adminRouter } from "./routers/admin";
 import { chatRouter } from "./routers/chat";
 import { compatibilityRouter } from "./routers/compatibility";
+import { engagementRouter } from "./routers/engagement";
 import { distributionsRouter, gamesRouter, hardwareRouter, searchRouter } from "./routers/games";
 import { knowledgeRouter } from "./routers/knowledge";
 import { userRouter } from "./routers/user";
@@ -29,6 +30,7 @@ export const appRouter = router({
   search: searchRouter,
   benchmarks: benchmarksRouter,
   compatibility: compatibilityRouter,
+  engagement: engagementRouter,
   chat: chatRouter,
   knowledge: knowledgeRouter,
   user: userRouter,

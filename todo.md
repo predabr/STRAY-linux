@@ -63,3 +63,18 @@
 - [x] Melhorar hierarquia, botões, animações, gráficos e organização das principais telas do Stray Linux.
 - [x] Configurar e validar pacotes Linux por família de distribuição (Debian/Ubuntu, Arch, Fedora/RHEL, openSUSE e AppImage), documentando escopo e comandos corretos.
 - [x] Atualizar o pacote Windows, validar os builds e entregar os artefatos rebatizados.
+- [x] Auditar componentes, rotas, routers e schema para mapear as capacidades já existentes contra o escopo do upgrade avançado.
+- [x] Criar uma paleta de comandos global com atalho de teclado, pesquisa instantânea agrupada e rotas de acesso rápido.
+- [x] Padronizar skeletons, estados vazios, falhas recuperáveis, breadcrumbs, atalhos e feedback de ação nas telas principais.
+- [x] Elevar a página de detalhe de jogo com hero, cobertura disponível, compatibilidade por ambiente, matriz filtrável, benchmarks rastreáveis, questões conhecidas e setup recomendado sem inventar conteúdo comunitário.
+- [x] Expandir filtros e visualizações comparativas de benchmark por GPU, CPU, distribuição e versão Proton, preservando a taxonomia de proveniência.
+- [x] Completar o perfil de hardware autenticado com CPU, GPU, RAM, armazenamento, distribuição, kernel, driver e monitor, vinculando-o às recomendações.
+- [x] Renovar dashboard e administração com painéis de estatística, histórico, recomendações fundamentadas, auditoria e fila de moderação.
+- [x] Evoluir LinuxFix e Linux Setup com progresso local, passos colapsáveis, comandos copiáveis, relações editoriais e mecanismos reais de confirmação, sem semear votos ou comentários simulados.
+- [x] Implementar metadados por rota, robots, sitemap, OpenGraph, Twitter Cards e dados estruturados compatíveis com o conteúdo publicado.
+- [x] Revisar consultas, paginação, divisão de código e renderização para reduzir carregamento desnecessário sem alterar a arquitetura.
+- [x] Atualizar documentação de instalação, desenvolvimento, build, banco, autenticação, solução de problemas e entrega.
+- [x] Validar typecheck, testes, build de produção e rotas críticas, documentando limites de dados e recursos dependentes de moderação.
+- [x] Implementar breadcrumbs consistentes nas principais rotas públicas e autenticadas e validar sua presença visualmente.
+- [x] Adicionar no detalhe do jogo questões conhecidas baseadas em LinuxFix relacionado e um bloco de setup recomendado derivado de guias relacionados.
+- [x] Criar e exibir relações editoriais explícitas entre LinuxFix, Linux Setup, jogos e distribuições relacionadas.

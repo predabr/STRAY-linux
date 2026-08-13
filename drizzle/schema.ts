@@ -231,6 +231,8 @@ export const userHardwareProfiles = mysqlTable(
     protonVersion: varchar("protonVersion", { length: 160 }),
     wineVersion: varchar("wineVersion", { length: 160 }),
     runtimeVersion: varchar("runtimeVersion", { length: 160 }),
+    storageDescription: varchar("storageDescription", { length: 255 }),
+    monitorDescription: varchar("monitorDescription", { length: 255 }),
     isActive: boolean("isActive").default(false).notNull(),
     createdAt,
     updatedAt,
@@ -449,6 +451,57 @@ export const linuxFixSolutions = mysqlTable(
     updatedAt,
   },
   (table) => [uniqueIndex("linux_fix_solutions_order_unique").on(table.fixId, table.stepOrder)],
+);
+
+export const linuxFixVotes = mysqlTable(
+  "linux_fix_votes",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    fixId: int("fixId").notNull().references(() => linuxFixes.id, { onDelete: "cascade" }),
+    userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+    value: int("value").notNull(),
+    createdAt,
+    updatedAt,
+  },
+  (table) => [uniqueIndex("linux_fix_votes_user_fix_unique").on(table.userId, table.fixId), index("linux_fix_votes_fix_idx").on(table.fixId, table.value)],
+);
+
+export const linuxFixComments = mysqlTable(
+  "linux_fix_comments",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    fixId: int("fixId").notNull().references(() => linuxFixes.id, { onDelete: "cascade" }),
+    userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+    body: text("body").notNull(),
+    isSolution: boolean("isSolution").default(false).notNull(),
+    deletedAt: timestamp("deletedAt"),
+    createdAt,
+    updatedAt,
+  },
+  (table) => [index("linux_fix_comments_fix_created_idx").on(table.fixId, table.createdAt), index("linux_fix_comments_user_idx").on(table.userId, table.createdAt)],
+);
+
+export const linuxFixConfirmations = mysqlTable(
+  "linux_fix_confirmations",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    fixId: int("fixId").notNull().references(() => linuxFixes.id, { onDelete: "cascade" }),
+    solutionId: int("solutionId").references(() => linuxFixSolutions.id, { onDelete: "set null" }),
+    userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+    createdAt,
+  },
+  (table) => [uniqueIndex("linux_fix_confirmations_user_fix_unique").on(table.userId, table.fixId), index("linux_fix_confirmations_fix_idx").on(table.fixId, table.createdAt)],
+);
+
+export const setupGuideStepProgress = mysqlTable(
+  "setup_guide_step_progress",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+    guideStepId: int("guideStepId").notNull().references(() => setupGuideSteps.id, { onDelete: "cascade" }),
+    completedAt: timestamp("completedAt").defaultNow().notNull(),
+  },
+  (table) => [uniqueIndex("setup_guide_step_progress_user_step_unique").on(table.userId, table.guideStepId), index("setup_guide_step_progress_user_idx").on(table.userId, table.completedAt)],
 );
 
 export const favorites = mysqlTable(

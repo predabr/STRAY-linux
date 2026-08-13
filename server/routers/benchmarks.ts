@@ -1,6 +1,6 @@
 import { and, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
-import { auditActions, benchmarkResults, benchmarks, games } from "../../drizzle/schema";
+import { auditActions, benchmarkResults, benchmarks, distributions, games, hardwareItems } from "../../drizzle/schema";
 import { publicProcedure, router } from "../_core/trpc";
 import { activeUserProcedure, moderatorProcedure, requireDatabase } from "./_guards";
 import { hasBenchmarkEvidence, reviewedBenchmarkProvenance } from "./policies";
@@ -54,6 +54,42 @@ export const benchmarksRouter = router({
     const rows = await db.select().from(benchmarks).where(and(...conditions)).orderBy(desc(benchmarks.measuredAt), desc(benchmarks.createdAt)).limit(input.pageSize).offset((input.page - 1) * input.pageSize);
     const resultRows = rows.length ? await db.select().from(benchmarkResults).where(sql`${benchmarkResults.benchmarkId} in (${sql.join(rows.map((row) => sql`${row.id}`), sql`, `)})`) : [];
     return rows.map((row) => ({ ...row, results: resultRows.filter((result) => result.benchmarkId === row.id) }));
+  }),
+
+  compare: publicProcedure.input(z.object({ gameId: z.number().int().positive(), resolutionWidth: z.number().int().positive().optional(), resolutionHeight: z.number().int().positive().optional(), preset: z.string().trim().max(160).optional(), limit: z.number().int().min(1).max(240).default(120) })).query(async ({ input }) => {
+    const db = await requireDatabase();
+    const conditions = [eq(benchmarks.gameId, input.gameId), eq(benchmarks.verificationStatus, "verified")];
+    if (input.resolutionWidth) conditions.push(eq(benchmarkResults.resolutionWidth, input.resolutionWidth));
+    if (input.resolutionHeight) conditions.push(eq(benchmarkResults.resolutionHeight, input.resolutionHeight));
+    if (input.preset) conditions.push(eq(benchmarkResults.preset, input.preset));
+    const rows = await db.select({ benchmark: benchmarks, result: benchmarkResults }).from(benchmarks).innerJoin(benchmarkResults, eq(benchmarkResults.benchmarkId, benchmarks.id)).where(and(...conditions)).orderBy(desc(benchmarks.measuredAt), desc(benchmarks.createdAt)).limit(input.limit);
+    const gpuIds = rows.flatMap((row) => row.benchmark.gpuId ? [row.benchmark.gpuId] : []);
+    const cpuIds = rows.flatMap((row) => row.benchmark.cpuId ? [row.benchmark.cpuId] : []);
+    const distributionIds = rows.flatMap((row) => row.benchmark.distributionId ? [row.benchmark.distributionId] : []);
+    const [hardware, distroRows] = await Promise.all([
+      [...gpuIds, ...cpuIds].length ? db.select({ id: hardwareItems.id, manufacturer: hardwareItems.manufacturer, model: hardwareItems.model }).from(hardwareItems).where(sql`${hardwareItems.id} in (${sql.join(Array.from(new Set([...gpuIds, ...cpuIds])).map((id) => sql`${id}`), sql`, `)})`) : [],
+      distributionIds.length ? db.select({ id: distributions.id, name: distributions.name }).from(distributions).where(sql`${distributions.id} in (${sql.join(Array.from(new Set(distributionIds)).map((id) => sql`${id}`), sql`, `)})`) : [],
+    ]);
+    const hardwareNames = new Map(hardware.map((item) => [item.id, `${item.manufacturer} ${item.model}`]));
+    const distributionNames = new Map(distroRows.map((item) => [item.id, item.name]));
+    return rows.map(({ benchmark, result }) => ({
+      id: `${benchmark.id}-${result.id}`,
+      benchmarkId: benchmark.id,
+      measuredAt: benchmark.measuredAt,
+      provenance: benchmark.provenance,
+      sourceLabel: benchmark.sourceLabel,
+      sourceUrl: benchmark.sourceUrl,
+      averageFps: result.averageFps ? Number(result.averageFps) : null,
+      onePercentLowFps: result.onePercentLowFps ? Number(result.onePercentLowFps) : null,
+      resolutionWidth: result.resolutionWidth,
+      resolutionHeight: result.resolutionHeight,
+      preset: result.preset,
+      gpu: benchmark.gpuId ? hardwareNames.get(benchmark.gpuId) ?? "GPU não publicada" : "GPU não declarada",
+      cpu: benchmark.cpuId ? hardwareNames.get(benchmark.cpuId) ?? "CPU não publicada" : "CPU não declarada",
+      distribution: benchmark.distributionId ? distributionNames.get(benchmark.distributionId) ?? "Distribuição não publicada" : "Distribuição não declarada",
+      protonVersion: benchmark.protonVersion ?? "Proton não declarado",
+      driverVersion: benchmark.driverVersion ?? benchmark.mesaVersion ?? benchmark.nvidiaVersion ?? "Driver não declarado",
+    }));
   }),
 
   submit: activeUserProcedure.input(submissionInput).mutation(async ({ ctx, input }) => {

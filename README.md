@@ -10,11 +10,12 @@ O **Stray Linux**, criado por **Pedro Henrique Gouveia Araújo de Souza** no Bra
 |---|---|
 | GameHub | Catálogo pesquisável com 1.500 jogos importados de snapshot licenciado, filtros server-side e páginas de detalhe. |
 | Compatibilidade | Modelo por jogo, distro, versão, kernel, CPU/GPU, drivers e Proton/Wine, com níveis de compatibilidade e proveniência. |
-| Benchmarks | Workflow de submissão, evidência obrigatória, revisão por MODERATOR/ADMIN e estimativa apenas a partir de benchmarks verificados com ambiente exato. |
-| Wiki e Setup | Wiki para 17 distribuições, 36 guias versionados e comandos copiáveis com avisos e fonte registrada. |
+| Benchmarks | Workflow de submissão, evidência obrigatória, revisão por MODERATOR/ADMIN, comparação V2 por GPU/CPU/distro/Proton e estimativa apenas a partir de benchmarks verificados com ambiente exato. |
+| Wiki e Setup | Wiki para 17 distribuições, 36 guias versionados, comandos copiáveis, passos recolhíveis e progresso autenticado por etapa. |
 | Atlas de Distribuições | Registro pesquisável de 753 entradas únicas da lista editorial, separado entre família de pacote, variante histórica, referência não Linux e avaliação necessária. |
-| LinuxFix | Soluções categorizadas com sintomas, causas, confiança, origem, comandos e alertas. |
-| Conta e moderação | Roles USER/MODERATOR/ADMIN, perfil de hardware, favoritos, guias salvos, reports, fila de benchmark e audit log. |
+| LinuxFix | Soluções categorizadas com sintomas, causas, confiança, origem, comandos e alertas, com votos, comentários e confirmações persistentes de usuários autenticados. |
+| Conta e moderação | Roles USER/MODERATOR/ADMIN, perfil de hardware completo, favoritos, guias salvos, reports, fila de benchmark e audit log. |
+| Navegação e indexação | Paleta global em `Ctrl/Cmd+K`, pesquisa categorizada, metadados por rota, OpenGraph, Twitter Cards, `robots.txt`, sitemap e JSON-LD. |
 | Assistente | Chat contextual com recuperação de conteúdo interno; opção de modelo local via Ollama. |
 | Desktop | Electron inicia o servidor Node local com SQLite, sem `DATABASE_URL`, e oferece pacotes Windows e Linux por formato compatível. |
 
@@ -42,6 +43,8 @@ pnpm build
 ```
 
 O banco é modelado em `drizzle/schema.ts`. Após mudanças de esquema, gere a migration, revise o SQL e aplique-a pelo fluxo de banco do ambiente. O script `scripts/import-steam-catalog.mjs` é idempotente e pode recriar o catálogo a partir de um download local do snapshot licenciado.
+
+Para a evolução de perfil e engajamento, a migração `drizzle/0003_left_chat.sql` adiciona campos de armazenamento e monitor ao perfil, votos, comentários e confirmações de LinuxFix, além de progresso de guia por etapa. A migração é **aditiva** e não remove tabelas ou colunas existentes. O procedimento de trabalho, as rotas públicas e os limites de moderação estão descritos em [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
 
 ## IA contextual e Ollama local
 
