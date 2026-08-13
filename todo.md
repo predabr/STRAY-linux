@@ -31,4 +31,8 @@
 - [ ] Criar guias específicos por família para Proton, Vulkan e MangoHud/GameMode, com passos e comandos compatíveis com Arch, Debian/Ubuntu, Fedora/RHEL e openSUSE.
 - [ ] Adicionar guias por família para drivers AMD, NVIDIA e Intel, incluindo pré-requisitos, método de instalação/configuração e avisos por distribuição.
 - [ ] Criar guias por família para FSR e upscaling, deixando claro quando o suporte depende do jogo, launcher ou runtime e quando não existe comando universal seguro.
+- [ ] Concluir todos os fluxos públicos e autenticados restantes, com estados vazios, erro, carregamento e ações persistentes.
+- [ ] Refinar o sistema visual com animações leves, transições acessíveis, hierarquia melhorada e responsividade profissional.
+- [ ] Adicionar gráficos e visualizações de benchmark/compatibilidade com proveniência explícita e sem dados de FPS fabricados.
+- [ ] Executar validação funcional ponta a ponta das rotas, ações pessoais, moderação, modo desktop SQLite e instalador Windows final.
 - [x] Reempacotar e validar o instalador Windows com SQLite, carga inicial local e operação sem variáveis de banco remoto.

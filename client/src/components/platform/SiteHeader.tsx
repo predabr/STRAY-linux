@@ -36,7 +36,7 @@ export function SiteHeader() {
           <DropdownMenuContent align="end"><DropdownMenuRadioGroup value={theme} onValueChange={(value) => setTheme(value as "light" | "dark" | "system")}><DropdownMenuRadioItem value="dark">Escuro</DropdownMenuRadioItem><DropdownMenuRadioItem value="light">Claro</DropdownMenuRadioItem><DropdownMenuRadioItem value="system">Sistema</DropdownMenuRadioItem></DropdownMenuRadioGroup></DropdownMenuContent>
         </DropdownMenu>
         {!loading && (user ? <Button size="sm" onClick={() => setLocation("/dashboard")}><UserRound className="mr-2 h-4 w-4" />Painel</Button> : <Button size="sm" onClick={() => startLogin()}>Entrar</Button>)}
-        <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Abrir menu" onClick={() => setLocation("/games")}><Menu className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Abrir pesquisa" onClick={() => setLocation("/search")}><Menu className="h-4 w-4" /></Button>
       </div>
     </div>
   </header>;
