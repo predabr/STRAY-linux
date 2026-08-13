@@ -26,6 +26,9 @@ const gameFilterInput = paginationInput.extend({
   cpuId: z.number().int().positive().optional(),
   compatibility: z.enum(["excellent", "good", "playable", "limited", "broken", "unknown"]).optional(),
   platform: z.enum(["steam", "steam_deck", "proton", "wine", "native_linux"]).optional(),
+  genre: z.string().trim().max(100).optional(),
+  multiplayer: z.boolean().optional(),
+  antiCheat: z.enum(["has", "none"]).optional(),
   tagSlugs: z.array(z.string().trim().max(100)).max(8).optional(),
   sort: z.enum(["title", "recent", "featured"]).default("title"),
 });
@@ -36,6 +39,10 @@ function publishedGameConditions(input: z.infer<typeof gameFilterInput>) {
   if (input.platform) {
     conditions.push(sql`exists (select 1 from ${gamePlatforms} gp where gp.gameId = ${games.id} and gp.platform = ${input.platform})`);
   }
+  if (input.antiCheat === "has") conditions.push(sql`exists (select 1 from ${gamePlatforms} gp where gp.gameId = ${games.id} and gp.antiCheat is not null and gp.antiCheat <> '')`);
+  if (input.antiCheat === "none") conditions.push(sql`not exists (select 1 from ${gamePlatforms} gp where gp.gameId = ${games.id} and gp.antiCheat is not null and gp.antiCheat <> '')`);
+  if (input.genre) conditions.push(sql`exists (select 1 from ${gameTags} gt inner join ${tags} t on t.id = gt.tagId where gt.gameId = ${games.id} and t.kind = 'genre' and t.slug = ${input.genre})`);
+  if (input.multiplayer) conditions.push(sql`exists (select 1 from ${gameTags} gt inner join ${tags} t on t.id = gt.tagId where gt.gameId = ${games.id} and t.kind = 'category' and (lower(t.slug) like '%multi%' or lower(t.name) like '%multi%'))`);
   if (input.tagSlugs?.length) {
     conditions.push(sql`exists (select 1 from ${gameTags} gt inner join ${tags} t on t.id = gt.tagId where gt.gameId = ${games.id} and t.slug in (${sql.join(input.tagSlugs.map((slug) => sql`${slug}`), sql`, `)}))`);
   }
@@ -92,6 +99,12 @@ export const gamesRouter = router({
 
     return { ...game, platforms, tags: tagRows, compatibility, guides };
   }),
+
+  filterOptions: publicProcedure.query(async () => {
+    const db = await requireDatabase();
+    const genres = await db.select({ slug: tags.slug, name: tags.name }).from(tags).where(eq(tags.kind, "genre")).orderBy(asc(tags.name)).limit(100);
+    return { genres };
+  }),
 });
 
 export const distributionsRouter = router({
@@ -105,6 +118,10 @@ export const distributionsRouter = router({
     if (!distribution) return null;
     const versions = await db.select().from(distributionVersions).where(eq(distributionVersions.distributionId, distribution.id)).orderBy(desc(distributionVersions.isSupported), desc(distributionVersions.releaseDate));
     return { ...distribution, versions };
+  }),
+  versions: publicProcedure.input(z.object({ distributionId: z.number().int().positive() })).query(async ({ input }) => {
+    const db = await requireDatabase();
+    return db.select().from(distributionVersions).where(eq(distributionVersions.distributionId, input.distributionId)).orderBy(desc(distributionVersions.isSupported), desc(distributionVersions.releaseDate));
   }),
 });
 

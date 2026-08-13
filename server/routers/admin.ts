@@ -1,11 +1,14 @@
 import { and, count, desc, eq, isNull, or } from "drizzle-orm";
 import { z } from "zod";
-import { auditActions, benchmarks, distributions, games, hardwareItems, reports, users } from "../../drizzle/schema";
+import { auditActions, benchmarkResults, benchmarks, distributions, games, hardwareItems, linuxFixes, linuxFixSolutions, reports, setupGuides, setupGuideSteps, users } from "../../drizzle/schema";
 import { router } from "../_core/trpc";
 import { administratorProcedure, requireDatabase } from "./_guards";
 
 const status = z.enum(["draft", "published", "archived"]);
 const sourceUrl = z.string().trim().url().max(2048).nullable().optional();
+const guideStepsInput = z.array(z.object({ title: z.string().trim().min(2).max(400), explanation: z.string().trim().max(12000).nullable().optional(), command: z.string().trim().max(12000).nullable().optional(), warning: z.string().trim().max(12000).nullable().optional() })).min(1).max(80);
+const fixSolutionsInput = z.array(z.object({ title: z.string().trim().min(2).max(400), explanation: z.string().trim().max(12000).nullable().optional(), command: z.string().trim().max(12000).nullable().optional(), warning: z.string().trim().max(12000).nullable().optional() })).min(1).max(80);
+const benchmarkResultsInput = z.array(z.object({ resolutionWidth: z.number().int().min(320).max(16384), resolutionHeight: z.number().int().min(240).max(8640), preset: z.string().trim().min(1).max(160), averageFps: z.number().positive().max(10000), onePercentLowFps: z.number().positive().max(10000).nullable().optional(), zeroPointOnePercentLowFps: z.number().positive().max(10000).nullable().optional() })).min(1).max(12);
 
 function assertSourceWhenPublishing(nextStatus: "draft" | "published" | "archived", nextUrl: string | null | undefined, previousUrl?: string | null) {
   if (nextStatus === "published" && !nextUrl && !previousUrl) throw new Error("Conteúdo publicado exige uma URL de fonte registrada.");
@@ -36,6 +39,7 @@ export const adminRouter = router({
       await db.insert(auditActions).values({ actorId: ctx.user.id, action: id ? "update" : "create", entityType: "game", entityId: entityId!, metadata: { status: value.status } });
       return { id: entityId };
     }),
+    archive: administratorProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); await db.update(games).set({ status: "archived", deletedAt: new Date() }).where(eq(games.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "archive", entityType: "game", entityId: input.id }); return { success: true }; }),
   }),
 
   distributions: router({
@@ -50,6 +54,7 @@ export const adminRouter = router({
       await db.insert(auditActions).values({ actorId: ctx.user.id, action: id ? "update" : "create", entityType: "distribution", entityId: entityId!, metadata: { status: value.status } });
       return { id: entityId };
     }),
+    archive: administratorProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); await db.update(distributions).set({ status: "archived", deletedAt: new Date() }).where(eq(distributions.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "archive", entityType: "distribution", entityId: input.id }); return { success: true }; }),
   }),
 
   hardware: router({
@@ -63,6 +68,62 @@ export const adminRouter = router({
       await db.insert(auditActions).values({ actorId: ctx.user.id, action: id ? "update" : "create", entityType: "hardware", entityId: entityId!, metadata: { kind: value.kind } });
       return { id: entityId };
     }),
+    archive: administratorProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); await db.update(hardwareItems).set({ deletedAt: new Date() }).where(eq(hardwareItems.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "archive", entityType: "hardware", entityId: input.id }); return { success: true }; }),
+  }),
+
+  guides: router({
+    list: administratorProcedure.query(async () => { const db = await requireDatabase(); return db.select().from(setupGuides).where(isNull(setupGuides.deletedAt)).orderBy(desc(setupGuides.updatedAt)).limit(100); }),
+    byId: administratorProcedure.input(z.object({ id: z.number().int().positive() })).query(async ({ input }) => { const db = await requireDatabase(); const guide = (await db.select().from(setupGuides).where(and(eq(setupGuides.id, input.id), isNull(setupGuides.deletedAt))).limit(1))[0]; if (!guide) return null; const steps = await db.select().from(setupGuideSteps).where(eq(setupGuideSteps.guideId, guide.id)).orderBy(setupGuideSteps.stepOrder); return { guide, steps }; }),
+    save: administratorProcedure.input(z.object({ id: z.number().int().positive().optional(), slug: z.string().trim().min(2).max(220), title: z.string().trim().min(2).max(400), description: z.string().trim().max(12000).nullable().optional(), difficulty: z.enum(["beginner", "intermediate", "advanced"]), guideVersion: z.string().trim().max(120).nullable().optional(), distributionId: z.number().int().positive().nullable().optional(), distributionVersionId: z.number().int().positive().nullable().optional(), gameId: z.number().int().positive().nullable().optional(), provenance: z.enum(["verified", "community", "estimated", "unknown"]), sourceUrl, status, steps: guideStepsInput })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase(); const { id, steps, ...value } = input;
+      const existing = id ? (await db.select().from(setupGuides).where(eq(setupGuides.id, id)).limit(1))[0] : undefined;
+      if (id && !existing) throw new Error("Guia não encontrado.");
+      assertSourceWhenPublishing(value.status, value.sourceUrl, existing?.sourceUrl);
+      let entityId = id;
+      if (id) { await db.update(setupGuides).set({ ...value, reviewedById: ctx.user.id, reviewedAt: new Date() }).where(eq(setupGuides.id, id)); await db.delete(setupGuideSteps).where(eq(setupGuideSteps.guideId, id)); }
+      else { const result = await db.insert(setupGuides).values({ ...value, authorId: ctx.user.id, reviewedById: value.status === "published" ? ctx.user.id : null, reviewedAt: value.status === "published" ? new Date() : null }); entityId = Number(result[0].insertId); }
+      await db.insert(setupGuideSteps).values(steps.map((step, index) => ({ ...step, guideId: entityId!, stepOrder: index + 1 })));
+      await db.insert(auditActions).values({ actorId: ctx.user.id, action: id ? "update" : "create", entityType: "setup_guide", entityId: entityId!, metadata: { status: value.status, stepCount: steps.length } });
+      return { id: entityId };
+    }),
+    archive: administratorProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); await db.update(setupGuides).set({ status: "archived", deletedAt: new Date() }).where(eq(setupGuides.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "archive", entityType: "setup_guide", entityId: input.id }); return { success: true }; }),
+  }),
+
+  linuxFix: router({
+    list: administratorProcedure.query(async () => { const db = await requireDatabase(); return db.select().from(linuxFixes).where(isNull(linuxFixes.deletedAt)).orderBy(desc(linuxFixes.updatedAt)).limit(100); }),
+    byId: administratorProcedure.input(z.object({ id: z.number().int().positive() })).query(async ({ input }) => { const db = await requireDatabase(); const fix = (await db.select().from(linuxFixes).where(and(eq(linuxFixes.id, input.id), isNull(linuxFixes.deletedAt))).limit(1))[0]; if (!fix) return null; const solutions = await db.select().from(linuxFixSolutions).where(eq(linuxFixSolutions.fixId, fix.id)).orderBy(linuxFixSolutions.stepOrder); return { fix, solutions }; }),
+    save: administratorProcedure.input(z.object({ id: z.number().int().positive().optional(), slug: z.string().trim().min(2).max(220), title: z.string().trim().min(2).max(400), category: z.enum(["steam", "proton", "wine", "vulkan", "amd", "nvidia", "intel", "anti_cheat", "audio", "controller", "fps", "stuttering", "crashes", "black_screen", "launch_errors", "other"]), symptoms: z.string().trim().min(8).max(12000), possibleCauses: z.string().trim().min(8).max(12000), gameId: z.number().int().positive().nullable().optional(), distributionId: z.number().int().positive().nullable().optional(), hardwareId: z.number().int().positive().nullable().optional(), affectedVersion: z.string().trim().max(160).nullable().optional(), confidence: z.enum(["high", "medium", "low", "unknown"]), provenance: z.enum(["verified", "community", "estimated", "unknown"]), sourceUrl, status, solutions: fixSolutionsInput })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase(); const { id, solutions, ...value } = input;
+      const existing = id ? (await db.select().from(linuxFixes).where(eq(linuxFixes.id, id)).limit(1))[0] : undefined;
+      if (id && !existing) throw new Error("Solução LinuxFix não encontrada.");
+      assertSourceWhenPublishing(value.status, value.sourceUrl, existing?.sourceUrl);
+      let entityId = id;
+      if (id) { await db.update(linuxFixes).set({ ...value, reviewedById: ctx.user.id, reviewedAt: new Date() }).where(eq(linuxFixes.id, id)); await db.delete(linuxFixSolutions).where(eq(linuxFixSolutions.fixId, id)); }
+      else { const result = await db.insert(linuxFixes).values({ ...value, authorId: ctx.user.id, reviewedById: value.status === "published" ? ctx.user.id : null, reviewedAt: value.status === "published" ? new Date() : null }); entityId = Number(result[0].insertId); }
+      await db.insert(linuxFixSolutions).values(solutions.map((solution, index) => ({ ...solution, fixId: entityId!, stepOrder: index + 1 })));
+      await db.insert(auditActions).values({ actorId: ctx.user.id, action: id ? "update" : "create", entityType: "linux_fix", entityId: entityId!, metadata: { status: value.status, solutionCount: solutions.length } });
+      return { id: entityId };
+    }),
+    archive: administratorProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); await db.update(linuxFixes).set({ status: "archived", deletedAt: new Date() }).where(eq(linuxFixes.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "archive", entityType: "linux_fix", entityId: input.id }); return { success: true }; }),
+  }),
+
+  benchmarks: router({
+    list: administratorProcedure.query(async () => { const db = await requireDatabase(); return db.select({ benchmark: benchmarks, gameTitle: games.title }).from(benchmarks).innerJoin(games, eq(benchmarks.gameId, games.id)).orderBy(desc(benchmarks.updatedAt)).limit(100); }),
+    byId: administratorProcedure.input(z.object({ id: z.number().int().positive() })).query(async ({ input }) => { const db = await requireDatabase(); const benchmark = (await db.select().from(benchmarks).where(eq(benchmarks.id, input.id)).limit(1))[0]; if (!benchmark) return null; const results = await db.select().from(benchmarkResults).where(eq(benchmarkResults.benchmarkId, input.id)); return { benchmark, results }; }),
+    save: administratorProcedure.input(z.object({ id: z.number().int().positive().optional(), gameId: z.number().int().positive(), cpuId: z.number().int().positive().nullable().optional(), gpuId: z.number().int().positive().nullable().optional(), distributionId: z.number().int().positive().nullable().optional(), distributionVersionId: z.number().int().positive().nullable().optional(), gameVersion: z.string().trim().max(160).nullable().optional(), kernelVersion: z.string().trim().max(160).nullable().optional(), driverVersion: z.string().trim().max(160).nullable().optional(), protonVersion: z.string().trim().max(160).nullable().optional(), wineVersion: z.string().trim().max(160).nullable().optional(), runtimeVersion: z.string().trim().max(160).nullable().optional(), sourceLabel: z.string().trim().min(2).max(255), sourceUrl: z.string().trim().url().max(2048), evidenceNote: z.string().trim().max(6000).nullable().optional(), provenance: z.enum(["verified", "community", "estimated", "unknown"]), verificationStatus: z.enum(["submitted", "in_review", "verified", "rejected"]), measuredAt: z.coerce.date().nullable().optional(), results: benchmarkResultsInput })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase(); const { id, results, ...value } = input; const existing = id ? (await db.select().from(benchmarks).where(eq(benchmarks.id, id)).limit(1))[0] : undefined; if (id && !existing) throw new Error("Benchmark não encontrado.");
+      const base = { ...value, userId: ctx.user.id, hardwareProfileId: null, ramId: null, mesaVersion: null, nvidiaVersion: null, sourceType: "admin_entry" as const, reviewedById: value.verificationStatus === "verified" || value.verificationStatus === "rejected" ? ctx.user.id : null, reviewedAt: value.verificationStatus === "verified" || value.verificationStatus === "rejected" ? new Date() : null };
+      let entityId = id; if (id) { await db.update(benchmarks).set(base).where(eq(benchmarks.id, id)); await db.delete(benchmarkResults).where(eq(benchmarkResults.benchmarkId, id)); } else { const created = await db.insert(benchmarks).values(base); entityId = Number(created[0].insertId); }
+      await db.insert(benchmarkResults).values(results.map((result) => ({ ...result, benchmarkId: entityId!, averageFps: result.averageFps.toString(), onePercentLowFps: result.onePercentLowFps?.toString(), zeroPointOnePercentLowFps: result.zeroPointOnePercentLowFps?.toString(), temperatureC: null, powerWatts: null })));
+      await db.insert(auditActions).values({ actorId: ctx.user.id, action: id ? "update" : "create", entityType: "benchmark", entityId: entityId!, metadata: { status: value.verificationStatus, provenance: value.provenance, resultCount: results.length } }); return { id: entityId };
+    }),
+    remove: administratorProcedure.input(z.object({ id: z.number().int().positive(), reason: z.string().trim().min(4).max(1000) })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); await db.delete(benchmarks).where(eq(benchmarks.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "delete", entityType: "benchmark", entityId: input.id, metadata: { reason: input.reason } }); return { success: true }; }),
+  }),
+
+  reports: router({
+    list: administratorProcedure.query(async () => { const db = await requireDatabase(); return db.select({ report: reports, reporterName: users.name, reporterEmail: users.email }).from(reports).innerJoin(users, eq(reports.reporterId, users.id)).orderBy(desc(reports.updatedAt)).limit(100); }),
+    save: administratorProcedure.input(z.object({ id: z.number().int().positive().optional(), subjectType: z.string().trim().min(2).max(80), subjectId: z.number().int().positive(), type: z.enum(["incorrect_information", "invalid_benchmark", "duplicate", "broken_link", "inappropriate_content", "spam", "other"]), description: z.string().trim().min(8).max(6000), status: z.enum(["open", "in_review", "resolved", "rejected"]), resolution: z.string().trim().max(6000).nullable().optional() })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); const { id, ...value } = input; const existing = id ? (await db.select().from(reports).where(eq(reports.id, id)).limit(1))[0] : undefined; if (id && !existing) throw new Error("Report não encontrado."); const reviewed = value.status === "resolved" || value.status === "rejected"; let entityId = id; const base = { ...value, reviewerId: reviewed ? ctx.user.id : null, resolvedAt: reviewed ? new Date() : null }; if (id) await db.update(reports).set(base).where(eq(reports.id, id)); else { const created = await db.insert(reports).values({ ...base, reporterId: ctx.user.id }); entityId = Number(created[0].insertId); } await db.insert(auditActions).values({ actorId: ctx.user.id, action: id ? "update" : "create", entityType: "report", entityId: entityId!, metadata: { status: value.status } }); return { id: entityId }; }),
+    remove: administratorProcedure.input(z.object({ id: z.number().int().positive(), reason: z.string().trim().min(4).max(1000) })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); await db.delete(reports).where(eq(reports.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "delete", entityType: "report", entityId: input.id, metadata: { reason: input.reason } }); return { success: true }; }),
   }),
 
   moderation: router({
@@ -71,6 +132,8 @@ export const adminRouter = router({
     reviewReport: administratorProcedure.input(z.object({ id: z.number().int().positive(), status: z.enum(["in_review", "resolved", "rejected"]), resolution: z.string().trim().max(4000).nullable().optional() })).mutation(async ({ ctx, input }) => {
       const db = await requireDatabase(); await db.update(reports).set({ status: input.status, reviewerId: ctx.user.id, resolution: input.resolution, resolvedAt: input.status === "resolved" || input.status === "rejected" ? new Date() : null }).where(eq(reports.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "review", entityType: "report", entityId: input.id, metadata: { status: input.status } }); return { success: true };
     }),
+    removeBenchmark: administratorProcedure.input(z.object({ id: z.number().int().positive(), reason: z.string().trim().min(4).max(1000) })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); await db.delete(benchmarks).where(eq(benchmarks.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "delete", entityType: "benchmark", entityId: input.id, metadata: { reason: input.reason } }); return { success: true }; }),
+    removeReport: administratorProcedure.input(z.object({ id: z.number().int().positive(), reason: z.string().trim().min(4).max(1000) })).mutation(async ({ ctx, input }) => { const db = await requireDatabase(); await db.delete(reports).where(eq(reports.id, input.id)); await db.insert(auditActions).values({ actorId: ctx.user.id, action: "delete", entityType: "report", entityId: input.id, metadata: { reason: input.reason } }); return { success: true }; }),
   }),
 
   users: router({

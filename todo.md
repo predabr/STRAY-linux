@@ -4,18 +4,18 @@
 - [x] Mapear fontes públicas permitidas para catálogo de jogos, compatibilidade, benchmarks e documentação oficial de distribuições.
 - [x] Modelar e aplicar o schema Drizzle para jogos, tags, plataformas, distros, versões, hardware, compatibilidade, benchmarks, wiki, guias, LinuxFix, perfis, favoritos, reports e auditoria.
 - [x] Expandir autenticação e RBAC para USER, MODERATOR e ADMIN com guards server-side e trilha de auditoria.
-- [ ] Implementar CRUD administrativo para jogos, distribuições, hardware, guias, LinuxFix, benchmarks e reports.
+- [x] Implementar CRUD administrativo para jogos, distribuições, hardware, guias, LinuxFix, benchmarks e reports.
 - [x] Criar pipeline de importação versionado para catálogo com pelo menos 1.000 jogos e metadados de origem.
-- [ ] Implementar pesquisa global e filtros de jogos por distribuição, CPU, GPU, compatibilidade, Proton, Steam Deck, gênero, multiplayer e anti-cheat.
+- [x] Implementar pesquisa global e filtros de jogos por distribuição, CPU, GPU, compatibilidade, Proton, Steam Deck, gênero, multiplayer e anti-cheat.
 - [ ] Construir páginas de catálogo e detalhe de jogo com estados vazios, paginação, fontes e proveniência explícita.
-- [ ] Implementar motor de compatibilidade por jogo, distro, versão, kernel, GPU, driver, Proton/Wine e runtime.
+- [x] Implementar motor de compatibilidade por jogo, distro, versão, kernel, GPU, driver, Proton/Wine e runtime.
 - [x] Implementar workflow de benchmark com proveniência VERIFIED, COMMUNITY, ESTIMATED e UNKNOWN, revisão por moderador e bloqueio de FPS sem fonte declarada.
 - [x] Implementar calculadora de desempenho que retorna somente dados verificados, estimativas metodológicas declaradas ou indisponibilidade explícita.
 - [ ] Criar wiki de distribuições incluindo Arch, CachyOS, Fedora, Nobara, Ubuntu, Bazzite, Pop!_OS, Linux Mint, Debian, openSUSE e EndeavourOS, com fontes, versões, drivers e orientações de otimização.
 - [ ] Construir Linux Setup com guias versionados, passos, comandos copiáveis, avisos, nível de dificuldade e filtros por distribuição.
 - [ ] Construir LinuxFix com categorias, sintomas, causas, soluções, confiança, origem, filtros e reports comunitários.
 - [ ] Concluir dashboard autenticado com My Games, My PC, My Benchmarks, Saved Guides, LinuxFix History, Favorites, Reports e Settings, incluindo as ações públicas que alimentam cada seção.
-- [ ] Concluir personalização de compatibilidade vinculada ao perfil ativo do usuário e exibi-la no detalhe do jogo/benchmark.
+- [x] Concluir personalização de compatibilidade vinculada ao perfil ativo do usuário e exibi-la no detalhe do jogo/benchmark.
 - [x] Integrar chat com recuperação de contexto dos conteúdos internos e suporte opcional a um provedor de IA local compatível com Ollama.
 - [x] Construir navegação, tema dark/light/system, responsividade, acessibilidade, estados de carregamento/erro/vazio e SEO básico.
 - [ ] Criar testes Vitest para roles, validações, proveniência de benchmark, compatibilidade, filtros e procedimentos críticos.
@@ -33,6 +33,6 @@
 - [ ] Criar guias por família para FSR e upscaling, deixando claro quando o suporte depende do jogo, launcher ou runtime e quando não existe comando universal seguro.
 - [ ] Concluir todos os fluxos públicos e autenticados restantes, com estados vazios, erro, carregamento e ações persistentes.
 - [ ] Refinar o sistema visual com animações leves, transições acessíveis, hierarquia melhorada e responsividade profissional.
-- [ ] Adicionar gráficos e visualizações de benchmark/compatibilidade com proveniência explícita e sem dados de FPS fabricados.
+- [x] Adicionar gráficos e visualizações de benchmark/compatibilidade com proveniência explícita e sem dados de FPS fabricados.
 - [ ] Executar validação funcional ponta a ponta das rotas, ações pessoais, moderação, modo desktop SQLite e instalador Windows final.
 - [x] Reempacotar e validar o instalador Windows com SQLite, carga inicial local e operação sem variáveis de banco remoto.

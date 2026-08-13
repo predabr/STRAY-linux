@@ -25,6 +25,8 @@ const profileInput = z.object({
   kernelVersion: z.string().trim().max(160).nullable().optional(),
   driverVersion: z.string().trim().max(160).nullable().optional(),
   protonVersion: z.string().trim().max(160).nullable().optional(),
+  wineVersion: z.string().trim().max(160).nullable().optional(),
+  runtimeVersion: z.string().trim().max(160).nullable().optional(),
   isActive: z.boolean().default(false),
 });
 

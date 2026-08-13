@@ -229,6 +229,8 @@ export const userHardwareProfiles = mysqlTable(
     kernelVersion: varchar("kernelVersion", { length: 160 }),
     driverVersion: varchar("driverVersion", { length: 160 }),
     protonVersion: varchar("protonVersion", { length: 160 }),
+    wineVersion: varchar("wineVersion", { length: 160 }),
+    runtimeVersion: varchar("runtimeVersion", { length: 160 }),
     isActive: boolean("isActive").default(false).notNull(),
     createdAt,
     updatedAt,

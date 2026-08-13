@@ -5,6 +5,7 @@ import { publicProcedure, router } from "./_core/trpc";
 import { benchmarksRouter } from "./routers/benchmarks";
 import { adminRouter } from "./routers/admin";
 import { chatRouter } from "./routers/chat";
+import { compatibilityRouter } from "./routers/compatibility";
 import { distributionsRouter, gamesRouter, hardwareRouter, searchRouter } from "./routers/games";
 import { knowledgeRouter } from "./routers/knowledge";
 import { userRouter } from "./routers/user";
@@ -25,6 +26,7 @@ export const appRouter = router({
   hardware: hardwareRouter,
   search: searchRouter,
   benchmarks: benchmarksRouter,
+  compatibility: compatibilityRouter,
   chat: chatRouter,
   knowledge: knowledgeRouter,
   user: userRouter,
