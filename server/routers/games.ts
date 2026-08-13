@@ -31,7 +31,7 @@ export const gameFilterInput = paginationInput.extend({
   multiplayer: z.boolean().optional(),
   antiCheat: z.enum(["has", "none"]).optional(),
   tagSlugs: z.array(z.string().trim().max(100)).max(8).optional(),
-  sort: z.enum(["title", "recent", "featured"]).default("title"),
+  sort: z.enum(["popular", "title", "recent", "featured"]).default("popular"),
 });
 
 function publishedGameConditions(input: z.infer<typeof gameFilterInput>) {
@@ -62,7 +62,7 @@ export const gamesRouter = router({
   list: publicProcedure.input(gameFilterInput).query(async ({ input }) => {
     const db = await requireDatabase();
     const where = and(...publishedGameConditions(input));
-    const orderBy = input.sort === "recent" ? desc(games.createdAt) : input.sort === "featured" ? desc(games.isFeatured) : asc(games.title);
+    const orderBy = input.sort === "recent" ? desc(games.createdAt) : input.sort === "featured" ? desc(games.isFeatured) : input.sort === "title" ? asc(games.title) : desc(games.sourcePositiveReviews);
     const [items, totalRows] = await Promise.all([
       db.select().from(games).where(where).orderBy(orderBy, asc(games.id)).limit(input.pageSize).offset((input.page - 1) * input.pageSize),
       db.select({ count: sql<number>`count(*)` }).from(games).where(where),
@@ -76,11 +76,16 @@ export const gamesRouter = router({
         ])
       : [[], []];
 
+    const platformsByGame = new Map<number, typeof platformRows>();
+    for (const platform of platformRows) platformsByGame.set(platform.gameId, [...(platformsByGame.get(platform.gameId) ?? []), platform]);
+    const tagsByGame = new Map<number, typeof tagRows>();
+    for (const tag of tagRows) tagsByGame.set(tag.gameId, [...(tagsByGame.get(tag.gameId) ?? []), tag]);
+
     return {
       data: items.map((item) => ({
         ...item,
-        platforms: platformRows.filter((platform) => platform.gameId === item.id),
-        tags: tagRows.filter((tag) => tag.gameId === item.id),
+        platforms: platformsByGame.get(item.id) ?? [],
+        tags: tagsByGame.get(item.id) ?? [],
       })),
       meta: { page: input.page, pageSize: input.pageSize, total: Number(totalRows[0]?.count ?? 0) },
     };

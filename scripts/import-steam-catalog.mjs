@@ -3,11 +3,11 @@ import fs from "node:fs";
 import mysql from "mysql2/promise";
 
 const datasetPath = process.env.STEAM_DATASET_PATH ?? "/home/ubuntu/linux-gaming-hub-data/games.json";
-const importLimit = Number.parseInt(process.env.STEAM_IMPORT_LIMIT ?? "1500", 10);
+const importLimit = Number.parseInt(process.env.STEAM_IMPORT_LIMIT ?? "10000", 10);
 const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) throw new Error("DATABASE_URL não está disponível para o importador.");
-if (!Number.isInteger(importLimit) || importLimit < 1000) throw new Error("STEAM_IMPORT_LIMIT precisa ser um inteiro de pelo menos 1000.");
+if (!Number.isInteger(importLimit) || importLimit < 10000) throw new Error("STEAM_IMPORT_LIMIT precisa ser um inteiro de pelo menos 10000.");
 
 const slugify = (value) => value
   .normalize("NFKD")
@@ -30,12 +30,19 @@ const isGameRecord = ([appId, game]) => {
 
 const raw = fs.readFileSync(datasetPath, "utf8");
 const records = Object.entries(JSON.parse(raw)).filter(isGameRecord);
-const selected = records
-  .sort(([, a], [, b]) => Number(b.positive ?? 0) - Number(a.positive ?? 0))
-  .slice(0, importLimit)
-  .map(([appId, game]) => ({ appId: Number.parseInt(appId, 10), game }));
+const rankedRecords = records
+  .map(([appId, game]) => ({ appId: Number.parseInt(appId, 10), game, normalizedTitle: slugify(game.name) }))
+  .sort((a, b) => Number(b.game.positive ?? 0) - Number(a.game.positive ?? 0) || Number(a.appId) - Number(b.appId));
+const titles = new Set();
+const selected = [];
+for (const item of rankedRecords) {
+  if (titles.has(item.normalizedTitle)) continue;
+  titles.add(item.normalizedTitle);
+  selected.push(item);
+  if (selected.length === importLimit) break;
+}
 
-if (selected.length < 1000) throw new Error(`O dataset forneceu somente ${selected.length} jogos válidos.`);
+if (selected.length < importLimit) throw new Error(`O dataset forneceu somente ${selected.length} jogos distintos; são necessários ${importLimit}.`);
 
 const connection = await mysql.createConnection(databaseUrl);
 try {
@@ -51,7 +58,7 @@ try {
   const inputHash = createHash("sha256").update(raw).digest("hex");
   const [batchResult] = await connection.execute(
     "INSERT INTO import_batches (sourceId, kind, inputHash, importedCount, notes) VALUES (?, ?, ?, ?, ?)",
-    [source.id, "steam_games_snapshot", inputHash, selected.length, `Seleção dos ${selected.length} títulos com maior contagem de avaliações positivas no snapshot.`],
+    [source.id, "steam_games_snapshot", inputHash, selected.length, `Seleção deduplicada de ${selected.length} títulos por contagem decrescente de avaliações positivas no snapshot.`],
   );
   const importBatchId = batchResult.insertId;
 
@@ -64,6 +71,7 @@ try {
     cleanText(game.developers?.join?.(", "), 255),
     cleanText(game.publishers?.join?.(", "), 255),
     cleanText(game.release_date, 64),
+    Number.isFinite(Number(game.positive)) ? Number(game.positive) : null,
     "published",
     source.id,
     importBatchId,
@@ -71,7 +79,7 @@ try {
     false,
   ]);
   await connection.query(
-    "INSERT INTO games (slug, title, steamAppId, shortDescription, description, developer, publisher, releaseDate, status, sourceId, importBatchId, sourceUrl, isFeatured) VALUES ? ON DUPLICATE KEY UPDATE title = VALUES(title), shortDescription = VALUES(shortDescription), description = VALUES(description), sourceId = VALUES(sourceId), importBatchId = VALUES(importBatchId), sourceUrl = VALUES(sourceUrl), status = 'published'",
+    "INSERT INTO games (slug, title, steamAppId, shortDescription, description, developer, publisher, releaseDate, sourcePositiveReviews, status, sourceId, importBatchId, sourceUrl, isFeatured) VALUES ? ON DUPLICATE KEY UPDATE title = VALUES(title), shortDescription = VALUES(shortDescription), description = VALUES(description), sourcePositiveReviews = VALUES(sourcePositiveReviews), sourceId = VALUES(sourceId), importBatchId = VALUES(importBatchId), sourceUrl = VALUES(sourceUrl), status = 'published'",
     [gameRows],
   );
 
@@ -113,5 +121,5 @@ try {
   await connection.rollback();
   throw error;
 } finally {
-  await connection.end();
+  connection.destroy();
 }

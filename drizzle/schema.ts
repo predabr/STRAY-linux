@@ -86,6 +86,7 @@ export const games = mysqlTable(
     developer: varchar("developer", { length: 255 }),
     publisher: varchar("publisher", { length: 255 }),
     releaseDate: varchar("releaseDate", { length: 64 }),
+    sourcePositiveReviews: int("sourcePositiveReviews"),
     coverImageUrl: varchar("coverImageUrl", { length: 2048 }),
     websiteUrl: varchar("websiteUrl", { length: 2048 }),
     status: mysqlEnum("status", publicationStatuses).default("draft").notNull(),
@@ -102,6 +103,7 @@ export const games = mysqlTable(
     uniqueIndex("games_steam_app_unique").on(table.steamAppId),
     index("games_status_idx").on(table.status),
     index("games_title_idx").on(table.title),
+    index("games_catalog_popularity_idx").on(table.status, table.sourcePositiveReviews),
   ],
 );
 

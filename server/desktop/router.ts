@@ -9,7 +9,7 @@ const store = () => getDesktopStore();
 
 function gameList(input: { q?: string; page: number; pageSize: number }) {
   const query = input.q?.trim() ? `%${input.q.trim()}%` : "%";
-  const games = store().all<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId FROM games WHERE title LIKE ? ORDER BY title", [query]);
+  const games = store().all<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE title LIKE ? ORDER BY source_positive_reviews DESC, title", [query]);
   return paginate(games.map((game) => ({ ...game, platforms: game.steamAppId ? [{ id: game.id, platform: "steam", antiCheat: null }] : [], tags: [] })), input.page, input.pageSize);
 }
 
@@ -27,7 +27,7 @@ export const desktopRouter = router({
   games: router({
     list: publicProcedure.input(pageInput.extend({ q: z.string().optional(), distributionId: z.number().optional(), gpuId: z.number().optional(), cpuId: z.number().optional(), compatibility: z.string().optional(), platform: z.string().optional(), genre: z.string().optional(), multiplayer: z.boolean().optional(), antiCheat: z.enum(["has", "none"]).optional(), tagSlugs: z.array(z.string()).optional(), sort: z.string().optional() })).query(({ input }) => gameList(input)),
     bySlug: publicProcedure.input(z.object({ slug: z.string() })).query(({ input }) => {
-      const game = store().one<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId FROM games WHERE slug = ?", [input.slug]);
+      const game = store().one<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE slug = ?", [input.slug]);
       if (!game) return null;
       return { ...game, platforms: game.steamAppId ? [{ id: game.id, platform: "steam", antiCheat: null }] : [], tags: [], compatibility: [], guides: [] };
     }),

@@ -78,3 +78,8 @@
 - [x] Implementar breadcrumbs consistentes nas principais rotas públicas e autenticadas e validar sua presença visualmente.
 - [x] Adicionar no detalhe do jogo questões conhecidas baseadas em LinuxFix relacionado e um bloco de setup recomendado derivado de guias relacionados.
 - [x] Criar e exibir relações editoriais explícitas entre LinuxFix, Linux Setup, jogos e distribuições relacionadas.
+- [x] Validar a fonte licenciada e a disponibilidade de pelo menos 10.000 metadados reais de jogos distintos.
+- [x] Adaptar o pipeline de importação para selecionar, deduplicar, classificar e registrar 10.000 jogos com proveniência.
+- [x] Ampliar o catálogo web, a busca e a paginação para a escala de 10.000 jogos sem dados fictícios.
+- [x] Atualizar o snapshot SQLite desktop e seus testes para o catálogo expandido.
+- [x] Atualizar documentação, validar build e revisar a experiência do catálogo expandido antes da entrega.

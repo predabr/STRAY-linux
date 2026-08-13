@@ -20,8 +20,9 @@ describe("contrato de filtros do GameHub", () => {
     expect(result).toMatchObject({ q: "Hades", page: 2, distributionId: 7, cpuId: 11, gpuId: 21, compatibility: "playable", platform: "proton", genre: "roguelike", multiplayer: true, antiCheat: "none", sort: "featured" });
   });
 
-  it("aplica paginação segura e valores padrão quando filtros opcionais estão ausentes", () => {
-    expect(gameFilterInput.parse({})).toMatchObject({ page: 1, pageSize: 24, sort: "title" });
+  it("aplica paginação segura e popularidade da fonte como ordenação padrão", () => {
+    expect(gameFilterInput.parse({})).toMatchObject({ page: 1, pageSize: 24, sort: "popular" });
+    expect(gameFilterInput.parse({ sort: "popular" })).toMatchObject({ sort: "popular" });
   });
 
   it("rejeita anti-cheat, runtime, identificadores e paginação fora do contrato", () => {

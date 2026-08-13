@@ -17,10 +17,11 @@ describe("DesktopStore", () => {
     const seedPath = path.resolve("desktop/seed/initial-data.json");
     const store = await DesktopStore.create(directory, seedPath);
 
-    expect(store.counts().games).toBeGreaterThanOrEqual(1500);
+    expect(store.counts().games).toBeGreaterThanOrEqual(10000);
     expect(store.counts().distributions).toBeGreaterThanOrEqual(17);
-    const game = store.one<{ id: number }>("SELECT id FROM games ORDER BY id LIMIT 1");
+    const game = store.one<{ id: number; sourcePositiveReviews: number }>("SELECT id, source_positive_reviews AS sourcePositiveReviews FROM games ORDER BY source_positive_reviews DESC LIMIT 1");
     expect(game?.id).toBeTypeOf("number");
+    expect(game?.sourcePositiveReviews).toBeGreaterThan(0);
 
     store.run("INSERT INTO favorites (game_id) VALUES (?)", [game!.id]);
     expect(store.one<{ count: number }>("SELECT count(*) AS count FROM favorites")?.count).toBe(1);

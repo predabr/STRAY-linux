@@ -3,9 +3,11 @@ import path from "node:path";
 import mysql from "mysql2/promise";
 
 if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required only to export the desktop seed during development.");
+const gameLimit = Number.parseInt(process.env.DESKTOP_GAME_LIMIT ?? "10000", 10);
+if (!Number.isInteger(gameLimit) || gameLimit < 10000) throw new Error("DESKTOP_GAME_LIMIT precisa ser um inteiro de pelo menos 10000.");
 
 const connection = await mysql.createConnection(process.env.DATABASE_URL);
-const [games] = await connection.query("SELECT id, slug, title, shortDescription, steamAppId FROM games WHERE status = 'published' AND deletedAt IS NULL ORDER BY id LIMIT 1500");
+const [games] = await connection.query(`SELECT id, slug, title, shortDescription, steamAppId, sourcePositiveReviews FROM games WHERE status = 'published' AND deletedAt IS NULL ORDER BY sourcePositiveReviews DESC, steamAppId IS NULL, steamAppId ASC, id ASC LIMIT ${gameLimit}`);
 const [distros] = await connection.query("SELECT id, slug, name, family, packageManager, defaultDesktop, officialUrl, sourceUrl FROM distributions WHERE status = 'published' AND deletedAt IS NULL ORDER BY name");
 const [wiki] = await connection.query("SELECT id, slug, title, excerpt, body, category, versionLabel, provenance, sourceUrl FROM wiki_articles WHERE status = 'published' AND deletedAt IS NULL ORDER BY id");
 const [guides] = await connection.query("SELECT id, slug, title, description, difficulty, guideVersion, provenance, sourceUrl FROM setup_guides WHERE status = 'published' AND deletedAt IS NULL ORDER BY id");
@@ -29,5 +31,5 @@ const seed = {
 const output = path.resolve("desktop/seed/initial-data.json");
 await fs.mkdir(path.dirname(output), { recursive: true });
 await fs.writeFile(output, JSON.stringify(seed));
-await connection.end();
+connection.destroy();
 console.log(JSON.stringify({ output, games: games.length, distributions: distros.length, wiki: wiki.length, guides: guides.length, fixes: fixes.length }));

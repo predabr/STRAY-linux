@@ -29,6 +29,13 @@
       "when": 1786637495867,
       "tag": "0003_left_chat",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1786639329098,
+      "tag": "0004_solid_exiles",
+      "breakpoints": true
     }
   ]
 }
