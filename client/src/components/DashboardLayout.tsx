@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { startLogin } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { BookOpenCheck, Gamepad2, Gauge, Heart, LayoutDashboard, LogOut, MonitorCog, PanelLeft, Settings, ShieldAlert } from "lucide-react";
+import { BookOpenCheck, Gamepad2, Gauge, Heart, History, LayoutDashboard, LogOut, MonitorCog, PanelLeft, Settings, ShieldAlert } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -29,13 +29,14 @@ import { Button } from "./ui/button";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Visão geral", path: "/dashboard" },
-  { icon: Gamepad2, label: "My Games", path: "/dashboard/games" },
-  { icon: MonitorCog, label: "My PC", path: "/dashboard/pc" },
-  { icon: Gauge, label: "My Benchmarks", path: "/dashboard/benchmarks" },
-  { icon: BookOpenCheck, label: "Saved Guides", path: "/dashboard/guides" },
-  { icon: Heart, label: "Favorites", path: "/dashboard/favorites" },
+  { icon: Gamepad2, label: "Meus jogos", path: "/dashboard/games" },
+  { icon: MonitorCog, label: "Meu PC", path: "/dashboard/pc" },
+  { icon: Gauge, label: "Meus benchmarks", path: "/dashboard/benchmarks" },
+  { icon: BookOpenCheck, label: "Guias salvos", path: "/dashboard/guides" },
+  { icon: History, label: "Histórico LinuxFix", path: "/dashboard/history" },
+  { icon: Heart, label: "Favoritos", path: "/dashboard/favorites" },
   { icon: ShieldAlert, label: "Reports", path: "/dashboard/reports" },
-  { icon: Settings, label: "Settings", path: "/dashboard/settings" },
+  { icon: Settings, label: "Configurações", path: "/dashboard/settings" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
@@ -174,9 +175,7 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-semibold tracking-tight truncate">
-                    Meu Hub
-                  </span>
+                  <span className="min-w-0"><span className="block truncate font-semibold tracking-tight">Meu Hub</span><span className="evidence-label mt-1 block truncate text-[7px] text-muted-foreground">PERFIL / EVIDÊNCIA</span></span>
                 </div>
               ) : null}
             </div>
@@ -261,7 +260,7 @@ function DashboardLayoutContent({
             </div>
           </div>
         )}
-        <main className="flex-1 p-4">{children}</main>
+        <main className="technical-grid flex-1 p-4">{children}</main>
       </SidebarInset>
     </>
   );

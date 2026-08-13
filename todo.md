@@ -7,18 +7,18 @@
 - [x] Implementar CRUD administrativo para jogos, distribuições, hardware, guias, LinuxFix, benchmarks e reports.
 - [x] Criar pipeline de importação versionado para catálogo com pelo menos 1.000 jogos e metadados de origem.
 - [x] Implementar pesquisa global e filtros de jogos por distribuição, CPU, GPU, compatibilidade, Proton, Steam Deck, gênero, multiplayer e anti-cheat.
-- [ ] Construir páginas de catálogo e detalhe de jogo com estados vazios, paginação, fontes e proveniência explícita.
+- [x] Construir páginas de catálogo e detalhe de jogo com estados vazios, paginação, fontes e proveniência explícita.
 - [x] Implementar motor de compatibilidade por jogo, distro, versão, kernel, GPU, driver, Proton/Wine e runtime.
 - [x] Implementar workflow de benchmark com proveniência VERIFIED, COMMUNITY, ESTIMATED e UNKNOWN, revisão por moderador e bloqueio de FPS sem fonte declarada.
 - [x] Implementar calculadora de desempenho que retorna somente dados verificados, estimativas metodológicas declaradas ou indisponibilidade explícita.
-- [ ] Criar wiki de distribuições incluindo Arch, CachyOS, Fedora, Nobara, Ubuntu, Bazzite, Pop!_OS, Linux Mint, Debian, openSUSE e EndeavourOS, com fontes, versões, drivers e orientações de otimização.
-- [ ] Construir Linux Setup com guias versionados, passos, comandos copiáveis, avisos, nível de dificuldade e filtros por distribuição.
-- [ ] Construir LinuxFix com categorias, sintomas, causas, soluções, confiança, origem, filtros e reports comunitários.
-- [ ] Concluir dashboard autenticado com My Games, My PC, My Benchmarks, Saved Guides, LinuxFix History, Favorites, Reports e Settings, incluindo as ações públicas que alimentam cada seção.
+- [x] Criar wiki de distribuições incluindo Arch, CachyOS, Fedora, Nobara, Ubuntu, Bazzite, Pop!_OS, Linux Mint, Debian, openSUSE e EndeavourOS, com fontes, versões, drivers e orientações de otimização.
+- [x] Construir Linux Setup com guias versionados, passos, comandos copiáveis, avisos, nível de dificuldade e filtros por distribuição.
+- [x] Construir LinuxFix com categorias, sintomas, causas, soluções, confiança, origem, filtros e reports comunitários.
+- [x] Concluir dashboard autenticado com My Games, My PC, My Benchmarks, Saved Guides, LinuxFix History, Favorites, Reports e Settings, incluindo as ações públicas que alimentam cada seção.
 - [x] Concluir personalização de compatibilidade vinculada ao perfil ativo do usuário e exibi-la no detalhe do jogo/benchmark.
 - [x] Integrar chat com recuperação de contexto dos conteúdos internos e suporte opcional a um provedor de IA local compatível com Ollama.
 - [x] Construir navegação, tema dark/light/system, responsividade, acessibilidade, estados de carregamento/erro/vazio e SEO básico.
-- [ ] Criar testes Vitest para roles, validações, proveniência de benchmark, compatibilidade, filtros e procedimentos críticos.
+- [x] Criar testes Vitest para roles, validações, proveniência de benchmark, compatibilidade, filtros e procedimentos críticos.
 - [x] Criar documentação de instalação, configuração, importação de dados, moderação, uso de IA local e contribuição no GitHub.
 - [x] Implementar banco local realmente embutido no Electron (migração da persistência para SQLite ou inclusão de serviço local), mantendo o instalador `.exe` já gerado.
 - [x] Executar verificações de tipo, testes e validação visual das rotas principais.
@@ -28,11 +28,29 @@
 - [x] Implementar adaptador SQLite exclusivo do Electron, com banco no diretório de dados do usuário e sem `DATABASE_URL`.
 - [x] Criar carga local versionada para o modo desktop, incluindo catálogo, distros, wiki, guias e LinuxFix essenciais.
 - [x] Ampliar a wiki por famílias Arch, Debian/Ubuntu, Fedora/RHEL e openSUSE, incluindo derivadas suportadas e fontes oficiais.
-- [ ] Criar guias específicos por família para Proton, Vulkan e MangoHud/GameMode, com passos e comandos compatíveis com Arch, Debian/Ubuntu, Fedora/RHEL e openSUSE.
-- [ ] Adicionar guias por família para drivers AMD, NVIDIA e Intel, incluindo pré-requisitos, método de instalação/configuração e avisos por distribuição.
-- [ ] Criar guias por família para FSR e upscaling, deixando claro quando o suporte depende do jogo, launcher ou runtime e quando não existe comando universal seguro.
-- [ ] Concluir todos os fluxos públicos e autenticados restantes, com estados vazios, erro, carregamento e ações persistentes.
-- [ ] Refinar o sistema visual com animações leves, transições acessíveis, hierarquia melhorada e responsividade profissional.
+- [x] Criar guias específicos por família para Proton, Vulkan e MangoHud/GameMode, com passos e comandos compatíveis com Arch, Debian/Ubuntu, Fedora/RHEL e openSUSE.
+- [x] Adicionar guias por família para drivers AMD, NVIDIA e Intel, incluindo pré-requisitos, método de instalação/configuração e avisos por distribuição.
+- [x] Criar guias por família para FSR e upscaling, deixando claro quando o suporte depende do jogo, launcher ou runtime e quando não existe comando universal seguro.
+- [x] Concluir todos os fluxos públicos e autenticados restantes, com estados vazios, erro, carregamento e ações persistentes.
+- [x] Refinar o sistema visual com animações leves, transições acessíveis, hierarquia melhorada e responsividade profissional.
 - [x] Adicionar gráficos e visualizações de benchmark/compatibilidade com proveniência explícita e sem dados de FPS fabricados.
-- [ ] Executar validação funcional ponta a ponta das rotas, ações pessoais, moderação, modo desktop SQLite e instalador Windows final.
+- [x] Executar validação funcional ponta a ponta das rotas, ações pessoais, moderação, modo desktop SQLite e instalador Windows final.
 - [x] Reempacotar e validar o instalador Windows com SQLite, carga inicial local e operação sem variáveis de banco remoto.
+- [x] Completar instruções Intel acionáveis por família, incluindo o ICD Vulkan aplicável e avisos de release.
+- [x] Publicar guias de FSR/upscaling por família (Arch, Debian/Ubuntu, Fedora/RHEL e openSUSE) sem sugerir comando universal inseguro.
+- [x] Completar o método de instalação AMD/Mesa/Vulkan para Debian/Ubuntu e revisar a cobertura acionável de cada fornecedor por família.
+- [x] Aplicar a identidade técnica de forma consistente em Games, Setup, Benchmark, Dashboard e Admin.
+- [x] Reduzir a monotonia de catálogo e guias com hierarquia editorial, agrupamentos e painéis de evidência.
+- [x] Revisar visualmente as rotas principais em desktop e mobile após os ajustes de identidade.
+- [x] Aplicar a identidade visual técnica à página Benchmark e revisar refinamentos próprios da administração.
+- [x] Adicionar agrupamentos editoriais e painéis de destaque estruturados em Games e Setup.
+- [x] Revisar visualmente Home, Games, GameDetail, Benchmark, Setup, LinuxFix, Dashboard e Admin em desktop e mobile.
+- [x] Aplicar refinamentos visuais diretamente no Admin, incluindo hierarquia, painéis técnicos e estados de conteúdo.
+- [x] Aprimorar estados globais de carregamento, vazio e erro nas áreas principais antes da validação visual final.
+- [x] Padronizar e validar estados de carregamento, vazio e erro em GameDetail, LinuxFix, Dashboard, Admin e demais rotas principais.
+- [x] Evidenciar a cobertura wiki por distribuição, incluindo versões, drivers e otimizações por artigo publicado.
+- [x] Ampliar testes de procedimentos críticos de moderação e administração.
+- [x] Executar validação funcional verificável dos fluxos pessoais, moderação e modo desktop antes da entrega.
+- [x] Criar perfis wiki específicos por distribuição com referências de release, driver e otimização verificáveis.
+- [x] Cobrir procedimentos tRPC de moderação e administração com testes de integração de router/contexto.
+- [x] Exercitar e registrar as ações pessoais e de moderação com uma validação funcional isolada antes da entrega.

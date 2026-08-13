@@ -19,7 +19,7 @@ const paginationInput = z.object({
   pageSize: z.number().int().min(1).max(48).default(24),
 });
 
-const gameFilterInput = paginationInput.extend({
+export const gameFilterInput = paginationInput.extend({
   q: z.string().trim().max(120).optional(),
   distributionId: z.number().int().positive().optional(),
   gpuId: z.number().int().positive().optional(),

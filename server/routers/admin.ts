@@ -8,9 +8,9 @@ const status = z.enum(["draft", "published", "archived"]);
 const sourceUrl = z.string().trim().url().max(2048).nullable().optional();
 const guideStepsInput = z.array(z.object({ title: z.string().trim().min(2).max(400), explanation: z.string().trim().max(12000).nullable().optional(), command: z.string().trim().max(12000).nullable().optional(), warning: z.string().trim().max(12000).nullable().optional() })).min(1).max(80);
 const fixSolutionsInput = z.array(z.object({ title: z.string().trim().min(2).max(400), explanation: z.string().trim().max(12000).nullable().optional(), command: z.string().trim().max(12000).nullable().optional(), warning: z.string().trim().max(12000).nullable().optional() })).min(1).max(80);
-const benchmarkResultsInput = z.array(z.object({ resolutionWidth: z.number().int().min(320).max(16384), resolutionHeight: z.number().int().min(240).max(8640), preset: z.string().trim().min(1).max(160), averageFps: z.number().positive().max(10000), onePercentLowFps: z.number().positive().max(10000).nullable().optional(), zeroPointOnePercentLowFps: z.number().positive().max(10000).nullable().optional() })).min(1).max(12);
+export const benchmarkResultsInput = z.array(z.object({ resolutionWidth: z.number().int().min(320).max(16384), resolutionHeight: z.number().int().min(240).max(8640), preset: z.string().trim().min(1).max(160), averageFps: z.number().positive().max(10000), onePercentLowFps: z.number().positive().max(10000).nullable().optional(), zeroPointOnePercentLowFps: z.number().positive().max(10000).nullable().optional() })).min(1).max(12);
 
-function assertSourceWhenPublishing(nextStatus: "draft" | "published" | "archived", nextUrl: string | null | undefined, previousUrl?: string | null) {
+export function assertSourceWhenPublishing(nextStatus: "draft" | "published" | "archived", nextUrl: string | null | undefined, previousUrl?: string | null) {
   if (nextStatus === "published" && !nextUrl && !previousUrl) throw new Error("Conteúdo publicado exige uma URL de fonte registrada.");
 }
 

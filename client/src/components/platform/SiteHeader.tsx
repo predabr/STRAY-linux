@@ -3,7 +3,7 @@ import { startLogin } from "@/const";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Gamepad2, Menu, Moon, Search, Sun, UserRound } from "lucide-react";
+import { BadgeCheck, Gamepad2, Menu, Moon, Search, Sun, UserRound } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
 const navigation = [
@@ -23,8 +23,8 @@ export function SiteHeader() {
   return <header className="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur-xl">
     <div className="container flex h-16 items-center gap-3">
       <Link href="/" className="group flex shrink-0 items-center gap-2.5">
-        <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_28px_-7px_hsl(var(--primary))] transition-transform duration-200 group-hover:scale-105"><Gamepad2 className="h-5 w-5" /></span>
-        <span className="hidden font-semibold tracking-tight sm:block">Linux <span className="text-primary">Gaming</span> Hub</span>
+        <span className="relative grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_28px_-7px_hsl(var(--primary))] transition-transform duration-200 group-hover:scale-105"><Gamepad2 className="h-5 w-5" /><BadgeCheck className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full bg-background text-primary" /></span>
+        <span className="hidden leading-none sm:block"><span className="block font-semibold tracking-tight">Linux <span className="text-primary">Gaming</span> Hub</span><span className="mt-1 block font-mono text-[8px] font-medium tracking-[0.18em] text-muted-foreground">PLAY / VERIFY / TUNE</span></span>
       </Link>
       <nav className="hidden min-w-0 flex-1 items-center justify-center gap-1 lg:flex">
         {navigation.map((item) => <Link key={item.href} href={item.href} className={`rounded-lg px-3 py-2 text-sm transition-colors ${location === item.href ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-accent/60 hover:text-foreground"}`}>{item.label}</Link>)}
