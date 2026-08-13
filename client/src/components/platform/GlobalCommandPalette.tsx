@@ -9,13 +9,15 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { trpc } from "@/lib/trpc";
-import { BookOpen, Gamepad2, Gauge, LayoutDashboard, Search, Server, Settings2, Wrench } from "lucide-react";
+import { BookOpen, Gamepad2, Gauge, LayoutDashboard, MonitorCog, Search, Server, Settings2, Wrench } from "lucide-react";
+import { windowsActions, windowsApps } from "@/data/windowsCatalog";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
 
 const quickLinks = [
   { label: "Abrir GameHub", hint: "Catálogo e compatibilidade", href: "/games", icon: Gamepad2 },
   { label: "Consultar benchmark", hint: "Evidência por ambiente", href: "/benchmark", icon: Gauge },
+  { label: "Abrir área Windows", hint: "Manutenção e aplicativos", href: "/windows", icon: MonitorCog },
   { label: "Abrir Atlas de distros", hint: "753 entradas classificadas", href: "/distros", icon: Server },
   { label: "Ver Linux Setup", hint: "Guias e comandos", href: "/setup", icon: Settings2 },
   { label: "Diagnosticar no LinuxFix", hint: "Soluções rastreáveis", href: "/linuxfix", icon: Wrench },
@@ -59,6 +61,7 @@ export function GlobalCommandPalette({ open: controlledOpen, onOpenChange }: Pal
         { label: "Guias", icon: BookOpen, items: results.data.guides, href: (item: { slug: string }) => `/setup/${item.slug}` },
       ]
     : [];
+  const windowsMatches = term.trim().length >= 2 ? [...windowsActions.map((item) => ({ id: `action-${item.id}`, title: item.title, description: item.description })), ...windowsApps.map((item) => ({ id: `app-${item.id}`, title: item.name, description: `${item.category}: ${item.description}` }))].filter((item) => `${item.title} ${item.description}`.toLocaleLowerCase("pt-BR").includes(term.trim().toLocaleLowerCase("pt-BR"))).slice(0, 6) : [];
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen} title="Paleta Stray Linux" description="Navegue e pesquise na plataforma" className="max-w-2xl">
@@ -78,6 +81,7 @@ export function GlobalCommandPalette({ open: controlledOpen, onOpenChange }: Pal
           const Icon = group.icon;
           return group.items.length ? <CommandGroup key={group.label} heading={group.label}>{group.items.map((item: { id: number; slug: string; title: string; description?: string | null }) => <CommandItem key={`${group.label}-${item.id}`} value={`${item.title} ${item.description ?? ""}`} onSelect={() => go(group.href(item))}><Icon /><span className="min-w-0"><span className="block truncate">{item.title}</span>{item.description ? <span className="block truncate text-xs text-muted-foreground">{item.description}</span> : null}</span></CommandItem>)}</CommandGroup> : null;
         })}
+        {windowsMatches.length ? <CommandGroup heading="Windows">{windowsMatches.map((item) => <CommandItem key={item.id} value={`${item.title} ${item.description}`} onSelect={() => go("/windows")}><MonitorCog /><span className="min-w-0"><span className="block truncate">{item.title}</span><span className="block truncate text-xs text-muted-foreground">{item.description}</span></span></CommandItem>)}</CommandGroup> : null}
         <CommandSeparator />
         <CommandGroup heading="Atalhos"><CommandItem onSelect={() => go("/search")}><Search /><span>Abrir pesquisa avançada</span><CommandShortcut>↵</CommandShortcut></CommandItem></CommandGroup>
       </CommandList>

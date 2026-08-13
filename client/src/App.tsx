@@ -24,6 +24,7 @@ const LinuxFixPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ 
 const LinuxFixDetailPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ default: module.LinuxFixDetailPage })));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const SearchPage = lazy(() => import("@/pages/Search"));
+const WindowsHub = lazy(() => import("@/pages/WindowsHub"));
 
 function Router() {
   return <Suspense fallback={<div className="min-h-screen bg-background"><div className="container py-14"><div className="h-5 w-32 animate-pulse rounded bg-muted" /><div className="mt-5 h-12 max-w-xl animate-pulse rounded bg-muted" /><div className="mt-7 h-72 animate-pulse rounded-2xl bg-muted" /></div></div>}><Switch>
@@ -31,6 +32,7 @@ function Router() {
     <Route path="/games" component={Games} />
     <Route path="/games/:slug" component={GameDetail} />
     <Route path="/benchmark" component={Benchmark} />
+    <Route path="/windows" component={WindowsHub} />
     <Route path="/assistant" component={AssistantPage} />
     <Route path="/wiki" component={WikiPage} />
     <Route path="/distros/:id" component={DistroProfile} />

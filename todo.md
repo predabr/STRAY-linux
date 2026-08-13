@@ -83,3 +83,16 @@
 - [x] Ampliar o catálogo web, a busca e a paginação para a escala de 10.000 jogos sem dados fictícios.
 - [x] Atualizar o snapshot SQLite desktop e seus testes para o catálogo expandido.
 - [x] Atualizar documentação, validar build e revisar a experiência do catálogo expandido antes da entrega.
+- [x] Pesquisar e documentar fontes oficiais para manutenção, reparo, segurança, energia, armazenamento e WinGet no Windows.
+- [x] Criar a área Windows com diagnóstico, manutenção segura, otimização reversível, aplicativos úteis e comandos copiados por categoria.
+- [x] Classificar cada ação Windows por pré-requisito, privilégio, risco e fonte, bloqueando recomendações destrutivas ou não verificadas.
+- [x] Integrar a rota Windows à navegação, à pesquisa global, aos metadados e ao modo desktop existente.
+- [x] Criar testes, documentação, validação visual e build para a nova área Windows.
+- [x] Reconstruir e validar os instaladores desktop com a nova área Windows incluída.
+- [x] Reconstruir AppImage, `.deb`, `.rpm` e `.pacman` após a inclusão da área Windows e registrar novos checksums e artefatos.
+- [x] Validar a matriz final de artefatos desktop Windows e Linux para confirmar que todos incluem a rota `/windows` e a documentação atualizada.
+- [x] Inspecionar os artefatos finais empacotados para confirmar que o build inclui a rota `/windows` e os documentos atualizados.
+- [x] Registrar a validação verificável por formato Windows, AppImage, `.deb`, `.rpm` e `.pacman` vinculada ao conteúdo final empacotado.
+- [x] Documentar em arquivo versionado a inspeção da rota `/windows` por formato e o método de verificação do `app.asar`.
+- [x] Esclarecer na documentação que manuais e checksums são distribuídos externamente aos pacotes desktop e validar esse limite de empacotamento.
+- [x] Inspecionar os cinco formatos finais para confirmar que os manuais e checksums não fazem parte do runtime distribuído.

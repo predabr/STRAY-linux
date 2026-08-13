@@ -12,6 +12,7 @@ import { useState } from "react";
 const navigation = [
   { label: "GameHub", href: "/games" },
   { label: "Benchmark", href: "/benchmark" },
+  { label: "Windows", href: "/windows" },
   { label: "Wiki", href: "/wiki" },
   { label: "Distros", href: "/distros" },
   { label: "LinuxFix", href: "/linuxfix" },

@@ -14,6 +14,7 @@ O **Stray Linux**, criado por **Pedro Henrique Gouveia Araújo de Souza** no Bra
 | Wiki e Setup | Wiki para 17 distribuições, 36 guias versionados, comandos copiáveis, passos recolhíveis e progresso autenticado por etapa. |
 | Atlas de Distribuições | Registro pesquisável de 753 entradas únicas da lista editorial, separado entre família de pacote, variante histórica, referência não Linux e avaliação necessária. |
 | LinuxFix | Soluções categorizadas com sintomas, causas, confiança, origem, comandos e alertas, com votos, comentários e confirmações persistentes de usuários autenticados. |
+| Windows | Área de diagnóstico, manutenção, reparo, energia, armazenamento e aplicativos úteis, com comandos individuais, requisitos, níveis de risco e fontes oficiais. |
 | Conta e moderação | Roles USER/MODERATOR/ADMIN, perfil de hardware completo, favoritos, guias salvos, reports, fila de benchmark e audit log. |
 | Navegação e indexação | Paleta global em `Ctrl/Cmd+K`, pesquisa categorizada, metadados por rota, OpenGraph, Twitter Cards, `robots.txt`, sitemap e JSON-LD. |
 | Assistente | Chat contextual com recuperação de conteúdo interno; opção de modelo local via Ollama. |
@@ -24,6 +25,8 @@ O **Stray Linux**, criado por **Pedro Henrique Gouveia Araújo de Souza** no Bra
 O catálogo ampliado usa somente metadados do arquivo `games.json` do dataset **Steam Games Metadata and Player Reviews (2020–2024)**, disponibilizado sob CC BY 4.0. O importador seleciona **10.000 títulos distintos** pelo sinal de avaliações positivas presente no próprio snapshot, grava o lote, AppID, URL e origem no banco, e mantém esse sinal como ordenação de popularidade. O snapshot não é apresentado como catálogo Steam em tempo real.[1]
 
 Os conteúdos iniciais de distribuição e configuração registram URL de fonte por artigo. O guia de Steam via Flatpak identifica explicitamente que o pacote Flathub é comunitário e sem suporte oficial da Valve, como informa sua página.[2] A sintaxe de instalação exibida segue a documentação do Flatpak.[3]
+
+A área Windows não executa comandos, não aplica scripts de “debloat” e não recomenda desativar componentes de segurança. Ela apresenta ações individuais com requisito, risco e fonte, priorizando WinGet, DISM/SFC e Storage Sense documentados pela Microsoft. Consulte [`docs/sources-windows.md`](docs/sources-windows.md) para o escopo e as referências.
 
 ## Desenvolvimento web
 

@@ -9,6 +9,7 @@ const defaults = {
 function metaFor(path: string) {
   if (path.startsWith("/games")) return { title: "GameHub | Stray Linux", description: "Catálogo de jogos com compatibilidade por ambiente, fontes e benchmarks verificáveis." };
   if (path.startsWith("/benchmark")) return { title: "PC Benchmark | Stray Linux", description: "Consulte benchmarks verificáveis por jogo, hardware, distribuição e runtime." };
+  if (path.startsWith("/windows")) return { title: "Windows | Stray Linux", description: "Comandos Windows verificados para diagnóstico, manutenção segura, reparo e aplicativos úteis." };
   if (path.startsWith("/distros")) return { title: "Atlas de Distribuições | Stray Linux", description: "Explore o Atlas de distribuições, famílias de pacote e comandos de instalação do Stray Linux." };
   if (path.startsWith("/wiki")) return { title: "Linux Wiki | Stray Linux", description: "Referências técnicas de Linux com fonte, versão e escopo de distribuição explícitos." };
   if (path.startsWith("/setup")) return { title: "Linux Setup | Stray Linux", description: "Guias técnicos com comandos copiáveis, avisos e progresso por etapa." };
