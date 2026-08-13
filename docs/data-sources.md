@@ -18,6 +18,11 @@ A importação de jogos será orientada por fontes públicas ou licenciadas e ca
 | Fedora Docs — Gaming | Referência oficial para gaming e drivers Fedora | Bloqueada por desafio anti-bot no ambiente de pesquisa; não será copiada ou importada automaticamente | https://docs.fedoraproject.org/en-US/gaming/ |
 | Flathub — Steam | Referência para identificador do aplicativo Flatpak, requisitos de arquitetura e permissões adicionais de biblioteca | Consultada; o pacote é sinalizado como comunitário e sem suporte oficial da Valve | https://flathub.org/en/apps/com.valvesoftware.Steam |
 | Flatpak Docs — Using Flatpak | Sintaxe de instalação e execução para comandos apresentados nos guias | Consultada | https://docs.flatpak.org/en/latest/using-flatpak.html |
+| Vulkan.org | Referência geral para a plataforma Vulkan e para o diagnóstico apresentado com ressalvas de pacote por distribuição | Consultada | https://vulkan.org/ |
+| NVIDIA Vulkan Driver Support | Referência oficial para a disponibilidade de drivers Vulkan NVIDIA, sem recomendar pacote genérico por distribuição | Consultada | https://developer.nvidia.com/vulkan-driver |
+| Red Hat Enterprise Linux Docs | Referência oficial para a família RHEL; os artigos não presumem suporte de gaming nem reutilizam comandos de Fedora | Referência de família | https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/ |
+| Rocky Linux Docs | Referência de documentação para derivada compatível com RHEL | Referência de família | https://docs.rockylinux.org/ |
+| AlmaLinux Wiki | Referência de documentação para derivada compatível com RHEL | Referência de família | https://wiki.almalinux.org/ |
 
 ## Regras de qualidade de dados
 
