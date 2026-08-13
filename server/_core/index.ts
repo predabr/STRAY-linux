@@ -10,6 +10,7 @@ import { desktopRouter } from "../desktop/router";
 import { initializeDesktopStore } from "../desktop/localStore";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { createTrpcRateLimitMiddleware } from "../lib/requestRateLimit";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -33,18 +34,24 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   if (process.env.DESKTOP_MODE === "1") await initializeDesktopStore();
   const app = express();
+  app.set("trust proxy", 1);
   const server = createServer(app);
-  // Configure body parser with larger size limit for file uploads
-  app.use(express.json({ limit: "50mb" }));
-  app.use(express.urlencoded({ limit: "50mb", extended: true }));
-  app.get("/api/health", (_req, res) => res.json({ ok: true, mode: process.env.DESKTOP_MODE === "1" ? "desktop" : "web" }));
+  app.use((_req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    next();
+  });
+  app.use(express.json({ limit: "8mb" }));
+  app.use(express.urlencoded({ limit: "8mb", extended: true }));
+  app.get("/api/health", (_req, res) => res.json({ ok: true, mode: process.env.DESKTOP_MODE === "1" ? "desktop" : "web", timestamp: new Date().toISOString() }));
   app.get("/robots.txt", (req, res) => {
     const origin = `${req.protocol}://${req.get("host")}`;
     res.type("text/plain").send(`User-agent: *\nAllow: /\nDisallow: /dashboard\nDisallow: /admin\nDisallow: /api/\nSitemap: ${origin}/sitemap.xml\n`);
   });
   app.get("/sitemap.xml", (req, res) => {
     const origin = `${req.protocol}://${req.get("host")}`;
-    const paths = ["/", "/games", "/benchmark", "/distros", "/wiki", "/setup", "/linuxfix", "/assistant"];
+    const paths = ["/", "/games", "/benchmark", "/compare", "/distros", "/wiki", "/setup", "/linuxfix", "/assistant", "/scanner"];
     const body = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((path) => `<url><loc>${origin}${path}</loc></url>`).join("")}</urlset>`;
     res.type("application/xml").send(body);
   });
@@ -53,6 +60,7 @@ async function startServer() {
     registerOAuthRoutes(app);
   }
   // tRPC API
+  app.use("/api/trpc", createTrpcRateLimitMiddleware());
   app.use(
     "/api/trpc",
     createExpressMiddleware({

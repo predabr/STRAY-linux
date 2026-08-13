@@ -4,6 +4,9 @@ import { auditActions, benchmarkResults, benchmarks, distributions, games, hardw
 import { publicProcedure, router } from "../_core/trpc";
 import { activeUserProcedure, moderatorProcedure, requireDatabase } from "./_guards";
 import { hasBenchmarkEvidence, reviewedBenchmarkProvenance } from "./policies";
+import { benchmarkEvidenceImageInput, decodeBenchmarkEvidenceImage } from "../lib/benchmarkEvidence";
+import { storagePut } from "../storage";
+import { randomUUID } from "node:crypto";
 
 const resultInput = z.object({
   resolutionWidth: z.number().int().min(320).max(16384),
@@ -35,6 +38,7 @@ const submissionInput = z.object({
   sourceLabel: z.string().trim().min(2).max(255),
   sourceUrl: z.string().trim().url().max(2048).optional(),
   evidenceNote: z.string().trim().min(8).max(6000).optional(),
+  evidenceImage: benchmarkEvidenceImageInput.optional(),
   measuredAt: z.coerce.date().optional(),
   results: z.array(resultInput).min(1).max(12),
 }).superRefine((value, ctx) => {
@@ -97,8 +101,12 @@ export const benchmarksRouter = router({
     if (!hasBenchmarkEvidence(input)) throw new Error("A submissão exige FPS médio e uma fonte ou evidência.");
     const game = (await db.select({ id: games.id }).from(games).where(eq(games.id, input.gameId)).limit(1))[0];
     if (!game) throw new Error("Jogo não encontrado.");
-    const { results, ...benchmark } = input;
-    const created = await db.insert(benchmarks).values({ ...benchmark, userId: ctx.user.id, sourceType: "community_submission", provenance: "community", verificationStatus: "submitted" });
+    const { results, evidenceImage, ...benchmark } = input;
+    const uploadedEvidence = evidenceImage ? await (async () => {
+      const { bytes, extension } = decodeBenchmarkEvidenceImage(evidenceImage);
+      return storagePut(`benchmark-evidence/${ctx.user.id}/${randomUUID()}.${extension}`, bytes, evidenceImage.mimeType);
+    })() : null;
+    const created = await db.insert(benchmarks).values({ ...benchmark, evidenceImageKey: uploadedEvidence?.key ?? null, evidenceImageUrl: uploadedEvidence?.url ?? null, userId: ctx.user.id, sourceType: "community_submission", provenance: "community", verificationStatus: "submitted" });
     const benchmarkId = Number(created[0].insertId);
     await db.insert(benchmarkResults).values(results.map((result) => ({
       ...result,

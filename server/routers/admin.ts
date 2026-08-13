@@ -1,8 +1,9 @@
 import { and, count, desc, eq, isNull, or, sql } from "drizzle-orm";
 import { z } from "zod";
-import { auditActions, benchmarkResults, benchmarks, compatibilityRecords, distributions, games, hardwareItems, linuxFixes, linuxFixSolutions, reports, setupGuides, setupGuideSteps, users } from "../../drizzle/schema";
+import { auditActions, benchmarkResults, benchmarks, compatibilityRecords, contentSources, distributions, games, hardwareItems, linuxFixes, linuxFixSolutions, reports, setupGuides, setupGuideSteps, sourceRefreshRuns, users } from "../../drizzle/schema";
 import { router } from "../_core/trpc";
 import { administratorProcedure, requireDatabase } from "./_guards";
+import { verifySteamWebApi } from "../lib/steamWebApi";
 
 const status = z.enum(["draft", "published", "archived"]);
 const sourceUrl = z.string().trim().url().max(2048).nullable().optional();
@@ -45,6 +46,45 @@ export const adminRouter = router({
       gamesMissingGuides: Number(missingGuides.total),
       distributionsWithoutCompatibility: Number(distrosWithoutCompatibility.total),
     };
+  }),
+
+  sources: router({
+    list: administratorProcedure.query(async () => {
+      const db = await requireDatabase();
+      const [sources, runs] = await Promise.all([
+        db.select().from(contentSources).orderBy(desc(contentSources.updatedAt)).limit(100),
+        db.select().from(sourceRefreshRuns).orderBy(desc(sourceRefreshRuns.requestedAt)).limit(100),
+      ]);
+      return { sources, runs };
+    }),
+    verifySteam: administratorProcedure.mutation(async ({ ctx }) => {
+      const db = await requireDatabase();
+      const now = new Date();
+      let source = (await db.select().from(contentSources).where(eq(contentSources.name, "Steam Web API")).limit(1))[0];
+      if (!source) {
+        const created = await db.insert(contentSources).values({ name: "Steam Web API", baseUrl: "https://api.steampowered.com/", licenseNote: "Uso sujeito aos termos Steamworks e aos endpoints autorizados pela chave configurada.", isOfficial: true, lastCheckedAt: now });
+        source = (await db.select().from(contentSources).where(eq(contentSources.id, Number(created[0].insertId))).limit(1))[0];
+      }
+      if (!source) throw new Error("Não foi possível inicializar a fonte Steam.");
+      const started = await db.insert(sourceRefreshRuns).values({ sourceId: source.id, kind: "steam-api-verification", status: "started", sourceEndpoint: "https://api.steampowered.com/ISteamWebAPIUtil/GetSupportedAPIList/v1/" });
+      const runId = Number(started[0].insertId);
+      try {
+        const result = await verifySteamWebApi(process.env.STEAM_WEB_API_KEY || "");
+        await Promise.all([
+          db.update(contentSources).set({ lastCheckedAt: now, lastSuccessfulRefreshAt: now }).where(eq(contentSources.id, source.id)),
+          db.update(sourceRefreshRuns).set({ status: "succeeded", finishedAt: new Date(), recordsSeen: result.interfaces, recordsChanged: 0, sourceEndpoint: result.endpoint, message: "Credencial validada. Nenhum metadado de loja foi importado por endpoint não documentado." }).where(eq(sourceRefreshRuns.id, runId)),
+          db.insert(auditActions).values({ actorId: ctx.user.id, action: "verify", entityType: "content_source", entityId: source.id, metadata: { source: "Steam Web API", interfaces: result.interfaces } }),
+        ]);
+        return { sourceId: source.id, runId, interfaces: result.interfaces, checkedAt: now };
+      } catch (error) {
+        const message = error instanceof Error ? error.message.slice(0, 2000) : "Falha desconhecida na verificação Steam.";
+        await Promise.all([
+          db.update(contentSources).set({ lastCheckedAt: now }).where(eq(contentSources.id, source.id)),
+          db.update(sourceRefreshRuns).set({ status: "failed", finishedAt: new Date(), message }).where(eq(sourceRefreshRuns.id, runId)),
+        ]);
+        throw error;
+      }
+    }),
   }),
 
   games: router({

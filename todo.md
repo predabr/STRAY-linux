@@ -118,3 +118,23 @@
 - [x] Adicionar regressão de autorização para a procedure administrativa `contentHealth` e validar a consulta com dados reais.
 - [x] Registrar a validação de estados vazios e paginação do comparador e do catálogo relacionado, sem ampliar conclusões para áreas não alteradas.
 - [x] Delimitar no relatório quais relações foram efetivamente adicionadas nesta rodada e quais continuam sendo capacidades já existentes ou futuras.
+- [x] Mapear as capacidades já existentes de Steam App ID, fontes, hardware, compatibilidade, benchmarks e comunidade contra o novo roadmap.
+- [x] Validar termos, licenças e formatos de fontes para Steam, Proton, ProtonDB, hardware, drivers e distribuições antes de importar ou sincronizar campos adicionais.
+- [x] Criar um contrato de relatório de sistema consentido, com minimização de dados, origem de cada campo e pré-visualização antes do envio.
+- [x] Evoluir o modo desktop com um scanner Linux local que detecte apenas informações técnicas permitidas e gere relatório exportável, sem upload automático.
+- [x] Explicar de forma rastreável o motor de compatibilidade atual e ampliar seus fatores somente quando houver evidência armazenada para o ambiente.
+- [x] Reforçar o fluxo de benchmark e comunidade com evidência, moderação e separação estrita entre VERIFIED, COMMUNITY e ESTIMATED.
+- [x] Projetar integração Steam e atualização de dados com opções seguras, tratando credenciais e agendamento como decisões explícitas de produção.
+- [x] Validar tipo, testes, build, desktop e documentação para as capacidades implementadas nesta rodada.
+- [x] Documentar o contrato de privacidade, minimização de dados, consentimento e retenção para scanner, benchmarks e relatórios de comunidade.
+- [x] Criar modelos rastreáveis de proveniência e atualização para fontes externas, sem ativar sincronização autenticada antes de receber as credenciais necessárias.
+- [x] Implementar o scanner Linux `stray-scan` como geração local de relatório técnico, com prévia e importação explícita no perfil do usuário.
+- [x] Evoluir a explicação da compatibilidade para mostrar fatores, evidências, cobertura e limitações, sem transformar ausência de dados em pontuação.
+- [x] Preparar o fluxo de benchmark para anexos de evidência e revisão, preservando categorias VERIFIED, COMMUNITY e ESTIMATED.
+- [x] Preparar controles de produção: rate limiting, saúde operacional, trilha de auditoria, documentação de backup e configurações necessárias para CI/CD.
+- [ ] Registrar as decisões pendentes de Steam API, domínio, armazenamento, CDN e monitoramento para ativação de produção.
+- [ ] Publicar este checkpoint e configurar o domínio público antes de criar tarefas recorrentes de atualização.
+- [ ] Aprovar endpoint Steam autorizado ou feed licenciado para importar campos de catálogo, capas e screenshots com proveniência.
+- [ ] Configurar CDN/rate limit distribuído, monitoramento externo e alertas para tráfego público multi-instância.
+- [x] Revalidar e documentar explicitamente as fontes de hardware, drivers e distribuições desta fase, com termos, formato e referência versionada.
+- [x] Preparar e versionar a base de CI/CD e operação: workflow de build/test, checklist de deploy, validações pós-publicação e variáveis necessárias.

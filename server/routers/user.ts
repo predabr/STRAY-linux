@@ -14,6 +14,7 @@ import {
 } from "../../drizzle/schema";
 import { router } from "../_core/trpc";
 import { activeUserProcedure, requireDatabase } from "./_guards";
+import { scannerReportInput, scannerReportToProfile } from "../lib/scannerReport";
 
 const profileInput = z.object({
   name: z.string().trim().min(1).max(140),
@@ -29,6 +30,12 @@ const profileInput = z.object({
   runtimeVersion: z.string().trim().max(160).nullable().optional(),
   storageDescription: z.string().trim().max(255).nullable().optional(),
   monitorDescription: z.string().trim().max(255).nullable().optional(),
+  detectedCpu: z.string().trim().max(255).nullable().optional(),
+  detectedGpu: z.string().trim().max(255).nullable().optional(),
+  detectedRamGb: z.number().int().min(0).max(1_000_000).nullable().optional(),
+  detectedDistribution: z.string().trim().max(255).nullable().optional(),
+  scannerVersion: z.string().trim().max(80).nullable().optional(),
+  scannedAt: z.coerce.date().nullable().optional(),
   isActive: z.boolean().default(false),
 });
 
@@ -74,6 +81,12 @@ export const userRouter = router({
         return { id };
       }
       const result = await db.insert(userHardwareProfiles).values({ ...profile, userId: ctx.user.id, isActive });
+      return { id: Number(result[0].insertId) };
+    }),
+    importScan: activeUserProcedure.input(z.object({ name: z.string().trim().min(1).max(140).default("Perfil importado pelo Stray Scan"), isActive: z.boolean().default(true), scan: scannerReportInput })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      if (input.isActive) await db.update(userHardwareProfiles).set({ isActive: false }).where(eq(userHardwareProfiles.userId, ctx.user.id));
+      const result = await db.insert(userHardwareProfiles).values({ ...scannerReportToProfile(input.scan), userId: ctx.user.id, name: input.name, isActive: input.isActive });
       return { id: Number(result[0].insertId) };
     }),
     remove: activeUserProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => {

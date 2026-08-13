@@ -54,6 +54,8 @@ export const contentSources = mysqlTable(
     baseUrl: varchar("baseUrl", { length: 2048 }),
     licenseNote: text("licenseNote"),
     isOfficial: boolean("isOfficial").default(false).notNull(),
+    lastCheckedAt: timestamp("lastCheckedAt"),
+    lastSuccessfulRefreshAt: timestamp("lastSuccessfulRefreshAt"),
     createdAt,
     updatedAt,
   },
@@ -72,6 +74,26 @@ export const importBatches = mysqlTable(
     notes: text("notes"),
   },
   (table) => [index("import_batches_source_kind_idx").on(table.sourceId, table.kind)],
+);
+
+export const sourceRefreshStatuses = ["started", "succeeded", "failed", "skipped"] as const;
+
+export const sourceRefreshRuns = mysqlTable(
+  "source_refresh_runs",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    sourceId: int("sourceId").notNull().references(() => contentSources.id, { onDelete: "cascade" }),
+    kind: varchar("kind", { length: 64 }).notNull(),
+    status: mysqlEnum("status", sourceRefreshStatuses).notNull(),
+    requestedAt: timestamp("requestedAt").defaultNow().notNull(),
+    finishedAt: timestamp("finishedAt"),
+    recordsSeen: int("recordsSeen").default(0).notNull(),
+    recordsChanged: int("recordsChanged").default(0).notNull(),
+    inputHash: varchar("inputHash", { length: 128 }),
+    sourceEndpoint: varchar("sourceEndpoint", { length: 2048 }),
+    message: text("message"),
+  },
+  (table) => [index("source_refresh_runs_source_requested_idx").on(table.sourceId, table.requestedAt), index("source_refresh_runs_status_idx").on(table.status, table.requestedAt)],
 );
 
 export const games = mysqlTable(
@@ -93,6 +115,8 @@ export const games = mysqlTable(
     sourceId: int("sourceId").references(() => contentSources.id, { onDelete: "set null" }),
     importBatchId: int("importBatchId").references(() => importBatches.id, { onDelete: "set null" }),
     sourceUrl: varchar("sourceUrl", { length: 2048 }),
+    sourceUpdatedAt: timestamp("sourceUpdatedAt"),
+    sourceCheckedAt: timestamp("sourceCheckedAt"),
     isFeatured: boolean("isFeatured").default(false).notNull(),
     deletedAt: timestamp("deletedAt"),
     createdAt,
@@ -105,6 +129,27 @@ export const games = mysqlTable(
     index("games_title_idx").on(table.title),
     index("games_catalog_popularity_idx").on(table.status, table.sourcePositiveReviews),
   ],
+);
+
+export const gameMediaKinds = ["cover", "header", "screenshot", "logo"] as const;
+
+export const gameMedia = mysqlTable(
+  "game_media",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    gameId: int("gameId").notNull().references(() => games.id, { onDelete: "cascade" }),
+    kind: mysqlEnum("kind", gameMediaKinds).notNull(),
+    imageUrl: varchar("imageUrl", { length: 2048 }).notNull(),
+    sourceUrl: varchar("sourceUrl", { length: 2048 }),
+    sourceId: int("sourceId").references(() => contentSources.id, { onDelete: "set null" }),
+    width: int("width"),
+    height: int("height"),
+    position: int("position").default(0).notNull(),
+    sourceCheckedAt: timestamp("sourceCheckedAt"),
+    createdAt,
+    updatedAt,
+  },
+  (table) => [uniqueIndex("game_media_game_kind_position_unique").on(table.gameId, table.kind, table.position), index("game_media_game_kind_idx").on(table.gameId, table.kind)],
 );
 
 export const tags = mysqlTable(
@@ -235,6 +280,12 @@ export const userHardwareProfiles = mysqlTable(
     runtimeVersion: varchar("runtimeVersion", { length: 160 }),
     storageDescription: varchar("storageDescription", { length: 255 }),
     monitorDescription: varchar("monitorDescription", { length: 255 }),
+    detectedCpu: varchar("detectedCpu", { length: 255 }),
+    detectedGpu: varchar("detectedGpu", { length: 255 }),
+    detectedRamGb: int("detectedRamGb"),
+    detectedDistribution: varchar("detectedDistribution", { length: 255 }),
+    scannerVersion: varchar("scannerVersion", { length: 80 }),
+    scannedAt: timestamp("scannedAt"),
     isActive: boolean("isActive").default(false).notNull(),
     createdAt,
     updatedAt,
@@ -313,6 +364,8 @@ export const benchmarks = mysqlTable(
     sourceLabel: varchar("sourceLabel", { length: 255 }),
     sourceUrl: varchar("sourceUrl", { length: 2048 }),
     evidenceNote: text("evidenceNote"),
+    evidenceImageKey: varchar("evidenceImageKey", { length: 512 }),
+    evidenceImageUrl: varchar("evidenceImageUrl", { length: 2048 }),
     reviewedById: int("reviewedById").references(() => users.id, { onDelete: "set null" }),
     reviewedAt: timestamp("reviewedAt"),
     reviewNote: text("reviewNote"),

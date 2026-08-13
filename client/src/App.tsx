@@ -25,6 +25,7 @@ const LinuxFixPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ 
 const LinuxFixDetailPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ default: module.LinuxFixDetailPage })));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const SearchPage = lazy(() => import("@/pages/Search"));
+const Scanner = lazy(() => import("@/pages/Scanner"));
 const WindowsHub = lazy(() => import("@/pages/WindowsHub"));
 
 function Router() {
@@ -45,6 +46,7 @@ function Router() {
     <Route path="/linuxfix" component={LinuxFixPage} />
     <Route path="/linuxfix/:slug" component={LinuxFixDetailPage} />
     <Route path="/search" component={SearchPage} />
+    <Route path="/scanner" component={Scanner} />
     <Route path="/dashboard" component={Dashboard} />
     <Route path="/dashboard/:section" component={Dashboard} />
     <Route path="/admin" component={Admin} />

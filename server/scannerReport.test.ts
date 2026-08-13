@@ -1,0 +1,29 @@
+import { describe, expect, it } from "vitest";
+import { scannerReportInput, scannerReportToProfile } from "./lib/scannerReport";
+
+const report = {
+  schemaVersion: 1,
+  scannerVersion: "1.0.0",
+  generatedAt: "2026-08-13T22:00:00.000Z",
+  system: {
+    distribution: { id: "arch", name: "Arch Linux", version: null },
+    kernelVersion: "6.12.1-arch1-1",
+    cpu: { model: "AMD Ryzen 5 5600" },
+    gpu: { model: "AMD Radeon RX 7600", vramMb: 8192 },
+    memoryGb: 24,
+    graphics: { driverVersion: "Mesa 26.2.0", mesaVersion: "26.2.0", vulkanVersion: "1.4.0", openGlVersion: "4.6" },
+    runtime: { wineVersion: "wine-10.0", protonVersion: null, steamDetected: true },
+  },
+};
+
+describe("contrato do stray-scan", () => {
+  it("aceita somente a telemetria técnica minimizada e converte para um perfil", () => {
+    const parsed = scannerReportInput.parse(report);
+    expect(scannerReportToProfile(parsed)).toMatchObject({ detectedCpu: "AMD Ryzen 5 5600", detectedGpu: "AMD Radeon RX 7600", detectedRamGb: 24, detectedDistribution: "Arch Linux", kernelVersion: "6.12.1-arch1-1" });
+  });
+
+  it("rejeita campos não permitidos como hostname, usuário ou identificador de máquina", () => {
+    expect(() => scannerReportInput.parse({ ...report, hostname: "não-permitido" })).toThrow();
+    expect(() => scannerReportInput.parse({ ...report, system: { ...report.system, serialNumber: "não-permitido" } })).toThrow();
+  });
+});
