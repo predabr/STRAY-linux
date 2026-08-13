@@ -96,3 +96,14 @@
 - [x] Documentar em arquivo versionado a inspeção da rota `/windows` por formato e o método de verificação do `app.asar`.
 - [x] Esclarecer na documentação que manuais e checksums são distribuídos externamente aos pacotes desktop e validar esse limite de empacotamento.
 - [x] Inspecionar os cinco formatos finais para confirmar que os manuais e checksums não fazem parte do runtime distribuído.
+- [x] Inventariar fontes, comandos, conteúdos técnicos, dependências, rotas e fluxos de IA para uma auditoria ampla.
+- [x] Revalidar fontes oficiais de Linux, Windows, catálogo e IA, corrigindo referências quebradas ou desatualizadas comprovadas.
+- [x] Testar contratos de IA, autenticação, busca, catálogo, dados, endpoints e controles de segurança sem usar dados fictícios.
+- [x] Corrigir falhas comprovadas e adicionar testes de regressão para os fluxos afetados.
+- [x] Validar build, rotas, documentação e artefatos desktop após a auditoria e registrar os limites de ambiente encontrados.
+- [x] Corrigir a continuidade de sessão no assistente para não criar uma conversa nova a cada pergunta.
+- [x] Melhorar a recuperação de contexto da IA por termos relevantes, mantendo filtro de conteúdo publicado e citações rastreáveis.
+- [x] Corrigir consultas de hardware que enviam `pageSize` acima do limite aceito pelo contrato tRPC.
+- [x] Proteger a gravação de turnos Ollama contra reutilização de uma sessão que não pertença ao usuário autenticado.
+- [x] Executar e registrar uma validação real da pesquisa global com resultado existente e consulta sem resultados, sem inserir dados fictícios.
+- [x] Executar e registrar chamadas reais dos endpoints públicos de catálogo e hardware usados pelos filtros, sem mocks.

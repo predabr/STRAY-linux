@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { gameFilterInput } from "./games";
+import { gameFilterInput, hardwareListInput } from "./games";
 
 describe("contrato de filtros do GameHub", () => {
   it("aceita a combinação técnica de distribuição, CPU, GPU, runtime e compatibilidade", () => {
@@ -30,5 +30,10 @@ describe("contrato de filtros do GameHub", () => {
     expect(() => gameFilterInput.parse({ platform: "native_windows" })).toThrow();
     expect(() => gameFilterInput.parse({ gpuId: 0 })).toThrow();
     expect(() => gameFilterInput.parse({ pageSize: 49 })).toThrow();
+  });
+
+  it("permite que seletores de hardware carreguem até 500 itens sem expandir a paginação do catálogo", () => {
+    expect(hardwareListInput.parse({ pageSize: 500, kind: "gpu" })).toMatchObject({ page: 1, pageSize: 500, kind: "gpu" });
+    expect(() => hardwareListInput.parse({ pageSize: 501 })).toThrow();
   });
 });

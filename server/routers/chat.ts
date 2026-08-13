@@ -7,6 +7,21 @@ import { activeUserProcedure, requireDatabase } from "./_guards";
 
 type Citation = { type: "wiki" | "guide" | "linuxfix"; title: string; slug: string; sourceUrl: string | null };
 
+const CONTEXT_STOPWORDS = new Set([
+  "a", "ao", "aos", "as", "com", "como", "da", "das", "de", "do", "dos", "e", "em", "eu", "isso", "na", "nas", "no", "nos", "o", "os", "ou", "para", "por", "pra", "que", "sobre", "um", "uma", "ver", "qual", "quais",
+]);
+
+export function extractContextTerms(question: string): string[] {
+  const normalized = question.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const words = normalized.split(/[^a-z0-9+._-]+/).filter(Boolean);
+  const terms: string[] = [];
+  for (const word of words) {
+    if (word.length >= 3 && !CONTEXT_STOPWORDS.has(word) && terms.indexOf(word) === -1) terms.push(word);
+    if (terms.length === 6) break;
+  }
+  return terms;
+}
+
 function llmText(content: string | Array<{ type: "text"; text: string } | { type: "image_url" } | { type: "file_url" }>) {
   if (typeof content === "string") return content;
   return content.filter((part): part is { type: "text"; text: string } => part.type === "text").map((part) => part.text).join("\n");
@@ -14,11 +29,15 @@ function llmText(content: string | Array<{ type: "text"; text: string } | { type
 
 async function retrieveContext(question: string) {
   const db = await requireDatabase();
-  const term = `%${question.slice(0, 120)}%`;
+  const terms = extractContextTerms(question);
+  const searchTerms = terms.length ? terms : [question.trim().slice(0, 120).toLowerCase()];
+  const wikiConditions = searchTerms.flatMap((term) => [like(wikiArticles.title, `%${term}%`), like(wikiArticles.excerpt, `%${term}%`), like(wikiArticles.body, `%${term}%`)]);
+  const guideConditions = searchTerms.flatMap((term) => [like(setupGuides.title, `%${term}%`), like(setupGuides.description, `%${term}%`)]);
+  const fixConditions = searchTerms.flatMap((term) => [like(linuxFixes.title, `%${term}%`), like(linuxFixes.symptoms, `%${term}%`), like(linuxFixes.possibleCauses, `%${term}%`)]);
   const [wiki, guides, fixes] = await Promise.all([
-    db.select({ title: wikiArticles.title, slug: wikiArticles.slug, body: wikiArticles.body, sourceUrl: wikiArticles.sourceUrl }).from(wikiArticles).where(and(eq(wikiArticles.status, "published"), isNull(wikiArticles.deletedAt), or(like(wikiArticles.title, term), like(wikiArticles.excerpt, term), like(wikiArticles.body, term))!)).orderBy(desc(wikiArticles.updatedAt)).limit(3),
-    db.select({ title: setupGuides.title, slug: setupGuides.slug, description: setupGuides.description, sourceUrl: setupGuides.sourceUrl }).from(setupGuides).where(and(eq(setupGuides.status, "published"), isNull(setupGuides.deletedAt), or(like(setupGuides.title, term), like(setupGuides.description, term))!)).orderBy(desc(setupGuides.updatedAt)).limit(3),
-    db.select({ title: linuxFixes.title, slug: linuxFixes.slug, symptoms: linuxFixes.symptoms, possibleCauses: linuxFixes.possibleCauses, sourceUrl: linuxFixes.sourceUrl }).from(linuxFixes).where(and(eq(linuxFixes.status, "published"), isNull(linuxFixes.deletedAt), or(like(linuxFixes.title, term), like(linuxFixes.symptoms, term), like(linuxFixes.possibleCauses, term))!)).orderBy(desc(linuxFixes.updatedAt)).limit(3),
+    db.select({ title: wikiArticles.title, slug: wikiArticles.slug, body: wikiArticles.body, sourceUrl: wikiArticles.sourceUrl }).from(wikiArticles).where(and(eq(wikiArticles.status, "published"), isNull(wikiArticles.deletedAt), or(...wikiConditions)!)).orderBy(desc(wikiArticles.updatedAt)).limit(3),
+    db.select({ title: setupGuides.title, slug: setupGuides.slug, description: setupGuides.description, sourceUrl: setupGuides.sourceUrl }).from(setupGuides).where(and(eq(setupGuides.status, "published"), isNull(setupGuides.deletedAt), or(...guideConditions)!)).orderBy(desc(setupGuides.updatedAt)).limit(3),
+    db.select({ title: linuxFixes.title, slug: linuxFixes.slug, symptoms: linuxFixes.symptoms, possibleCauses: linuxFixes.possibleCauses, sourceUrl: linuxFixes.sourceUrl }).from(linuxFixes).where(and(eq(linuxFixes.status, "published"), isNull(linuxFixes.deletedAt), or(...fixConditions)!)).orderBy(desc(linuxFixes.updatedAt)).limit(3),
   ]);
   const citations: Citation[] = [
     ...wiki.map((item) => ({ type: "wiki" as const, title: item.title, slug: item.slug, sourceUrl: item.sourceUrl })),
@@ -62,7 +81,7 @@ export const chatRouter = router({
       sessionId = Number(created[0].insertId);
     }
     await db.insert(chatMessages).values({ sessionId, role: "user", content: input.question });
-    const system = `Você é o assistente do Linux Gaming Hub. Responda em português brasileiro usando SOMENTE o contexto interno fornecido abaixo. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade ou FPS. Diferencie fatos, orientações comunitárias e incertezas. Para comandos, enfatize avisos de segurança. Ao final, cite os títulos internos utilizados sob o cabeçalho 'Fontes internas'.\n\nCONTEXTO INTERNO:\n${context.text || "Nenhum conteúdo interno relacionado foi recuperado."}`;
+    const system = `Você é o assistente do Stray Linux. Responda em português brasileiro usando SOMENTE o contexto interno fornecido abaixo. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade ou FPS. Diferencie fatos, orientações comunitárias e incertezas. Para comandos, enfatize avisos de segurança. Ao final, cite os títulos internos utilizados sob o cabeçalho 'Fontes internas'.\n\nCONTEXTO INTERNO:\n${context.text || "Nenhum conteúdo interno relacionado foi recuperado."}`;
     const response = await invokeLLM({ messages: [{ role: "system", content: system }, { role: "user", content: input.question }], maxTokens: 900 });
     const answer = llmText(response.choices[0]?.message.content ?? "Não consegui gerar uma resposta agora.") || "Não consegui gerar uma resposta agora.";
     await db.insert(chatMessages).values({ sessionId, role: "assistant", content: answer, citations: context.citations });
@@ -76,6 +95,9 @@ export const chatRouter = router({
     if (!sessionId) {
       const created = await db.insert(chatSessions).values({ userId: ctx.user.id, title: input.question.slice(0, 120), provider: "ollama-local" });
       sessionId = Number(created[0].insertId);
+    } else {
+      const session = (await db.select({ id: chatSessions.id }).from(chatSessions).where(and(eq(chatSessions.id, sessionId), eq(chatSessions.userId, ctx.user.id))).limit(1))[0];
+      if (!session) throw new Error("Sessão de chat não encontrada.");
     }
     await db.insert(chatMessages).values([{ sessionId, role: "user", content: input.question }, { sessionId, role: "assistant", content: input.answer, citations: input.citations }]);
     await db.update(chatSessions).set({ updatedAt: new Date() }).where(eq(chatSessions.id, sessionId));

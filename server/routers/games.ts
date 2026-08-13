@@ -20,6 +20,13 @@ const paginationInput = z.object({
   pageSize: z.number().int().min(1).max(48).default(24),
 });
 
+export const hardwareListInput = z.object({
+  page: z.number().int().min(1).default(1),
+  pageSize: z.number().int().min(1).max(500).default(24),
+  q: z.string().trim().max(120).optional(),
+  kind: z.enum(["cpu", "gpu", "ram"]).optional(),
+});
+
 export const gameFilterInput = paginationInput.extend({
   q: z.string().trim().max(120).optional(),
   distributionId: z.number().int().positive().optional(),
@@ -154,7 +161,7 @@ export const distributionsRouter = router({
 });
 
 export const hardwareRouter = router({
-  list: publicProcedure.input(paginationInput.extend({ q: z.string().trim().max(120).optional(), kind: z.enum(["cpu", "gpu", "ram"]).optional() })).query(async ({ input }) => {
+  list: publicProcedure.input(hardwareListInput).query(async ({ input }) => {
     const db = await requireDatabase();
     const conditions = [isNull(hardwareItems.deletedAt)];
     if (input.kind) conditions.push(eq(hardwareItems.kind, input.kind));
