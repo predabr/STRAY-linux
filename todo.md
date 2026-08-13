@@ -1,0 +1,27 @@
+# Project TODO
+
+- [x] Definir a arquitetura híbrida web/Electron, a estratégia de banco local e o modo de operação sem serviços externos obrigatórios.
+- [x] Mapear fontes públicas permitidas para catálogo de jogos, compatibilidade, benchmarks e documentação oficial de distribuições.
+- [x] Modelar e aplicar o schema Drizzle para jogos, tags, plataformas, distros, versões, hardware, compatibilidade, benchmarks, wiki, guias, LinuxFix, perfis, favoritos, reports e auditoria.
+- [x] Expandir autenticação e RBAC para USER, MODERATOR e ADMIN com guards server-side e trilha de auditoria.
+- [ ] Implementar CRUD administrativo para jogos, distribuições, hardware, guias, LinuxFix, benchmarks e reports.
+- [x] Criar pipeline de importação versionado para catálogo com pelo menos 1.000 jogos e metadados de origem.
+- [ ] Implementar pesquisa global e filtros de jogos por distribuição, CPU, GPU, compatibilidade, Proton, Steam Deck, gênero, multiplayer e anti-cheat.
+- [ ] Construir páginas de catálogo e detalhe de jogo com estados vazios, paginação, fontes e proveniência explícita.
+- [ ] Implementar motor de compatibilidade por jogo, distro, versão, kernel, GPU, driver, Proton/Wine e runtime.
+- [x] Implementar workflow de benchmark com proveniência VERIFIED, COMMUNITY, ESTIMATED e UNKNOWN, revisão por moderador e bloqueio de FPS sem fonte declarada.
+- [x] Implementar calculadora de desempenho que retorna somente dados verificados, estimativas metodológicas declaradas ou indisponibilidade explícita.
+- [ ] Criar wiki de distribuições incluindo Arch, CachyOS, Fedora, Nobara, Ubuntu, Bazzite, Pop!_OS, Linux Mint, Debian, openSUSE e EndeavourOS, com fontes, versões, drivers e orientações de otimização.
+- [ ] Construir Linux Setup com guias versionados, passos, comandos copiáveis, avisos, nível de dificuldade e filtros por distribuição.
+- [ ] Construir LinuxFix com categorias, sintomas, causas, soluções, confiança, origem, filtros e reports comunitários.
+- [ ] Criar dashboard autenticado com My Games, My PC, My Benchmarks, Saved Guides, LinuxFix History, Favorites, Reports e Settings.
+- [ ] Implementar perfil de hardware e personalização de compatibilidade vinculada ao perfil ativo do usuário.
+- [x] Integrar chat com recuperação de contexto dos conteúdos internos e suporte opcional a um provedor de IA local compatível com Ollama.
+- [x] Construir navegação, tema dark/light/system, responsividade, acessibilidade, estados de carregamento/erro/vazio e SEO básico.
+- [ ] Criar testes Vitest para roles, validações, proveniência de benchmark, compatibilidade, filtros e procedimentos críticos.
+- [x] Criar documentação de instalação, configuração, importação de dados, moderação, uso de IA local e contribuição no GitHub.
+- [ ] Implementar banco local realmente embutido no Electron (migração da persistência para SQLite ou inclusão de serviço local), mantendo o instalador `.exe` já gerado.
+- [x] Executar verificações de tipo, testes e validação visual das rotas principais.
+- [x] Corrigir o modo Ollama local para recuperar contexto conforme a pergunta enviada pelo usuário.
+- [x] Atualizar título, idioma e metadados SEO básicos do produto.
+- [x] Documentar moderação e contribuição, incluindo roles, reports e fluxo de benchmark.

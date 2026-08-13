@@ -1,33 +1,23 @@
-import { useAuth } from "@/_core/hooks/useAuth";
+import { GameCard } from "@/components/platform/GameCard";
+import { SiteHeader } from "@/components/platform/SiteHeader";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { trpc } from "@/lib/trpc";
+import { ArrowRight, BookOpenCheck, Database, Gauge, Search, ShieldCheck, Wrench } from "lucide-react";
+import { useMemo } from "react";
+import { useLocation } from "wouter";
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Workflow, Frontend Best Practices, Design Guide and Common Pitfalls
- */
 export default function Home() {
-  // The useAuth hook provides authentication state.
-  // To implement login/logout, call logout(), or start login from an event
-  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
-  // startLogin() during render (no href={startLogin()}) — it mints a one-time
-  // nonce cookie and must run only at the moment of navigation.
-  let { user, loading, error, isAuthenticated, logout } = useAuth();
-
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
-    </div>
-  );
+  const [, setLocation] = useLocation();
+  const featuredInput = useMemo(() => ({ page: 1, pageSize: 8, sort: "featured" as const }), []);
+  const gamesQuery = trpc.games.list.useQuery(featuredInput);
+  const stats = [{ value: "1.500+", label: "jogos indexados", icon: Database }, { value: "14", label: "distribuições na wiki", icon: BookOpenCheck }, { value: "0", label: "FPS sem fonte", icon: ShieldCheck }];
+  return <div className="min-h-screen bg-background text-foreground"><SiteHeader /><main>
+    <section className="relative overflow-hidden border-b"><div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_18%_20%,hsl(var(--primary)/0.2),transparent_28%),radial-gradient(circle_at_78%_15%,rgba(34,211,238,0.16),transparent_24%),linear-gradient(180deg,hsl(var(--muted)/0.55),transparent)]" /><div className="container grid gap-10 py-16 md:grid-cols-[1.15fr_.85fr] md:py-24"><div className="max-w-3xl"><Badge variant="outline" className="mb-5 border-primary/30 bg-primary/5 text-primary">Dados com proveniência, não promessas vazias</Badge><h1 className="max-w-3xl text-4xl font-semibold tracking-[-0.04em] md:text-6xl">Seu mapa técnico para <span className="text-primary">gaming no Linux.</span></h1><p className="mt-6 max-w-2xl text-base leading-7 text-muted-foreground md:text-lg">Descubra jogos, compare compatibilidade por ambiente, encontre guias versionados e investigue problemas sem esconder lacunas de dados.</p><div className="mt-8 flex flex-wrap gap-3"><Button size="lg" onClick={() => setLocation("/games")}>Explorar GameHub <ArrowRight className="ml-2 h-4 w-4" /></Button><Button size="lg" variant="outline" onClick={() => setLocation("/benchmark")}><Gauge className="mr-2 h-4 w-4" />Consultar benchmark</Button></div></div><Card className="border-primary/15 bg-card/70 shadow-2xl shadow-primary/5 backdrop-blur"><CardContent className="p-5"><div className="flex items-center justify-between"><div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">Integrity panel</p><h2 className="mt-1 text-xl font-semibold">O que o Hub não faz</h2></div><ShieldCheck className="h-8 w-8 text-primary" /></div><div className="mt-6 space-y-4 text-sm"><div className="rounded-xl border bg-background/70 p-4"><strong>Sem FPS inventado.</strong><p className="mt-1 text-muted-foreground">Benchmarks sem fonte verificável aparecem como ausentes, comunitários ou estimados.</p></div><div className="rounded-xl border bg-background/70 p-4"><strong>Compatibilidade contextual.</strong><p className="mt-1 text-muted-foreground">Distro, driver, kernel, GPU e runtime podem mudar o resultado.</p></div><div className="rounded-xl border bg-background/70 p-4"><strong>Conteúdo revisável.</strong><p className="mt-1 text-muted-foreground">Guias, correções e relatórios preservam fonte e status de revisão.</p></div></div></CardContent></Card></div></section>
+    <section className="container grid gap-3 py-8 sm:grid-cols-3">{stats.map((stat) => <div key={stat.label} className="flex items-center gap-4 rounded-xl border bg-card p-4"><span className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary"><stat.icon className="h-5 w-5" /></span><div><p className="text-xl font-semibold">{stat.value}</p><p className="text-xs text-muted-foreground">{stat.label}</p></div></div>)}</section>
+    <section className="container py-10 md:py-16"><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm font-medium text-primary">CATÁLOGO EM DESTAQUE</p><h2 className="mt-1 text-3xl font-semibold tracking-tight">Comece por um jogo real.</h2></div><Button variant="ghost" onClick={() => setLocation("/games")}>Ver todo o catálogo <ArrowRight className="ml-2 h-4 w-4" /></Button></div><div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{gamesQuery.isLoading ? Array.from({ length: 8 }).map((_, index) => <Skeleton key={index} className="h-72 rounded-2xl" />) : gamesQuery.data?.data.map((game) => <GameCard key={game.id} game={game} />)}</div></section>
+    <section className="border-y bg-muted/35"><div className="container grid gap-4 py-12 md:grid-cols-3"><Card className="border-0 bg-transparent shadow-none"><CardContent className="p-0"><Search className="h-6 w-6 text-primary" /><h3 className="mt-4 font-semibold">Pesquisa que respeita filtros</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">Filtre por plataforma, gênero, distribuição, hardware e nível de compatibilidade quando houver dados.</p></CardContent></Card><Card className="border-0 bg-transparent shadow-none"><CardContent className="p-0"><Wrench className="h-6 w-6 text-primary" /><h3 className="mt-4 font-semibold">LinuxFix orientado a evidência</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">Soluções indicam confiança, origem e limitações antes de sugerir qualquer comando.</p></CardContent></Card><Card className="border-0 bg-transparent shadow-none"><CardContent className="p-0"><BookOpenCheck className="h-6 w-6 text-primary" /><h3 className="mt-4 font-semibold">Wiki versionada</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">Guias distinguem instruções gerais de conteúdo específico por distribuição e versão.</p></CardContent></Card></div></section>
+  </main></div>;
 }

@@ -1,6 +1,8 @@
 {
   "name": "linux-gaming-hub",
   "version": "1.0.0",
+  "description": "Linux gaming knowledge platform with provenance-aware compatibility and benchmarks.",
+  "author": "Linux Gaming Hub contributors",
   "type": "module",
   "license": "MIT",
   "scripts": {
@@ -10,7 +12,9 @@
     "check": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
-    "db:push": "drizzle-kit generate && drizzle-kit migrate"
+    "db:push": "drizzle-kit generate && drizzle-kit migrate",
+    "desktop:build": "pnpm build && electron-builder --win nsis --x64",
+    "desktop:dir": "pnpm build && electron-builder --dir"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.693.0",
@@ -91,6 +95,8 @@
     "add": "^2.0.6",
     "autoprefixer": "^10.4.20",
     "drizzle-kit": "^0.31.4",
+    "electron": "^37.4.0",
+    "electron-builder": "^26.0.12",
     "esbuild": "^0.25.0",
     "pnpm": "^10.15.1",
     "postcss": "^8.4.47",
@@ -103,6 +109,24 @@
     "vite-plugin-manus-runtime": "0.0.59",
     "vitest": "^2.1.4"
   },
+  "main": "desktop/main.cjs",
+  "build": {
+    "appId": "im.linuxgaminghub.desktop",
+    "productName": "Linux Gaming Hub",
+    "asar": true,
+    "files": [
+      "dist/**/*",
+      "desktop/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "Linux-Gaming-Hub-${version}-Setup.${ext}",
+      "signAndEditExecutable": false
+    }
+  },
   "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
   "pnpm": {
     "patchedDependencies": {
@@ -110,6 +134,14 @@
     },
     "overrides": {
       "tailwindcss>nanoid": "3.3.7"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "@tailwindcss/oxide",
+      "esbuild"
+    ],
+    "onlyBuiltDependencies": [
+      "electron",
+      "electron-winstaller"
+    ]
   }
 }

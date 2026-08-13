@@ -1,0 +1,86 @@
+import { and, desc, eq } from "drizzle-orm";
+import { z } from "zod";
+import {
+  favorites,
+  games,
+  hardwareItems,
+  savedGuides,
+  setupGuides,
+  userHardwareProfiles,
+} from "../../drizzle/schema";
+import { router } from "../_core/trpc";
+import { activeUserProcedure, requireDatabase } from "./_guards";
+
+const profileInput = z.object({
+  name: z.string().trim().min(1).max(140),
+  cpuId: z.number().int().positive().nullable().optional(),
+  gpuId: z.number().int().positive().nullable().optional(),
+  ramId: z.number().int().positive().nullable().optional(),
+  distributionId: z.number().int().positive().nullable().optional(),
+  distributionVersionId: z.number().int().positive().nullable().optional(),
+  kernelVersion: z.string().trim().max(160).nullable().optional(),
+  driverVersion: z.string().trim().max(160).nullable().optional(),
+  protonVersion: z.string().trim().max(160).nullable().optional(),
+  isActive: z.boolean().default(false),
+});
+
+export const userRouter = router({
+  dashboard: activeUserProcedure.query(async ({ ctx }) => {
+    const db = await requireDatabase();
+    const [profiles, favoriteRows, savedGuideRows] = await Promise.all([
+      db.select().from(userHardwareProfiles).where(eq(userHardwareProfiles.userId, ctx.user.id)).orderBy(desc(userHardwareProfiles.isActive), desc(userHardwareProfiles.updatedAt)),
+      db.select({ game: games }).from(favorites).innerJoin(games, eq(favorites.gameId, games.id)).where(eq(favorites.userId, ctx.user.id)).orderBy(desc(favorites.createdAt)).limit(12),
+      db.select({ guide: setupGuides }).from(savedGuides).innerJoin(setupGuides, eq(savedGuides.guideId, setupGuides.id)).where(eq(savedGuides.userId, ctx.user.id)).orderBy(desc(savedGuides.createdAt)).limit(12),
+    ]);
+    return { user: ctx.user, profiles, favorites: favoriteRows.map((row) => row.game), savedGuides: savedGuideRows.map((row) => row.guide) };
+  }),
+
+  profiles: router({
+    list: activeUserProcedure.query(async ({ ctx }) => {
+      const db = await requireDatabase();
+      return db.select().from(userHardwareProfiles).where(eq(userHardwareProfiles.userId, ctx.user.id)).orderBy(desc(userHardwareProfiles.isActive), desc(userHardwareProfiles.updatedAt));
+    }),
+    upsert: activeUserProcedure.input(profileInput.extend({ id: z.number().int().positive().optional() })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      const { id, isActive, ...profile } = input;
+      if (isActive) {
+        await db.update(userHardwareProfiles).set({ isActive: false }).where(eq(userHardwareProfiles.userId, ctx.user.id));
+      }
+      if (id) {
+        const existing = (await db.select({ id: userHardwareProfiles.id }).from(userHardwareProfiles).where(and(eq(userHardwareProfiles.id, id), eq(userHardwareProfiles.userId, ctx.user.id))).limit(1))[0];
+        if (!existing) throw new Error("Perfil não encontrado.");
+        await db.update(userHardwareProfiles).set({ ...profile, isActive }).where(eq(userHardwareProfiles.id, id));
+        return { id };
+      }
+      const result = await db.insert(userHardwareProfiles).values({ ...profile, userId: ctx.user.id, isActive });
+      return { id: Number(result[0].insertId) };
+    }),
+    remove: activeUserProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      await db.delete(userHardwareProfiles).where(and(eq(userHardwareProfiles.id, input.id), eq(userHardwareProfiles.userId, ctx.user.id)));
+      return { success: true };
+    }),
+  }),
+
+  favorites: router({
+    list: activeUserProcedure.query(async ({ ctx }) => {
+      const db = await requireDatabase();
+      return db.select({ game: games }).from(favorites).innerJoin(games, eq(favorites.gameId, games.id)).where(eq(favorites.userId, ctx.user.id)).orderBy(desc(favorites.createdAt));
+    }),
+    toggle: activeUserProcedure.input(z.object({ gameId: z.number().int().positive() })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      const existing = (await db.select({ id: favorites.id }).from(favorites).where(and(eq(favorites.userId, ctx.user.id), eq(favorites.gameId, input.gameId))).limit(1))[0];
+      if (existing) {
+        await db.delete(favorites).where(eq(favorites.id, existing.id));
+        return { favorited: false };
+      }
+      await db.insert(favorites).values({ userId: ctx.user.id, gameId: input.gameId });
+      return { favorited: true };
+    }),
+  }),
+
+  hardwareOptions: activeUserProcedure.query(async () => {
+    const db = await requireDatabase();
+    return db.select().from(hardwareItems).orderBy(hardwareItems.kind, hardwareItems.manufacturer, hardwareItems.model).limit(500);
+  }),
+});
