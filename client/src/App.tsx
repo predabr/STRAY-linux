@@ -13,6 +13,7 @@ const DistroProfile = lazy(() => import("@/pages/DistroProfile"));
 const Admin = lazy(() => import("@/pages/Admin"));
 const AssistantPage = lazy(() => import("@/pages/Assistant"));
 const Benchmark = lazy(() => import("@/pages/Benchmark"));
+const Compare = lazy(() => import("@/pages/Compare"));
 const GameDetail = lazy(() => import("@/pages/GameDetail"));
 const Games = lazy(() => import("@/pages/Games"));
 const Home = lazy(() => import("@/pages/Home"));
@@ -32,6 +33,7 @@ function Router() {
     <Route path="/games" component={Games} />
     <Route path="/games/:slug" component={GameDetail} />
     <Route path="/benchmark" component={Benchmark} />
+    <Route path="/compare" component={Compare} />
     <Route path="/windows" component={WindowsHub} />
     <Route path="/assistant" component={AssistantPage} />
     <Route path="/wiki" component={WikiPage} />

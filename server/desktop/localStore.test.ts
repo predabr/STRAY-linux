@@ -18,7 +18,10 @@ describe("DesktopStore", () => {
     const store = await DesktopStore.create(directory, seedPath);
 
     expect(store.counts().games).toBeGreaterThanOrEqual(10000);
-    expect(store.counts().distributions).toBeGreaterThanOrEqual(17);
+    expect(store.counts().distributions).toBeGreaterThanOrEqual(18);
+    expect(store.one<{ slug: string; packageManager: string }>("SELECT slug, package_manager AS packageManager FROM distributions WHERE slug = ?", ["zorin-os"])).toEqual({ slug: "zorin-os", packageManager: "apt" });
+    expect(store.one<{ slug: string }>("SELECT slug FROM wiki_articles WHERE slug = ?", ["zorin-os-gaming-reference"])).toEqual({ slug: "zorin-os-gaming-reference" });
+    expect(store.all<{ slug: string }>("SELECT slug FROM setup_guides WHERE slug IN (?, ?, ?) ORDER BY slug", ["zorin-nvidia-driver-gaming", "zorin-steam-flatpak", "zorin-update-and-gaming-baseline"])).toHaveLength(3);
     const game = store.one<{ id: number; sourcePositiveReviews: number }>("SELECT id, source_positive_reviews AS sourcePositiveReviews FROM games ORDER BY source_positive_reviews DESC LIMIT 1");
     expect(game?.id).toBeTypeOf("number");
     expect(game?.sourcePositiveReviews).toBeGreaterThan(0);

@@ -10,6 +10,10 @@ describe("guards tRPC de procedimentos críticos", () => {
     await expect(caller("user").admin.overview()).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 
+  it("impede que usuário comum leia as métricas administrativas de qualidade de conteúdo", async () => {
+    await expect(caller("user").admin.contentHealth()).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
   it("impede que usuário comum inicie revisão de benchmark", async () => {
     await expect(caller("user").benchmarks.review({ id: 1, decision: "verified", reviewNote: "Revisão técnica com evidência suficiente." })).rejects.toMatchObject({ code: "FORBIDDEN" });
   });

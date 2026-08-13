@@ -9,7 +9,7 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { trpc } from "@/lib/trpc";
-import { BookOpen, Gamepad2, Gauge, LayoutDashboard, MonitorCog, Search, Server, Settings2, Wrench } from "lucide-react";
+import { BookOpen, Gamepad2, Gauge, GitCompareArrows, LayoutDashboard, MonitorCog, Search, Server, Settings2, Wrench } from "lucide-react";
 import { windowsActions, windowsApps } from "@/data/windowsCatalog";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
@@ -17,6 +17,7 @@ import { useLocation } from "wouter";
 const quickLinks = [
   { label: "Abrir GameHub", hint: "Catálogo e compatibilidade", href: "/games", icon: Gamepad2 },
   { label: "Consultar benchmark", hint: "Evidência por ambiente", href: "/benchmark", icon: Gauge },
+  { label: "Comparar benchmarks", hint: "GPUs e ambientes verificados", href: "/compare", icon: GitCompareArrows },
   { label: "Abrir área Windows", hint: "Manutenção e aplicativos", href: "/windows", icon: MonitorCog },
   { label: "Abrir Atlas de distros", hint: "753 entradas classificadas", href: "/distros", icon: Server },
   { label: "Ver Linux Setup", hint: "Guias e comandos", href: "/setup", icon: Settings2 },

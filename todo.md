@@ -107,3 +107,14 @@
 - [x] Proteger a gravação de turnos Ollama contra reutilização de uma sessão que não pertença ao usuário autenticado.
 - [x] Executar e registrar uma validação real da pesquisa global com resultado existente e consulta sem resultados, sem inserir dados fictícios.
 - [x] Executar e registrar chamadas reais dos endpoints públicos de catálogo e hardware usados pelos filtros, sem mocks.
+- [x] Mapear, no estado atual, quais requisitos do briefing de evolução já existem e quais lacunas ainda são reais.
+- [x] Verificar a presença de Zorin OS no Atlas, wiki, guias e snapshot desktop; incluir apenas as informações oficiais que estiverem ausentes.
+- [x] Revalidar e ampliar, quando necessário, os comandos e fontes oficiais de cada família de distribuição sem inserir instruções inseguras ou não verificadas.
+- [x] Completar relações úteis e páginas conectadas de GameHub, compatibilidade, benchmark, LinuxFix, guias, favoritos, comparação e moderação que ainda estiverem faltando.
+- [x] Auditar qualidade de dados, estados vazios, paginação, consultas e bundle, corrigindo problemas comprovados.
+- [x] Adicionar regressões para as novas relações, conteúdo de distros e controles de autorização implementados.
+- [x] Validar desktop, mobile, typecheck, testes, build, documentação e pacotes desktop após a evolução.
+- [x] Limitar a documentação desta rodada ao Zorin OS e explicitar que as demais famílias preservam a auditoria anterior, sem alegar nova revalidação integral.
+- [x] Adicionar regressão de autorização para a procedure administrativa `contentHealth` e validar a consulta com dados reais.
+- [x] Registrar a validação de estados vazios e paginação do comparador e do catálogo relacionado, sem ampliar conclusões para áreas não alteradas.
+- [x] Delimitar no relatório quais relações foram efetivamente adicionadas nesta rodada e quais continuam sendo capacidades já existentes ou futuras.

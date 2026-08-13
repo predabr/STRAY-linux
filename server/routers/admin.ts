@@ -1,6 +1,6 @@
-import { and, count, desc, eq, isNull, or } from "drizzle-orm";
+import { and, count, desc, eq, isNull, or, sql } from "drizzle-orm";
 import { z } from "zod";
-import { auditActions, benchmarkResults, benchmarks, distributions, games, hardwareItems, linuxFixes, linuxFixSolutions, reports, setupGuides, setupGuideSteps, users } from "../../drizzle/schema";
+import { auditActions, benchmarkResults, benchmarks, compatibilityRecords, distributions, games, hardwareItems, linuxFixes, linuxFixSolutions, reports, setupGuides, setupGuideSteps, users } from "../../drizzle/schema";
 import { router } from "../_core/trpc";
 import { administratorProcedure, requireDatabase } from "./_guards";
 
@@ -25,6 +25,26 @@ export const adminRouter = router({
       db.select({ total: count() }).from(reports).where(eq(reports.status, "open")),
     ]);
     return { games: gameCount.total, distributions: distroCount.total, hardware: hardwareCount.total, pendingBenchmarks: pendingBenchmarks.total, openReports: openReports.total };
+  }),
+
+  contentHealth: administratorProcedure.query(async () => {
+    const db = await requireDatabase();
+    const publishedGame = and(eq(games.status, "published"), isNull(games.deletedAt));
+    const publishedDistro = and(eq(distributions.status, "published"), isNull(distributions.deletedAt));
+    const [[missingBenchmarks], [missingCompatibility], [missingFixes], [missingGuides], [distrosWithoutCompatibility]] = await Promise.all([
+      db.select({ total: count() }).from(games).where(and(publishedGame, sql`not exists (select 1 from ${benchmarks} b where b.gameId = ${games.id} and b.verificationStatus = 'verified')`)),
+      db.select({ total: count() }).from(games).where(and(publishedGame, sql`not exists (select 1 from ${compatibilityRecords} c where c.gameId = ${games.id})`)),
+      db.select({ total: count() }).from(games).where(and(publishedGame, sql`not exists (select 1 from ${linuxFixes} f where f.gameId = ${games.id} and f.status = 'published' and f.deletedAt is null)`)),
+      db.select({ total: count() }).from(games).where(and(publishedGame, sql`not exists (select 1 from ${setupGuides} g where g.gameId = ${games.id} and g.status = 'published' and g.deletedAt is null)`)),
+      db.select({ total: count() }).from(distributions).where(and(publishedDistro, sql`not exists (select 1 from ${compatibilityRecords} c where c.distributionId = ${distributions.id})`)),
+    ]);
+    return {
+      gamesMissingBenchmarks: Number(missingBenchmarks.total),
+      gamesMissingCompatibility: Number(missingCompatibility.total),
+      gamesMissingLinuxFix: Number(missingFixes.total),
+      gamesMissingGuides: Number(missingGuides.total),
+      distributionsWithoutCompatibility: Number(distrosWithoutCompatibility.total),
+    };
   }),
 
   games: router({
