@@ -4,9 +4,13 @@ O wrapper Electron empacota o frontend e o servidor Node do Linux Gaming Hub par
 
 > O chat local pode usar uma instalação local do Ollama em `http://127.0.0.1:11434`. O modelo escolhido deve ser instalado pelo próprio usuário. O aplicativo não envia essa pergunta a um serviço remoto quando o provedor **Ollama local** está selecionado.
 
-## Banco de dados
+## Banco de dados local
 
-A edição web usa o banco MySQL/TiDB do ambiente gerenciado. O wrapper desktop aceita uma `databaseUrl` no arquivo de configuração para executar o mesmo backend localmente. A atual arquitetura Drizzle utiliza o driver MySQL; por isso, a produção de um instalador realmente autônomo com banco embarcado requer a migração da camada de persistência para SQLite ou a inclusão de um serviço MySQL/MariaDB no instalador. Essa decisão é documentada explicitamente para evitar prometer um banco local que não exista.
+A edição web permanece no banco MySQL/TiDB gerenciado. O Electron usa um **SQLite local** separado, criado automaticamente em `linux-gaming-hub.sqlite` dentro da pasta de dados do aplicativo. A primeira abertura importa o snapshot publicado de jogos, distribuições, wiki, guias e LinuxFix; favoritos, perfis de hardware, guias salvos, histórico, reports e submissões de benchmark são persistidos apenas nesse banco local.
+
+> A edição desktop não exige `DATABASE_URL`, nem inicia MySQL/MariaDB no computador do usuário. O snapshot não contém FPS inventados: benchmarks sem amostra verificada continuam indisponíveis até que o usuário registre uma submissão local com evidência.
+
+Para atualizar conteúdo no desktop, gere um novo snapshot durante o desenvolvimento com `node scripts/export-desktop-seed.mjs` e publique uma nova versão do instalador. A edição web continua sendo a fonte colaborativa e moderada.
 
 ## Criar um instalador Windows
 
@@ -16,4 +20,4 @@ Após instalar as dependências de desktop, execute:
 pnpm desktop:build
 ```
 
-O comando gera o pacote de distribuição em `release/`. A compilação cruzada de um instalador NSIS para Windows pode requerer Wine em uma máquina Linux; a alternativa confiável é executar o comando em um runner Windows do GitHub Actions.
+O comando gera o instalador NSIS em `dist/Linux-Gaming-Hub-<versão>-Setup.exe`. A compilação cruzada de um instalador Windows em Linux pode requerer Wine; o workflow do GitHub Actions é o caminho reproduzível para releases.

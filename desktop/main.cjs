@@ -9,7 +9,7 @@ const preferredPort = Number(process.env.LGH_PORT || 43819);
 
 function loadDesktopConfig() {
   const configPath = path.join(app.getPath("userData"), "linux-gaming-hub.config.json");
-  const defaults = { port: preferredPort, databaseUrl: "", ollamaEndpoint: "http://127.0.0.1:11434" };
+  const defaults = { port: preferredPort, ollamaEndpoint: "http://127.0.0.1:11434" };
   try {
     const stored = JSON.parse(fs.readFileSync(configPath, "utf8"));
     return { ...defaults, ...stored };
@@ -23,6 +23,9 @@ function startLocalServer(config) {
   const serverEntry = app.isPackaged
     ? path.join(process.resourcesPath, "app.asar", "dist", "index.js")
     : path.join(app.getAppPath(), "dist", "index.js");
+  const seedPath = app.isPackaged
+    ? path.join(process.resourcesPath, "app.asar", "desktop", "seed", "initial-data.json")
+    : path.join(app.getAppPath(), "desktop", "seed", "initial-data.json");
   serverProcess = spawn(process.execPath, [serverEntry], {
     env: {
       ...process.env,
@@ -30,7 +33,8 @@ function startLocalServer(config) {
       NODE_ENV: "production",
       DESKTOP_MODE: "1",
       PORT: String(config.port),
-      ...(config.databaseUrl ? { DATABASE_URL: config.databaseUrl } : {}),
+      DESKTOP_DATA_DIR: app.getPath("userData"),
+      DESKTOP_SEED_PATH: seedPath,
     },
     stdio: "pipe",
     windowsHide: true,
@@ -70,7 +74,7 @@ app.whenReady().then(async () => {
     await waitForServer(config.port);
     createWindow(config.port);
   } catch (error) {
-    dialog.showErrorBox("Linux Gaming Hub", `${error.message}\n\nEdite o arquivo linux-gaming-hub.config.json na pasta de dados do aplicativo e configure DATABASE_URL para executar o backend local.`);
+    dialog.showErrorBox("Linux Gaming Hub", `${error.message}\n\nO aplicativo não exige DATABASE_URL. Verifique se o diretório local possui permissão de escrita e tente abrir novamente.`);
     app.quit();
   }
 });

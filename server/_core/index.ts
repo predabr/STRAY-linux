@@ -6,6 +6,8 @@ import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
+import { desktopRouter } from "../desktop/router";
+import { initializeDesktopStore } from "../desktop/localStore";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 
@@ -29,19 +31,22 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 }
 
 async function startServer() {
+  if (process.env.DESKTOP_MODE === "1") await initializeDesktopStore();
   const app = express();
   const server = createServer(app);
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   app.get("/api/health", (_req, res) => res.json({ ok: true, mode: process.env.DESKTOP_MODE === "1" ? "desktop" : "web" }));
-  registerStorageProxy(app);
-  registerOAuthRoutes(app);
+  if (process.env.DESKTOP_MODE !== "1") {
+    registerStorageProxy(app);
+    registerOAuthRoutes(app);
+  }
   // tRPC API
   app.use(
     "/api/trpc",
     createExpressMiddleware({
-      router: appRouter,
+      router: (process.env.DESKTOP_MODE === "1" ? desktopRouter : appRouter) as typeof appRouter,
       createContext,
     })
   );

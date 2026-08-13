@@ -20,8 +20,13 @@
 - [x] Construir navegação, tema dark/light/system, responsividade, acessibilidade, estados de carregamento/erro/vazio e SEO básico.
 - [ ] Criar testes Vitest para roles, validações, proveniência de benchmark, compatibilidade, filtros e procedimentos críticos.
 - [x] Criar documentação de instalação, configuração, importação de dados, moderação, uso de IA local e contribuição no GitHub.
-- [ ] Implementar banco local realmente embutido no Electron (migração da persistência para SQLite ou inclusão de serviço local), mantendo o instalador `.exe` já gerado.
+- [x] Implementar banco local realmente embutido no Electron (migração da persistência para SQLite ou inclusão de serviço local), mantendo o instalador `.exe` já gerado.
 - [x] Executar verificações de tipo, testes e validação visual das rotas principais.
 - [x] Corrigir o modo Ollama local para recuperar contexto conforme a pergunta enviada pelo usuário.
 - [x] Atualizar título, idioma e metadados SEO básicos do produto.
 - [x] Documentar moderação e contribuição, incluindo roles, reports e fluxo de benchmark.
+- [x] Implementar adaptador SQLite exclusivo do Electron, com banco no diretório de dados do usuário e sem `DATABASE_URL`.
+- [x] Criar carga local versionada para o modo desktop, incluindo catálogo, distros, wiki, guias e LinuxFix essenciais.
+- [x] Ampliar a wiki por famílias Arch, Debian/Ubuntu, Fedora/RHEL e openSUSE, incluindo derivadas suportadas e fontes oficiais.
+- [ ] Adicionar guias de Steam, Proton, Vulkan, drivers AMD/NVIDIA/Intel, MangoHud, GameMode e FSR por família de distribuição.
+- [x] Reempacotar e validar o instalador Windows com SQLite, carga inicial local e operação sem variáveis de banco remoto.
