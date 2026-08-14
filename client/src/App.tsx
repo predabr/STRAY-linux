@@ -28,6 +28,7 @@ const LinuxFixPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ 
 const LinuxFixDetailPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ default: module.LinuxFixDetailPage })));
 const Library = lazy(() => import("@/pages/Library"));
 const Moderation = lazy(() => import("@/pages/Moderation"));
+const Mods = lazy(() => import("@/pages/Mods"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const Performance = lazy(() => import("@/pages/Performance"));
 const SearchPage = lazy(() => import("@/pages/Search"));
@@ -56,6 +57,7 @@ function Router() {
     <Route path="/library" component={Library} />
     <Route path="/performance" component={Performance} />
     <Route path="/moderation" component={Moderation} />
+    <Route path="/mods" component={Mods} />
     <Route path="/search" component={SearchPage} />
     <Route path="/scanner" component={Scanner} />
     <Route path="/status" component={Status} />

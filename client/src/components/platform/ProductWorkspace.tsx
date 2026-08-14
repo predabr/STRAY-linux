@@ -2,7 +2,7 @@ import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
-import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 
@@ -17,6 +17,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
     { href: "/", label: t("overview"), icon: LayoutDashboard },
     { href: "/games", label: t("gameHub"), icon: Gamepad2 },
     { href: "/library", label: t("installedGames"), icon: Library },
+    { href: "/mods", label: "Mods", icon: Boxes },
     { href: "/compare", label: copy.compare, icon: BarChart3 },
     { href: "/benchmark", label: t("benchmark"), icon: Gauge },
     { href: "/linuxfix", label: t("linuxFix"), icon: Wrench },
