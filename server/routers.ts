@@ -10,6 +10,7 @@ import { compatibilityRouter } from "./routers/compatibility";
 import { engagementRouter } from "./routers/engagement";
 import { distributionsRouter, gamesRouter, hardwareRouter, searchRouter } from "./routers/games";
 import { knowledgeRouter } from "./routers/knowledge";
+import { linuxFixCommunityRouter } from "./routers/linuxFixCommunity";
 import { userRouter } from "./routers/user";
 
 export const appRouter = router({
@@ -33,6 +34,7 @@ export const appRouter = router({
   engagement: engagementRouter,
   chat: chatRouter,
   knowledge: knowledgeRouter,
+  linuxFixCommunity: linuxFixCommunityRouter,
   user: userRouter,
 });
 

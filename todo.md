@@ -188,3 +188,7 @@
 - [x] Melhorar dashboard, saúde de gaming e Stray AI contextual usando apenas scanner, perfil, LinuxFix, guias, compatibilidade e benchmarks existentes.
 - [x] Refinar as visualizações de benchmarks e compatibilidade com filtros, proveniência e estados explícitos de dados insuficientes.
 - [x] Atualizar todos os 11 idiomas, acessibilidade, testes, build, artefatos desktop e validações visuais antes do checkpoint final.
+- [x] Auditar os LinuxFix publicados, seus passos, evidências e fluxos de report para identificar lacunas de conteúdo e colaboração sem criar relatos simulados.
+- [x] Reestruturar os LinuxFix com triagem de sintomas, pré-requisitos, ações de baixo risco, verificação de resultado, reversão e fontes oficiais quando aplicáveis.
+- [x] Implementar contribuições voluntárias por solução, no formato de proposta moderada, com estado, autoria, segurança e trilha de auditoria server-side.
+- [x] Atualizar 11 idiomas, acessibilidade, testes, validação visual e publicação após a evolução da central LinuxFix.

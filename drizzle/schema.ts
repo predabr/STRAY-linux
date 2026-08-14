@@ -24,6 +24,9 @@ export const guideDifficulties = ["beginner", "intermediate", "advanced"] as con
 export const reportStatuses = ["open", "in_review", "resolved", "rejected"] as const;
 export const reportTypes = ["incorrect_information", "invalid_benchmark", "duplicate", "broken_link", "inappropriate_content", "spam", "other"] as const;
 export const fixCategories = ["steam", "proton", "wine", "vulkan", "amd", "nvidia", "intel", "anti_cheat", "audio", "controller", "fps", "stuttering", "crashes", "black_screen", "launch_errors", "other"] as const;
+export const fixStepKinds = ["inspect", "change", "verify", "recover"] as const;
+export const fixStepRisks = ["read_only", "reversible", "system_change"] as const;
+export const linuxFixProposalStatuses = ["submitted", "in_review", "accepted", "rejected", "withdrawn"] as const;
 
 const createdAt = timestamp("createdAt").defaultNow().notNull();
 const updatedAt = timestamp("updatedAt").defaultNow().onUpdateNow().notNull();
@@ -505,6 +508,11 @@ export const linuxFixSolutions = mysqlTable(
     explanation: text("explanation"),
     command: text("command"),
     warning: text("warning"),
+    kind: mysqlEnum("kind", fixStepKinds).default("inspect").notNull(),
+    risk: mysqlEnum("risk", fixStepRisks).default("read_only").notNull(),
+    verification: text("verification"),
+    rollback: text("rollback"),
+    sourceUrl: varchar("sourceUrl", { length: 2048 }),
     createdAt,
     updatedAt,
   },
@@ -549,6 +557,29 @@ export const linuxFixConfirmations = mysqlTable(
     createdAt,
   },
   (table) => [uniqueIndex("linux_fix_confirmations_user_fix_unique").on(table.userId, table.fixId), index("linux_fix_confirmations_fix_idx").on(table.fixId, table.createdAt)],
+);
+
+export const linuxFixProposals = mysqlTable(
+  "linux_fix_proposals",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    fixId: int("fixId").notNull().references(() => linuxFixes.id, { onDelete: "cascade" }),
+    authorId: int("authorId").notNull().references(() => users.id, { onDelete: "cascade" }),
+    title: varchar("title", { length: 300 }).notNull(),
+    observation: text("observation").notNull(),
+    reproduction: text("reproduction").notNull(),
+    suggestedSteps: text("suggestedSteps").notNull(),
+    sourceUrl: varchar("sourceUrl", { length: 2048 }),
+    contextSnapshot: json("contextSnapshot"),
+    contextSharedAt: timestamp("contextSharedAt"),
+    status: mysqlEnum("status", linuxFixProposalStatuses).default("submitted").notNull(),
+    reviewerId: int("reviewerId").references(() => users.id, { onDelete: "set null" }),
+    reviewNote: text("reviewNote"),
+    reviewedAt: timestamp("reviewedAt"),
+    createdAt,
+    updatedAt,
+  },
+  (table) => [index("linux_fix_proposals_fix_status_idx").on(table.fixId, table.status, table.createdAt), index("linux_fix_proposals_author_idx").on(table.authorId, table.createdAt), index("linux_fix_proposals_status_idx").on(table.status, table.createdAt)],
 );
 
 export const setupGuideStepProgress = mysqlTable(

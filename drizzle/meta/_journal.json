@@ -71,6 +71,20 @@
       "when": 1786667843149,
       "tag": "0009_colorful_plazm",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1786704619156,
+      "tag": "0010_warm_firelord",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1786705057634,
+      "tag": "0011_dear_norrin_radd",
+      "breakpoints": true
     }
   ]
 }

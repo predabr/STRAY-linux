@@ -1,4 +1,5 @@
 import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
+import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
 import { BookOpenCheck, BotMessageSquare, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Sparkles, Wrench } from "lucide-react";
@@ -10,6 +11,7 @@ type NavigationItem = { href: string; label: string; icon: typeof LayoutDashboar
 export function ProductWorkspace({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const { locale, t } = useLanguage();
+  const { user } = useAuth();
   const copy = productShellCopy[locale];
   const workspace: NavigationItem[] = [
     { href: "/", label: t("overview"), icon: LayoutDashboard },
@@ -28,6 +30,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
     { href: "/dashboard/favorites", label: t("favorites"), icon: Heart },
     { href: "/dashboard/settings", label: t("settings"), icon: Settings },
   ];
+  if (user?.role === "moderator" || user?.role === "admin") personal.unshift({ href: "/moderation", label: t("reports"), icon: ShieldCheck });
   const bottomNavigation = [workspace[0]!, workspace[1]!, workspace[2]!, system[1]!];
   const isDashboardRoute = location.startsWith("/admin");
   if (isDashboardRoute) return <>{children}</>;

@@ -64,7 +64,7 @@ function StaticTextLocalizer() {
     const catalog = staticTranslationCatalog[locale] ?? staticTranslationCatalog["pt-BR"];
     const translateText = (node: Text) => {
       const parent = node.parentElement;
-      if (!parent || ["SCRIPT", "STYLE", "CODE", "KBD", "PRE", "TEXTAREA", "OPTION"].includes(parent.tagName) || parent.isContentEditable) return;
+      if (!parent || parent.closest("[data-no-localize]") || ["SCRIPT", "STYLE", "CODE", "KBD", "PRE", "TEXTAREA", "OPTION"].includes(parent.tagName) || parent.isContentEditable) return;
       const baseline = originalText.get(node) ?? node.data;
       originalText.set(node, baseline);
       const { prefix, core, suffix } = splitWhitespace(baseline);
@@ -73,6 +73,7 @@ function StaticTextLocalizer() {
       if (node.data !== next) node.data = next;
     };
     const translateAttributes = (element: Element) => {
+      if (element.closest("[data-no-localize]")) return;
       const baselines = originalAttributes.get(element) ?? {};
       for (const attribute of localizableAttributes) {
         const current = element.getAttribute(attribute);

@@ -3,6 +3,7 @@ import { distroProfileCopy } from "@/i18n/distroProfileCopy";
 import { homeDiagnosticsCopy } from "@/i18n/homeDiagnosticsCopy";
 import { introCopy } from "@/i18n/introCopy";
 import { gameCardCopy } from "@/i18n/gameCardCopy";
+import { linuxFixContributionCopy, linuxFixCopy, linuxFixModerationCopy } from "@/i18n/linuxFixCopy";
 import { overviewCopy } from "@/i18n/overviewCopy";
 import { productShellCopy } from "@/i18n/productShellCopy";
 import { distroRegistry } from "@shared/distro-registry";
@@ -17,6 +18,9 @@ describe("experience copy", () => {
       const shell = productShellCopy[locale];
       const overview = overviewCopy[locale];
       const gameCard = gameCardCopy[locale];
+      const linuxFix = linuxFixCopy[locale];
+      const contribution = linuxFixContributionCopy[locale];
+      const moderation = linuxFixModerationCopy[locale];
       expect(profile.backToAtlas.trim()).not.toBe("");
       expect(profile.bigLinuxTitle.trim()).not.toBe("");
       expect(profile.installArtifact(".deb")).toContain(".deb");
@@ -32,6 +36,13 @@ describe("experience copy", () => {
       expect(overview.scannerAction.trim()).not.toBe("");
       expect(gameCard.catalogRecord.trim()).not.toBe("");
       expect(gameCard.openGame("Stray Linux").trim()).not.toBe("");
+      expect(linuxFix.catalogTitle.trim()).not.toBe("");
+      expect(linuxFix.kind.inspect.trim()).not.toBe("");
+      expect(linuxFix.risk.reversible.trim()).not.toBe("");
+      expect(contribution.consent.trim()).not.toBe("");
+      expect(contribution.statuses.in_review.trim()).not.toBe("");
+      expect(moderation.description.trim()).not.toBe("");
+      expect(moderation.accept.trim()).not.toBe("");
     }
   });
 

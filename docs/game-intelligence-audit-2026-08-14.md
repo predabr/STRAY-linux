@@ -28,14 +28,20 @@ O dashboard autenticado já mantém perfil de hardware, favoritos, guias salvos,
 
 ## Artefatos desktop reconstruídos
 
-Os cinco formatos foram recompilados com o workspace de aplicativo, os cartões sem mídia externa e as telas de Game Intelligence. A publicação do empacotador continua desativada durante a geração local.
+Os cinco formatos foram recompilados com o workspace de aplicativo, os cartões sem mídia externa, as telas de Game Intelligence e a central LinuxFix renovada. A publicação do empacotador continua desativada durante a geração local.
 
 | Artefato | SHA-256 |
 | --- | --- |
-| `Stray-Linux-1.0.0-Setup.exe` | `7c2340324dae1edaae6f795df9f59dd5d2e5a81aa1417ab8d4e5f9a6f1e2d566` |
-| `Stray-Linux-1.0.0-x86_64.AppImage` | `17ff26b228781e1a1bc8d9e1a55b51b32b4a7cc81ef555ac1c8fd153d4b2ca81` |
-| `Stray-Linux-1.0.0-amd64.deb` | `ab82e006a6fb253755530124d374f632248dff751b7542f4781b01ae300c22c9` |
-| `Stray-Linux-1.0.0-x86_64.rpm` | `1d4e8958dcff3632c40c808cbfea81569427da6c1ea182cd4954301fee51e6ac` |
-| `Stray-Linux-1.0.0-x64.pacman` | `2253e360e84d407dc020a3c8a5fce9c47f21e931cd0437cc90b9025b1da987ab` |
+| `Stray-Linux-1.0.0-Setup.exe` | `c74476a7c772ff33ed989cfa76fd04b1b0fecf196aa20933f1d184d5cda043c6` |
+| `Stray-Linux-1.0.0-x86_64.AppImage` | `ee3ed056e698774149318ef4d3734eaf0ca862730f44fa850143eedaba737e4c` |
+| `Stray-Linux-1.0.0-amd64.deb` | `913b865801fc0bb2bad92c8a4869e0bbc21944fce789dc7e0fa82346e06e520d` |
+| `Stray-Linux-1.0.0-x86_64.rpm` | `fb4cb7ff18214c8de4acf18b2b37b52d0168027d8f7d3f2e18290c612183ebde` |
+| `Stray-Linux-1.0.0-x64.pacman` | `43d7549cdda5475148d6ca2c0463b934791bb3cb6c7c6244a4b47b1a930fb9c6` |
 
 O build foi concluído com sucesso. O Vite preserva um aviso de chunk grande já presente no bundle principal; a divisão adicional de código de Mermaid e de visualizações deve ser tratada em uma rodada separada de desempenho, sem alterar o comportamento atual.
+
+## Central LinuxFix e contribuição moderada
+
+Cada etapa LinuxFix agora declara o tipo operacional (`inspect`, `change`, `verify` ou `recover`), risco, como verificar o resultado, reversão quando houver alteração e a fonte específica ou herdada do runbook. A interface deixa explícito que confirmação comunitária descreve experiência de uso e não transforma uma instrução em evidência verificada.
+
+As contribuições seguem uma fila privada: uma pessoa envia observação, reprodução, procedimento proposto e fonte opcional; o contexto técnico é anexado somente por consentimento explícito e é limitado a distribuição, kernel, driver, Proton, Wine e GPU. Nenhuma proposta é publicada automaticamente. Moderadores decidem entre revisão, aceitação para edição ou recusa, e cada submissão, retirada e decisão grava uma ação de auditoria. A aceitação não injeta comandos no runbook: a alteração editorial permanece uma ação separada e revisável.
