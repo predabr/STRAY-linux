@@ -201,3 +201,4 @@
 - [x] Reorganizar a navegação em grupos operacionais de nível desktop e redesenhar a visão geral com sistema, status, atividades e atalhos baseados em dados disponíveis.
 - [x] Corrigir e validar Steam local, biblioteca e abertura explícita por URI autorizada, mantendo o catálogo sem mídia, FPS ou compatibilidade simulados.
 - [x] Atualizar as 11 localidades, acessibilidade, testes, validação visual, build e instaladores após a evolução de menus e Steam.
+- [x] Ajustar os breakpoints do painel operacional para manter a densidade de aplicativo desktop ao lado da navegação lateral.

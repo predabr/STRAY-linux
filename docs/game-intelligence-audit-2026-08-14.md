@@ -32,11 +32,11 @@ Os cinco formatos foram recompilados com o workspace de aplicativo, os cartões 
 
 | Artefato | SHA-256 |
 | --- | --- |
-| `Stray-Linux-1.0.0-Setup.exe` | `7ecd11575916a7fc4cd7822dbc47d753e73e3036379926066d8334eca0696565` |
-| `Stray-Linux-1.0.0-x86_64.AppImage` | `e06561811bd14829295ab5f08c3111fd9392bb0ede619cd3240b66b6679dcc2f` |
-| `Stray-Linux-1.0.0-amd64.deb` | `32b108eea986f1e80f6f9323d4d422d7628eb94624b6abf927991f984394f32b` |
-| `Stray-Linux-1.0.0-x86_64.rpm` | `fa7eeed5b5d2be910ae81c70c99b638aae26f1d954d987326d38249f5a92d6e1` |
-| `Stray-Linux-1.0.0-x64.pacman` | `46e95a25c00cbfc7d8987c2eb051482e87f1716bb10f519dbfb9dfc159dd82e3` |
+| `Stray-Linux-1.0.0-Setup.exe` | `cc087fad089cd0de0f46ea5bd170beac17e422d40b54e46db9301166594705b7` |
+| `Stray-Linux-1.0.0-x86_64.AppImage` | `1613d938acfd2141d6f3cca313fa9fb3d31d2c26c72d1d39f319d53b7a5fbc38` |
+| `Stray-Linux-1.0.0-amd64.deb` | `786d3b2aa501bec84e529db5dc7bf101ca9e2cb729fe18ddb93fdefad85c1c54` |
+| `Stray-Linux-1.0.0-x86_64.rpm` | `8441e27a15494190ce0e5a3611a4791a57ff4a27c8586b4b2e3db537dd561481` |
+| `Stray-Linux-1.0.0-x64.pacman` | `10b8e1f7f21a428acb7de1df460a3aebea3778121672ffb237f0f7360c6d65c0` |
 
 O build foi concluído com sucesso. O Vite preserva um aviso de chunk grande já presente no bundle principal; a divisão adicional de código de Mermaid e de visualizações deve ser tratada em uma rodada separada de desempenho, sem alterar o comportamento atual.
 
