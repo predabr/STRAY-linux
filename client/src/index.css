@@ -227,4 +227,22 @@
   }
   button:not(:disabled):active, [role="button"]:not([aria-disabled="true"]):active { transform: scale(0.97); }
   [data-slot="card"]:hover { box-shadow: 0 16px 38px oklch(0.1 0.02 260 / 18%); transform: translateY(-2px); }
+
+  .intro-logo-reveal { opacity: 0; transform: translateY(12px); animation: stray-intro-logo-reveal 720ms cubic-bezier(0.23, 1, 0.32, 1) 90ms forwards; }
+  .intro-logo-pop { animation: stray-intro-logo-pop 760ms cubic-bezier(0.23, 1, 0.32, 1) 160ms both; }
+  .intro-light-scan { animation: stray-intro-scan 1000ms cubic-bezier(0.77, 0, 0.175, 1) 720ms both; }
+  .intro-type-char { display: inline-block; opacity: 0; transform: translateY(0.28em); animation: stray-intro-character 280ms cubic-bezier(0.23, 1, 0.32, 1) forwards; }
+  .intro-subtitle { opacity: 0; transform: translateY(8px); animation: stray-intro-logo-reveal 520ms cubic-bezier(0.23, 1, 0.32, 1) 1.85s forwards; }
+  .intro-controls { opacity: 0; transform: translateY(8px); animation: stray-intro-logo-reveal 480ms cubic-bezier(0.23, 1, 0.32, 1) 2.05s forwards; }
+  .intro-curtain { position: absolute; inset-inline: 0; bottom: -18%; z-index: 30; height: 130%; background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--card))); transform: translateY(105%); transition: transform 720ms cubic-bezier(0.77, 0, 0.175, 1); }
+  .intro-curtain-open { transform: translateY(-112%); }
+
+  @keyframes stray-intro-logo-reveal { to { opacity: 1; transform: translateY(0); } }
+  @keyframes stray-intro-logo-pop { 0% { opacity: 0; transform: scale(0.95); } 68% { opacity: 1; transform: scale(1.04); } 100% { opacity: 1; transform: scale(1); } }
+  @keyframes stray-intro-scan { from { transform: translateX(0) skewX(-12deg); opacity: 0; } 18% { opacity: 1; } to { transform: translateX(500%) skewX(-12deg); opacity: 0; } }
+  @keyframes stray-intro-character { to { opacity: 1; transform: translateY(0); } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-curtain-open { display: none; }
 }

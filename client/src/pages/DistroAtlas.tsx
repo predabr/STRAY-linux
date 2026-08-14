@@ -46,7 +46,7 @@ const supportClass: Record<DistroRegistryEntry["support"], string> = {
 };
 
 const featuredNames = [
-  "Bazzite", "CachyOS", "Nobara", "Arch Linux", "EndeavourOS", "Fedora Linux", "Ubuntu", "Linux Mint", "Pop!_OS", "Zorin OS", "Debian", "openSUSE", "Manjaro", "Gentoo", "KDE neon",
+  "Bazzite", "BigLinux", "CachyOS", "Nobara", "Arch Linux", "EndeavourOS", "Fedora Linux", "Ubuntu", "Linux Mint", "Pop!_OS", "Zorin OS", "Debian", "openSUSE", "Manjaro", "Gentoo", "KDE neon",
 ];
 
 function normalise(value: string) {

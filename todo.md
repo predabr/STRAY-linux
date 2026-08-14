@@ -173,3 +173,8 @@
 - [x] Simplificar a navegação global para reduzir escolhas concorrentes e deixar os caminhos principais mais claros em desktop e celular.
 - [x] Reorganizar a página de distribuições por objetivo, família e nível de orientação, preservando as 18 distros e seus conteúdos existentes.
 - [x] Atualizar traduções, foco de teclado, testes e validação visual da nova navegação antes do checkpoint.
+- [x] Auditar dependências, início, perfis de distribuições e fontes oficiais para localizar melhorias comprováveis sem remover capacidades existentes.
+- [x] Incluir e publicar o BigLinux somente com informações, métodos e fontes oficiais verificados.
+- [x] Reestruturar os perfis de distribuições para facilitar a leitura por etapas, contexto, instalação e próximos passos.
+- [x] Criar uma abertura animada suave do Stray Linux com controles de acessibilidade, redução de movimento e som opcional.
+- [x] Atualizar os 11 idiomas, testes, validações visuais e build após as melhorias de conteúdo e experiência.

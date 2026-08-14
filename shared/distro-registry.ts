@@ -432,11 +432,11 @@ export const distroRegistry = {
     },
     {
       "id": "familia-arch-linux-biglinux-originalmente-mandriva-hoje-arch-based",
-      "name": "BigLinux (originalmente Mandriva, hoje Arch-based)",
+      "name": "BigLinux",
       "section": "FAMÍLIA ARCH LINUX",
       "family": "Arch e derivadas",
       "installer": "pacman",
-      "support": "historical"
+      "support": "package-family"
     },
     {
       "id": "familia-arch-linux-portergen-nicho",
@@ -5977,14 +5977,6 @@ export const distroRegistry = {
     {
       "id": "nicho-tematicas-diversas-manjaro-budgie",
       "name": "Manjaro Budgie",
-      "section": "NICHO / TEMÁTICAS / DIVERSAS",
-      "family": "Base própria ou família mista",
-      "installer": null,
-      "support": "research-required"
-    },
-    {
-      "id": "nicho-tematicas-diversas-biglinux-brasil",
-      "name": "BigLinux (Brasil)",
       "section": "NICHO / TEMÁTICAS / DIVERSAS",
       "family": "Base própria ou família mista",
       "installer": null,

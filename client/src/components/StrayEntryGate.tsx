@@ -1,50 +1,78 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { Button } from "@/components/ui/button";
-import { startLogin } from "@/const";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { introCopy } from "@/i18n/introCopy";
 import { normalizeRoute, routeRequiresAccount } from "@/lib/routeAccess";
-import { ArrowRight, CheckCircle2, ChevronRight, CircleDotDashed, Cpu, Gamepad2, ShieldCheck, Sparkles } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { startLogin } from "@/const";
+import { ArrowRight, CheckCircle2, CircleDotDashed, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation } from "wouter";
 
-const scenes = [
-  { eyebrow: "STRAY LINUX / 01", title: "Seu PC não é genérico.", body: "Distribuição, driver, kernel e runtime mudam a experiência. O Stray Linux começa pelo seu ambiente real.", icon: Cpu },
-  { eyebrow: "STRAY LINUX / 02", title: "Cada comando tem um lugar.", body: "A central separa famílias, variantes imutáveis e projetos históricos antes de sugerir uma rota de configuração.", icon: ShieldCheck },
-  { eyebrow: "STRAY LINUX / 03", title: "Pronto para explorar.", body: "Catálogo de jogos, Atlas de distribuições, guias e evidências técnicas reunidos em um só caminho.", icon: Gamepad2 },
-];
+const introAudioUrl = "/manus-storage/intro-ambient_54206208.mp3";
+const introStorageKey = "stray-intro-complete";
 
 export function StrayEntryGate({ children }: { children: ReactNode }) {
   const { isAuthenticated, loading } = useAuth();
+  const { locale } = useLanguage();
   const [location] = useLocation();
-  const [stage, setStage] = useState<"intro" | "access">(() => sessionStorage.getItem("stray-intro-complete") === "1" ? "access" : "intro");
-  const [scene, setScene] = useState(0);
-  const desktopMode = typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname);
+  const [introComplete, setIntroComplete] = useState(() => sessionStorage.getItem(introStorageKey) === "1");
   const [localEntry, setLocalEntry] = useState(() => sessionStorage.getItem("stray-local-entry") === "1");
+  const desktopMode = typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname);
   const pathOnly = normalizeRoute(location);
   const requiresAccount = routeRequiresAccount(location);
 
-  useEffect(() => {
-    if (stage !== "intro") return;
-    const timer = window.setTimeout(() => {
-      if (scene < scenes.length - 1) setScene((current) => current + 1);
-      else { sessionStorage.setItem("stray-intro-complete", "1"); setStage("access"); }
-    }, 3400);
-    return () => window.clearTimeout(timer);
-  }, [scene, stage]);
-
-  if (!requiresAccount && pathOnly !== "/") return <>{children}</>;
+  if (pathOnly === "/" && !introComplete) return <Intro locale={locale} onComplete={() => { sessionStorage.setItem(introStorageKey, "1"); setIntroComplete(true); }} />;
+  if (!requiresAccount) return <>{children}</>;
   if (loading) return <div className="grid min-h-screen place-items-center bg-background"><CircleDotDashed className="h-7 w-7 animate-spin text-primary" /></div>;
   if (isAuthenticated || (desktopMode && localEntry)) return <>{children}</>;
-  if (stage === "intro") return <Intro scene={scene} onNext={() => { if (scene < scenes.length - 1) setScene(scene + 1); else { sessionStorage.setItem("stray-intro-complete", "1"); setStage("access"); } }} onSkip={() => { sessionStorage.setItem("stray-intro-complete", "1"); setStage("access"); }} />;
-  return <Access desktopMode={desktopMode} onLocalContinue={() => { sessionStorage.setItem("stray-local-entry", "1"); setLocalEntry(true); }} />;
+  return <Access locale={locale} desktopMode={desktopMode} onLocalContinue={() => { sessionStorage.setItem("stray-local-entry", "1"); setLocalEntry(true); }} />;
 }
 
-function Intro({ scene, onNext, onSkip }: { scene: number; onNext: () => void; onSkip: () => void }) {
-  const current = scenes[scene];
-  const Icon = current.icon;
-  return <main className="relative grid min-h-screen overflow-hidden bg-[#05070c] text-foreground"><div className="absolute inset-0 opacity-70 [background-image:linear-gradient(hsl(var(--primary)/0.08)_1px,transparent_1px),linear-gradient(90deg,hsl(var(--primary)/0.08)_1px,transparent_1px)] [background-size:48px_48px]" /><div className="absolute -left-24 top-1/4 h-96 w-96 rounded-full bg-primary/20 blur-[130px]" /><div className="absolute -right-24 bottom-0 h-96 w-96 rounded-full bg-cyan-400/10 blur-[130px]" /><div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col px-6 py-7 md:px-10"><div className="flex items-center justify-between"><StrayBrandMark /><Button variant="ghost" size="sm" onClick={onSkip}>Pular introdução</Button></div><div className="my-auto grid flex-1 items-center gap-10 py-14 md:grid-cols-[1.1fr_.9fr]"><div className="max-w-3xl"><p className="font-mono text-xs font-medium tracking-[0.22em] text-primary">{current.eyebrow}</p><h1 className="mt-5 text-5xl font-semibold tracking-[-0.05em] md:text-7xl">{current.title}</h1><p className="mt-6 max-w-xl text-lg leading-8 text-muted-foreground">{current.body}</p><div className="mt-10 flex items-center gap-3"><Button size="lg" onClick={onNext}>{scene === scenes.length - 1 ? "Entrar no Stray Linux" : "Próxima cena"}<ChevronRight className="ml-2 h-4 w-4" /></Button><div className="flex gap-2">{scenes.map((item, index) => <span key={item.eyebrow} className={`h-1.5 rounded-full transition-all ${index === scene ? "w-9 bg-primary" : "w-2 bg-muted-foreground/35"}`} />)}</div></div></div><div className="relative mx-auto grid aspect-square w-full max-w-md place-items-center"><div className="absolute inset-0 rounded-[2.5rem] border border-primary/20 bg-card/30 backdrop-blur-sm" /><div className="absolute inset-7 rounded-[2rem] border border-primary/30 bg-[radial-gradient(circle_at_35%_30%,hsl(var(--primary)/0.35),transparent_35%),linear-gradient(135deg,hsl(var(--primary)/0.12),transparent_55%)]" /><div className="relative grid h-28 w-28 place-items-center rounded-3xl border border-primary/30 bg-background/80 shadow-[0_0_80px_-20px_hsl(var(--primary))]"><Icon className="h-12 w-12 text-primary" /></div><span className="absolute left-8 top-9 rounded border border-primary/20 bg-background/70 px-2 py-1 font-mono text-[10px] text-primary">VERIFY</span><span className="absolute bottom-10 right-7 rounded border border-cyan-400/20 bg-background/70 px-2 py-1 font-mono text-[10px] text-cyan-300">READY</span></div></div><footer className="flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-5 text-xs text-muted-foreground"><span>Stray Linux · criado no Brasil</span><span className="font-mono">INTRO / {String(scene + 1).padStart(2, "0")}</span></footer></div></main>;
+function Intro({ locale, onComplete }: { locale: keyof typeof introCopy; onComplete: () => void }) {
+  const copy = introCopy[locale];
+  const [leaving, setLeaving] = useState(false);
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const finish = () => {
+    if (leaving) return;
+    setLeaving(true);
+    window.setTimeout(onComplete, 720);
+  };
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      const target = event.target instanceof HTMLElement ? event.target : null;
+      if (target?.closest("button, a, input, select, textarea")) return;
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        finish();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  });
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (!audioEnabled) { audio.pause(); return; }
+    void audio.play().catch(() => setAudioEnabled(false));
+  }, [audioEnabled]);
+
+  return <main className="intro-stage relative grid min-h-screen overflow-hidden bg-[#16171a] text-foreground"><audio ref={audioRef} src={introAudioUrl} loop preload="metadata" />
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.1),transparent_28%),linear-gradient(135deg,rgba(255,255,255,0.035),transparent_44%)]" />
+    <div className="absolute inset-0 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px)] [background-size:48px_48px]" />
+    <div className="relative z-10 flex min-h-screen flex-col px-6 py-6 md:px-10"><header className="flex items-center justify-between gap-2"><span className="max-w-28 font-mono text-[10px] font-medium tracking-[0.18em] text-white/50">{copy.eyebrow}</span><div className="flex shrink-0 items-center gap-1"><Button variant="ghost" size="sm" className="px-2 text-white/70 hover:bg-white/10 hover:text-white sm:px-3" onClick={() => setAudioEnabled((current) => !current)} aria-pressed={audioEnabled} aria-label={audioEnabled ? copy.muteSound : copy.enableSound}>{audioEnabled ? <Volume2 className="mr-2 h-4 w-4" /> : <VolumeX className="mr-2 h-4 w-4" />}{audioEnabled ? copy.muteSound : copy.enableSound}</Button><Button variant="ghost" size="icon" className="text-white/70 hover:bg-white/10 hover:text-white sm:hidden" onClick={finish} aria-label={copy.skip} title={copy.skip}><ArrowRight className="h-4 w-4" /></Button><Button variant="ghost" size="sm" className="hidden text-white/70 hover:bg-white/10 hover:text-white sm:inline-flex" onClick={finish}>{copy.skip}</Button></div></header>
+      <section className="relative z-10 mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center text-center"><div className="intro-logo-reveal relative isolate mt-[-4vh] rounded-[2rem] border border-white/10 bg-white/[0.055] px-9 py-8 shadow-[0_18px_80px_rgba(0,0,0,0.26)] backdrop-blur"><div className="intro-logo-pop scale-[1.36] sm:scale-[1.55]"><StrayBrandMark /></div><div aria-hidden="true" className="intro-light-scan pointer-events-none absolute inset-y-0 left-[-36%] w-[28%] -skew-x-12 bg-gradient-to-r from-transparent via-white/70 to-transparent blur-md" /></div>
+        <p className="mt-7 text-[10px] font-medium uppercase tracking-[0.24em] text-white/45">{copy.soundHint}</p><h1 aria-label={copy.title} className="mt-7 max-w-4xl text-3xl font-semibold tracking-[-0.035em] text-white sm:text-5xl md:text-6xl">{Array.from(copy.title).map((character, index) => <span aria-hidden="true" key={`${character}-${index}`} className="intro-type-char" style={{ animationDelay: `${420 + index * 42}ms` }}>{character === " " ? "\u00a0" : character}</span>)}</h1><p className="intro-subtitle mt-5 max-w-2xl text-base leading-7 text-white/65 md:text-lg">{copy.subtitle}</p><div className="intro-controls mt-9 flex flex-col items-center gap-3"><Button size="lg" className="min-w-52 bg-white text-slate-950 hover:bg-white/90" onClick={finish}>{copy.continue}<ArrowRight className="ml-2 h-4 w-4" /></Button><p className="text-xs text-white/45">{copy.keyboardHint}</p></div>
+      </section><footer className="relative z-10 flex items-center justify-between border-t border-white/10 pt-5 text-xs text-white/45"><span>Stray Linux · Brasil</span><span className="inline-flex items-center gap-2"><Sparkles className="h-3.5 w-3.5" />EXPLORE / CONFIGURE / JOGUE</span></footer>
+    </div><div aria-hidden="true" className={`intro-curtain ${leaving ? "intro-curtain-open" : ""}`} />
+  </main>;
 }
 
-function Access({ desktopMode, onLocalContinue }: { desktopMode: boolean; onLocalContinue: () => void }) {
-  return <main className="relative grid min-h-screen place-items-center overflow-hidden bg-background px-5"><div className="absolute inset-0 technical-grid opacity-70" /><section className="relative z-10 w-full max-w-lg rounded-3xl border border-primary/20 bg-card/90 p-7 shadow-2xl shadow-primary/10 backdrop-blur-xl md:p-9"><StrayBrandMark /><p className="evidence-label mt-10 text-primary">ACESSO PROTEGIDO</p><h1 className="mt-3 text-3xl font-semibold tracking-tight">Entre para abrir sua central.</h1><p className="mt-3 leading-7 text-muted-foreground">Seu dashboard sincroniza perfis, favoritos, guias salvos, histórico de correções e reports. A autenticação do site usa o provedor seguro já configurado.</p>{desktopMode ? <div className="mt-7 rounded-2xl border border-primary/20 bg-primary/5 p-4"><p className="font-medium">Modo local detectado</p><p className="mt-1 text-sm leading-6 text-muted-foreground">A versão desktop funciona com SQLite local e não exige banco remoto. Continue para abrir seu catálogo offline.</p><Button className="mt-4 w-full" size="lg" onClick={onLocalContinue}>Abrir modo local <ArrowRight className="ml-2 h-4 w-4" /></Button></div> : <div className="mt-7"><Button className="w-full" size="lg" onClick={() => startLogin()}>Continuar com sua conta <ArrowRight className="ml-2 h-4 w-4" /></Button><p className="mt-3 flex gap-2 text-xs leading-5 text-muted-foreground"><CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />Se o provedor de autenticação conectado oferecer Google, a escolha aparecerá na etapa segura de entrada. Não é criado um login Google paralelo ou sem credenciais.</p></div>}<div className="mt-7 flex items-center gap-2 border-t pt-5 text-xs text-muted-foreground"><Sparkles className="h-3.5 w-3.5 text-primary" />Stray Linux · criado por Pedro Henrique Gouveia Araújo de Souza · Brasil</div></section></main>;
+function Access({ locale, desktopMode, onLocalContinue }: { locale: keyof typeof introCopy; desktopMode: boolean; onLocalContinue: () => void }) {
+  const copy = introCopy[locale];
+  return <main className="relative grid min-h-screen place-items-center overflow-hidden bg-background px-5"><div className="absolute inset-0 technical-grid opacity-70" /><section className="relative z-10 w-full max-w-lg rounded-3xl border border-primary/20 bg-card/90 p-7 shadow-2xl shadow-primary/10 backdrop-blur-xl md:p-9"><StrayBrandMark /><p className="evidence-label mt-10 text-primary">{copy.accessEyebrow}</p><h1 className="mt-3 text-3xl font-semibold tracking-tight">{copy.accessTitle}</h1><p className="mt-3 leading-7 text-muted-foreground">{copy.accessBody}</p>{desktopMode ? <div className="mt-7 rounded-2xl border border-primary/20 bg-primary/5 p-4"><p className="font-medium">{copy.localMode}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{copy.localModeBody}</p><Button className="mt-4 w-full" size="lg" onClick={onLocalContinue}>{copy.localContinue}<ArrowRight className="ml-2 h-4 w-4" /></Button></div> : <div className="mt-7"><Button className="w-full" size="lg" onClick={() => startLogin()}>{copy.signIn}<ArrowRight className="ml-2 h-4 w-4" /></Button><p className="mt-3 flex gap-2 text-xs leading-5 text-muted-foreground"><CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />{copy.providerHint}</p></div>}<div className="mt-7 flex items-center gap-2 border-t pt-5 text-xs text-muted-foreground"><Sparkles className="h-3.5 w-3.5 text-primary" />Stray Linux · Brasil</div></section></main>;
 }
