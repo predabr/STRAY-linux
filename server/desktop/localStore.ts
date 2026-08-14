@@ -33,7 +33,7 @@ export class DesktopStore {
       CREATE TABLE IF NOT EXISTS linux_fixes (id INTEGER PRIMARY KEY, slug TEXT UNIQUE NOT NULL, title TEXT NOT NULL, category TEXT NOT NULL, symptoms TEXT NOT NULL, possible_causes TEXT NOT NULL, confidence TEXT NOT NULL, provenance TEXT NOT NULL, source_url TEXT, solutions_json TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS favorites (game_id INTEGER PRIMARY KEY, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS saved_guides (guide_id INTEGER PRIMARY KEY, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
-      CREATE TABLE IF NOT EXISTS profiles (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE NOT NULL, cpu_id INTEGER, gpu_id INTEGER, ram_id INTEGER, distribution_id INTEGER, distribution_version_id INTEGER, kernel_version TEXT, driver_version TEXT, proton_version TEXT, wine_version TEXT, runtime_version TEXT, is_active INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS profiles (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE NOT NULL, cpu_id INTEGER, gpu_id INTEGER, ram_id INTEGER, distribution_id INTEGER, distribution_version_id INTEGER, kernel_version TEXT, driver_version TEXT, proton_version TEXT, wine_version TEXT, runtime_version TEXT, storage_description TEXT, monitor_description TEXT, is_active INTEGER NOT NULL DEFAULT 0, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS fix_history (id INTEGER PRIMARY KEY AUTOINCREMENT, fix_id INTEGER NOT NULL, viewed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, subject_type TEXT NOT NULL, subject_id INTEGER NOT NULL, type TEXT NOT NULL, description TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'open', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS benchmarks (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id INTEGER NOT NULL, source_label TEXT NOT NULL, source_url TEXT, evidence_note TEXT, verification_status TEXT NOT NULL DEFAULT 'submitted', provenance TEXT NOT NULL DEFAULT 'community', results_json TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
@@ -43,6 +43,8 @@ export class DesktopStore {
     if (!profileColumns.has("distribution_version_id")) this.db.run("ALTER TABLE profiles ADD COLUMN distribution_version_id INTEGER");
     if (!profileColumns.has("wine_version")) this.db.run("ALTER TABLE profiles ADD COLUMN wine_version TEXT");
     if (!profileColumns.has("runtime_version")) this.db.run("ALTER TABLE profiles ADD COLUMN runtime_version TEXT");
+    if (!profileColumns.has("storage_description")) this.db.run("ALTER TABLE profiles ADD COLUMN storage_description TEXT");
+    if (!profileColumns.has("monitor_description")) this.db.run("ALTER TABLE profiles ADD COLUMN monitor_description TEXT");
     const gameColumns = new Set(this.rows<{ name: string }>("PRAGMA table_info(games)").map((column) => column.name));
     if (!gameColumns.has("source_positive_reviews")) this.db.run("ALTER TABLE games ADD COLUMN source_positive_reviews INTEGER");
     this.db.run("CREATE INDEX IF NOT EXISTS idx_games_popularity ON games(source_positive_reviews)");

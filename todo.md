@@ -155,3 +155,6 @@
 - [ ] Validar a importação Steam autorizada com dados reais, sem duplicar jogos, sobrescrever proveniência ou criar mídia sem licença.
 - [ ] Resolver a autorização da `STEAM_WEB_API_KEY` para `IStoreService/GetAppList/v1`, que respondeu HTTP 403 em três execuções controladas, antes de uma nova tentativa de importação.
 - [x] Revisar a integridade dos Steam App IDs existentes e as pendências finais de produção antes da publicação definitiva.
+- [x] Implementar internacionalização integral da interface em português e pelo menos dez idiomas amplamente usados, com seleção persistente e sem textos de interface sem tradução.
+- [x] Inventariar e evoluir as capacidades desktop locais prioritárias: scanner, perfil automático, biblioteca Steam, saúde do sistema, diagnósticos e configurações seguras.
+- [x] Validar a internacionalização, os fluxos desktop e os pacotes distribuíveis sem remover funcionalidades existentes.

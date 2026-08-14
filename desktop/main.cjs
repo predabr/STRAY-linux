@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain } = require("electron");
 const { spawn } = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -65,12 +65,31 @@ function createWindow(port) {
     minHeight: 720,
     backgroundColor: "#09090b",
     title: "Stray Linux",
-    webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true },
+    webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true, preload: path.join(__dirname, "preload.cjs") },
   });
   mainWindow.loadURL(`http://127.0.0.1:${port}`);
 }
 
+function runScanner() {
+  const scannerPath = app.isPackaged ? path.join(process.resourcesPath, "app.asar", "desktop", "bin", "stray-scan.cjs") : path.join(app.getAppPath(), "desktop", "bin", "stray-scan.cjs");
+  return new Promise((resolve, reject) => {
+    const child = spawn(process.execPath, [scannerPath, "--pretty"], { env: { ...process.env, ELECTRON_RUN_AS_NODE: "1" }, stdio: ["ignore", "pipe", "pipe"], windowsHide: true });
+    let stdout = ""; let stderr = "";
+    child.stdout.on("data", (chunk) => { stdout += chunk; });
+    child.stderr.on("data", (chunk) => { stderr += chunk; });
+    child.on("error", () => reject(new Error("Não foi possível iniciar o scanner local.")));
+    child.on("close", (code) => {
+      if (code !== 0) return reject(new Error(stderr.trim() || "O scanner local não terminou corretamente."));
+      try { resolve(JSON.parse(stdout)); } catch { reject(new Error("O scanner local retornou um relatório inválido.")); }
+    });
+  });
+}
+
 app.whenReady().then(async () => {
+  ipcMain.handle("stray:scanner:run", async (event) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação do scanner recusada.");
+    return runScanner();
+  });
   const config = loadDesktopConfig();
   startLocalServer(config);
   try {

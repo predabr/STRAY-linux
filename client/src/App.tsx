@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { RouteMeta } from "./components/RouteMeta";
 import { StrayEntryGate } from "./components/StrayEntryGate";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const DistroAtlas = lazy(() => import("@/pages/DistroAtlas"));
@@ -58,7 +59,7 @@ function Router() {
 }
 
 function App() {
-  return <ErrorBoundary><ThemeProvider defaultTheme="dark" switchable><TooltipProvider><RouteMeta /><StrayEntryGate><Router /></StrayEntryGate><Toaster /></TooltipProvider></ThemeProvider></ErrorBoundary>;
+  return <ErrorBoundary><LanguageProvider><ThemeProvider defaultTheme="dark" switchable><TooltipProvider><RouteMeta /><StrayEntryGate><Router /></StrayEntryGate><Toaster /></TooltipProvider></ThemeProvider></LanguageProvider></ErrorBoundary>;
 }
 
 export default App;

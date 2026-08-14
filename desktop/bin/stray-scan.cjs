@@ -6,7 +6,7 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
-const SCANNER_VERSION = "1.0.0";
+const SCANNER_VERSION = "1.1.0";
 
 function readText(file) {
   try { return fs.readFileSync(file, "utf8"); } catch { return null; }
@@ -64,11 +64,46 @@ function detectGraphics() {
 
 function detectSteam() {
   const home = os.homedir();
-  return [path.join(home, ".steam", "steam"), path.join(home, ".local", "share", "Steam"), path.join(home, ".var", "app", "com.valvesoftware.Steam")].some((folder) => fs.existsSync(folder));
+  const roots = [path.join(home, ".steam", "steam"), path.join(home, ".local", "share", "Steam"), path.join(home, ".var", "app", "com.valvesoftware.Steam", "data", "Steam")];
+  const libraryFolders = roots.flatMap((root) => {
+    const steamApps = path.join(root, "steamapps");
+    const content = readText(path.join(steamApps, "libraryfolders.vdf")) || "";
+    const discovered = [...content.matchAll(/"path"\s+"([^"]+)"/g)].map((match) => path.join(match[1].replace(/\\\\/g, "\\"), "steamapps"));
+    return [steamApps, ...discovered];
+  });
+  const manifests = new Set();
+  for (const folder of libraryFolders) {
+    try { for (const entry of fs.readdirSync(folder)) if (/^appmanifest_\d+\.acf$/i.test(entry)) manifests.add(`${folder}/${entry}`); } catch {}
+  }
+  return { detected: roots.some((folder) => fs.existsSync(folder)), installedGameCount: manifests.size };
+}
+
+function detectDesktopEnvironment() {
+  return process.env.XDG_CURRENT_DESKTOP || process.env.DESKTOP_SESSION || process.env.GDMSESSION || null;
+}
+
+function detectStorage() {
+  const output = firstLine("df", ["-Pk", "/"]);
+  const line = (output || "").split("\n").at(-1) || "";
+  const values = line.trim().split(/\s+/);
+  if (values.length < 6 || !/^\d+$/.test(values[1])) return null;
+  return { filesystem: values[0] || null, mount: values.at(-1) || null, totalGb: Math.round(Number(values[1]) / 1024 / 1024), usedGb: Math.round(Number(values[2]) / 1024 / 1024) };
+}
+
+function detectDisplays() {
+  const output = firstLine("xrandr", ["--current"]);
+  if (!output) return [];
+  return output.split("\n").flatMap((line) => {
+    const match = line.match(/^([\w.-]+)\s+connected(?:\s+primary)?\s+(\d+)x(\d+)\+[-\d]+\+[-\d]+/);
+    if (!match) return [];
+    const refresh = (line.match(/\s(\d+(?:\.\d+)?)\*\+?/) || [])[1];
+    return [{ name: match[1], resolution: `${match[2]}×${match[3]}`, refreshHz: refresh ? Number(refresh) : null }];
+  });
 }
 
 function createReport() {
   const osRelease = parseOsRelease(readText("/etc/os-release"));
+  const steam = detectSteam();
   return {
     schemaVersion: 1,
     scannerVersion: SCANNER_VERSION,
@@ -76,11 +111,14 @@ function createReport() {
     system: {
       distribution: osRelease,
       kernelVersion: firstLine("uname", ["-r"]),
+      desktopEnvironment: detectDesktopEnvironment(),
       cpu: { model: detectCpu() },
       gpu: detectGpu(),
       memoryGb: detectMemoryGb(),
+      storage: detectStorage(),
+      displays: detectDisplays(),
       graphics: detectGraphics(),
-      runtime: { wineVersion: firstLine("wine", ["--version"]), protonVersion: null, steamDetected: detectSteam() },
+      runtime: { wineVersion: firstLine("wine", ["--version"]), protonVersion: null, steamDetected: steam.detected, installedGameCount: steam.installedGameCount },
     },
   };
 }
