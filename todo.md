@@ -170,3 +170,6 @@
 - [x] Auditar a versão publicada, logs, rotas, produção e empacotamento para localizar e corrigir falhas verificáveis.
 - [x] Revalidar LinuxFix e comandos por distribuição em fontes oficiais, corrigindo apenas instruções confirmadas e preservando a proveniência.
 - [x] Atualizar todas as traduções, acessibilidade e validações afetadas por cada correção antes do novo checkpoint.
+- [x] Simplificar a navegação global para reduzir escolhas concorrentes e deixar os caminhos principais mais claros em desktop e celular.
+- [x] Reorganizar a página de distribuições por objetivo, família e nível de orientação, preservando as 18 distros e seus conteúdos existentes.
+- [x] Atualizar traduções, foco de teclado, testes e validação visual da nova navegação antes do checkpoint.
