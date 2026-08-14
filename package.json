@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "db:push": "drizzle-kit generate && drizzle-kit migrate",
-    "desktop:build": "pnpm build && electron-builder --win nsis --x64",
+    "desktop:build": "pnpm build && electron-builder --win nsis --x64 --publish never",
+    "desktop:packages": "pnpm build && electron-builder --win nsis --linux AppImage deb rpm pacman --x64 --publish never",
     "desktop:dir": "pnpm build && electron-builder --dir"
   },
   "dependencies": {
@@ -186,6 +187,11 @@
     "appImage": {
       "artifactName": "Stray-Linux-${version}-${arch}.AppImage",
       "compression": "zstd"
+    },
+    "publish": {
+      "provider": "generic",
+      "url": "https://updates.straylinux.local",
+      "publishAutoUpdate": false
     }
   },
   "packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
