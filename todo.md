@@ -204,8 +204,8 @@
 - [x] Ajustar os breakpoints do painel operacional para manter a densidade de aplicativo desktop ao lado da navegação lateral.
 - [x] Mapear os prompts 1–10 e 12–17 contra os recursos atuais e registrar limites de dados, segurança e fontes.
 - [x] Excluir explicitamente o Prompt 11 — Achievements — de rotas, dados, navegação, eventos e recomendações desta evolução.
-- [ ] Evoluir GameHub, perfil de jogo, Benchmark Lab e matriz de compatibilidade somente com catálogo e evidências rastreáveis.
-- [ ] Ampliar Meu PC, Scanner, recomendações explicáveis, Steam local e integração Linux segura sem coletar ou enviar dados sem consentimento.
-- [ ] Evoluir LinuxFix, Stray AI, perfil de jogador e comunidade com moderação, proveniência e contexto técnico mínimo.
-- [ ] Implementar importação Steam consentida, Performance Center e sessões locais sem declarar telemetria local como benchmark verificado.
-- [ ] Aplicar auditoria visual, design system, 11 localidades, acessibilidade, testes, build, instaladores e publicação sem incluir Achievements.
+- [x] Evoluir GameHub, perfil de jogo, Benchmark Lab e matriz de compatibilidade somente com catálogo e evidências rastreáveis.
+- [x] Ampliar Meu PC, Scanner, recomendações explicáveis, Steam local e integração Linux segura sem coletar ou enviar dados sem consentimento.
+- [x] Evoluir LinuxFix, Stray AI, perfil de jogador e comunidade com moderação, proveniência e contexto técnico mínimo.
+- [x] Implementar importação Steam consentida, Performance Center e sessões locais sem declarar telemetria local como benchmark verificado.
+- [x] Aplicar auditoria visual, design system, 11 localidades, acessibilidade, testes, build, instaladores e publicação sem incluir Achievements.
