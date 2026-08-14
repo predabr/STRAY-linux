@@ -63,7 +63,24 @@ function scanSteamLibrary(home) {
   return [...games.values()].sort((left, right) => left.name.localeCompare(right.name, "pt-BR"));
 }
 
-module.exports = { getSteamRoots, getSteamAppsFolders, parseManifest, scanSteamLibrary };
+function scanSteamWorkshop(home) {
+  const entries = [];
+  for (const steamApps of getSteamAppsFolders(home)) {
+    const contentRoot = path.join(steamApps.path, "workshop", "content");
+    let appIds = [];
+    try { appIds = fs.readdirSync(contentRoot, { withFileTypes: true }).filter((entry) => entry.isDirectory() && /^\d+$/.test(entry.name)).map((entry) => entry.name); } catch { continue; }
+    for (const appId of appIds.slice(0, 100)) {
+      const folder = path.join(contentRoot, appId);
+      let modCount = 0;
+      try { modCount = fs.readdirSync(folder, { withFileTypes: true }).filter((entry) => entry.isDirectory()).length; } catch {}
+      entries.push({ appId: Number(appId), modCount, path: folder, installationType: steamApps.kind });
+    }
+  }
+  const unique = new Map(); for (const entry of entries) if (!unique.has(entry.appId)) unique.set(entry.appId, entry);
+  return { source: "steam-workshop-local", entries: [...unique.values()].sort((left, right) => left.appId - right.appId) };
+}
+
+module.exports = { getSteamRoots, getSteamAppsFolders, parseManifest, scanSteamLibrary, scanSteamWorkshop };
 
 if (require.main === module) {
   const homeIndex = process.argv.indexOf("--home");

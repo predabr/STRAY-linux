@@ -100,6 +100,12 @@ app.whenReady().then(async () => {
     if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação da biblioteca recusada.");
     return scanLibrary();
   });
+  ipcMain.handle("stray:library:scan-mods", async (event) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de mods recusada.");
+    const libraryPath = app.isPackaged ? path.join(process.resourcesPath, "app.asar", "desktop", "bin", "stray-library.cjs") : path.join(app.getAppPath(), "desktop", "bin", "stray-library.cjs");
+    const { scanSteamWorkshop } = require(libraryPath);
+    return scanSteamWorkshop();
+  });
   ipcMain.handle("stray:library:launch", async (event, appId) => {
     if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de execução recusada.");
     if (!Number.isSafeInteger(appId) || appId <= 0) throw new Error("Identificador de jogo inválido.");
