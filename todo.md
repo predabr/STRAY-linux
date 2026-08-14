@@ -178,3 +178,7 @@
 - [x] Reestruturar os perfis de distribuições para facilitar a leitura por etapas, contexto, instalação e próximos passos.
 - [x] Criar uma abertura animada suave do Stray Linux com controles de acessibilidade, redução de movimento e som opcional.
 - [x] Atualizar os 11 idiomas, testes, validações visuais e build após as melhorias de conteúdo e experiência.
+- [x] Auditar a página inicial, a composição do Centro de Operações e todos os créditos públicos para remover exposição de dados pessoais desnecessários.
+- [x] Substituir o card genérico de operações por uma prévia visual, honesta e acessível do diagnóstico LinuxFix.
+- [x] Refinar hero, CTAs, tipografia técnica e hierarquia de acentos sem remover o grid e a linguagem visual do Stray Linux.
+- [x] Atualizar 11 idiomas, acessibilidade, testes e validação visual da página inicial antes do checkpoint.
