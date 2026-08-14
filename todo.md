@@ -138,3 +138,6 @@
 - [ ] Configurar CDN/rate limit distribuído, monitoramento externo e alertas para tráfego público multi-instância.
 - [x] Revalidar e documentar explicitamente as fontes de hardware, drivers e distribuições desta fase, com termos, formato e referência versionada.
 - [x] Preparar e versionar a base de CI/CD e operação: workflow de build/test, checklist de deploy, validações pós-publicação e variáveis necessárias.
+- [x] Expor no painel administrativo o histórico de fontes e a verificação manual da Steam Web API já protegida por autenticação de administrador.
+- [x] Preparar, sem ativar, o contrato de job periódico idempotente para fontes aprovadas após publicação do site.
+- [x] Elaborar opções técnicas comparáveis para CDN/rate limiting distribuído e monitoramento externo, para decisão explícita do proprietário.

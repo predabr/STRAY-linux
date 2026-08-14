@@ -54,12 +54,13 @@ export const contentSources = mysqlTable(
     baseUrl: varchar("baseUrl", { length: 2048 }),
     licenseNote: text("licenseNote"),
     isOfficial: boolean("isOfficial").default(false).notNull(),
+    scheduleCronTaskUid: varchar("scheduleCronTaskUid", { length: 65 }),
     lastCheckedAt: timestamp("lastCheckedAt"),
     lastSuccessfulRefreshAt: timestamp("lastSuccessfulRefreshAt"),
     createdAt,
     updatedAt,
   },
-  (table) => [uniqueIndex("content_sources_name_unique").on(table.name)],
+  (table) => [uniqueIndex("content_sources_name_unique").on(table.name), index("content_sources_cron_uid_idx").on(table.scheduleCronTaskUid)],
 );
 
 export const importBatches = mysqlTable(

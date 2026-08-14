@@ -11,6 +11,7 @@ import { initializeDesktopStore } from "../desktop/localStore";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { createTrpcRateLimitMiddleware } from "../lib/requestRateLimit";
+import { refreshSourceHandler } from "../scheduled/sourceRefresh";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -59,6 +60,7 @@ async function startServer() {
     registerStorageProxy(app);
     registerOAuthRoutes(app);
   }
+  app.post("/api/scheduled/source-refresh", refreshSourceHandler);
   // tRPC API
   app.use("/api/trpc", createTrpcRateLimitMiddleware());
   app.use(
