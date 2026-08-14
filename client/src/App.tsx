@@ -24,6 +24,7 @@ const SetupPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ def
 const SetupDetailPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ default: module.SetupDetailPage })));
 const LinuxFixPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ default: module.LinuxFixPage })));
 const LinuxFixDetailPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ default: module.LinuxFixDetailPage })));
+const Library = lazy(() => import("@/pages/Library"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const SearchPage = lazy(() => import("@/pages/Search"));
 const Scanner = lazy(() => import("@/pages/Scanner"));
@@ -47,6 +48,7 @@ function Router() {
     <Route path="/setup/:slug" component={SetupDetailPage} />
     <Route path="/linuxfix" component={LinuxFixPage} />
     <Route path="/linuxfix/:slug" component={LinuxFixDetailPage} />
+    <Route path="/library" component={Library} />
     <Route path="/search" component={SearchPage} />
     <Route path="/scanner" component={Scanner} />
     <Route path="/status" component={Status} />

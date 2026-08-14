@@ -101,9 +101,32 @@ function detectDisplays() {
   });
 }
 
+function hasCommand(command) {
+  return Boolean(firstLine("sh", ["-lc", `command -v ${command}`]));
+}
+
+function detectGamingEnvironment() {
+  const sessionType = process.env.XDG_SESSION_TYPE || null;
+  const groups = firstLine("id", ["-nG"])?.split(/\s+/) ?? [];
+  const gamemoded = hasCommand("systemctl") ? firstLine("systemctl", ["--user", "is-active", "gamemoded.service"]) : null;
+  return {
+    sessionType,
+    waylandDetected: sessionType === "wayland" || Boolean(process.env.WAYLAND_DISPLAY),
+    x11Detected: sessionType === "x11" || Boolean(process.env.DISPLAY),
+    vulkanToolsDetected: hasCommand("vulkaninfo"),
+    gameModeDetected: hasCommand("gamemoderun"),
+    gameModeServiceActive: gamemoded === null ? null : gamemoded === "active",
+    mangoHudDetected: hasCommand("mangohud"),
+    gamescopeDetected: hasCommand("gamescope"),
+    flatpakDetected: hasCommand("flatpak"),
+    renderGroupDetected: groups.includes("render") || groups.includes("video"),
+  };
+}
+
 function createReport() {
   const osRelease = parseOsRelease(readText("/etc/os-release"));
   const steam = detectSteam();
+  const gaming = detectGamingEnvironment();
   return {
     schemaVersion: 1,
     scannerVersion: SCANNER_VERSION,
@@ -118,7 +141,7 @@ function createReport() {
       storage: detectStorage(),
       displays: detectDisplays(),
       graphics: detectGraphics(),
-      runtime: { wineVersion: firstLine("wine", ["--version"]), protonVersion: null, steamDetected: steam.detected, installedGameCount: steam.installedGameCount },
+      runtime: { wineVersion: firstLine("wine", ["--version"]), protonVersion: null, steamDetected: steam.detected, installedGameCount: steam.installedGameCount, gaming },
     },
   };
 }

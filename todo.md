@@ -160,3 +160,8 @@
 - [x] Validar a internacionalização, os fluxos desktop e os pacotes distribuíveis sem remover funcionalidades existentes.
 - [x] Desativar a tarefa periódica Steam e o vínculo de `taskUid`, pois o modo gratuito não utilizará credenciais Steamworks Partner.
 - [x] Documentar a operação gratuita sem Steamworks e validar que nenhum refresh Steam será disparado automaticamente.
+- [x] Ampliar o diagnóstico local do ecossistema Linux para runtimes, APIs gráficas, sessões, ferramentas de jogos, serviços e permissões, com causas e ações somente quando verificáveis.
+- [x] Criar uma biblioteca desktop local de jogos detectados, com execução permitida por ação explícita, informações técnicas disponíveis e sem substituir o Steam.
+- [x] Renomear e evoluir o assistente integrado para Stray AI, usando diagnóstico fundamentado no perfil, LinuxFix, compatibilidade e benchmarks publicados.
+- [x] Preparar a API pública versionada com documentação, limites e escopo de leitura seguro para jogos, compatibilidade, benchmarks, hardware, distros e LinuxFix.
+- [ ] Executar endurecimento de produção em autenticação, IPC, filesystem, comandos, SQL, XSS, CSRF, uploads, permissões, segredos, desempenho, recuperação e distribuição.

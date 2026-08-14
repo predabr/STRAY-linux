@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain, shell } = require("electron");
 const { spawn } = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -85,10 +85,28 @@ function runScanner() {
   });
 }
 
+function scanLibrary() {
+  const libraryPath = app.isPackaged ? path.join(process.resourcesPath, "app.asar", "desktop", "bin", "stray-library.cjs") : path.join(app.getAppPath(), "desktop", "bin", "stray-library.cjs");
+  const { scanSteamLibrary } = require(libraryPath);
+  return { games: scanSteamLibrary() };
+}
+
 app.whenReady().then(async () => {
   ipcMain.handle("stray:scanner:run", async (event) => {
     if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação do scanner recusada.");
     return runScanner();
+  });
+  ipcMain.handle("stray:library:scan", async (event) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação da biblioteca recusada.");
+    return scanLibrary();
+  });
+  ipcMain.handle("stray:library:launch", async (event, appId) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de execução recusada.");
+    if (!Number.isSafeInteger(appId) || appId <= 0) throw new Error("Identificador de jogo inválido.");
+    const installed = scanLibrary().games.some((game) => game.appId === appId);
+    if (!installed) throw new Error("O jogo não está instalado nesta biblioteca Steam.");
+    await shell.openExternal(`steam://run/${appId}`);
+    return { launched: true };
   });
   const config = loadDesktopConfig();
   startLocalServer(config);

@@ -16,7 +16,7 @@ export const scannerReportInput = z.object({
     storage: z.object({ filesystem: nullableText, mount: nullableText, totalGb: z.number().int().min(0).max(1_000_000).nullable(), usedGb: z.number().int().min(0).max(1_000_000).nullable() }).strict().nullable().optional(),
     displays: z.array(z.object({ name: nullableText, resolution: nullableText, refreshHz: z.number().min(0).max(1_000).nullable() }).strict()).max(8).optional(),
     graphics: z.object({ driverVersion: nullableText, mesaVersion: nullableText, vulkanVersion: nullableText, openGlVersion: nullableText }).strict(),
-    runtime: z.object({ wineVersion: nullableText, protonVersion: nullableText, steamDetected: z.boolean(), installedGameCount: z.number().int().min(0).max(100_000).optional() }).strict(),
+    runtime: z.object({ wineVersion: nullableText, protonVersion: nullableText, steamDetected: z.boolean(), installedGameCount: z.number().int().min(0).max(100_000).optional(), gaming: z.object({ sessionType: nullableText, waylandDetected: z.boolean(), x11Detected: z.boolean(), vulkanToolsDetected: z.boolean(), gameModeDetected: z.boolean(), gameModeServiceActive: z.boolean().nullable(), mangoHudDetected: z.boolean(), gamescopeDetected: z.boolean(), flatpakDetected: z.boolean(), renderGroupDetected: z.boolean() }).strict().optional() }).strict(),
   }).strict(),
 }).strict();
 

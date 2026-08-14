@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { scannerReportInput, scannerReportToProfile } from "./lib/scannerReport";
+import { assessLinuxGamingEnvironment } from "./lib/linuxHealth";
 
 const report = {
   schemaVersion: 1,
@@ -33,5 +34,12 @@ describe("contrato do stray-scan", () => {
     expect(parsed.system.displays?.[0]?.resolution).toBe("2560×1440");
     expect(parsed.system.runtime.installedGameCount).toBe(42);
     expect(() => scannerReportInput.parse({ ...parsed, system: { ...parsed.system, username: "não-permitido" } })).toThrow();
+  });
+
+  it("produz diagnóstico explicável sem atribuir causa não verificada", () => {
+    const parsed = scannerReportInput.parse({ ...report, system: { ...report.system, graphics: { ...report.system.graphics, vulkanVersion: null, mesaVersion: null }, runtime: { ...report.system.runtime, steamDetected: false, gaming: { sessionType: "wayland", waylandDetected: true, x11Detected: false, vulkanToolsDetected: false, gameModeDetected: false, gameModeServiceActive: null, mangoHudDetected: false, gamescopeDetected: false, flatpakDetected: true, renderGroupDetected: false } } } });
+    const findings = assessLinuxGamingEnvironment(parsed);
+    expect(findings.map((finding) => finding.id)).toEqual(expect.arrayContaining(["steam-not-detected", "vulkan-not-verified", "render-permission-not-detected"]));
+    expect(findings.every((finding) => finding.recommendedAction.length > 20)).toBe(true);
   });
 });
