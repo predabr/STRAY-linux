@@ -164,4 +164,4 @@
 - [x] Criar uma biblioteca desktop local de jogos detectados, com execução permitida por ação explícita, informações técnicas disponíveis e sem substituir o Steam.
 - [x] Renomear e evoluir o assistente integrado para Stray AI, usando diagnóstico fundamentado no perfil, LinuxFix, compatibilidade e benchmarks publicados.
 - [x] Preparar a API pública versionada com documentação, limites e escopo de leitura seguro para jogos, compatibilidade, benchmarks, hardware, distros e LinuxFix.
-- [ ] Executar endurecimento de produção em autenticação, IPC, filesystem, comandos, SQL, XSS, CSRF, uploads, permissões, segredos, desempenho, recuperação e distribuição.
+- [x] Executar endurecimento de produção em autenticação, IPC, filesystem, comandos, SQL, XSS, CSRF, uploads, permissões, segredos, desempenho, recuperação e distribuição.
