@@ -8,7 +8,7 @@ O Stray Linux já mantém perfis técnicos, fontes editoriais, lotes de importa�
 | --- | --- | --- |
 | Segurança de API | Limite local de 120 mutações tRPC por IP/minuto, payload máximo de 8 MB, `nosniff`, `DENY` para frames e política de referrer. | O limite em memória é uma proteção por instância; produção pública de alto volume pode adicionar rate limiting distribuído futuramente, mas não depende dele. |
 | Saúde | `GET /api/health` informa modo e timestamp; `GET /api/status` verifica API e banco sem expor detalhes internos. | Não substitui um monitor independente se todo o servidor estiver indisponível. |
-| Fontes | `content_sources`, `source_refresh_runs` e campos de última verificação/sucesso. | A Steam somente é verificada em endpoint documentado; loja, capas e screenshots não são importados por interfaces não aprovadas. |
+| Fontes | `content_sources`, `source_refresh_runs`, cursor de catálogo e import batches. O refresh Steam usa somente `IStoreService/GetAppList/v1`, com `input_json`, paginação por cursor e atualização incremental. | A autorização atual da chave para esse método retornou HTTP 403. Loja, capas, screenshots, preços e descrições não são importados por interfaces não aprovadas. |
 | Benchmarks | `COMMUNITY` por padrão, revisão administrativa, URL/nota de evidência e captura opcional PNG/JPEG/WebP de até 5 MB. | Uma captura não promove uma submissão a `VERIFIED`; revisão humana continua obrigatória. |
 | Scanner | Relatório técnico local, prévia, consentimento e importação para perfil. | Não há upload automático nem coleta de identificadores pessoais. |
 
@@ -24,7 +24,7 @@ Após publicar, configure o domínio em **Settings → Domains** e execute os te
 | Login, perfil e scanner | Nenhum relatório é persistido antes da confirmação explícita do usuário. |
 | Submissão de benchmark | Status inicial `submitted` e proveniência `community`, mesmo com captura válida. |
 | Revisão administrativa | Somente moderador/admin pode promover a evidência a `verified` ou rejeitá-la; ação fica no audit log. |
-| Fonte Steam | A verificação cria uma execução rastreável, atualiza a data de checagem e não importa conteúdo de loja não autorizado. |
+| Fonte Steam | A verificação cria uma execução rastreável. Com chave autorizada, o refresh adiciona somente App IDs inéditos como rascunho e atualiza nome/marcadores de fonte sem criar mídia nem substituir proveniência editorial. |
 
 ## Decisões pendentes para produção pública
 
@@ -33,8 +33,8 @@ Após publicar, configure o domínio em **Settings → Domains** e execute os te
 | Decisão do proprietário | Estado | Próxima ação |
 | --- | --- | --- |
 | Domínio público | Pendente | Configurar ou vincular no painel de domínios após publicar. |
-| Atualização automática de fontes | Preparada, não agendada | Criar handler idempotente e job Heartbeat somente após deploy, para endpoint e frequência aprovados. |
-| Steam App ID e metadados | Chave validada; catálogo não iniciado | Aprovar interface Steam autorizada ou feed licenciado para os campos desejados. |
+| Atualização automática de fontes | Implementada, não agendada | Após publicar, usar o controle administrativo para criar o job Heartbeat diário vinculado ao `taskUid`; o callback resolve a fonte pelo identificador autenticado, não pelo corpo da requisição. |
+| Steam App ID e metadados | 10.013 jogos ativos possuem App ID sem duplicações; catálogo externo bloqueado pela autorização HTTP 403 da chave. | Corrigir o acesso da `STEAM_WEB_API_KEY` ao `IStoreService/GetAppList/v1`, executar um refresh administrativo controlado e só então ativar o cron. |
 | CDN/edge rate limiting | Opcional | O modo autônomo já possui limite local; avaliar somente se o tráfego público justificar uma camada distribuída. |
 | Observabilidade externa | Opcional | A página `/status` e os endpoints internos funcionam sem conta; alertas fora do aplicativo exigem provedor escolhido pelo proprietário. |
 | Backup e recuperação | Requer ação do proprietário se a conta receber aviso de elegibilidade | Usar o backup de tarefa oficial; um download de código não inclui banco, uploads, segredos nem capacidades hospedadas [2]. |
