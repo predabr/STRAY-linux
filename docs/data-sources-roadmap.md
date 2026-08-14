@@ -21,3 +21,12 @@
 ## Limite atual da integração Steam
 
 O ambiente validou a credencial contra a lista oficial de interfaces e registra cada verificação em `source_refresh_runs`. A sincronização não importa páginas, capas, screenshots ou metadados de loja por endpoints não documentados. A próxima importação deverá usar somente uma interface explicitamente permitida para a chave do projeto ou um feed licenciado aprovado, preservando `Steam App ID`, URL, data de coleta e campos alterados.
+
+## Escopo autorizado de catálogo
+
+O único endpoint aprovado nesta etapa é `IStoreService/GetAppList/v1`, documentado pela Steamworks para informação pública da Steam Store. Ele exige Web API key, permite limitar o resultado a jogos e expõe paginação por `last_appid`, tamanho por `max_results` e atualização incremental por `if_modified_since` [5].
+
+O Stray Linux poderá importar somente os campos que esta resposta disponibilizar diretamente para o catálogo: Steam App ID, nome, tipo e marcadores de alteração. Capas, screenshots, trailers, descrições detalhadas, preços e assets continuam bloqueados: esta decisão não autoriza scraping nem endpoints de Storefront não documentados. A alternativa legada `ISteamApps/GetAppList/v2` é marcada como descontinuada para a escala do catálogo e não será utilizada [6].
+
+[5]: https://partner.steamgames.com/doc/webapi/IStoreService "Steamworks IStoreService / GetAppList"
+[6]: https://partner.steamgames.com/doc/webapi/ISteamApps "Steamworks ISteamApps"

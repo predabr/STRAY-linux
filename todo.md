@@ -149,3 +149,8 @@
 - [x] Criar status interno público e dados operacionais mínimos sem expor segredos, usuários ou detalhes de infraestrutura.
 - [x] Ampliar o health check e o runbook para operação autônoma sem contas externas, CDN ou alerta fora da aplicação.
 - [x] Validar a operação autônoma com typecheck, testes, build e documentação de limitações reais.
+- [x] Confirmar e documentar os endpoints Steam autorizados para metadados de catálogo, mantendo capas e screenshots bloqueados sem feed licenciado.
+- [x] Implementar atualização administrativa limitada, idempotente e rastreável para os metadados Steam permitidos.
+- [ ] Criar e validar a tarefa periódica publicada de refresh Steam com `taskUid`, somente após confirmação de publicação.
+- [ ] Validar a importação Steam autorizada com dados reais, sem duplicar jogos, sobrescrever proveniência ou criar mídia sem licença.
+- [ ] Resolver a autorização da `STEAM_WEB_API_KEY` para `IStoreService/GetAppList/v1`, que respondeu HTTP 403 em três execuções controladas, antes de uma nova tentativa de importação.

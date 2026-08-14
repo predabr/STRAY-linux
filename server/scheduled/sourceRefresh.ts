@@ -1,8 +1,9 @@
 import type { Request, Response } from "express";
-import { contentSources, sourceRefreshRuns } from "../../drizzle/schema";
+import { contentSources } from "../../drizzle/schema";
 import { sdk } from "../_core/sdk";
 import { requireDatabase } from "../routers/_guards";
 import { eq } from "drizzle-orm";
+import { refreshSteamCatalog } from "../lib/steamCatalogRefresh";
 
 export function isCronTask(user: { isCron?: boolean; taskUid?: string }) {
   return user.isCron === true && typeof user.taskUid === "string" && user.taskUid.length > 0;
@@ -18,8 +19,9 @@ export async function refreshSourceHandler(req: Request, res: Response) {
     const db = await requireDatabase();
     const source = (await db.select().from(contentSources).where(eq(contentSources.scheduleCronTaskUid, cronTaskUid)).limit(1))[0];
     if (!source) return res.json({ ok: true, skipped: "orphan" });
-    await db.insert(sourceRefreshRuns).values({ sourceId: source.id, kind: "scheduled-source-refresh", status: "skipped", finishedAt: new Date(), sourceEndpoint: source.baseUrl, message: "Nenhuma receita de importação aprovada para esta fonte. Nenhuma solicitação externa foi feita." });
-    return res.json({ ok: true, skipped: "awaiting_approved_recipe", sourceId: source.id });
+    if (source.name !== "Steam Web API") return res.json({ ok: true, skipped: "unsupported_source", sourceId: source.id });
+    const result = await refreshSteamCatalog(db, source, process.env.STEAM_WEB_API_KEY || "", { maxResults: 1000 });
+    return res.json({ ok: true, sourceId: source.id, ...result });
   } catch (error) {
     const message = error instanceof Error ? error.message.slice(0, 500) : "Erro não identificado.";
     return res.status(500).json({ error: "source_refresh_failed", message, context: { taskUid: taskUid ?? null }, timestamp: new Date().toISOString() });

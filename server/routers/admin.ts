@@ -4,6 +4,10 @@ import { auditActions, benchmarkResults, benchmarks, compatibilityRecords, conte
 import { router } from "../_core/trpc";
 import { administratorProcedure, requireDatabase } from "./_guards";
 import { verifySteamWebApi } from "../lib/steamWebApi";
+import { refreshSteamCatalog } from "../lib/steamCatalogRefresh";
+import { createHeartbeatJob } from "../_core/heartbeat";
+import { parse as parseCookie } from "cookie";
+import { COOKIE_NAME } from "@shared/const";
 
 const status = z.enum(["draft", "published", "archived"]);
 const sourceUrl = z.string().trim().url().max(2048).nullable().optional();
@@ -62,7 +66,7 @@ export const adminRouter = router({
       const now = new Date();
       let source = (await db.select().from(contentSources).where(eq(contentSources.name, "Steam Web API")).limit(1))[0];
       if (!source) {
-        const created = await db.insert(contentSources).values({ name: "Steam Web API", baseUrl: "https://api.steampowered.com/", licenseNote: "Uso sujeito aos termos Steamworks e aos endpoints autorizados pela chave configurada.", isOfficial: true, lastCheckedAt: now });
+        const created = await db.insert(contentSources).values({ name: "Steam Web API", baseUrl: "https://partner.steam-api.com/IStoreService/GetAppList/v1/", licenseNote: "Uso limitado ao IStoreService/GetAppList documentado pela Steamworks; somente App ID e nome. Mídia e dados de Storefront não são importados.", isOfficial: true, lastCheckedAt: now });
         source = (await db.select().from(contentSources).where(eq(contentSources.id, Number(created[0].insertId))).limit(1))[0];
       }
       if (!source) throw new Error("Não foi possível inicializar a fonte Steam.");
@@ -84,6 +88,27 @@ export const adminRouter = router({
         ]);
         throw error;
       }
+    }),
+    refreshSteamCatalog: administratorProcedure.input(z.object({ maxResults: z.number().int().min(1).max(5000).default(1000) })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      const source = (await db.select().from(contentSources).where(eq(contentSources.name, "Steam Web API")).limit(1))[0];
+      if (!source) throw new Error("Verifique a credencial Steam antes de atualizar o catálogo.");
+      const result = await refreshSteamCatalog(db, source, process.env.STEAM_WEB_API_KEY || "", input);
+      await db.insert(auditActions).values({ actorId: ctx.user.id, action: "import", entityType: "content_source", entityId: source.id, metadata: { source: "Steam IStoreService/GetAppList", seen: result.seen, created: result.created, nextCursor: result.nextCursor } });
+      return result;
+    }),
+    scheduleSteamCatalogRefresh: administratorProcedure.input(z.object({ cron: z.string().trim().regex(/^\S+(?:\s+\S+){5}$/, "Use uma expressão cron de seis campos em UTC.").default("0 0 3 * * *") })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      const source = (await db.select().from(contentSources).where(eq(contentSources.name, "Steam Web API")).limit(1))[0];
+      if (!source) throw new Error("Verifique a credencial Steam antes de configurar a atualização periódica.");
+      if (source.scheduleCronTaskUid) return { taskUid: source.scheduleCronTaskUid, alreadyScheduled: true };
+      const sessionToken = parseCookie(ctx.req.headers.cookie ?? "")[COOKIE_NAME] ?? "";
+      const job = await createHeartbeatJob({ name: "stray-steam-catalog-refresh", cron: input.cron, path: "/api/scheduled/source-refresh", description: "Refresh incremental do catálogo Steam pelo IStoreService/GetAppList/v1." }, sessionToken);
+      await Promise.all([
+        db.update(contentSources).set({ scheduleCronTaskUid: job.taskUid }).where(eq(contentSources.id, source.id)),
+        db.insert(auditActions).values({ actorId: ctx.user.id, action: "schedule", entityType: "content_source", entityId: source.id, metadata: { source: "Steam IStoreService/GetAppList", taskUid: job.taskUid, cron: input.cron } }),
+      ]);
+      return { taskUid: job.taskUid, alreadyScheduled: false, nextExecutionAt: job.nextExecutionAt ?? null };
     }),
   }),
 
