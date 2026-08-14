@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { startLogin } from "@/const";
 import { ArrowRight, CheckCircle2, ChevronRight, CircleDotDashed, Cpu, Gamepad2, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
+import { useLocation } from "wouter";
 
 const scenes = [
   { eyebrow: "STRAY LINUX / 01", title: "Seu PC não é genérico.", body: "Distribuição, driver, kernel e runtime mudam a experiência. O Stray Linux começa pelo seu ambiente real.", icon: Cpu },
@@ -13,10 +14,12 @@ const scenes = [
 
 export function StrayEntryGate({ children }: { children: ReactNode }) {
   const { isAuthenticated, loading } = useAuth();
+  const [location] = useLocation();
   const [stage, setStage] = useState<"intro" | "access">(() => sessionStorage.getItem("stray-intro-complete") === "1" ? "access" : "intro");
   const [scene, setScene] = useState(0);
   const desktopMode = typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname);
   const [localEntry, setLocalEntry] = useState(() => sessionStorage.getItem("stray-local-entry") === "1");
+  const requiresAccount = ["/dashboard", "/admin", "/assistant", "/scanner"].some((path) => location === path || location.startsWith(`${path}/`));
 
   useEffect(() => {
     if (stage !== "intro") return;
@@ -27,6 +30,7 @@ export function StrayEntryGate({ children }: { children: ReactNode }) {
     return () => window.clearTimeout(timer);
   }, [scene, stage]);
 
+  if (!requiresAccount && location !== "/") return <>{children}</>;
   if (loading) return <div className="grid min-h-screen place-items-center bg-background"><CircleDotDashed className="h-7 w-7 animate-spin text-primary" /></div>;
   if (isAuthenticated || (desktopMode && localEntry)) return <>{children}</>;
   if (stage === "intro") return <Intro scene={scene} onNext={() => { if (scene < scenes.length - 1) setScene(scene + 1); else { sessionStorage.setItem("stray-intro-complete", "1"); setStage("access"); } }} onSkip={() => { sessionStorage.setItem("stray-intro-complete", "1"); setStage("access"); }} />;

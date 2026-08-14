@@ -167,3 +167,6 @@
 - [x] Executar endurecimento de produção em autenticação, IPC, filesystem, comandos, SQL, XSS, CSRF, uploads, permissões, segredos, desempenho, recuperação e distribuição.
 - [x] Ampliar a biblioteca local usando o catálogo licenciado já existente, sem copiar descrições ou mídia da Steam sem fonte autorizada; o snapshot contém 10.000 jogos descritos.
 - [x] Enriquecer os detalhes de jogos com descrição, requisitos e recomendações somente quando houver origem verificável e apresentada ao usuário.
+- [ ] Auditar a versão publicada, logs, rotas, produção e empacotamento para localizar e corrigir falhas verificáveis.
+- [ ] Revalidar LinuxFix e comandos por distribuição em fontes oficiais, corrigindo apenas instruções confirmadas e preservando a proveniência.
+- [ ] Atualizar todas as traduções, acessibilidade e validações afetadas por cada correção antes do novo checkpoint.
