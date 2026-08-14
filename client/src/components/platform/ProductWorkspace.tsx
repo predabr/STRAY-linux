@@ -2,7 +2,7 @@ import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
-import { BarChart3, BookOpenCheck, BotMessageSquare, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 
@@ -25,6 +25,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
   const system: NavigationItem[] = [
     { href: "/dashboard/pc", label: t("myPc"), icon: MonitorCog },
     { href: "/scanner", label: t("scanner"), icon: ShieldCheck },
+    { href: "/performance", label: "Performance", icon: Activity },
     { href: "/assistant", label: "Stray AI", icon: BotMessageSquare },
   ];
   const personal: NavigationItem[] = [

@@ -2,6 +2,7 @@ import { and, asc, desc, eq, inArray, isNull, like, or, sql } from "drizzle-orm"
 import { z } from "zod";
 import {
   compatibilityRecords,
+  contentSources,
   distributions,
   distributionVersions,
   gamePlatforms,
@@ -26,6 +27,8 @@ export const hardwareListInput = z.object({
   q: z.string().trim().max(120).optional(),
   kind: z.enum(["cpu", "gpu", "ram"]).optional(),
 });
+
+export const gameShowcaseInput = z.object({ limit: z.number().int().min(1).max(12).default(6) });
 
 export const gameFilterInput = paginationInput.extend({
   q: z.string().trim().max(120).optional(),
@@ -103,13 +106,15 @@ export const gamesRouter = router({
     const game = (await db.select().from(games).where(and(eq(games.slug, input.slug), eq(games.status, "published"), isNull(games.deletedAt))).limit(1))[0];
     if (!game) return null;
 
-    const [platforms, tagRows, compatibility, guides, fixes] = await Promise.all([
+    const [platforms, tagRows, compatibilityRows, guides, fixes] = await Promise.all([
       db.select().from(gamePlatforms).where(eq(gamePlatforms.gameId, game.id)),
       db.select({ slug: tags.slug, name: tags.name, kind: tags.kind }).from(gameTags).innerJoin(tags, eq(gameTags.tagId, tags.id)).where(eq(gameTags.gameId, game.id)),
-      db.select().from(compatibilityRecords).where(eq(compatibilityRecords.gameId, game.id)).orderBy(desc(compatibilityRecords.reviewedAt)).limit(24),
+      db.select({ record: compatibilityRecords, sourceName: contentSources.name, sourceOfficial: contentSources.isOfficial }).from(compatibilityRecords).leftJoin(contentSources, eq(compatibilityRecords.sourceId, contentSources.id)).where(eq(compatibilityRecords.gameId, game.id)).orderBy(desc(compatibilityRecords.reviewedAt)).limit(24),
       db.select().from(setupGuides).where(and(eq(setupGuides.gameId, game.id), eq(setupGuides.status, "published"))).limit(12),
       db.select().from(linuxFixes).where(and(eq(linuxFixes.gameId, game.id), eq(linuxFixes.status, "published"), isNull(linuxFixes.deletedAt))).orderBy(desc(linuxFixes.updatedAt)).limit(12),
     ]);
+
+    const compatibility = compatibilityRows.map(({ record, sourceName, sourceOfficial }) => ({ ...record, sourceName, sourceOfficial }));
 
     const distributionIds = compatibility.flatMap((record) => record.distributionId ? [record.distributionId] : []);
     const hardwareIds = compatibility.flatMap((record) => [record.cpuId, record.gpuId].filter((id): id is number => Boolean(id)));
@@ -139,6 +144,28 @@ export const gamesRouter = router({
     const db = await requireDatabase();
     const genres = await db.select({ slug: tags.slug, name: tags.name }).from(tags).where(eq(tags.kind, "genre")).orderBy(asc(tags.name)).limit(100);
     return { genres };
+  }),
+
+  showcase: publicProcedure.input(gameShowcaseInput).query(async ({ input }) => {
+    const db = await requireDatabase();
+    const published = and(eq(games.status, "published"), isNull(games.deletedAt));
+    const [featured, recent] = await Promise.all([
+      db.select().from(games).where(and(published, eq(games.isFeatured, true))).orderBy(desc(games.updatedAt), asc(games.title)).limit(input.limit),
+      db.select().from(games).where(published).orderBy(desc(games.createdAt), asc(games.title)).limit(input.limit),
+    ]);
+    const ids = Array.from(new Set([...featured, ...recent].map((game) => game.id)));
+    const [platformRows, tagRows] = ids.length
+      ? await Promise.all([
+          db.select({ gameId: gamePlatforms.gameId, platform: gamePlatforms.platform, antiCheat: gamePlatforms.antiCheat }).from(gamePlatforms).where(inArray(gamePlatforms.gameId, ids)),
+          db.select({ gameId: gameTags.gameId, slug: tags.slug, name: tags.name, kind: tags.kind }).from(gameTags).innerJoin(tags, eq(gameTags.tagId, tags.id)).where(inArray(gameTags.gameId, ids)),
+        ])
+      : [[], []];
+    const platformsByGame = new Map<number, typeof platformRows>();
+    for (const platform of platformRows) platformsByGame.set(platform.gameId, [...(platformsByGame.get(platform.gameId) ?? []), platform]);
+    const tagsByGame = new Map<number, typeof tagRows>();
+    for (const tag of tagRows) tagsByGame.set(tag.gameId, [...(tagsByGame.get(tag.gameId) ?? []), tag]);
+    const decorate = <T extends typeof games.$inferSelect>(items: T[]) => items.map((game) => ({ ...game, platforms: platformsByGame.get(game.id) ?? [], tags: tagsByGame.get(game.id) ?? [] }));
+    return { featured: decorate(featured), recent: decorate(recent) };
   }),
 });
 

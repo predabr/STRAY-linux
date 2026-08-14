@@ -1,6 +1,7 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
 import { ProvenanceBadge } from "@/components/platform/ProvenanceBadge";
+import { GameIdentityMeta, GameProfileSummary } from "@/components/platform/GameProfileSummary";
 import { SiteHeader } from "@/components/platform/SiteHeader";
 import { PageBreadcrumbs } from "@/components/platform/PageBreadcrumbs";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +34,7 @@ export default function GameDetail() {
   const isFavorite = favorites.data?.some((entry) => entry.game.id === game.id) ?? false;
   const handleFavorite = () => isAuthenticated ? toggleFavorite.mutate({ gameId: game.id }) : startLogin();
   return <div className="min-h-screen bg-background"><SiteHeader /><main className="container py-6 md:py-10"><PageBreadcrumbs items={[{ label: "GameHub", href: "/games" }, { label: game.title }]} /><Link href="/games"><Button variant="ghost" size="sm"><ArrowLeft className="mr-2 h-4 w-4" />Voltar ao catálogo</Button></Link>
-    <Hero game={game} isFavorite={isFavorite} onFavorite={handleFavorite} pending={toggleFavorite.isPending} />
+    <Hero game={game} isFavorite={isFavorite} onFavorite={handleFavorite} pending={toggleFavorite.isPending} /><GameIdentityMeta game={game} /><GameProfileSummary game={game} />
     <ReportPanel gameId={game.id} />
     <section className="mt-6 grid gap-5 lg:grid-cols-[1.2fr_.8fr]"><div className="space-y-5"><CompatibilityMatrix items={game.compatibility} />{isAuthenticated ? <ProfileCompatibility profileQuery={activeProfile} environment={environment} gameVersion={gameVersion} onVersionChange={setGameVersion} /> : null}<Guides items={game.guides} /></div><aside className="space-y-5"><PerformanceChart loading={benchmarkQuery.isLoading} data={chartData} /><FixCard items={game.fixes} /><Card><CardContent className="p-5"><div className="flex gap-3"><Cpu className="mt-0.5 h-5 w-5 text-primary" /><div><p className="font-medium">Personalize com Meu PC</p><p className="mt-1 text-sm leading-6 text-muted-foreground">Crie um perfil ativo para comparar registros publicados com seu ambiente.</p></div></div></CardContent></Card></aside></section>
   </main></div>;

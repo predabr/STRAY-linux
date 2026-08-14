@@ -28,15 +28,15 @@ O dashboard autenticado já mantém perfil de hardware, favoritos, guias salvos,
 
 ## Artefatos desktop reconstruídos
 
-Os cinco formatos foram recompilados com o workspace de aplicativo, os cartões sem mídia externa, a visão geral operacional, a central LinuxFix renovada, o Scanner técnico ampliado e a descoberta Steam Flatpak corrigida. A publicação do empacotador continua desativada durante a geração local.
+Os cinco formatos foram recompilados com o workspace de aplicativo, os cartões sem mídia externa, a visão geral operacional, a central LinuxFix renovada, o Scanner técnico ampliado, a descoberta Steam Flatpak corrigida, o GameHub de descoberta, a camada visual de confiança e a central de sessões locais. A publicação do empacotador continua desativada durante a geração local.
 
 | Artefato | SHA-256 |
 | --- | --- |
-| `Stray-Linux-1.0.0-Setup.exe` | `cc087fad089cd0de0f46ea5bd170beac17e422d40b54e46db9301166594705b7` |
-| `Stray-Linux-1.0.0-x86_64.AppImage` | `1613d938acfd2141d6f3cca313fa9fb3d31d2c26c72d1d39f319d53b7a5fbc38` |
-| `Stray-Linux-1.0.0-amd64.deb` | `786d3b2aa501bec84e529db5dc7bf101ca9e2cb729fe18ddb93fdefad85c1c54` |
-| `Stray-Linux-1.0.0-x86_64.rpm` | `8441e27a15494190ce0e5a3611a4791a57ff4a27c8586b4b2e3db537dd561481` |
-| `Stray-Linux-1.0.0-x64.pacman` | `10b8e1f7f21a428acb7de1df460a3aebea3778121672ffb237f0f7360c6d65c0` |
+| `Stray-Linux-1.0.0-Setup.exe` | `24169eafae1acc656ee17c7cf56713756f89e80582118eea913d86cc98c6163b` |
+| `Stray-Linux-1.0.0-x86_64.AppImage` | `bc00a8b40c62df4914aa873ebbfb95f6d0e53f31e510cf4bf1142fa7cbadaea8` |
+| `Stray-Linux-1.0.0-amd64.deb` | `ff694a8e62de111f17faf5b7fcd9cc43164d4859874cb9037b727975ea24c1b4` |
+| `Stray-Linux-1.0.0-x86_64.rpm` | `f48565c3c07cf6331b785a43fed634a3669b2712fecdf56e672e5608dfcafd59` |
+| `Stray-Linux-1.0.0-x64.pacman` | `10dd1e7f5770ef9f34e0670ccea50c857a9d60fd3c0767291c1f31a7426e5097` |
 
 O build foi concluído com sucesso. O Vite preserva um aviso de chunk grande já presente no bundle principal; a divisão adicional de código de Mermaid e de visualizações deve ser tratada em uma rodada separada de desempenho, sem alterar o comportamento atual.
 
@@ -55,3 +55,9 @@ A descoberta local da biblioteca cobre os caminhos nativos convencionais, os lin
 Cada etapa LinuxFix agora declara o tipo operacional (`inspect`, `change`, `verify` ou `recover`), risco, como verificar o resultado, reversão quando houver alteração e a fonte específica ou herdada do runbook. A interface deixa explícito que confirmação comunitária descreve experiência de uso e não transforma uma instrução em evidência verificada.
 
 As contribuições seguem uma fila privada: uma pessoa envia observação, reprodução, procedimento proposto e fonte opcional; o contexto técnico é anexado somente por consentimento explícito e é limitado a distribuição, kernel, driver, Proton, Wine e GPU. Nenhuma proposta é publicada automaticamente. Moderadores decidem entre revisão, aceitação para edição ou recusa, e cada submissão, retirada e decisão grava uma ação de auditoria. A aceitação não injeta comandos no runbook: a alteração editorial permanece uma ação separada e revisável.
+
+## Descoberta, confiança e sessões locais
+
+O GameHub ganhou seções de destaques editoriais e registros recentes, ambas derivadas apenas dos campos existentes no catálogo. Categorias como tendência, melhor compatibilidade, recomendação pessoal, Steam Deck e favoritos da comunidade permanecem ocultas enquanto não houver evidência para sustentá-las. O perfil de jogo mostra metadados de catálogo e cobertura por área; a ausência de benchmark, matriz, LinuxFix ou guia continua explícita.
+
+O badge de proveniência passou a aceitar detalhes de origem, status, data, confiança, método e contagem de evidências quando esses campos existirem. A central **Sessões de jogo locais** grava somente jogo selecionado, horário inicial/final, duração real e o nome opcional do perfil ativo no dispositivo. Ela não coleta FPS, frame time, temperatura, potência ou uso de hardware sem coletor autorizado, não inicia jogos, não envia dados automaticamente e não cria benchmark público.
