@@ -165,3 +165,5 @@
 - [x] Renomear e evoluir o assistente integrado para Stray AI, usando diagnóstico fundamentado no perfil, LinuxFix, compatibilidade e benchmarks publicados.
 - [x] Preparar a API pública versionada com documentação, limites e escopo de leitura seguro para jogos, compatibilidade, benchmarks, hardware, distros e LinuxFix.
 - [x] Executar endurecimento de produção em autenticação, IPC, filesystem, comandos, SQL, XSS, CSRF, uploads, permissões, segredos, desempenho, recuperação e distribuição.
+- [x] Ampliar a biblioteca local usando o catálogo licenciado já existente, sem copiar descrições ou mídia da Steam sem fonte autorizada; o snapshot contém 10.000 jogos descritos.
+- [x] Enriquecer os detalhes de jogos com descrição, requisitos e recomendações somente quando houver origem verificável e apresentada ao usuário.
