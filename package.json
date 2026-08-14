@@ -136,6 +136,15 @@
       "artifactName": "Stray-Linux-${version}-Setup.${ext}",
       "signAndEditExecutable": false
     },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Stray Linux"
+    },
     "linux": {
       "icon": "icons",
       "category": "Game",

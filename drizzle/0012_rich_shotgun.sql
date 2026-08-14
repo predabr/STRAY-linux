@@ -1,0 +1,1 @@
+ALTER TABLE `user_hardware_profiles` ADD `scanDetails` json;

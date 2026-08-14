@@ -29,10 +29,13 @@ describe("contrato do stray-scan", () => {
   });
 
   it("aceita ambiente, armazenamento e monitores opcionais sem ampliar dados pessoais", () => {
-    const parsed = scannerReportInput.parse({ ...report, scannerVersion: "1.1.0", system: { ...report.system, desktopEnvironment: "KDE", storage: { filesystem: "/dev/nvme0n1p2", mount: "/", totalGb: 1024, usedGb: 530 }, displays: [{ name: "DP-1", resolution: "2560×1440", refreshHz: 144 }], runtime: { ...report.system.runtime, installedGameCount: 42 } } });
+    const parsed = scannerReportInput.parse({ ...report, scannerVersion: "1.2.0", system: { ...report.system, architecture: "x86_64", desktopEnvironment: "KDE", cpu: { model: "AMD Ryzen 5 5600", architecture: "x86_64", physicalCores: 6, logicalCores: 12, maxMhz: 4400 }, gpu: { model: "AMD Radeon RX 7600", vendor: "AMD", vramMb: 8192, driverVersion: null, adapters: [{ model: "AMD Radeon RX 7600", vendor: "AMD", vramMb: 8192, driverVersion: null }] }, storage: { filesystem: "/dev/nvme0n1p2", mount: "/", totalGb: 1024, usedGb: 530 }, displays: [{ name: "DP-1", resolution: "2560×1440", refreshHz: 144 }], graphics: { ...report.system.graphics, driverProvider: "mesa/glxinfo", openGlRenderer: "AMD Radeon", vulkanSummaryAvailable: true, glxInfoAvailable: true }, runtime: { ...report.system.runtime, protonTools: ["GE-Proton10"], steamInstallKinds: ["native"], installedGameCount: 42 } } });
     expect(parsed.system.storage?.totalGb).toBe(1024);
     expect(parsed.system.displays?.[0]?.resolution).toBe("2560×1440");
     expect(parsed.system.runtime.installedGameCount).toBe(42);
+    expect(parsed.system.cpu.logicalCores).toBe(12);
+    expect(parsed.system.gpu.adapters?.[0]?.vramMb).toBe(8192);
+    expect(scannerReportToProfile(parsed).scanDetails).toMatchObject({ architecture: "x86_64", graphics: { openGlRenderer: "AMD Radeon" }, runtime: { protonTools: ["GE-Proton10"] } });
     expect(() => scannerReportInput.parse({ ...parsed, system: { ...parsed.system, username: "não-permitido" } })).toThrow();
   });
 

@@ -10,13 +10,14 @@ export const scannerReportInput = z.object({
     distribution: z.object({ id: nullableText, name: nullableText, version: nullableText }).strict(),
     kernelVersion: nullableText,
     desktopEnvironment: nullableText.optional(),
-    cpu: z.object({ model: nullableText }).strict(),
-    gpu: z.object({ model: nullableText, vramMb: z.number().int().min(0).max(1_000_000).nullable() }).strict(),
+    architecture: nullableText.optional(),
+    cpu: z.object({ model: nullableText, architecture: nullableText.optional(), logicalCores: z.number().int().min(1).max(10_000).nullable().optional(), physicalCores: z.number().int().min(1).max(10_000).nullable().optional(), maxMhz: z.number().int().min(1).max(20_000).nullable().optional() }).strict(),
+    gpu: z.object({ model: nullableText, vendor: nullableText.optional(), vramMb: z.number().int().min(0).max(1_000_000).nullable(), driverVersion: nullableText.optional(), adapters: z.array(z.object({ model: nullableText, vendor: nullableText, vramMb: z.number().int().min(0).max(1_000_000).nullable(), driverVersion: nullableText }).strict()).max(4).optional() }).strict(),
     memoryGb: z.number().int().min(0).max(1_000_000).nullable(),
     storage: z.object({ filesystem: nullableText, mount: nullableText, totalGb: z.number().int().min(0).max(1_000_000).nullable(), usedGb: z.number().int().min(0).max(1_000_000).nullable() }).strict().nullable().optional(),
     displays: z.array(z.object({ name: nullableText, resolution: nullableText, refreshHz: z.number().min(0).max(1_000).nullable() }).strict()).max(8).optional(),
-    graphics: z.object({ driverVersion: nullableText, mesaVersion: nullableText, vulkanVersion: nullableText, openGlVersion: nullableText }).strict(),
-    runtime: z.object({ wineVersion: nullableText, protonVersion: nullableText, steamDetected: z.boolean(), installedGameCount: z.number().int().min(0).max(100_000).optional(), gaming: z.object({ sessionType: nullableText, waylandDetected: z.boolean(), x11Detected: z.boolean(), vulkanToolsDetected: z.boolean(), gameModeDetected: z.boolean(), gameModeServiceActive: z.boolean().nullable(), mangoHudDetected: z.boolean(), gamescopeDetected: z.boolean(), flatpakDetected: z.boolean(), renderGroupDetected: z.boolean() }).strict().optional() }).strict(),
+    graphics: z.object({ driverVersion: nullableText, driverProvider: nullableText.optional(), mesaVersion: nullableText, vulkanVersion: nullableText, openGlVersion: nullableText, openGlRenderer: nullableText.optional(), vulkanSummaryAvailable: z.boolean().optional(), glxInfoAvailable: z.boolean().optional() }).strict(),
+    runtime: z.object({ wineVersion: nullableText, protonVersion: nullableText, protonTools: z.array(z.string().trim().min(1).max(255)).max(12).optional(), steamDetected: z.boolean(), steamInstallKinds: z.array(z.enum(["native", "flatpak"])).max(2).optional(), installedGameCount: z.number().int().min(0).max(100_000).optional(), gaming: z.object({ sessionType: nullableText, waylandDetected: z.boolean(), x11Detected: z.boolean(), vulkanToolsDetected: z.boolean(), gameModeDetected: z.boolean(), gameModeServiceActive: z.boolean().nullable(), mangoHudDetected: z.boolean(), gamescopeDetected: z.boolean(), vkBasaltDetected: z.boolean().optional(), winetricksDetected: z.boolean().optional(), flatpakDetected: z.boolean(), renderGroupDetected: z.boolean() }).strict().optional() }).strict(),
   }).strict(),
 }).strict();
 
@@ -35,5 +36,16 @@ export function scannerReportToProfile(report: ScannerReport) {
     detectedDistribution: distribution,
     scannerVersion: report.scannerVersion,
     scannedAt: new Date(report.generatedAt),
+    scanDetails: {
+      architecture: report.system.architecture ?? report.system.cpu.architecture ?? null,
+      cpu: report.system.cpu,
+      gpu: report.system.gpu,
+      memoryGb: report.system.memoryGb,
+      storage: report.system.storage ?? null,
+      displays: report.system.displays ?? [],
+      graphics: report.system.graphics,
+      runtime: report.system.runtime,
+      desktopEnvironment: report.system.desktopEnvironment ?? null,
+    },
   };
 }

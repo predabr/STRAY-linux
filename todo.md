@@ -192,3 +192,8 @@
 - [x] Reestruturar os LinuxFix com triagem de sintomas, pré-requisitos, ações de baixo risco, verificação de resultado, reversão e fontes oficiais quando aplicáveis.
 - [x] Implementar contribuições voluntárias por solução, no formato de proposta moderada, com estado, autoria, segurança e trilha de auditoria server-side.
 - [x] Atualizar 11 idiomas, acessibilidade, testes, validação visual e publicação após a evolução da central LinuxFix.
+- [x] Auditar o Scanner, perfil de hardware, gráficos e empacotadores atuais para identificar campos verificáveis, lacunas e permissões reais.
+- [x] Expandir a detecção local de hardware e ambiente gráfico com coleta minimizada, proveniência por campo e ausência explícita quando uma ferramenta não estiver disponível.
+- [x] Redesenhar o perfil de hardware e os gráficos para comparar somente sinais reais do Scanner, sem estimar desempenho, temperatura, VRAM ou compatibilidade ausentes.
+- [x] Ajustar os metadados e fluxos dos instaladores para solicitar privilégios administrativos somente quando apropriado e documentar os limites por formato.
+- [x] Atualizar 11 idiomas, acessibilidade, testes, build, checksums, validação visual e publicação após a evolução de hardware e instalação.

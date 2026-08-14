@@ -6,19 +6,19 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
-const SCANNER_VERSION = "1.1.0";
+const SCANNER_VERSION = "1.2.0";
 
-function readText(file) {
-  try { return fs.readFileSync(file, "utf8"); } catch { return null; }
-}
+function readText(file) { try { return fs.readFileSync(file, "utf8"); } catch { return null; } }
 
-function firstLine(command, args) {
+function commandOutput(command, args) {
   try {
-    const result = spawnSync(command, args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 2500 });
+    const result = spawnSync(command, args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 2500, maxBuffer: 512 * 1024 });
     if (result.status !== 0 || !result.stdout) return null;
     return result.stdout.trim() || null;
   } catch { return null; }
 }
+
+function firstLine(command, args) { return commandOutput(command, args); }
 
 function parseOsRelease(content) {
   const values = {};
@@ -33,7 +33,15 @@ function parseOsRelease(content) {
 
 function detectCpu() {
   const cpuInfo = readText("/proc/cpuinfo") || "";
-  return (cpuInfo.match(/^model name\s*:\s*(.+)$/m) || cpuInfo.match(/^Hardware\s*:\s*(.+)$/m) || [])[1]?.trim() || null;
+  const lscpu = commandOutput("lscpu", []) || "";
+  const readLscpu = (label) => (lscpu.match(new RegExp(`^${label}:\\s*(.+)$`, "mi")) || [])[1]?.trim() || null;
+  const model = (cpuInfo.match(/^model name\s*:\s*(.+)$/m) || cpuInfo.match(/^Hardware\s*:\s*(.+)$/m) || [])[1]?.trim() || null;
+  const logicalCores = Number.parseInt(readLscpu("CPU\\(s\\)") || "", 10) || os.cpus().length || null;
+  const coresPerSocket = Number.parseInt(readLscpu("Core\\(s\\) per socket") || "", 10);
+  const sockets = Number.parseInt(readLscpu("Socket\\(s\\)") || "", 10);
+  const physicalCores = coresPerSocket && sockets ? coresPerSocket * sockets : null;
+  const maxMhz = Number.parseFloat(readLscpu("CPU max MHz") || "") || null;
+  return { model, architecture: readLscpu("Architecture") || firstLine("uname", ["-m"]), logicalCores, physicalCores, maxMhz: maxMhz ? Math.round(maxMhz) : null };
 }
 
 function detectMemoryGb() {
@@ -41,30 +49,50 @@ function detectMemoryGb() {
   return match ? Math.round(Number(match[1]) / 1024 / 1024) : null;
 }
 
-function detectGpu() {
-  const nvidia = firstLine("nvidia-smi", ["--query-gpu=name,memory.total", "--format=csv,noheader,nounits"]);
-  if (nvidia) {
-    const [model, memory] = nvidia.split(",").map((value) => value.trim());
-    return { model: model || null, vramMb: Number.parseInt(memory, 10) || null };
-  }
-  const pci = firstLine("lspci", ["-nn"]);
-  const gpuLine = (pci || "").split("\n").find((line) => /VGA compatible controller|3D controller|Display controller/i.test(line));
-  return { model: gpuLine ? gpuLine.replace(/^[^:]+:\s*/, "").trim() : null, vramMb: null };
+function inferGpuVendor(model) {
+  if (/nvidia|geforce|quadro|tesla/i.test(model || "")) return "NVIDIA";
+  if (/amd|radeon|ati/i.test(model || "")) return "AMD";
+  if (/intel|arc|iris|uhd graphics/i.test(model || "")) return "Intel";
+  return null;
 }
 
-function detectGraphics() {
+function detectGpuAdapters() {
+  const nvidia = commandOutput("nvidia-smi", ["--query-gpu=name,memory.total,driver_version", "--format=csv,noheader,nounits"]);
+  if (nvidia) return nvidia.split("\n").slice(0, 4).map((line) => {
+    const [model, memory, driverVersion] = line.split(",").map((value) => value.trim());
+    return { model: model || null, vendor: "NVIDIA", vramMb: Number.parseInt(memory, 10) || null, driverVersion: driverVersion || null };
+  });
+  const pci = commandOutput("lspci", ["-nn"]);
+  return (pci || "").split("\n").filter((line) => /VGA compatible controller|3D controller|Display controller/i.test(line)).slice(0, 4).map((line) => {
+    const model = line.replace(/^[^:]+:\s*/, "").trim() || null;
+    return { model, vendor: inferGpuVendor(model), vramMb: null, driverVersion: null };
+  });
+}
+
+function detectGpu() {
+  const adapters = detectGpuAdapters();
+  const primary = adapters[0] || { model: null, vendor: null, vramMb: null, driverVersion: null };
+  return { ...primary, adapters };
+}
+
+function detectGraphics(gpu) {
   const nvidiaDriver = firstLine("nvidia-smi", ["--query-gpu=driver_version", "--format=csv,noheader,nounits"]);
-  const glx = firstLine("glxinfo", ["-B"]);
-  const vulkan = firstLine("vulkaninfo", ["--summary"]);
+  const glx = commandOutput("glxinfo", ["-B"]);
+  const vulkan = commandOutput("vulkaninfo", ["--summary"]);
   const mesa = (glx || "").match(/Mesa\s+([0-9][\w.-]+)/i)?.[1] || null;
   const openGl = (glx || "").match(/OpenGL version string:\s*(.+)$/im)?.[1]?.trim() || null;
+  const openGlRenderer = (glx || "").match(/OpenGL renderer string:\s*(.+)$/im)?.[1]?.trim() || null;
   const vulkanVersion = (vulkan || "").match(/Vulkan Instance Version:\s*([0-9.]+)/i)?.[1] || null;
-  return { driverVersion: nvidiaDriver || (mesa ? `Mesa ${mesa}` : null), mesaVersion: mesa, vulkanVersion, openGlVersion: openGl };
+  const driverVersion = nvidiaDriver || gpu.driverVersion || (mesa ? `Mesa ${mesa}` : null);
+  return { driverVersion, driverProvider: nvidiaDriver ? "nvidia-smi" : mesa ? "mesa/glxinfo" : null, mesaVersion: mesa, vulkanVersion, openGlVersion: openGl, openGlRenderer, vulkanSummaryAvailable: Boolean(vulkan), glxInfoAvailable: Boolean(glx) };
 }
 
-function detectSteam() {
+function steamRoots() {
   const home = os.homedir();
-  const roots = [path.join(home, ".steam", "steam"), path.join(home, ".local", "share", "Steam"), path.join(home, ".var", "app", "com.valvesoftware.Steam", "data", "Steam")];
+  return [path.join(home, ".steam", "steam"), path.join(home, ".local", "share", "Steam"), path.join(home, ".var", "app", "com.valvesoftware.Steam", "data", "Steam")];
+}
+
+function detectSteam(roots) {
   const libraryFolders = roots.flatMap((root) => {
     const steamApps = path.join(root, "steamapps");
     const content = readText(path.join(steamApps, "libraryfolders.vdf")) || "";
@@ -75,12 +103,20 @@ function detectSteam() {
   for (const folder of libraryFolders) {
     try { for (const entry of fs.readdirSync(folder)) if (/^appmanifest_\d+\.acf$/i.test(entry)) manifests.add(`${folder}/${entry}`); } catch {}
   }
-  return { detected: roots.some((folder) => fs.existsSync(folder)), installedGameCount: manifests.size };
+  const installKinds = roots.flatMap((root) => fs.existsSync(root) ? [root.includes("com.valvesoftware.Steam") ? "flatpak" : "native"] : []);
+  return { detected: roots.some((folder) => fs.existsSync(folder)), installedGameCount: manifests.size, installKinds: [...new Set(installKinds)] };
 }
 
-function detectDesktopEnvironment() {
-  return process.env.XDG_CURRENT_DESKTOP || process.env.DESKTOP_SESSION || process.env.GDMSESSION || null;
+function detectProton(roots) {
+  const candidates = roots.flatMap((root) => [path.join(root, "compatibilitytools.d"), path.join(root, "steamapps", "common")]);
+  const tools = new Set();
+  for (const folder of candidates) {
+    try { for (const entry of fs.readdirSync(folder, { withFileTypes: true })) if (entry.isDirectory() && /^(GE-Proton|Proton)/i.test(entry.name)) tools.add(entry.name); } catch {}
+  }
+  return [...tools].sort().slice(0, 12);
 }
+
+function detectDesktopEnvironment() { return process.env.XDG_CURRENT_DESKTOP || process.env.DESKTOP_SESSION || process.env.GDMSESSION || null; }
 
 function detectStorage() {
   const output = firstLine("df", ["-Pk", "/"]);
@@ -101,67 +137,48 @@ function detectDisplays() {
   });
 }
 
-function hasCommand(command) {
-  return Boolean(firstLine("sh", ["-lc", `command -v ${command}`]));
-}
+function hasCommand(command) { return Boolean(firstLine("sh", ["-lc", `command -v ${command}`])); }
 
 function detectGamingEnvironment() {
   const sessionType = process.env.XDG_SESSION_TYPE || null;
   const groups = firstLine("id", ["-nG"])?.split(/\s+/) ?? [];
   const gamemoded = hasCommand("systemctl") ? firstLine("systemctl", ["--user", "is-active", "gamemoded.service"]) : null;
-  return {
-    sessionType,
-    waylandDetected: sessionType === "wayland" || Boolean(process.env.WAYLAND_DISPLAY),
-    x11Detected: sessionType === "x11" || Boolean(process.env.DISPLAY),
-    vulkanToolsDetected: hasCommand("vulkaninfo"),
-    gameModeDetected: hasCommand("gamemoderun"),
-    gameModeServiceActive: gamemoded === null ? null : gamemoded === "active",
-    mangoHudDetected: hasCommand("mangohud"),
-    gamescopeDetected: hasCommand("gamescope"),
-    flatpakDetected: hasCommand("flatpak"),
-    renderGroupDetected: groups.includes("render") || groups.includes("video"),
-  };
+  return { sessionType, waylandDetected: sessionType === "wayland" || Boolean(process.env.WAYLAND_DISPLAY), x11Detected: sessionType === "x11" || Boolean(process.env.DISPLAY), vulkanToolsDetected: hasCommand("vulkaninfo"), gameModeDetected: hasCommand("gamemoderun"), gameModeServiceActive: gamemoded === null ? null : gamemoded === "active", mangoHudDetected: hasCommand("mangohud"), gamescopeDetected: hasCommand("gamescope"), vkBasaltDetected: hasCommand("vkbasalt"), winetricksDetected: hasCommand("winetricks"), flatpakDetected: hasCommand("flatpak"), renderGroupDetected: groups.includes("render") || groups.includes("video") };
 }
 
 function createReport() {
-  const osRelease = parseOsRelease(readText("/etc/os-release"));
-  const steam = detectSteam();
-  const gaming = detectGamingEnvironment();
+  const roots = steamRoots();
+  const steam = detectSteam(roots);
+  const protonTools = detectProton(roots);
+  const gpu = detectGpu();
   return {
     schemaVersion: 1,
     scannerVersion: SCANNER_VERSION,
     generatedAt: new Date().toISOString(),
     system: {
-      distribution: osRelease,
+      distribution: parseOsRelease(readText("/etc/os-release")),
       kernelVersion: firstLine("uname", ["-r"]),
       desktopEnvironment: detectDesktopEnvironment(),
-      cpu: { model: detectCpu() },
-      gpu: detectGpu(),
+      architecture: firstLine("uname", ["-m"]),
+      cpu: detectCpu(),
+      gpu,
       memoryGb: detectMemoryGb(),
       storage: detectStorage(),
       displays: detectDisplays(),
-      graphics: detectGraphics(),
-      runtime: { wineVersion: firstLine("wine", ["--version"]), protonVersion: null, steamDetected: steam.detected, installedGameCount: steam.installedGameCount, gaming },
+      graphics: detectGraphics(gpu),
+      runtime: { wineVersion: firstLine("wine", ["--version"]), protonVersion: protonTools[0] || null, protonTools, steamDetected: steam.detected, steamInstallKinds: steam.installKinds, installedGameCount: steam.installedGameCount, gaming: detectGamingEnvironment() },
     },
   };
 }
 
 function main() {
   const args = process.argv.slice(2);
-  if (args.includes("--help")) {
-    process.stdout.write("Uso: stray-scan [--pretty] [--output caminho.json]\nGera somente um relatório técnico local; não envia dados.\n");
-    return;
-  }
+  if (args.includes("--help")) { process.stdout.write("Uso: stray-scan [--pretty] [--output caminho.json]\nGera somente um relatório técnico local; não envia dados.\n"); return; }
   const outputIndex = args.indexOf("--output");
   const output = outputIndex >= 0 ? args[outputIndex + 1] : null;
   if (outputIndex >= 0 && (!output || output.startsWith("-"))) throw new Error("Informe um caminho após --output.");
   const payload = JSON.stringify(createReport(), null, args.includes("--pretty") || Boolean(output) ? 2 : 0);
-  if (output) {
-    fs.writeFileSync(path.resolve(output), `${payload}\n`, { encoding: "utf8", mode: 0o600 });
-    process.stdout.write(`Relatório local gravado em ${path.resolve(output)}\n`);
-  } else {
-    process.stdout.write(`${payload}\n`);
-  }
+  if (output) { fs.writeFileSync(path.resolve(output), `${payload}\n`, { encoding: "utf8", mode: 0o600 }); process.stdout.write(`Relatório local gravado em ${path.resolve(output)}\n`); } else process.stdout.write(`${payload}\n`);
 }
 
 try { main(); } catch (error) { process.stderr.write(`stray-scan: ${error.message}\n`); process.exitCode = 1; }

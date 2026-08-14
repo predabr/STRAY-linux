@@ -56,6 +56,7 @@ function Router() {
     <Route path="/scanner" component={Scanner} />
     <Route path="/status" component={Status} />
     <Route path="/dashboard" component={Dashboard} />
+    <Route path="/dashboard/:section/:subsection" component={Dashboard} />
     <Route path="/dashboard/:section" component={Dashboard} />
     <Route path="/admin" component={Admin} />
     <Route path="/404" component={NotFound} />

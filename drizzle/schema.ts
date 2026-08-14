@@ -292,6 +292,7 @@ export const userHardwareProfiles = mysqlTable(
     detectedDistribution: varchar("detectedDistribution", { length: 255 }),
     scannerVersion: varchar("scannerVersion", { length: 80 }),
     scannedAt: timestamp("scannedAt"),
+    scanDetails: json("scanDetails"),
     isActive: boolean("isActive").default(false).notNull(),
     createdAt,
     updatedAt,

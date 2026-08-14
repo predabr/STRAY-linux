@@ -28,17 +28,23 @@ O dashboard autenticado já mantém perfil de hardware, favoritos, guias salvos,
 
 ## Artefatos desktop reconstruídos
 
-Os cinco formatos foram recompilados com o workspace de aplicativo, os cartões sem mídia externa, as telas de Game Intelligence e a central LinuxFix renovada. A publicação do empacotador continua desativada durante a geração local.
+Os cinco formatos foram recompilados com o workspace de aplicativo, os cartões sem mídia externa, as telas de Game Intelligence, a central LinuxFix renovada e o Scanner técnico ampliado. A publicação do empacotador continua desativada durante a geração local.
 
 | Artefato | SHA-256 |
 | --- | --- |
-| `Stray-Linux-1.0.0-Setup.exe` | `c74476a7c772ff33ed989cfa76fd04b1b0fecf196aa20933f1d184d5cda043c6` |
-| `Stray-Linux-1.0.0-x86_64.AppImage` | `ee3ed056e698774149318ef4d3734eaf0ca862730f44fa850143eedaba737e4c` |
-| `Stray-Linux-1.0.0-amd64.deb` | `913b865801fc0bb2bad92c8a4869e0bbc21944fce789dc7e0fa82346e06e520d` |
-| `Stray-Linux-1.0.0-x86_64.rpm` | `fb4cb7ff18214c8de4acf18b2b37b52d0168027d8f7d3f2e18290c612183ebde` |
-| `Stray-Linux-1.0.0-x64.pacman` | `43d7549cdda5475148d6ca2c0463b934791bb3cb6c7c6244a4b47b1a930fb9c6` |
+| `Stray-Linux-1.0.0-Setup.exe` | `b20be6a38e6bb83a218728a254af180006e3c86955e049350f49257754916714` |
+| `Stray-Linux-1.0.0-x86_64.AppImage` | `2ed5044eb7d05eac38db565f935a1f3eea6910f6fab578a2d5b36efd1937d478` |
+| `Stray-Linux-1.0.0-amd64.deb` | `97760631b18157239864af4eb87d634d22911b3008e898febc9f1161cae62420` |
+| `Stray-Linux-1.0.0-x86_64.rpm` | `0712363a1ce90e7e46862d44572338374c95f4bc3138f0d039d71fbcb92d2a34` |
+| `Stray-Linux-1.0.0-x64.pacman` | `ccee0775ae4de2c11a6f31f319583fad2695f6be4bc6087c9715c2f226ab3c34` |
 
 O build foi concluído com sucesso. O Vite preserva um aviso de chunk grande já presente no bundle principal; a divisão adicional de código de Mermaid e de visualizações deve ser tratada em uma rodada separada de desempenho, sem alterar o comportamento atual.
+
+## Scanner técnico e instalação
+
+O Stray Scan agora registra arquitetura, topologia de CPU, adaptadores gráficos, VRAM quando o driver a expõe, pilha Mesa/Vulkan/OpenGL, renderer, armazenamento, monitores, Steam nativo/Flatpak, ferramentas Proton encontradas e sinais de sessão. Cada campo é opcional: uma ferramenta ausente ou uma permissão não disponível produz **não informado**, e não uma estimativa. Os gráficos exibem apenas capacidade detectada em GB e marcadores de disponibilidade local; não calculam FPS, temperatura, estabilidade ou compatibilidade.
+
+O instalador Windows NSIS foi reconstruído em modo por máquina (`perMachine`) com confirmação UAC. A elevação é limitada à instalação: o aplicativo e o Scanner continuam em execução normal de usuário. Pacotes Linux exigem privilégio apenas no gerenciador de pacotes; AppImage continua portátil sem administrador.
 
 ## Central LinuxFix e contribuição moderada
 
