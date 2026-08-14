@@ -2,6 +2,7 @@ export const STEAM_INTERFACE_LIST_ENDPOINT = "https://api.steampowered.com/IStea
 export const STEAM_APP_LIST_ENDPOINT = "https://partner.steam-api.com/IStoreService/GetAppList/v1/";
 
 export type SteamCatalogApp = { appId: number; name: string; lastModified: number | null; priceChangeNumber: number | null };
+export type SteamCatalogPage = { endpoint: string; apps: SteamCatalogApp[]; haveMoreResults: boolean; lastAppId: number | null };
 
 export function slugifySteamTitle(value: string) {
   return value.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 160) || "untitled";
@@ -17,6 +18,19 @@ export function parseSteamCatalogApps(payload: unknown): SteamCatalogApp[] {
     if (!Number.isInteger(appId) || appId <= 0 || name.length < 2) return [];
     return [{ appId, name: name.slice(0, 400), lastModified: Number.isFinite(Number(app.last_modified)) ? Number(app.last_modified) : null, priceChangeNumber: Number.isFinite(Number(app.price_change_number)) ? Number(app.price_change_number) : null }];
   });
+}
+
+export function parseSteamCatalogPage(payload: unknown): Omit<SteamCatalogPage, "endpoint"> {
+  const response = (payload as { response?: Record<string, unknown> } | null)?.response;
+  if (!response) throw new Error("A Steam respondeu sem o objeto de catálogo esperado.");
+  const apps = parseSteamCatalogApps(payload);
+  const returnedCursor = Number(response.last_appid);
+  const fallbackCursor = apps.reduce((largest, app) => Math.max(largest, app.appId), 0);
+  return {
+    apps,
+    haveMoreResults: response.have_more_results === true,
+    lastAppId: Number.isInteger(returnedCursor) && returnedCursor > 0 ? returnedCursor : fallbackCursor || null,
+  };
 }
 
 export async function getSteamCatalogPage(key: string, options: { lastAppId?: number | null; maxResults?: number; modifiedSince?: number | null } = {}) {
@@ -35,8 +49,7 @@ export async function getSteamCatalogPage(key: string, options: { lastAppId?: nu
   }));
   const response = await fetch(url, { signal: AbortSignal.timeout(20_000) });
   if (!response.ok) throw new Error(`Steam IStoreService respondeu HTTP ${response.status}.`);
-  const payload = await response.json();
-  return { endpoint: STEAM_APP_LIST_ENDPOINT, apps: parseSteamCatalogApps(payload) };
+  return { endpoint: STEAM_APP_LIST_ENDPOINT, ...parseSteamCatalogPage(await response.json()) };
 }
 
 export function countSteamInterfaces(payload: unknown) {

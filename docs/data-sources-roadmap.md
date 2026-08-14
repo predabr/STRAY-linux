@@ -28,5 +28,11 @@ O único endpoint aprovado nesta etapa é `IStoreService/GetAppList/v1`, documen
 
 O Stray Linux poderá importar somente os campos que esta resposta disponibilizar diretamente para o catálogo: Steam App ID, nome, tipo e marcadores de alteração. Capas, screenshots, trailers, descrições detalhadas, preços e assets continuam bloqueados: esta decisão não autoriza scraping nem endpoints de Storefront não documentados. A alternativa legada `ISteamApps/GetAppList/v2` é marcada como descontinuada para a escala do catálogo e não será utilizada [6].
 
+## Auditoria de integridade antes da publicação
+
+Em 14 de agosto de 2026, a revisão local encontrou **10.013 jogos ativos com Steam App ID**, nenhum jogo ativo sem esse identificador e nenhum identificador duplicado. A verificação também confirmou **zero registros de `game_media` vinculados à fonte Steam**, preservando o bloqueio de capas e screenshots sem feed licenciado.
+
+O pipeline administrativo foi preparado com cursor persistente, lote rastreável, criação de rascunhos apenas para IDs inexistentes e registro de sucesso ou falha em `source_refresh_runs`. Três chamadas de validação controlada a `IStoreService/GetAppList/v1`, no formato `input_json` exigido pela Steamworks, retornaram HTTP 403. Por isso, nenhum refresh externo foi considerado válido, nenhum cursor avançou e nenhum jogo foi criado ou alterado por essa fonte. A publicação e o cron permanecem inativos até que a chave tenha acesso efetivo a esse método.
+
 [5]: https://partner.steamgames.com/doc/webapi/IStoreService "Steamworks IStoreService / GetAppList"
 [6]: https://partner.steamgames.com/doc/webapi/ISteamApps "Steamworks ISteamApps"

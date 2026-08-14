@@ -154,3 +154,4 @@
 - [ ] Criar e validar a tarefa periódica publicada de refresh Steam com `taskUid`, somente após confirmação de publicação.
 - [ ] Validar a importação Steam autorizada com dados reais, sem duplicar jogos, sobrescrever proveniência ou criar mídia sem licença.
 - [ ] Resolver a autorização da `STEAM_WEB_API_KEY` para `IStoreService/GetAppList/v1`, que respondeu HTTP 403 em três execuções controladas, antes de uma nova tentativa de importação.
+- [x] Revisar a integridade dos Steam App IDs existentes e as pendências finais de produção antes da publicação definitiva.
