@@ -1,0 +1,17 @@
+import type { Locale } from "@/contexts/LanguageContext";
+
+type GameCardCopy = { catalogRecord: string; indexedMetadata: string; antiCheatListed: string; noGenre: string; openGame: (title: string) => string; catalogFallback: string; };
+
+export const gameCardCopy: Record<Locale, GameCardCopy> = {
+  "pt-BR": { catalogRecord: "CATÁLOGO / REGISTRO INDEXADO", indexedMetadata: "Metadados indexados", antiCheatListed: "Anti-cheat listado", noGenre: "Sem gênero indexado", openGame: (title) => `Abrir ${title}`, catalogFallback: "Metadados de catálogo disponíveis; informações adicionais dependem de fonte e revisão." },
+  en: { catalogRecord: "CATALOG / INDEXED RECORD", indexedMetadata: "Indexed metadata", antiCheatListed: "Anti-cheat listed", noGenre: "No indexed genre", openGame: (title) => `Open ${title}`, catalogFallback: "Catalog metadata is available; further information depends on source and review." },
+  es: { catalogRecord: "CATÁLOGO / REGISTRO INDEXADO", indexedMetadata: "Metadatos indexados", antiCheatListed: "Anti-cheat listado", noGenre: "Sin género indexado", openGame: (title) => `Abrir ${title}`, catalogFallback: "Hay metadatos de catálogo disponibles; la información adicional depende de la fuente y la revisión." },
+  fr: { catalogRecord: "CATALOGUE / ENREGISTREMENT INDEXÉ", indexedMetadata: "Métadonnées indexées", antiCheatListed: "Anti-cheat répertorié", noGenre: "Aucun genre indexé", openGame: (title) => `Ouvrir ${title}`, catalogFallback: "Les métadonnées du catalogue sont disponibles ; les informations supplémentaires dépendent de la source et de la révision." },
+  de: { catalogRecord: "KATALOG / INDEXIERTER EINTRAG", indexedMetadata: "Indexierte Metadaten", antiCheatListed: "Anti-Cheat gelistet", noGenre: "Kein Genre indexiert", openGame: (title) => `${title} öffnen`, catalogFallback: "Katalogmetadaten sind verfügbar; weitere Informationen hängen von Quelle und Prüfung ab." },
+  it: { catalogRecord: "CATALOGO / RECORD INDICIZZATO", indexedMetadata: "Metadati indicizzati", antiCheatListed: "Anti-cheat elencato", noGenre: "Nessun genere indicizzato", openGame: (title) => `Apri ${title}`, catalogFallback: "I metadati del catalogo sono disponibili; le ulteriori informazioni dipendono da fonte e revisione." },
+  ru: { catalogRecord: "КАТАЛОГ / ИНДЕКСИРОВАННАЯ ЗАПИСЬ", indexedMetadata: "Индексированные метаданные", antiCheatListed: "Anti-cheat указан", noGenre: "Жанр не индексирован", openGame: (title) => `Открыть ${title}`, catalogFallback: "Метаданные каталога доступны; дополнительная информация зависит от источника и проверки." },
+  "zh-CN": { catalogRecord: "目录 / 已索引记录", indexedMetadata: "已索引元数据", antiCheatListed: "已列出反作弊", noGenre: "没有已索引的类型", openGame: (title) => `打开 ${title}`, catalogFallback: "目录元数据可用；更多信息取决于来源和审核。" },
+  ja: { catalogRecord: "カタログ / インデックス済み記録", indexedMetadata: "インデックス済みメタデータ", antiCheatListed: "Anti-cheat 記載あり", noGenre: "インデックス済みジャンルなし", openGame: (title) => `${title} を開く`, catalogFallback: "カタログのメタデータは利用できます。追加情報はソースとレビューに依存します。" },
+  ko: { catalogRecord: "카탈로그 / 색인 레코드", indexedMetadata: "색인 메타데이터", antiCheatListed: "Anti-cheat 등록됨", noGenre: "색인 장르 없음", openGame: (title) => `${title} 열기`, catalogFallback: "카탈로그 메타데이터를 사용할 수 있습니다. 추가 정보는 출처와 검토에 따라 달라집니다." },
+  ar: { catalogRecord: "الكتالوج / سجل مفهرس", indexedMetadata: "بيانات وصفية مفهرسة", antiCheatListed: "تم إدراج Anti-cheat", noGenre: "لا يوجد نوع مفهرس", openGame: (title) => `فتح ${title}`, catalogFallback: "البيانات الوصفية للكتالوج متاحة؛ تعتمد المعلومات الإضافية على المصدر والمراجعة." },
+};

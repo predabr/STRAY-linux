@@ -20,9 +20,10 @@ export function StrayEntryGate({ children }: { children: ReactNode }) {
   const [localEntry, setLocalEntry] = useState(() => sessionStorage.getItem("stray-local-entry") === "1");
   const desktopMode = typeof window !== "undefined" && ["127.0.0.1", "localhost"].includes(window.location.hostname);
   const pathOnly = normalizeRoute(location);
+  const introPreviewRequested = new URLSearchParams(location.split("?")[1] ?? "").get("intro") === "1";
   const requiresAccount = routeRequiresAccount(location);
 
-  if (pathOnly === "/" && !introComplete) return <Intro locale={locale} onComplete={() => { sessionStorage.setItem(introStorageKey, "1"); setIntroComplete(true); }} />;
+  if (pathOnly === "/" && introPreviewRequested && !introComplete) return <Intro locale={locale} onComplete={() => { sessionStorage.setItem(introStorageKey, "1"); setIntroComplete(true); }} />;
   if (!requiresAccount) return <>{children}</>;
   if (loading) return <div className="grid min-h-screen place-items-center bg-background"><CircleDotDashed className="h-7 w-7 animate-spin text-primary" /></div>;
   if (isAuthenticated || (desktopMode && localEntry)) return <>{children}</>;

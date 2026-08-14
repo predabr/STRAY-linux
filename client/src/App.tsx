@@ -5,6 +5,7 @@ import { lazy, Suspense } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { RouteMeta } from "./components/RouteMeta";
 import { StrayEntryGate } from "./components/StrayEntryGate";
+import { ProductWorkspace } from "./components/platform/ProductWorkspace";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 
@@ -61,7 +62,7 @@ function Router() {
 }
 
 function App() {
-  return <ErrorBoundary><LanguageProvider><ThemeProvider defaultTheme="dark" switchable><TooltipProvider><RouteMeta /><StrayEntryGate><Router /></StrayEntryGate><Toaster /></TooltipProvider></ThemeProvider></LanguageProvider></ErrorBoundary>;
+  return <ErrorBoundary><LanguageProvider><ThemeProvider defaultTheme="dark" switchable><TooltipProvider><RouteMeta /><StrayEntryGate><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate><Toaster /></TooltipProvider></ThemeProvider></LanguageProvider></ErrorBoundary>;
 }
 
 export default App;

@@ -182,3 +182,9 @@
 - [x] Substituir o card genérico de operações por uma prévia visual, honesta e acessível do diagnóstico LinuxFix.
 - [x] Refinar hero, CTAs, tipografia técnica e hierarquia de acentos sem remover o grid e a linguagem visual do Stray Linux.
 - [x] Atualizar 11 idiomas, acessibilidade, testes e validação visual da página inicial antes do checkpoint.
+- [x] Auditar as capacidades atuais de GameHub, biblioteca, dashboard, IA e benchmarks contra o briefing de Game Intelligence, preservando limitações de dados e proveniência.
+- [x] Criar uma estrutura visual de aplicativo com navegação lateral, topbar e adaptação segura para desktop, tablet e celular.
+- [x] Evoluir detalhes de jogos e biblioteca com busca, agrupamentos e recomendações condicionadas a dados publicados, sem inventar descrições, FPS ou compatibilidade.
+- [x] Melhorar dashboard, saúde de gaming e Stray AI contextual usando apenas scanner, perfil, LinuxFix, guias, compatibilidade e benchmarks existentes.
+- [x] Refinar as visualizações de benchmarks e compatibilidade com filtros, proveniência e estados explícitos de dados insuficientes.
+- [x] Atualizar todos os 11 idiomas, acessibilidade, testes, build, artefatos desktop e validações visuais antes do checkpoint final.

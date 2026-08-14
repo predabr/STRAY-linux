@@ -167,6 +167,10 @@
     background-size: 28px 28px;
   }
 
+  .product-workspace .technical-grid {
+    background-size: 22px 22px;
+  }
+
   .evidence-label {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     font-size: 0.68rem;
