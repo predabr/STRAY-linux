@@ -2,7 +2,7 @@ import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
-import { BookOpenCheck, BotMessageSquare, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Sparkles, Wrench } from "lucide-react";
+import { BarChart3, BookOpenCheck, BotMessageSquare, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 
@@ -17,6 +17,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
     { href: "/", label: t("overview"), icon: LayoutDashboard },
     { href: "/games", label: t("gameHub"), icon: Gamepad2 },
     { href: "/library", label: t("installedGames"), icon: Library },
+    { href: "/compare", label: copy.compare, icon: BarChart3 },
     { href: "/benchmark", label: t("benchmark"), icon: Gauge },
     { href: "/linuxfix", label: t("linuxFix"), icon: Wrench },
     { href: "/setup", label: t("setup"), icon: BookOpenCheck },
@@ -28,6 +29,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
   ];
   const personal: NavigationItem[] = [
     { href: "/dashboard/favorites", label: t("favorites"), icon: Heart },
+    { href: "/dashboard/reports", label: t("reports"), icon: ShieldCheck },
     { href: "/dashboard/settings", label: t("settings"), icon: Settings },
   ];
   if (user?.role === "moderator" || user?.role === "admin") personal.unshift({ href: "/moderation", label: t("reports"), icon: ShieldCheck });
@@ -36,7 +38,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
   if (isDashboardRoute) return <>{children}</>;
 
   return <div className="product-workspace min-h-screen bg-background">
-    <aside className="product-rail fixed inset-y-0 start-0 z-40 hidden w-60 border-e border-white/8 bg-[#111318]/95 px-3 py-4 backdrop-blur-xl lg:flex lg:flex-col">
+    <aside className="product-rail fixed inset-y-0 start-0 z-40 hidden w-56 border-e border-white/8 bg-[#0d1016]/95 px-3 py-4 shadow-[18px_0_40px_rgba(0,0,0,.14)] backdrop-blur-xl lg:flex lg:flex-col">
       <div className="px-2"><StrayBrandMark /></div>
       <nav aria-label="Navegação do aplicativo" className="mt-8 flex-1 space-y-6 overflow-y-auto">
         <NavigationGroup label={copy.workspace} items={workspace} location={location} />
@@ -45,7 +47,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
       </nav>
       <div className="mt-4 border-t border-white/8 px-2 pt-4"><p className="inline-flex items-center gap-2 font-tech text-[10px] uppercase tracking-[0.12em] text-emerald-300"><span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />{copy.status}</p><p className="mt-2 font-tech text-[10px] text-white/35">{copy.version}</p></div>
     </aside>
-    <div className="min-h-screen pb-16 lg:ps-60 lg:pb-0">{children}</div>
+    <div className="min-h-screen pb-16 lg:ps-56 lg:pb-0">{children}</div>
     <nav aria-label="Navegação rápida" className="fixed inset-x-0 bottom-0 z-50 flex h-16 border-t border-white/10 bg-[#111318]/95 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">{bottomNavigation.map((item) => <RailLink key={item.href} item={item} location={location} compact />)}</nav>
   </div>;
 }

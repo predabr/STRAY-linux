@@ -89,7 +89,7 @@ function detectGraphics(gpu) {
 
 function steamRoots() {
   const home = os.homedir();
-  return [path.join(home, ".steam", "steam"), path.join(home, ".local", "share", "Steam"), path.join(home, ".var", "app", "com.valvesoftware.Steam", "data", "Steam")];
+  return [path.join(home, ".steam", "steam"), path.join(home, ".steam", "root"), path.join(home, ".steam", "debian-installation"), path.join(home, ".local", "share", "Steam"), path.join(home, ".var", "app", "com.valvesoftware.Steam", ".local", "share", "Steam"), path.join(home, ".var", "app", "com.valvesoftware.Steam", "data", "Steam")];
 }
 
 function detectSteam(roots) {

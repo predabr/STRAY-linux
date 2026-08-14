@@ -4,32 +4,40 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 
-function readText(file) {
-  try { return fs.readFileSync(file, "utf8"); } catch { return null; }
+function readText(file) { try { return fs.readFileSync(file, "utf8"); } catch { return null; } }
+function unescapeVdf(value) { return value.replace(/\\\\/g, "\\").replace(/\\"/g, '"'); }
+function realPath(value) { try { return fs.realpathSync(value); } catch { return value; } }
+
+function getSteamRoots(home = os.homedir()) {
+  const candidates = steamRootCandidates(home);
+  const roots = new Map();
+  for (const candidate of candidates) if (fs.existsSync(candidate.path)) roots.set(realPath(candidate.path), { path: realPath(candidate.path), kind: candidate.kind });
+  return [...roots.values()];
 }
 
-function unescapeVdf(value) {
-  return value.replace(/\\\\/g, "\\").replace(/\\\"/g, '"');
-}
-
-function getSteamAppsFolders() {
-  const home = os.homedir();
-  const roots = [
-    path.join(home, ".steam", "steam"),
-    path.join(home, ".local", "share", "Steam"),
-    path.join(home, ".var", "app", "com.valvesoftware.Steam", "data", "Steam"),
+function steamRootCandidates(home) {
+  return [
+    { path: path.join(home, ".steam", "steam"), kind: "native" },
+    { path: path.join(home, ".steam", "root"), kind: "native" },
+    { path: path.join(home, ".steam", "debian-installation"), kind: "native" },
+    { path: path.join(home, ".local", "share", "Steam"), kind: "native" },
+    { path: path.join(home, ".var", "app", "com.valvesoftware.Steam", ".local", "share", "Steam"), kind: "flatpak" },
+    { path: path.join(home, ".var", "app", "com.valvesoftware.Steam", "data", "Steam"), kind: "flatpak" },
   ];
-  const folders = new Set();
-  for (const root of roots) {
-    const steamApps = path.join(root, "steamapps");
-    if (fs.existsSync(steamApps)) folders.add(steamApps);
+}
+
+function getSteamAppsFolders(home) {
+  const folders = new Map();
+  for (const root of getSteamRoots(home)) {
+    const steamApps = path.join(root.path, "steamapps");
+    if (fs.existsSync(steamApps)) folders.set(realPath(steamApps), { path: realPath(steamApps), kind: root.kind });
     const libraryFolders = readText(path.join(steamApps, "libraryfolders.vdf")) || "";
     for (const match of libraryFolders.matchAll(/"path"\s+"((?:\\.|[^"])*)"/g)) {
       const candidate = path.join(unescapeVdf(match[1]), "steamapps");
-      if (fs.existsSync(candidate)) folders.add(candidate);
+      if (fs.existsSync(candidate)) folders.set(realPath(candidate), { path: realPath(candidate), kind: root.kind });
     }
   }
-  return [...folders];
+  return [...folders.values()];
 }
 
 function parseManifest(content) {
@@ -40,21 +48,25 @@ function parseManifest(content) {
   return { appId: Number(appId), name: unescapeVdf(name), installDir: installDir ? unescapeVdf(installDir) : null };
 }
 
-function scanSteamLibrary() {
+function scanSteamLibrary(home) {
   const games = new Map();
-  for (const steamApps of getSteamAppsFolders()) {
+  for (const steamApps of getSteamAppsFolders(home)) {
     let entries = [];
-    try { entries = fs.readdirSync(steamApps); } catch { continue; }
+    try { entries = fs.readdirSync(steamApps.path); } catch { continue; }
     for (const entry of entries) {
       if (!/^appmanifest_\d+\.acf$/i.test(entry)) continue;
-      const parsed = parseManifest(readText(path.join(steamApps, entry)) || "");
+      const parsed = parseManifest(readText(path.join(steamApps.path, entry)) || "");
       if (!parsed || games.has(parsed.appId)) continue;
-      games.set(parsed.appId, { ...parsed, libraryPath: steamApps });
+      games.set(parsed.appId, { ...parsed, libraryPath: steamApps.path, installationType: steamApps.kind });
     }
   }
   return [...games.values()].sort((left, right) => left.name.localeCompare(right.name, "pt-BR"));
 }
 
-module.exports = { scanSteamLibrary };
+module.exports = { getSteamRoots, getSteamAppsFolders, parseManifest, scanSteamLibrary };
 
-if (require.main === module) process.stdout.write(`${JSON.stringify({ games: scanSteamLibrary() }, null, 2)}\n`);
+if (require.main === module) {
+  const homeIndex = process.argv.indexOf("--home");
+  const home = homeIndex >= 0 ? process.argv[homeIndex + 1] : undefined;
+  process.stdout.write(`${JSON.stringify({ games: scanSteamLibrary(home) }, null, 2)}\n`);
+}

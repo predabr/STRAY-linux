@@ -28,15 +28,15 @@ O dashboard autenticado já mantém perfil de hardware, favoritos, guias salvos,
 
 ## Artefatos desktop reconstruídos
 
-Os cinco formatos foram recompilados com o workspace de aplicativo, os cartões sem mídia externa, as telas de Game Intelligence, a central LinuxFix renovada e o Scanner técnico ampliado. A publicação do empacotador continua desativada durante a geração local.
+Os cinco formatos foram recompilados com o workspace de aplicativo, os cartões sem mídia externa, a visão geral operacional, a central LinuxFix renovada, o Scanner técnico ampliado e a descoberta Steam Flatpak corrigida. A publicação do empacotador continua desativada durante a geração local.
 
 | Artefato | SHA-256 |
 | --- | --- |
-| `Stray-Linux-1.0.0-Setup.exe` | `b20be6a38e6bb83a218728a254af180006e3c86955e049350f49257754916714` |
-| `Stray-Linux-1.0.0-x86_64.AppImage` | `2ed5044eb7d05eac38db565f935a1f3eea6910f6fab578a2d5b36efd1937d478` |
-| `Stray-Linux-1.0.0-amd64.deb` | `97760631b18157239864af4eb87d634d22911b3008e898febc9f1161cae62420` |
-| `Stray-Linux-1.0.0-x86_64.rpm` | `0712363a1ce90e7e46862d44572338374c95f4bc3138f0d039d71fbcb92d2a34` |
-| `Stray-Linux-1.0.0-x64.pacman` | `ccee0775ae4de2c11a6f31f319583fad2695f6be4bc6087c9715c2f226ab3c34` |
+| `Stray-Linux-1.0.0-Setup.exe` | `7ecd11575916a7fc4cd7822dbc47d753e73e3036379926066d8334eca0696565` |
+| `Stray-Linux-1.0.0-x86_64.AppImage` | `e06561811bd14829295ab5f08c3111fd9392bb0ede619cd3240b66b6679dcc2f` |
+| `Stray-Linux-1.0.0-amd64.deb` | `32b108eea986f1e80f6f9323d4d422d7628eb94624b6abf927991f984394f32b` |
+| `Stray-Linux-1.0.0-x86_64.rpm` | `fa7eeed5b5d2be910ae81c70c99b638aae26f1d954d987326d38249f5a92d6e1` |
+| `Stray-Linux-1.0.0-x64.pacman` | `46e95a25c00cbfc7d8987c2eb051482e87f1716bb10f519dbfb9dfc159dd82e3` |
 
 O build foi concluído com sucesso. O Vite preserva um aviso de chunk grande já presente no bundle principal; a divisão adicional de código de Mermaid e de visualizações deve ser tratada em uma rodada separada de desempenho, sem alterar o comportamento atual.
 
@@ -45,6 +45,10 @@ O build foi concluído com sucesso. O Vite preserva um aviso de chunk grande já
 O Stray Scan agora registra arquitetura, topologia de CPU, adaptadores gráficos, VRAM quando o driver a expõe, pilha Mesa/Vulkan/OpenGL, renderer, armazenamento, monitores, Steam nativo/Flatpak, ferramentas Proton encontradas e sinais de sessão. Cada campo é opcional: uma ferramenta ausente ou uma permissão não disponível produz **não informado**, e não uma estimativa. Os gráficos exibem apenas capacidade detectada em GB e marcadores de disponibilidade local; não calculam FPS, temperatura, estabilidade ou compatibilidade.
 
 O instalador Windows NSIS foi reconstruído em modo por máquina (`perMachine`) com confirmação UAC. A elevação é limitada à instalação: o aplicativo e o Scanner continuam em execução normal de usuário. Pacotes Linux exigem privilégio apenas no gerenciador de pacotes; AppImage continua portátil sem administrador.
+
+## Biblioteca Steam local
+
+A descoberta local da biblioteca cobre os caminhos nativos convencionais, os links de compatibilidade `~/.steam/root` e `~/.steam/debian-installation`, e a localização padrão atual da Steam Flatpak em `~/.var/app/com.valvesoftware.Steam/.local/share/Steam`. O leitor deduplica caminhos reais, lê somente `libraryfolders.vdf` e manifestos `appmanifest_*.acf`, e classifica o resultado como instalação nativa ou Flatpak. A abertura continua limitada ao App ID encontrado localmente e à URI `steam://run/<id>`; não usa conta, chave Steamworks, biblioteca remota, capa, FPS ou relatório de compatibilidade.
 
 ## Central LinuxFix e contribuição moderada
 
