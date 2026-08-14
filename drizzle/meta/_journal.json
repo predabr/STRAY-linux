@@ -92,6 +92,13 @@
       "when": 1786706369962,
       "tag": "0012_rich_shotgun",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "5",
+      "when": 1786720318725,
+      "tag": "0013_polite_magneto",
+      "breakpoints": true
     }
   ]
 }

@@ -211,7 +211,7 @@
 - [x] Aplicar auditoria visual, design system, 11 localidades, acessibilidade, testes, build, instaladores e publicação sem incluir Achievements.
 - [x] Auditar detecção local, bibliotecas, persistência e API existentes para Controller Center, mods, sincronização e widgets sem assumir conectores externos.
 - [x] Criar Controller Center com inventário local e ações que não modifiquem o sistema sem confirmação explícita.
-- [ ] Integrar descoberta local de mods e gerenciadores suportados, com leitura mínima, importação opcional e nenhuma alteração automática em arquivos de jogo.
-- [ ] Implementar sincronização avançada com seleção de dados, consentimento, resolução visível de conflitos e nenhum envio de dados técnicos por padrão.
-- [ ] Expandir a API pública com documentação, widgets e badges que exponham apenas dados publicados, com origem, limites e estado de indisponibilidade.
-- [ ] Atualizar 11 localidades, acessibilidade, segurança, testes, build, instaladores e publicação das quatro integrações.
+- [x] Integrar descoberta local de mods Steam Workshop com leitura mínima e nenhuma alteração automática em arquivos de jogo.
+- [x] Implementar sincronização avançada com seleção de dados, consentimento persistente, estado visível de conflitos e nenhum envio de dados técnicos por padrão.
+- [x] Expandir a API pública com documentação, widgets e badges que exponham apenas dados publicados, com origem, limites e estado de indisponibilidade.
+- [x] Atualizar 11 localidades, acessibilidade, segurança, testes, build, instaladores e publicação das quatro integrações.

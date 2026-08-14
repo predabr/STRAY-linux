@@ -2,7 +2,7 @@ import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
-import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Cloud, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 
@@ -34,6 +34,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
     { href: "/dashboard/favorites", label: t("favorites"), icon: Heart },
     { href: "/dashboard/reports", label: t("reports"), icon: ShieldCheck },
     { href: "/dashboard/settings", label: t("settings"), icon: Settings },
+    { href: "/sync", label: t("syncing"), icon: Cloud },
   ];
   if (user?.role === "moderator" || user?.role === "admin") personal.unshift({ href: "/moderation", label: t("reports"), icon: ShieldCheck });
   const bottomNavigation = [workspace[0]!, workspace[1]!, workspace[2]!, system[1]!];

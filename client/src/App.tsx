@@ -13,6 +13,7 @@ const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const DistroAtlas = lazy(() => import("@/pages/DistroAtlas"));
 const DistroProfile = lazy(() => import("@/pages/DistroProfile"));
 const Admin = lazy(() => import("@/pages/Admin"));
+const ApiDocs = lazy(() => import("@/pages/ApiDocs"));
 const AssistantPage = lazy(() => import("@/pages/Assistant"));
 const Benchmark = lazy(() => import("@/pages/Benchmark"));
 const Compare = lazy(() => import("@/pages/Compare"));
@@ -34,6 +35,7 @@ const Performance = lazy(() => import("@/pages/Performance"));
 const SearchPage = lazy(() => import("@/pages/Search"));
 const Scanner = lazy(() => import("@/pages/Scanner"));
 const Status = lazy(() => import("@/pages/Status"));
+const Sync = lazy(() => import("@/pages/Sync"));
 const WindowsHub = lazy(() => import("@/pages/WindowsHub"));
 
 function Router() {
@@ -46,11 +48,13 @@ function Router() {
     <Route path="/controllers" component={Controllers} />
     <Route path="/windows" component={WindowsHub} />
     <Route path="/assistant" component={AssistantPage} />
+    <Route path="/api/docs" component={ApiDocs} />
     <Route path="/wiki" component={WikiPage} />
     <Route path="/distros/:id" component={DistroProfile} />
     <Route path="/distros" component={DistroAtlas} />
     <Route path="/wiki/:slug" component={WikiDetailPage} />
     <Route path="/setup" component={SetupPage} />
+    <Route path="/sync" component={Sync} />
     <Route path="/setup/:slug" component={SetupDetailPage} />
     <Route path="/linuxfix" component={LinuxFixPage} />
     <Route path="/linuxfix/:slug" component={LinuxFixDetailPage} />

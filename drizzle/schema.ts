@@ -627,6 +627,24 @@ export const linuxFixHistory = mysqlTable(
   (table) => [index("linux_fix_history_user_idx").on(table.userId, table.viewedAt)],
 );
 
+export const userSyncPreferences = mysqlTable(
+  "user_sync_preferences",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull().references(() => users.id, { onDelete: "cascade" }),
+    syncFavorites: boolean("syncFavorites").default(true).notNull(),
+    syncSavedGuides: boolean("syncSavedGuides").default(true).notNull(),
+    syncLinuxFixHistory: boolean("syncLinuxFixHistory").default(true).notNull(),
+    syncManualProfiles: boolean("syncManualProfiles").default(true).notNull(),
+    syncTechnicalSnapshot: boolean("syncTechnicalSnapshot").default(false).notNull(),
+    consentedAt: timestamp("consentedAt").defaultNow().notNull(),
+    lastReviewedAt: timestamp("lastReviewedAt").defaultNow().notNull(),
+    createdAt,
+    updatedAt,
+  },
+  (table) => [uniqueIndex("user_sync_preferences_user_unique").on(table.userId)],
+);
+
 export const reports = mysqlTable(
   "reports",
   {

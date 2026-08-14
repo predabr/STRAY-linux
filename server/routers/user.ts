@@ -11,6 +11,7 @@ import {
   savedGuides,
   setupGuides,
   userHardwareProfiles,
+  userSyncPreferences,
 } from "../../drizzle/schema";
 import { router } from "../_core/trpc";
 import { activeUserProcedure, requireDatabase } from "./_guards";
@@ -48,6 +49,20 @@ export const userRouter = router({
       db.select({ guide: setupGuides }).from(savedGuides).innerJoin(setupGuides, eq(savedGuides.guideId, setupGuides.id)).where(eq(savedGuides.userId, ctx.user.id)).orderBy(desc(savedGuides.createdAt)).limit(12),
     ]);
     return { user: ctx.user, profiles, favorites: favoriteRows.map((row) => row.game), savedGuides: savedGuideRows.map((row) => row.guide) };
+  }),
+
+  syncPreferences: router({
+    get: activeUserProcedure.query(async ({ ctx }) => {
+      const db = await requireDatabase();
+      const preference = (await db.select().from(userSyncPreferences).where(eq(userSyncPreferences.userId, ctx.user.id)).limit(1))[0];
+      return preference ?? { syncFavorites: true, syncSavedGuides: true, syncLinuxFixHistory: true, syncManualProfiles: true, syncTechnicalSnapshot: false, consentedAt: null, lastReviewedAt: null };
+    }),
+    update: activeUserProcedure.input(z.object({ syncFavorites: z.boolean(), syncSavedGuides: z.boolean(), syncLinuxFixHistory: z.boolean(), syncManualProfiles: z.boolean(), syncTechnicalSnapshot: z.boolean() })).mutation(async ({ ctx, input }) => {
+      const db = await requireDatabase();
+      const now = new Date();
+      await db.insert(userSyncPreferences).values({ userId: ctx.user.id, ...input, consentedAt: now, lastReviewedAt: now }).onDuplicateKeyUpdate({ set: { ...input, lastReviewedAt: now } });
+      return { success: true, reviewedAt: now };
+    }),
   }),
 
   recommendations: activeUserProcedure.query(async ({ ctx }) => {
