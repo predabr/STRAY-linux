@@ -146,6 +146,19 @@ function detectGamingEnvironment() {
   return { sessionType, waylandDetected: sessionType === "wayland" || Boolean(process.env.WAYLAND_DISPLAY), x11Detected: sessionType === "x11" || Boolean(process.env.DISPLAY), vulkanToolsDetected: hasCommand("vulkaninfo"), gameModeDetected: hasCommand("gamemoderun"), gameModeServiceActive: gamemoded === null ? null : gamemoded === "active", mangoHudDetected: hasCommand("mangohud"), gamescopeDetected: hasCommand("gamescope"), vkBasaltDetected: hasCommand("vkbasalt"), winetricksDetected: hasCommand("winetricks"), flatpakDetected: hasCommand("flatpak"), renderGroupDetected: groups.includes("render") || groups.includes("video") };
 }
 
+function detectControllers() {
+  const devicesFile = readText("/proc/bus/input/devices") || "";
+  const names = new Map();
+  for (const block of devicesFile.split("\n\n")) {
+    const name = (block.match(/^N: Name="(.+)"$/m) || [])[1] || null;
+    const handlers = (block.match(/^H: Handlers=(.+)$/m) || [])[1] || "";
+    for (const id of handlers.match(/js\d+/g) || []) names.set(id, name);
+  }
+  const devices = [];
+  try { for (const id of fs.readdirSync("/dev/input")) if (/^js\d+$/.test(id)) devices.push({ id, name: names.get(id) || null, path: `/dev/input/${id}` }); } catch {}
+  return { detected: devices.length > 0, devices: devices.slice(0, 16), source: "procfs/dev-input" };
+}
+
 function createReport() {
   const roots = steamRoots();
   const steam = detectSteam(roots);
@@ -167,6 +180,7 @@ function createReport() {
       displays: detectDisplays(),
       graphics: detectGraphics(gpu),
       runtime: { wineVersion: firstLine("wine", ["--version"]), protonVersion: protonTools[0] || null, protonTools, steamDetected: steam.detected, steamInstallKinds: steam.installKinds, installedGameCount: steam.installedGameCount, gaming: detectGamingEnvironment() },
+      controllers: detectControllers(),
     },
   };
 }

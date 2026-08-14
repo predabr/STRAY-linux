@@ -25,6 +25,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
   const system: NavigationItem[] = [
     { href: "/dashboard/pc", label: t("myPc"), icon: MonitorCog },
     { href: "/scanner", label: t("scanner"), icon: ShieldCheck },
+    { href: "/controllers", label: "Controles", icon: Gamepad2 },
     { href: "/performance", label: "Performance", icon: Activity },
     { href: "/assistant", label: "Stray AI", icon: BotMessageSquare },
   ];
