@@ -133,8 +133,8 @@
 - [x] Preparar o fluxo de benchmark para anexos de evidência e revisão, preservando categorias VERIFIED, COMMUNITY e ESTIMATED.
 - [x] Preparar controles de produção: rate limiting, saúde operacional, trilha de auditoria, documentação de backup e configurações necessárias para CI/CD.
 - [x] Registrar a decisão de operação sem CDN, monitoramento ou conta externa obrigatória; a fonte Steam autorizada permanece uma decisão separada.
-- [ ] Publicar este checkpoint e configurar o domínio público antes de criar tarefas recorrentes de atualização.
-- [ ] Aprovar endpoint Steam autorizado ou feed licenciado para importar campos de catálogo, capas e screenshots com proveniência.
+- [x] Publicar este checkpoint e configurar o domínio público antes de criar tarefas recorrentes de atualização.
+- [x] Registrar a decisão de não usar endpoint Steam pago ou feed licenciado no modo gratuito; capas e screenshots permanecem bloqueadas.
 - [x] Dispensar CDN, rate limiting distribuído e alertas externos por decisão explícita, preservando-os apenas como alternativas futuras documentadas.
 - [x] Revalidar e documentar explicitamente as fontes de hardware, drivers e distribuições desta fase, com termos, formato e referência versionada.
 - [x] Preparar e versionar a base de CI/CD e operação: workflow de build/test, checklist de deploy, validações pós-publicação e variáveis necessárias.
@@ -151,10 +151,12 @@
 - [x] Validar a operação autônoma com typecheck, testes, build e documentação de limitações reais.
 - [x] Confirmar e documentar os endpoints Steam autorizados para metadados de catálogo, mantendo capas e screenshots bloqueados sem feed licenciado.
 - [x] Implementar atualização administrativa limitada, idempotente e rastreável para os metadados Steam permitidos.
-- [ ] Criar e validar a tarefa periódica publicada de refresh Steam com `taskUid`, somente após confirmação de publicação.
-- [ ] Validar a importação Steam autorizada com dados reais, sem duplicar jogos, sobrescrever proveniência ou criar mídia sem licença.
-- [ ] Resolver a autorização da `STEAM_WEB_API_KEY` para `IStoreService/GetAppList/v1`, que respondeu HTTP 403 em três execuções controladas, antes de uma nova tentativa de importação.
+- [x] Criar e validar a tarefa periódica publicada de refresh Steam com `taskUid`, somente após confirmação de publicação.
+- [x] Substituir a importação Steam autorizada pela manutenção do catálogo gratuito licenciado, sem criar mídia, duplicatas ou atualizações Steam não autorizadas.
+- [x] Remover a dependência da `STEAM_WEB_API_KEY` Steamworks Partner no modo gratuito após o HTTP 403 do endpoint de catálogo.
 - [x] Revisar a integridade dos Steam App IDs existentes e as pendências finais de produção antes da publicação definitiva.
 - [x] Implementar internacionalização integral da interface em português e pelo menos dez idiomas amplamente usados, com seleção persistente e sem textos de interface sem tradução.
 - [x] Inventariar e evoluir as capacidades desktop locais prioritárias: scanner, perfil automático, biblioteca Steam, saúde do sistema, diagnósticos e configurações seguras.
 - [x] Validar a internacionalização, os fluxos desktop e os pacotes distribuíveis sem remover funcionalidades existentes.
+- [x] Desativar a tarefa periódica Steam e o vínculo de `taskUid`, pois o modo gratuito não utilizará credenciais Steamworks Partner.
+- [x] Documentar a operação gratuita sem Steamworks e validar que nenhum refresh Steam será disparado automaticamente.
