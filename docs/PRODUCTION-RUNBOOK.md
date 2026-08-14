@@ -6,8 +6,8 @@ O Stray Linux já mantém perfis técnicos, fontes editoriais, lotes de importa�
 
 | Área | Implementado nesta versão | Limite deliberado |
 | --- | --- | --- |
-| Segurança de API | Limite local de 120 mutações tRPC por IP/minuto, payload máximo de 8 MB, `nosniff`, `DENY` para frames e política de referrer. | O limite em memória é uma proteção por instância; produção pública de alto volume deve incluir rate limiting no edge ou serviço distribuído. |
-| Saúde | `GET /api/health` informa modo e timestamp sem detalhes internos. | Não substitui alertas externos de disponibilidade. |
+| Segurança de API | Limite local de 120 mutações tRPC por IP/minuto, payload máximo de 8 MB, `nosniff`, `DENY` para frames e política de referrer. | O limite em memória é uma proteção por instância; produção pública de alto volume pode adicionar rate limiting distribuído futuramente, mas não depende dele. |
+| Saúde | `GET /api/health` informa modo e timestamp; `GET /api/status` verifica API e banco sem expor detalhes internos. | Não substitui um monitor independente se todo o servidor estiver indisponível. |
 | Fontes | `content_sources`, `source_refresh_runs` e campos de última verificação/sucesso. | A Steam somente é verificada em endpoint documentado; loja, capas e screenshots não são importados por interfaces não aprovadas. |
 | Benchmarks | `COMMUNITY` por padrão, revisão administrativa, URL/nota de evidência e captura opcional PNG/JPEG/WebP de até 5 MB. | Uma captura não promove uma submissão a `VERIFIED`; revisão humana continua obrigatória. |
 | Scanner | Relatório técnico local, prévia, consentimento e importação para perfil. | Não há upload automático nem coleta de identificadores pessoais. |
@@ -35,8 +35,8 @@ Após publicar, configure o domínio em **Settings → Domains** e execute os te
 | Domínio público | Pendente | Configurar ou vincular no painel de domínios após publicar. |
 | Atualização automática de fontes | Preparada, não agendada | Criar handler idempotente e job Heartbeat somente após deploy, para endpoint e frequência aprovados. |
 | Steam App ID e metadados | Chave validada; catálogo não iniciado | Aprovar interface Steam autorizada ou feed licenciado para os campos desejados. |
-| CDN/edge rate limiting | Pendente | Escolher provedor ou camada gerenciada compatível com a política de tráfego esperada. |
-| Observabilidade externa | Pendente | Integrar monitoramento de uptime e alertas sem coletar segredos ou conteúdo pessoal. |
+| CDN/edge rate limiting | Opcional | O modo autônomo já possui limite local; avaliar somente se o tráfego público justificar uma camada distribuída. |
+| Observabilidade externa | Opcional | A página `/status` e os endpoints internos funcionam sem conta; alertas fora do aplicativo exigem provedor escolhido pelo proprietário. |
 | Backup e recuperação | Requer ação do proprietário se a conta receber aviso de elegibilidade | Usar o backup de tarefa oficial; um download de código não inclui banco, uploads, segredos nem capacidades hospedadas [2]. |
 
 ## Backup e restauração de website hospedado

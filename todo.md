@@ -132,10 +132,10 @@
 - [x] Evoluir a explicação da compatibilidade para mostrar fatores, evidências, cobertura e limitações, sem transformar ausência de dados em pontuação.
 - [x] Preparar o fluxo de benchmark para anexos de evidência e revisão, preservando categorias VERIFIED, COMMUNITY e ESTIMATED.
 - [x] Preparar controles de produção: rate limiting, saúde operacional, trilha de auditoria, documentação de backup e configurações necessárias para CI/CD.
-- [ ] Registrar as decisões pendentes de Steam API, domínio, armazenamento, CDN e monitoramento para ativação de produção.
+- [x] Registrar a decisão de operação sem CDN, monitoramento ou conta externa obrigatória; a fonte Steam autorizada permanece uma decisão separada.
 - [ ] Publicar este checkpoint e configurar o domínio público antes de criar tarefas recorrentes de atualização.
 - [ ] Aprovar endpoint Steam autorizado ou feed licenciado para importar campos de catálogo, capas e screenshots com proveniência.
-- [ ] Configurar CDN/rate limit distribuído, monitoramento externo e alertas para tráfego público multi-instância.
+- [x] Dispensar CDN, rate limiting distribuído e alertas externos por decisão explícita, preservando-os apenas como alternativas futuras documentadas.
 - [x] Revalidar e documentar explicitamente as fontes de hardware, drivers e distribuições desta fase, com termos, formato e referência versionada.
 - [x] Preparar e versionar a base de CI/CD e operação: workflow de build/test, checklist de deploy, validações pós-publicação e variáveis necessárias.
 - [x] Expor no painel administrativo o histórico de fontes e a verificação manual da Steam Web API já protegida por autenticação de administrador.
@@ -145,3 +145,7 @@
 - [x] Definir monitores Better Stack para saúde, disponibilidade e futura execução de cron, sem cadastrar ou notificar destinatários externos.
 - [x] Versionar uma especificação de ativação Cloudflare + Better Stack com limites iniciais, rollback e dados exigidos do proprietário.
 - [x] Validar a preparação local e registrar as credenciais, DNS e publicação que continuam dependentes de configuração externa.
+- [x] Remover Cloudflare e Better Stack como requisito operacional do plano ativo, preservando-os apenas como alternativas futuras documentadas.
+- [x] Criar status interno público e dados operacionais mínimos sem expor segredos, usuários ou detalhes de infraestrutura.
+- [x] Ampliar o health check e o runbook para operação autônoma sem contas externas, CDN ou alerta fora da aplicação.
+- [x] Validar a operação autônoma com typecheck, testes, build e documentação de limitações reais.

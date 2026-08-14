@@ -12,6 +12,7 @@ import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { createTrpcRateLimitMiddleware } from "../lib/requestRateLimit";
 import { refreshSourceHandler } from "../scheduled/sourceRefresh";
+import { getOperationalStatus } from "../lib/operationalStatus";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -46,13 +47,14 @@ async function startServer() {
   app.use(express.json({ limit: "8mb" }));
   app.use(express.urlencoded({ limit: "8mb", extended: true }));
   app.get("/api/health", (_req, res) => res.json({ ok: true, mode: process.env.DESKTOP_MODE === "1" ? "desktop" : "web", timestamp: new Date().toISOString() }));
+  app.get("/api/status", async (_req, res) => { const status = await getOperationalStatus(process.env.DESKTOP_MODE === "1"); res.status(status.status === "operational" ? 200 : 503).json(status); });
   app.get("/robots.txt", (req, res) => {
     const origin = `${req.protocol}://${req.get("host")}`;
     res.type("text/plain").send(`User-agent: *\nAllow: /\nDisallow: /dashboard\nDisallow: /admin\nDisallow: /api/\nSitemap: ${origin}/sitemap.xml\n`);
   });
   app.get("/sitemap.xml", (req, res) => {
     const origin = `${req.protocol}://${req.get("host")}`;
-    const paths = ["/", "/games", "/benchmark", "/compare", "/distros", "/wiki", "/setup", "/linuxfix", "/assistant", "/scanner"];
+    const paths = ["/", "/games", "/benchmark", "/compare", "/distros", "/wiki", "/setup", "/linuxfix", "/assistant", "/scanner", "/status"];
     const body = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map((path) => `<url><loc>${origin}${path}</loc></url>`).join("")}</urlset>`;
     res.type("application/xml").send(body);
   });
