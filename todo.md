@@ -310,3 +310,6 @@
 - [x] Corrigir falhas comprovadas e elevar as superfícies prioritárias do aplicativo sem criar dados, telemetria ou atualizações falsas.
 - [x] Validar site, atualizações, testes, build, cinco instaladores, checksums e publicação desta rodada.
 - [x] Implementar atualização controlada escolhida pelo usuário: feed de release publicado, verificação de versão e integridade, download de artefato oficial e confirmação explícita antes de reiniciar.
+- [x] Auditar e definir a navegação horizontal por rolagem, incluindo fallback com leitura vertical e redução de movimento.
+- [x] Redesenhar a landing em preto e branco com painéis horizontais, transições suaves e downloads revelados após a narrativa.
+- [x] Validar rolagem, teclado, mobile, downloads e build da landing animada antes da publicação.

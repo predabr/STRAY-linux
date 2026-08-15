@@ -37,13 +37,15 @@ describe("landing pública", () => {
 
   it("mantém apresentação institucional e downloads sem substituir a interface por imagem estática", () => {
     const landing = read("client/src/pages/Home.tsx");
-    expect(landing).toContain("Clareza para");
+    expect(landing).toContain("HorizontalStory");
+    expect(landing).toContain("Seu Linux.");
     expect(landing).toContain("Criado por Pedro, Brasil");
     expect(landing).toContain("<TerminalInstaller");
     expect(landing).toContain('useState<Installer["id"] | null>(null)');
     expect(landing).toContain('selected ? linuxInstallers.find((item) => item.id === selected) : undefined');
     expect(landing).toContain('{installer.name} · pacote {installer.signal}');
     expect(landing).toContain("SELEÇÃO OBRIGATÓRIA");
+    expect(landing).toContain("SCROLL TO EXPLORE");
     expect(landing).toContain("O bloco usa `bash -c`");
     expect(landing).toContain("usam exclusivamente a aba");
     expect(landing).not.toContain("stray-linux-landing-original_68a8e472.png");
