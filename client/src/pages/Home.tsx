@@ -2,6 +2,7 @@ import { ArrowDownRight, Check, Clipboard, ClipboardCheck, Download, ExternalLin
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { distributionAssets as assets, linuxInstallers } from "@/lib/distribution";
+import { ReferenceLanding } from "@/pages/ReferenceLanding";
 
 const capabilitySteps = [
   { label: "ANALISA", title: "Entenda seu hardware", text: "Scanner local e perfil técnico consentido.", icon: MonitorCog, href: "/scanner" },
@@ -19,7 +20,7 @@ const proofSignals = [
   { value: "LOCAL", label: "scanner e biblioteca" },
 ] as const;
 
-export default function Home() {
+function LegacyHome() {
   return <div id="top" className="min-h-screen overflow-x-hidden bg-[#050a16] text-white selection:bg-violet-500/40"><SiteNav />
     <main>
       <section className="relative isolate overflow-hidden border-b border-white/[.07]">
@@ -44,6 +45,10 @@ export default function Home() {
       <section id="install" className="border-y border-white/[.08] bg-[#07101d]"><div className="container py-16 sm:py-20"><div className="mx-auto max-w-2xl text-center"><p className="font-tech text-[10px] tracking-[.15em] text-blue-200">STRAY LINUX / V1.0.0</p><h2 className="mt-3 text-3xl font-semibold tracking-[-.045em] sm:text-4xl">Pronto para levar seu Linux para o próximo nível?</h2><p className="mt-3 text-sm text-white/52">Instale o Stray Linux e comece com uma leitura local, segura e rastreável.</p></div><div className="mx-auto mt-9 grid max-w-5xl gap-4 lg:grid-cols-2"><div className="rounded-xl border border-white/[.1] bg-[#0b1426] p-5"><div className="flex items-center gap-3"><Terminal className="h-7 w-7 text-blue-200" /><div><p className="font-semibold">Linux</p><p className="text-xs text-white/45">Terminal verificado por família de distribuição</p></div></div><p className="mt-5 rounded-lg border border-white/[.08] bg-black/20 p-3 font-tech text-[11px] text-white/56">Debian, Fedora, openSUSE, Arch e AppImage</p><a href="/download" className="mt-5 inline-flex text-sm font-medium text-blue-200 hover:text-blue-100">Ver todos os métodos de instalação <ArrowDownRight className="ml-1.5 h-4 w-4" /></a></div><div className="rounded-xl border border-blue-400/25 bg-[linear-gradient(145deg,rgba(50,76,222,.22),rgba(13,21,41,.96))] p-5"><div className="flex items-center gap-3"><HardDrive className="h-7 w-7 text-blue-200" /><div><p className="font-semibold">Windows</p><p className="text-xs text-white/45">Instalador direto para Windows 10 e 11 x64</p></div></div><a href={assets.exe} download="Stray-Linux-1.0.0-Setup.exe" className="mt-5 flex"><Button className="h-12 w-full rounded-md bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500"><Download className="mr-2 h-4 w-4" />Baixar .EXE (64-bit)</Button></a><p className="mt-3 text-center text-xs text-white/42">Confira o SHA-256 publicado antes de executar.</p></div></div></div></section>
     </main><SiteFooter />
   </div>;
+}
+
+export default function Home() {
+  return <ReferenceLanding />;
 }
 
 export function DownloadPage() {

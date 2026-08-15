@@ -260,3 +260,7 @@
 - [x] Revisar metadados públicos e navegação de descoberta para separar claramente download, documentação e aplicativo.
 - [x] Reconstruir a landing pública na composição visual da referência enviada, mantendo métricas e diagnósticos somente quando verificáveis.
 - [x] Ligar todos os CTAs da landing reconstruída a download, produto, Scanner, GameHub, LinuxFix, Stray AI e instalação por distribuição.
+- [x] Aplicar a imagem original fornecida pelo criador como landing pública inalterada, com hotspots acessíveis para todos os botões visíveis.
+- [x] Auditar os logs e os fluxos públicos/desktop para corrigir apenas erros comprováveis sem degradar recursos existentes.
+- [x] Aplicar correções de segurança transitivas para `path-to-regexp` e `lodash` encontradas na auditoria de produção.
+- [x] Aplicar correções de segurança transitivas para `path-to-regexp` e `lodash` encontradas na auditoria de produção.

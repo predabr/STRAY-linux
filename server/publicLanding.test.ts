@@ -9,11 +9,11 @@ describe("landing pública", () => {
   it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
     const distribution = read("client/src/lib/distribution.ts");
-    expect(distribution).toContain("Stray-Linux-1.0.0-Setup_77d35f72.exe");
-    expect(distribution).toContain("Stray-Linux-1.0.0-amd64_a04a5424.deb");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_fad145a2.rpm");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x64_e47eaca5.pacman");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_aa80474b.AppImage");
+    expect(distribution).toContain("Stray-Linux-1.0.0-Setup_ad43788b.exe");
+    expect(distribution).toContain("Stray-Linux-1.0.0-amd64_8b1ff213.deb");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_9bff31ed.rpm");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x64_b6657e3c.pacman");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_b55c59b6.AppImage");
     expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
     expect(distribution).toContain("sha256sum -c -");
@@ -35,12 +35,13 @@ describe("landing pública", () => {
   });
 
   it("liga a composição de referência aos fluxos existentes sem declarar FPS ou notas fabricadas", () => {
-    const landing = read("client/src/pages/Home.tsx");
+    const landing = read("client/src/pages/ReferenceLanding.tsx");
     for (const route of ["/scanner", "/games", "/library", "/linuxfix", "/setup", "/benchmark", "/assistant", "/download", "/api/docs"]) {
       expect(landing).toContain(`"${route}"`);
     }
-    expect(landing).toContain('href={assets.exe}');
-    expect(landing).toContain("Aguardando evidência verificável");
+    expect(landing).toContain("stray-linux-landing-original_68a8e472.png");
+    expect(landing).toContain("distributionAssets.exe");
+    expect(landing).toContain("aria-label={spot.label}");
     expect(landing).not.toContain("87 FPS");
     expect(landing).not.toContain("Excellent 92");
   });

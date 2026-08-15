@@ -17,11 +17,11 @@ Os arquivos de instrução, fontes e checksums são distribuídos **externamente
 ## Checksums SHA-256
 
 ```text
-e3ea6eb5c29d106c1249cc085cfaaa24b987ff3caff95bf8cdf98361993dbdb8  Stray-Linux-1.0.0-Setup.exe
-94a1294fabd4e6a1b06f538d6c31c5d8cf6e6e56e23f3acbe939906482d4a425  Stray-Linux-1.0.0-x86_64.AppImage
-36ce2009ebb2cef89b94b2afd03aea1787990f50e8854ae034ef0796f3ceca9d  Stray-Linux-1.0.0-amd64.deb
-cc406cd01d303207b6d490bcabf3d88ccb685547fd7864ca3197045a7aff6969  Stray-Linux-1.0.0-x86_64.rpm
-b92e5e3a105a040c53928b348f800269a6e65ff534f8372cef3278dd9543bdbb  Stray-Linux-1.0.0-x64.pacman
+7bc75da30d15b556ff636e5f4db4595ec718668a02c9525b316ffd3b159d3ddd  Stray-Linux-1.0.0-Setup.exe
+aa632ab2e926adc7185ae00ab43d24be8b1ee235388d0ff8307d842ad9eb7957  Stray-Linux-1.0.0-x86_64.AppImage
+289bebb48d9d4c070d053a8273c0cba41c336a9d1a778fd1efc564f16d3d14e3  Stray-Linux-1.0.0-amd64.deb
+f4ba15159e79619cb619b49f33cad89ebbd15a6c98a6455b3ea765c64a31e73c  Stray-Linux-1.0.0-x86_64.rpm
+584a7da5fd306a17e5758e102f5b116687a977b2de8572c071f51b48295761dd  Stray-Linux-1.0.0-x64.pacman
 ```
 
 Em Linux, execute `sha256sum <arquivo>` e compare a saída. Em Windows, use `Get-FileHash .\Stray-Linux-1.0.0-Setup.exe -Algorithm SHA256` no PowerShell.
