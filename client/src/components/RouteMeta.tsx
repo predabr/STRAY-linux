@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useLocation } from "wouter";
 
 const defaults = {
-  title: "Stray Linux — Central de gaming e configuração Linux",
-  description: "Dados rastreáveis de Linux gaming, Atlas de distribuições, guias técnicos, LinuxFix e benchmarks com proveniência.",
+  title: "Stray Linux — Aplicativo desktop para gaming no Linux",
+  description: "Conheça o Stray Linux, seus recursos técnicos e os formatos de download para Windows e distribuições Linux.",
 };
 
 function metaFor(path: string) {

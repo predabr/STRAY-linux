@@ -1,6 +1,6 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
 import { lazy, Suspense } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { RouteMeta } from "./components/RouteMeta";
@@ -75,7 +75,13 @@ function Router() {
 }
 
 function App() {
-  return <ErrorBoundary><LanguageProvider><ThemeProvider defaultTheme="dark" switchable><TooltipProvider><RouteMeta /><StrayEntryGate><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate><Toaster /></TooltipProvider></ThemeProvider></LanguageProvider></ErrorBoundary>;
+  return <ErrorBoundary><LanguageProvider><ThemeProvider defaultTheme="dark" switchable><TooltipProvider><RouteMeta /><ApplicationSurface /><Toaster /></TooltipProvider></ThemeProvider></LanguageProvider></ErrorBoundary>;
+}
+
+function ApplicationSurface() {
+  const [location] = useLocation();
+  if (location === "/") return <Home />;
+  return <StrayEntryGate><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate>;
 }
 
 export default App;

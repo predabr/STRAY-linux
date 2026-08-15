@@ -220,3 +220,8 @@
 - [x] Integrar descoberta local somente leitura de jogos Heroic para bibliotecas Epic, GOG e Amazon suportadas pelo launcher, sem ler credenciais ou modificar instalações.
 - [x] Exibir capas somente quando forem encontradas localmente na biblioteca autorizada do usuário ou em uma fonte licenciada e rastreável; manter estado sem mídia nos demais casos.
 - [x] Revalidar 11 localidades, acessibilidade, testes, build, instaladores e publicação após a atualização de IA, Heroic e mídia.
+- [x] Separar a experiência pública do site do workspace completo do aplicativo desktop.
+- [x] Criar uma landing profissional que explique o Stray Linux, recursos, privacidade e limites verificáveis.
+- [x] Exibir downloads e comandos de instalação por Windows, Debian/Ubuntu, Fedora/RHEL/openSUSE, Arch e AppImage com checksums e fontes.
+- [x] Publicar uma descrição concisa inspirada no README, sem expor passos internos de desenvolvimento.
+- [x] Validar a landing pública em desktop e celular, testes, build e publicação.

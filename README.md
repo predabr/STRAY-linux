@@ -17,7 +17,7 @@ O **Stray Linux**, criado por **Pedro Henrique Gouveia Araújo de Souza** no Bra
 | Windows | Área de diagnóstico, manutenção, reparo, energia, armazenamento e aplicativos úteis, com comandos individuais, requisitos, níveis de risco e fontes oficiais. |
 | Conta e moderação | Roles USER/MODERATOR/ADMIN, perfil de hardware completo, favoritos, guias salvos, reports, fila de benchmark e audit log. |
 | Navegação e indexação | Paleta global em `Ctrl/Cmd+K`, pesquisa categorizada, metadados por rota, OpenGraph, Twitter Cards, `robots.txt`, sitemap e JSON-LD. |
-| Assistente | Chat contextual com recuperação de conteúdo interno; opção de modelo local via Ollama. |
+| Assistente | Stray AI contextual para dúvidas sobre Stray Linux e gaming no Linux, com recusa explícita de pedidos fora do escopo. |
 | Desktop | Electron inicia o servidor Node local com SQLite, sem `DATABASE_URL`, e oferece pacotes Windows e Linux por formato compatível. |
 
 ## Dados e proveniência
@@ -58,11 +58,9 @@ A migração `drizzle/0004_solid_exiles.sql` acrescenta a métrica `sourcePositi
 
 Para a evolução de perfil e engajamento, a migração `drizzle/0003_left_chat.sql` adiciona campos de armazenamento e monitor ao perfil, votos, comentários e confirmações de LinuxFix, além de progresso de guia por etapa. A migração é **aditiva** e não remove tabelas ou colunas existentes. O procedimento de trabalho, as rotas públicas e os limites de moderação estão descritos em [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
 
-## IA contextual e Ollama local
+## Stray AI contextual
 
-O modo **Plataforma** chama o modelo apenas no servidor e entrega ao modelo trechos recuperados de wiki, guias e LinuxFix. O prompt exige que ele declare a falta de dados, em vez de inventar compatibilidade, FPS ou comandos.
-
-O modo **Ollama local** consulta `http://127.0.0.1:11434` por padrão e não usa token remoto. Instale e execute um modelo local antes de selecioná-lo. No navegador, a máquina deve permitir que a página alcance o endpoint local; no Electron, esse é o fluxo recomendado.
+O Stray AI recupera apenas contexto publicado de wiki, guias, LinuxFix e perfil técnico disponível. O fluxo exige que ele declare a falta de dados em vez de inventar compatibilidade, FPS ou comandos, e recusa pedidos que não estejam relacionados ao Stray Linux, ao gaming no Linux ou ao conteúdo técnico do aplicativo.
 
 ## Desktop, Windows e Linux
 

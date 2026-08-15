@@ -14,7 +14,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const copy = productShellCopy[locale];
   const workspace: NavigationItem[] = [
-    { href: "/", label: t("overview"), icon: LayoutDashboard },
+    { href: "/dashboard", label: t("overview"), icon: LayoutDashboard },
     { href: "/games", label: t("gameHub"), icon: Gamepad2 },
     { href: "/library", label: t("installedGames"), icon: Library },
     { href: "/mods", label: "Mods", icon: Boxes },
