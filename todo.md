@@ -215,3 +215,8 @@
 - [x] Implementar sincronização avançada com seleção de dados, consentimento persistente, estado visível de conflitos e nenhum envio de dados técnicos por padrão.
 - [x] Expandir a API pública com documentação, widgets e badges que exponham apenas dados publicados, com origem, limites e estado de indisponibilidade.
 - [x] Atualizar 11 localidades, acessibilidade, segurança, testes, build, instaladores e publicação das quatro integrações.
+- [x] Remover completamente a opção e referências a Ollama do Stray AI, incluindo os contratos desktop.
+- [x] Restringir o Stray AI a perguntas sobre Stray Linux, gaming no Linux e conteúdo interno, com recusa determinística para pedidos fora do escopo.
+- [x] Integrar descoberta local somente leitura de jogos Heroic para bibliotecas Epic, GOG e Amazon suportadas pelo launcher, sem ler credenciais ou modificar instalações.
+- [x] Exibir capas somente quando forem encontradas localmente na biblioteca autorizada do usuário ou em uma fonte licenciada e rastreável; manter estado sem mídia nos demais casos.
+- [x] Revalidar 11 localidades, acessibilidade, testes, build, instaladores e publicação após a atualização de IA, Heroic e mídia.

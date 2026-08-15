@@ -5,6 +5,7 @@ const os = require("node:os");
 const path = require("node:path");
 
 function readText(file) { try { return fs.readFileSync(file, "utf8"); } catch { return null; } }
+function readJson(file) { try { const value = JSON.parse(fs.readFileSync(file, "utf8")); return value && typeof value === "object" ? value : null; } catch { return null; } }
 function unescapeVdf(value) { return value.replace(/\\\\/g, "\\").replace(/\\"/g, '"'); }
 function realPath(value) { try { return fs.realpathSync(value); } catch { return value; } }
 
@@ -80,10 +81,76 @@ function scanSteamWorkshop(home) {
   return { source: "steam-workshop-local", entries: [...unique.values()].sort((left, right) => left.appId - right.appId) };
 }
 
-module.exports = { getSteamRoots, getSteamAppsFolders, parseManifest, scanSteamLibrary, scanSteamWorkshop };
+function heroicLegendaryCandidates(home = os.homedir()) {
+  return [
+    { path: path.join(process.env.XDG_CONFIG_HOME || path.join(home, ".config"), "heroic", "legendaryConfig", "legendary"), installationType: "native" },
+    { path: path.join(home, ".var", "app", "com.heroicgameslauncher.hgl", "config", "heroic", "legendaryConfig", "legendary"), installationType: "flatpak" },
+  ];
+}
+
+function pickHeroicCover(keyImages) {
+  if (!Array.isArray(keyImages)) return null;
+  const preferredTypes = ["DieselGameBoxTall", "OfferImageTall", "DieselGameBox", "OfferImageWide"];
+  for (const type of preferredTypes) {
+    const image = keyImages.find((candidate) => candidate && candidate.type === type && typeof candidate.url === "string" && /^https:\/\//i.test(candidate.url));
+    if (image) return image.url;
+  }
+  return null;
+}
+
+/**
+ * Lê apenas registros de instalações Epic já conhecidos pelo Heroic/Legendary.
+ * Não acessa user.json, tokens, cookies, rede, executáveis ou pastas de jogos fora
+ * do caminho explicitamente armazenado pelo launcher.
+ */
+function scanHeroicLibrary(home) {
+  const games = new Map();
+  for (const candidate of heroicLegendaryCandidates(home)) {
+    const installed = readJson(path.join(candidate.path, "installed.json"));
+    if (!installed) continue;
+    for (const [appName, installedEntry] of Object.entries(installed)) {
+      if (!installedEntry || typeof installedEntry !== "object" || !/^[A-Za-z0-9_.-]+$/.test(appName)) continue;
+      const installDir = typeof installedEntry.install_path === "string" ? installedEntry.install_path : null;
+      if (!installDir || !fs.existsSync(installDir)) continue;
+      const metadataRecord = readJson(path.join(candidate.path, "metadata", `${appName}.json`));
+      const metadata = metadataRecord && metadataRecord.metadata && typeof metadataRecord.metadata === "object" ? metadataRecord.metadata : {};
+      const title = typeof metadata.title === "string" && metadata.title.trim() ? metadata.title.trim() : typeof installedEntry.title === "string" && installedEntry.title.trim() ? installedEntry.title.trim() : appName;
+      const id = `heroic:${appName}`;
+      if (!games.has(id)) games.set(id, {
+        id,
+        appId: null,
+        externalId: appName,
+        name: title,
+        installDir,
+        libraryPath: candidate.path,
+        installationType: candidate.installationType,
+        launcher: "heroic",
+        store: "epic",
+        coverUrl: pickHeroicCover(metadata.keyImages),
+        coverSource: metadata.keyImages ? "heroic-local-metadata" : null,
+      });
+    }
+  }
+  return [...games.values()].sort((left, right) => left.name.localeCompare(right.name, "pt-BR"));
+}
+
+function scanLocalLibrary(home) {
+  const steam = scanSteamLibrary(home).map((game) => ({
+    id: `steam:${game.appId}`,
+    ...game,
+    externalId: String(game.appId),
+    launcher: "steam",
+    store: "steam",
+    coverUrl: null,
+    coverSource: null,
+  }));
+  return [...steam, ...scanHeroicLibrary(home)].sort((left, right) => left.name.localeCompare(right.name, "pt-BR"));
+}
+
+module.exports = { getSteamRoots, getSteamAppsFolders, parseManifest, scanSteamLibrary, scanSteamWorkshop, heroicLegendaryCandidates, scanHeroicLibrary, scanLocalLibrary };
 
 if (require.main === module) {
   const homeIndex = process.argv.indexOf("--home");
   const home = homeIndex >= 0 ? process.argv[homeIndex + 1] : undefined;
-  process.stdout.write(`${JSON.stringify({ games: scanSteamLibrary(home) }, null, 2)}\n`);
+  process.stdout.write(`${JSON.stringify({ games: scanLocalLibrary(home) }, null, 2)}\n`);
 }

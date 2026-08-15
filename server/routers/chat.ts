@@ -2,6 +2,7 @@ import { and, asc, desc, eq, isNull, like, or } from "drizzle-orm";
 import { z } from "zod";
 import { chatMessages, chatSessions, linuxFixes, setupGuides, userHardwareProfiles, wikiArticles } from "../../drizzle/schema";
 import { invokeLLM } from "../_core/llm";
+import { isStrayAiDomainQuestion, STRAY_AI_OUT_OF_SCOPE_RESPONSE } from "../lib/strayAiScope";
 import { router } from "../_core/trpc";
 import { activeUserProcedure, requireDatabase } from "./_guards";
 
@@ -59,8 +60,6 @@ async function retrieveContext(question: string, userId?: number) {
 const questionInput = z.object({ sessionId: z.number().int().positive().optional(), question: z.string().trim().min(2).max(2500) });
 
 export const chatRouter = router({
-  contextForLocal: activeUserProcedure.input(z.object({ question: z.string().trim().min(2).max(2500) })).mutation(async ({ ctx, input }) => retrieveContext(input.question, ctx.user.id)),
-
   sessions: activeUserProcedure.query(async ({ ctx }) => {
     const db = await requireDatabase();
     return db.select().from(chatSessions).where(eq(chatSessions.userId, ctx.user.id)).orderBy(desc(chatSessions.updatedAt)).limit(40);
@@ -75,36 +74,26 @@ export const chatRouter = router({
 
   ask: activeUserProcedure.input(questionInput).mutation(async ({ ctx, input }) => {
     const db = await requireDatabase();
-    const context = await retrieveContext(input.question, ctx.user.id);
     let sessionId = input.sessionId;
     if (sessionId) {
       const session = (await db.select({ id: chatSessions.id }).from(chatSessions).where(and(eq(chatSessions.id, sessionId), eq(chatSessions.userId, ctx.user.id))).limit(1))[0];
       if (!session) throw new Error("Sessão de chat não encontrada.");
     } else {
-      const created = await db.insert(chatSessions).values({ userId: ctx.user.id, title: input.question.slice(0, 120), provider: "platform" });
+      const created = await db.insert(chatSessions).values({ userId: ctx.user.id, title: input.question.slice(0, 120), provider: "stray-ai" });
       sessionId = Number(created[0].insertId);
     }
     await db.insert(chatMessages).values({ sessionId, role: "user", content: input.question });
-    const system = `Você é o Stray AI, o assistente técnico do aplicativo Stray Linux. Responda em português brasileiro usando SOMENTE o contexto interno e o perfil técnico fornecidos abaixo. Para diagnósticos, apresente: hipótese provável somente se houver evidência, confiança (alta, média, baixa ou indisponível), motivo e ações seguras. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade, FPS, versões ou causa. Diferencie fatos, orientações comunitárias e incertezas. Ao final, cite os títulos internos utilizados sob o cabeçalho 'Fontes internas'.\n\nCONTEXTO INTERNO:\n${context.text || "Nenhum conteúdo interno relacionado foi recuperado."}`;
+    if (!isStrayAiDomainQuestion(input.question)) {
+      await db.insert(chatMessages).values({ sessionId, role: "assistant", content: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [] });
+      await db.update(chatSessions).set({ updatedAt: new Date() }).where(eq(chatSessions.id, sessionId));
+      return { sessionId, answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [] };
+    }
+    const context = await retrieveContext(input.question, ctx.user.id);
+    const system = `Você é o Stray AI, o assistente técnico do aplicativo Stray Linux. Responda em português brasileiro SOMENTE sobre Stray Linux, gaming no Linux, perfil técnico do usuário, GameHub, LinuxFix, Scanner, bibliotecas locais e conteúdos publicados do aplicativo. Recuse pedidos de programação, criação de jogos, trabalhos escolares, entretenimento genérico ou qualquer tema externo usando exatamente esta frase: "${STRAY_AI_OUT_OF_SCOPE_RESPONSE}". Use SOMENTE o contexto interno e o perfil técnico fornecidos abaixo. Para diagnósticos, apresente hipótese provável somente quando houver evidência, confiança (alta, média, baixa ou indisponível), motivo e ações seguras. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade, FPS, versões ou causa. Diferencie fatos, orientações comunitárias e incertezas. Ao final, cite os títulos internos utilizados sob o cabeçalho 'Fontes internas'.\n\nCONTEXTO INTERNO:\n${context.text || "Nenhum conteúdo interno relacionado foi recuperado."}`;
     const response = await invokeLLM({ messages: [{ role: "system", content: system }, { role: "user", content: input.question }], maxTokens: 900 });
     const answer = llmText(response.choices[0]?.message.content ?? "Não consegui gerar uma resposta agora.") || "Não consegui gerar uma resposta agora.";
     await db.insert(chatMessages).values({ sessionId, role: "assistant", content: answer, citations: context.citations });
     await db.update(chatSessions).set({ updatedAt: new Date() }).where(eq(chatSessions.id, sessionId));
     return { sessionId, answer, citations: context.citations };
-  }),
-
-  saveLocalTurn: activeUserProcedure.input(z.object({ sessionId: z.number().int().positive().optional(), question: z.string().trim().min(2).max(2500), answer: z.string().trim().min(1).max(15000), citations: z.array(z.object({ type: z.enum(["wiki", "guide", "linuxfix"]), title: z.string(), slug: z.string(), sourceUrl: z.string().nullable() })).max(12) })).mutation(async ({ ctx, input }) => {
-    const db = await requireDatabase();
-    let sessionId = input.sessionId;
-    if (!sessionId) {
-      const created = await db.insert(chatSessions).values({ userId: ctx.user.id, title: input.question.slice(0, 120), provider: "ollama-local" });
-      sessionId = Number(created[0].insertId);
-    } else {
-      const session = (await db.select({ id: chatSessions.id }).from(chatSessions).where(and(eq(chatSessions.id, sessionId), eq(chatSessions.userId, ctx.user.id))).limit(1))[0];
-      if (!session) throw new Error("Sessão de chat não encontrada.");
-    }
-    await db.insert(chatMessages).values([{ sessionId, role: "user", content: input.question }, { sessionId, role: "assistant", content: input.answer, citations: input.citations }]);
-    await db.update(chatSessions).set({ updatedAt: new Date() }).where(eq(chatSessions.id, sessionId));
-    return { sessionId };
   }),
 });

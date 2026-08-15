@@ -2,6 +2,7 @@ import { z } from "zod";
 import { publicProcedure, router } from "../_core/trpc";
 import { getDesktopStore } from "./localStore";
 import { scannerReportInput, scannerReportToProfile } from "../lib/scannerReport";
+import { isStrayAiDomainQuestion, STRAY_AI_OUT_OF_SCOPE_RESPONSE } from "../lib/strayAiScope";
 
 const pageInput = z.object({ page: z.number().int().min(1).default(1), pageSize: z.number().int().min(1).max(48).default(24) });
 const localUser = { id: 1, openId: "desktop-local-user", name: "Usuário local", email: null, loginMethod: "desktop", role: "admin" as const, createdAt: new Date(), updatedAt: new Date(), lastSignedIn: new Date() };
@@ -10,7 +11,7 @@ const store = () => getDesktopStore();
 
 function gameList(input: { q?: string; page: number; pageSize: number }) {
   const query = input.q?.trim() ? `%${input.q.trim()}%` : "%";
-  const games = store().all<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE title LIKE ? ORDER BY source_positive_reviews DESC, title", [query]);
+  const games = store().all<any>("SELECT id, slug, title, description AS shortDescription, cover_image_url AS coverImageUrl, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE title LIKE ? ORDER BY source_positive_reviews DESC, title", [query]);
   return paginate(games.map((game) => ({ ...game, platforms: game.steamAppId ? [{ id: game.id, platform: "steam", antiCheat: null }] : [], tags: [] })), input.page, input.pageSize);
 }
 
@@ -28,7 +29,7 @@ export const desktopRouter = router({
   games: router({
     list: publicProcedure.input(pageInput.extend({ q: z.string().optional(), distributionId: z.number().optional(), gpuId: z.number().optional(), cpuId: z.number().optional(), compatibility: z.string().optional(), platform: z.string().optional(), genre: z.string().optional(), multiplayer: z.boolean().optional(), antiCheat: z.enum(["has", "none"]).optional(), tagSlugs: z.array(z.string()).optional(), sort: z.string().optional() })).query(({ input }) => gameList(input)),
     bySlug: publicProcedure.input(z.object({ slug: z.string() })).query(({ input }) => {
-      const game = store().one<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE slug = ?", [input.slug]);
+      const game = store().one<any>("SELECT id, slug, title, description AS shortDescription, cover_image_url AS coverImageUrl, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE slug = ?", [input.slug]);
       if (!game) return null;
       return { ...game, platforms: game.steamAppId ? [{ id: game.id, platform: "steam", antiCheat: null }] : [], tags: [], compatibility: [], guides: [] };
     }),
@@ -90,6 +91,6 @@ export const desktopRouter = router({
     reports: router({ list: publicProcedure.query(() => store().all<any>("SELECT id, subject_type AS subjectType, subject_id AS subjectId, type, description, status, created_at AS createdAt FROM reports ORDER BY created_at DESC")), create: publicProcedure.input(z.any()).mutation(({ input }) => { const result = store().run("INSERT INTO reports (subject_type, subject_id, type, description) VALUES (?, ?, ?, ?)", [input.subjectType, input.subjectId, input.type, input.description]); return { id: Number(result.lastInsertRowid), status: "open" as const }; }) }),
     hardwareOptions: publicProcedure.query(() => []), compatibilityForActiveProfile: publicProcedure.input(z.object({ gameId: z.number() })).query(() => ({ profile: null, records: [] })),
   }),
-  chat: router({ history: publicProcedure.query(() => []), ask: publicProcedure.input(z.any()).mutation(() => ({ answer: "No modo desktop, selecione Ollama local para respostas sem token. O contexto disponível é a wiki e os guias incluídos no snapshot.", sources: [] })), context: publicProcedure.input(z.object({ question: z.string() })).mutation(() => ({ sources: [] })) }),
+  chat: router({ history: publicProcedure.query(() => []), ask: publicProcedure.input(z.object({ question: z.string().trim().min(2).max(2500) })).mutation(({ input }) => ({ answer: isStrayAiDomainQuestion(input.question) ? "No modo desktop, o Stray AI permanece focado no Stray Linux e usa apenas o conteúdo incluído no snapshot local. Para diagnósticos fundamentados, abra o Scanner e consulte os guias e LinuxFix disponíveis." : STRAY_AI_OUT_OF_SCOPE_RESPONSE, sources: [] })) }),
   admin: router({ overview: publicProcedure.query(() => ({ ...store().counts(), hardware: 0, pendingBenchmarks: store().one<{ count: number }>("SELECT count(*) as count FROM benchmarks WHERE verification_status = 'submitted'")?.count ?? 0, openReports: store().one<{ count: number }>("SELECT count(*) as count FROM reports WHERE status = 'open'")?.count ?? 0 })), listUsers: publicProcedure.query(() => [localUser]) }),
 });

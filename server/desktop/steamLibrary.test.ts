@@ -15,6 +15,18 @@ describe("biblioteca Steam local", () => {
     fs.mkdirSync(steamApps, { recursive: true });
     fs.writeFileSync(path.join(steamApps, "appmanifest_620.acf"), '"AppState"\n{\n  "appid" "620"\n  "name" "Portal 2"\n  "installdir" "Portal 2"\n}\n', "utf8");
     const raw = execFileSync(process.execPath, [path.resolve(process.cwd(), "desktop/bin/stray-library.cjs"), "--home", home], { encoding: "utf8" });
-    expect(JSON.parse(raw).games).toEqual([{ appId: 620, name: "Portal 2", installDir: "Portal 2", libraryPath: steamApps, installationType: "flatpak" }]);
+    expect(JSON.parse(raw).games).toEqual([{
+      id: "steam:620",
+      appId: 620,
+      externalId: "620",
+      name: "Portal 2",
+      installDir: "Portal 2",
+      libraryPath: steamApps,
+      installationType: "flatpak",
+      launcher: "steam",
+      store: "steam",
+      coverUrl: null,
+      coverSource: null,
+    }]);
   });
 });

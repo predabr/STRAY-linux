@@ -31,6 +31,7 @@ vi.mock("../_core/llm", () => ({
 
 import { appRouter } from "../routers";
 import { extractContextTerms } from "./chat";
+import { isStrayAiDomainQuestion, STRAY_AI_OUT_OF_SCOPE_RESPONSE } from "../lib/strayAiScope";
 
 function caller() {
   return appRouter.createCaller({ user: { id: 71, role: "user", isBanned: false } } as any);
@@ -46,6 +47,16 @@ describe("assistente: continuidade, contexto e autorização", () => {
     expect(extractContextTerms("Como instalar Steam pelo Flatpak em outra unidade?")).toEqual(["instalar", "steam", "pelo", "flatpak", "outra", "unidade"]);
   });
 
+  it("aceita somente questões do Stray Linux e bloqueia criação de código antes do modelo", async () => {
+    expect(isStrayAiDomainQuestion("Como verificar Vulkan no meu PC Linux?")).toBe(true);
+    expect(isStrayAiDomainQuestion("Crie um código para um jogo em Python")).toBe(false);
+
+    const result = await caller().chat.ask({ question: "Crie um código para um jogo em Python" });
+    expect(result.answer).toBe(STRAY_AI_OUT_OF_SCOPE_RESPONSE);
+    expect(harness.writes).toHaveLength(3);
+    expect(harness.writes[2]).toMatchObject({ role: "assistant", content: STRAY_AI_OUT_OF_SCOPE_RESPONSE });
+  });
+
   it("reutiliza a sessão da plataforma e grava somente os dois novos turnos", async () => {
     const result = await caller().chat.ask({ sessionId: 42, question: "Como instalar Steam pelo Flatpak?" });
     expect(result.sessionId).toBe(42);
@@ -54,11 +65,4 @@ describe("assistente: continuidade, contexto e autorização", () => {
     expect(harness.writes[1]).toMatchObject({ sessionId: 42, role: "assistant" });
   });
 
-  it("só permite salvar turnos locais em uma sessão pertencente ao usuário autenticado", async () => {
-    await expect(caller().chat.saveLocalTurn({ sessionId: 42, question: "Pergunta local", answer: "Resposta local", citations: [] })).resolves.toEqual({ sessionId: 42 });
-    expect(harness.writes[0]).toMatchObject([{ sessionId: 42, role: "user" }, { sessionId: 42, role: "assistant" }]);
-
-    harness.session = [];
-    await expect(caller().chat.saveLocalTurn({ sessionId: 99, question: "Pergunta local", answer: "Resposta local", citations: [] })).rejects.toThrow("Sessão de chat não encontrada.");
-  });
 });

@@ -9,13 +9,14 @@ const preferredPort = Number(process.env.LGH_PORT || 43819);
 
 function loadDesktopConfig() {
   const configPath = path.join(app.getPath("userData"), "stray-linux.config.json");
-  const defaults = { port: preferredPort, ollamaEndpoint: "http://127.0.0.1:11434" };
+  const defaults = { port: preferredPort };
   try {
     const legacyPath = path.join(app.getPath("userData"), "linux-gaming-hub.config.json");
     const sourcePath = fs.existsSync(configPath) ? configPath : legacyPath;
     const stored = JSON.parse(fs.readFileSync(sourcePath, "utf8"));
-    if (sourcePath !== configPath) fs.writeFileSync(configPath, JSON.stringify({ ...defaults, ...stored }, null, 2));
-    return { ...defaults, ...stored };
+    const normalized = { ...defaults, ...stored };
+    if (sourcePath !== configPath) fs.writeFileSync(configPath, JSON.stringify(normalized, null, 2));
+    return normalized;
   } catch {
     fs.writeFileSync(configPath, JSON.stringify(defaults, null, 2));
     return defaults;
@@ -87,8 +88,8 @@ function runScanner() {
 
 function scanLibrary() {
   const libraryPath = app.isPackaged ? path.join(process.resourcesPath, "app.asar", "desktop", "bin", "stray-library.cjs") : path.join(app.getAppPath(), "desktop", "bin", "stray-library.cjs");
-  const { scanSteamLibrary } = require(libraryPath);
-  return { games: scanSteamLibrary() };
+  const { scanLocalLibrary } = require(libraryPath);
+  return { games: scanLocalLibrary() };
 }
 
 app.whenReady().then(async () => {
@@ -106,8 +107,10 @@ app.whenReady().then(async () => {
     const { scanSteamWorkshop } = require(libraryPath);
     return scanSteamWorkshop();
   });
-  ipcMain.handle("stray:library:launch", async (event, appId) => {
+  ipcMain.handle("stray:library:launch", async (event, gameId) => {
     if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de execução recusada.");
+    if (typeof gameId !== "string" || !/^steam:\d+$/.test(gameId)) throw new Error("O Stray Linux não inicia jogos do Heroic; abra-o pelo próprio launcher.");
+    const appId = Number(gameId.slice("steam:".length));
     if (!Number.isSafeInteger(appId) || appId <= 0) throw new Error("Identificador de jogo inválido.");
     const installed = scanLibrary().games.some((game) => game.appId === appId);
     if (!installed) throw new Error("O jogo não está instalado nesta biblioteca Steam.");
