@@ -24,3 +24,5 @@ A auditoria de dependências de produção identificou duas vulnerabilidades de 
 ## Correção da regressão estática
 
 Em resposta ao incidente reportado pelo criador, o componente de imagem estática foi removido da rota pública. As capturas em desktop e celular confirmam que a landing voltou a exibir hero, preview de produto, fluxo de recursos, leitura de sistema, GameHub, Benchmark, LinuxFix, Stray AI, instalação e rodapé como componentes reais. Os CTAs e links internos permanecem no DOM e a página não usa mais a imagem original como substituta da interface.
+
+Após o primeiro checkpoint de correção, o domínio publicado continuou a servir o bundle anterior com a imagem estática. A publicação será acionada novamente e verificada com cache-busting antes de confirmar a recuperação externa.
