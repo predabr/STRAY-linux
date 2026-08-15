@@ -1,6 +1,6 @@
 # Stray Linux
 
-O **Stray Linux**, criado por **Pedro Henrique Gouveia Araújo de Souza** no Brasil, é uma plataforma técnica para descoberta de jogos, compatibilidade Linux, benchmarks rastreáveis, Atlas de distribuições, Linux Setup, LinuxFix, perfis de hardware e moderação comunitária. A interface web é React/TypeScript, o backend é Express/tRPC e a persistência usa Drizzle com MySQL/TiDB. O projeto também inclui um wrapper Electron com SQLite local.
+O **Stray Linux**, criado no Brasil, é um aplicativo desktop técnico para descoberta de jogos, compatibilidade Linux, benchmarks rastreáveis, Atlas de distribuições, Linux Setup, LinuxFix e perfis de hardware. A interface web é React/TypeScript, o backend é Express/tRPC e a persistência usa Drizzle com MySQL/TiDB. O aplicativo Electron usa SQLite local e não exige `DATABASE_URL` do usuário.
 
 > A plataforma não apresenta FPS como medição se não houver proveniência. Benchmarks são classificados como **Verified**, **Community**, **Estimated** ou **Unknown**; a ausência de evidência é exibida como indisponibilidade, e não substituída por dados fictícios.
 
@@ -18,7 +18,7 @@ O **Stray Linux**, criado por **Pedro Henrique Gouveia Araújo de Souza** no Bra
 | Conta e moderação | Roles USER/MODERATOR/ADMIN, perfil de hardware completo, favoritos, guias salvos, reports, fila de benchmark e audit log. |
 | Navegação e indexação | Paleta global em `Ctrl/Cmd+K`, pesquisa categorizada, metadados por rota, OpenGraph, Twitter Cards, `robots.txt`, sitemap e JSON-LD. |
 | Assistente | Stray AI contextual para dúvidas sobre Stray Linux e gaming no Linux, com recusa explícita de pedidos fora do escopo. |
-| Desktop | Electron inicia o servidor Node local com SQLite, sem `DATABASE_URL`, e oferece pacotes Windows e Linux por formato compatível. |
+| Desktop | Electron inicia o servidor Node local com SQLite, sem `DATABASE_URL`, detecta Steam, Heroic e pastas externas selecionadas manualmente e oferece pacotes Windows e Linux por formato compatível. |
 
 ## Dados e proveniência
 
@@ -27,6 +27,14 @@ O catálogo ampliado usa somente metadados do arquivo `games.json` do dataset **
 Os conteúdos iniciais de distribuição e configuração registram URL de fonte por artigo. O guia de Steam via Flatpak identifica explicitamente que o pacote Flathub é comunitário e sem suporte oficial da Valve, como informa sua página.[2] A sintaxe de instalação exibida segue a documentação do Flatpak.[3]
 
 A área Windows não executa comandos, não aplica scripts de “debloat” e não recomenda desativar componentes de segurança. Ela apresenta ações individuais com requisito, risco e fonte, priorizando WinGet, DISM/SFC e Storage Sense documentados pela Microsoft. Consulte [`docs/sources-windows.md`](docs/sources-windows.md) para o escopo e as referências.
+
+## Instalação para usuários
+
+No Windows, baixe o instalador direto [na página oficial do Stray Linux](https://linuxtoys-ckuyvpj5.manus.space/#instalar). Em Linux, a página exibe um comando específico para Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch ou AppImage. Cada comando baixa o pacote correto, valida o SHA-256 antes da instalação e remove o arquivo temporário quando aplicável.
+
+> A distribuição Linux é intencionalmente apresentada pelo terminal. O Stray Linux não anuncia repositórios APT, DNF ou Pacman que não foram publicados e mantidos como repositórios de pacotes.
+
+Para desinstalar, consulte o [guia público de remoção](https://linuxtoys-ckuyvpj5.manus.space/uninstall). A remoção do aplicativo não apaga automaticamente dados locais.
 
 ## Desenvolvimento web
 

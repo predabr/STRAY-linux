@@ -235,3 +235,8 @@
 - [x] Aprimorar o Stray AI com sugestões de diagnóstico e respostas orientadas a evidência, mantendo a recusa fora do escopo.
 - [x] Melhorar cartões e páginas de jogos com descrição, origem e mídia somente quando autorizada/localmente disponível.
 - [x] Revalidar idiomas, acessibilidade, testes, build, instaladores e publicação da atualização.
+- [x] Redesenhar a landing pública com uma direção visual autoral, chamativa e coerente com o Stray Linux.
+- [x] Manter download direto somente para o instalador Windows `.exe` e mover Linux para comandos de terminal verificáveis.
+- [x] Publicar os artefatos Linux em um destino de distribuição que permita comandos de terminal reais, sem URLs ou repositórios inventados.
+- [x] Atualizar o README público e a documentação de distribuição para o novo fluxo.
+- [x] Validar responsividade, acessibilidade, testes, build e publicação da landing de distribuição.

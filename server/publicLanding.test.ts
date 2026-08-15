@@ -6,14 +6,20 @@ const projectRoot = path.resolve(import.meta.dirname, "..");
 const read = (relativePath: string) => fs.readFileSync(path.join(projectRoot, relativePath), "utf8");
 
 describe("landing pública", () => {
-  it("expõe formatos reais de instalação e não simula um repositório Pacman", () => {
+  it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
-    expect(landing).toContain("Stray-Linux-1.0.0-Setup.exe");
-    expect(landing).toContain("Stray-Linux-1.0.0-amd64.deb");
-    expect(landing).toContain("Stray-Linux-1.0.0-x86_64.rpm");
-    expect(landing).toContain("Stray-Linux-1.0.0-x64.pacman");
-    expect(landing).toContain("Stray-Linux-1.0.0-x86_64.AppImage");
-    expect(landing).toContain("sudo pacman -U ./Stray-Linux-1.0.0-x64.pacman");
+    expect(landing).toContain("Stray-Linux-1.0.0-Setup_fd81114a.exe");
+    expect(landing).toContain("Stray-Linux-1.0.0-amd64_8506c6fc.deb");
+    expect(landing).toContain("Stray-Linux-1.0.0-x86_64_032c51b2.rpm");
+    expect(landing).toContain("Stray-Linux-1.0.0-x64_0d745038.pacman");
+    expect(landing).toContain("Stray-Linux-1.0.0-x86_64_68775b31.AppImage");
+    expect(landing).toContain("sudo pacman -U /tmp/stray-linux.pacman");
+    expect(landing).toContain("sha256sum -c -");
+    expect(landing).toContain('href={assets.exe}');
+    expect(landing).not.toContain('href={assets.deb}');
+    expect(landing).not.toContain('href={assets.rpm}');
+    expect(landing).not.toContain('href={assets.pacman}');
+    expect(landing).not.toContain('href={assets.appImage}');
     expect(landing).not.toContain("pacman -S stray-linux");
   });
 
