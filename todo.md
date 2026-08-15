@@ -264,3 +264,8 @@
 - [x] Auditar os logs e os fluxos públicos/desktop para corrigir apenas erros comprováveis sem degradar recursos existentes.
 - [x] Aplicar correções de segurança transitivas para `path-to-regexp` e `lodash` encontradas na auditoria de produção.
 - [x] Aplicar correções de segurança transitivas para `path-to-regexp` e `lodash` encontradas na auditoria de produção.
+- [ ] Aplicar a linguagem visual aprovada da landing às superfícies essenciais do aplicativo desktop, preservando dados e ações reais.
+- [ ] Auditar a descoberta Steam e a biblioteca local, ampliar somente os dados autorizados e documentar limites de API sem credenciais pagas.
+- [ ] Revisar os fluxos de instalação e desinstalação por Windows, Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch e AppImage, com novos testes e pacotes se necessários.
+- [ ] Executar auditoria de erros em logs, rotas, dependências, build e desktop antes da publicação final.
+- [x] Corrigir a regressão da landing que substituiu a interface funcional por uma imagem estática e restaurar os blocos reais, responsivos e navegáveis.

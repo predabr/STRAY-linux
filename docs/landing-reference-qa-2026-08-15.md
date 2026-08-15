@@ -20,3 +20,7 @@ Por solicitação posterior do criador, a página inicial passou a exibir o arqu
 As rotas públicas `/`, `/download`, `/uninstall`, `/games`, `/scanner`, `/assistant`, `/benchmark`, `/linuxfix` e `/api/docs` responderam com HTTP 200 após o restart. Não foram encontrados erros recentes no console ou no servidor; o erro histórico de importação de `Setup` continuou apenas como registro anterior à criação da página.
 
 A auditoria de dependências de produção identificou duas vulnerabilidades de alta severidade transitivas. `express` foi atualizado para a série `4.22.2` e os overrides do workspace fixaram `path-to-regexp` em `0.1.13` e `lodash` em `4.18.1`. A nova auditoria retornou `No known vulnerabilities found` para dependências de produção. O único aviso restante é de compatibilidade de peer para uma ferramenta de localização JSX de desenvolvimento; não há falha de compilação ou execução associada.
+
+## Correção da regressão estática
+
+Em resposta ao incidente reportado pelo criador, o componente de imagem estática foi removido da rota pública. As capturas em desktop e celular confirmam que a landing voltou a exibir hero, preview de produto, fluxo de recursos, leitura de sistema, GameHub, Benchmark, LinuxFix, Stray AI, instalação e rodapé como componentes reais. Os CTAs e links internos permanecem no DOM e a página não usa mais a imagem original como substituta da interface.

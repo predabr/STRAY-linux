@@ -34,14 +34,15 @@ describe("landing pública", () => {
     expect(app).toContain("<ProductWorkspace><Router /></ProductWorkspace>");
   });
 
-  it("liga a composição de referência aos fluxos existentes sem declarar FPS ou notas fabricadas", () => {
-    const landing = read("client/src/pages/ReferenceLanding.tsx");
+  it("mantém a composição funcional e responsiva sem substituir a interface por imagem estática", () => {
+    const landing = read("client/src/pages/Home.tsx");
     for (const route of ["/scanner", "/games", "/library", "/linuxfix", "/setup", "/benchmark", "/assistant", "/download", "/api/docs"]) {
       expect(landing).toContain(`"${route}"`);
     }
-    expect(landing).toContain("stray-linux-landing-original_68a8e472.png");
-    expect(landing).toContain("distributionAssets.exe");
-    expect(landing).toContain("aria-label={spot.label}");
+    expect(landing).toContain("<ProductPreview />");
+    expect(landing).toContain("<SystemPreview />");
+    expect(landing).toContain("<TerminalInstaller");
+    expect(landing).not.toContain("stray-linux-landing-original_68a8e472.png");
     expect(landing).not.toContain("87 FPS");
     expect(landing).not.toContain("Excellent 92");
   });
