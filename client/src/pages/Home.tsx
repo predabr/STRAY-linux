@@ -14,7 +14,7 @@ const capabilitySteps = [
 
 const proofSignals = [
   { value: "10.013", label: "jogos catalogados" },
-  { value: "18", label: "distribuições publicadas" },
+  { value: "21", label: "distribuições publicadas" },
   { value: "11", label: "idiomas da interface" },
   { value: "LOCAL", label: "scanner e biblioteca" },
 ] as const;

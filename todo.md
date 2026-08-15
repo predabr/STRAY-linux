@@ -281,3 +281,4 @@
 - [x] Revisar e corrigir somente falhas comprovadas de instalação, desinstalação, rotas públicas e navegação do aplicativo.
 - [x] Auditar e ampliar as referências oficiais de distribuições, wikis, guias e LinuxFix sem publicar instruções ou compatibilidade não verificadas.
 - [x] Validar web, desktop, instaladores, desinstaladores, testes, build e publicação após as correções.
+- [x] Corrigir a contagem pública de distribuições na landing para refletir os 21 perfis publicados.

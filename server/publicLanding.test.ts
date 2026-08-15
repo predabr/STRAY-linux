@@ -42,6 +42,7 @@ describe("landing pública", () => {
     expect(landing).toContain("<ProductPreview />");
     expect(landing).toContain("<SystemPreview />");
     expect(landing).toContain("<TerminalInstaller");
+    expect(landing).toContain('{ value: "21", label: "distribuições publicadas" }');
     expect(landing).not.toContain("stray-linux-landing-original_68a8e472.png");
     expect(landing).not.toContain("87 FPS");
     expect(landing).not.toContain("Excellent 92");
