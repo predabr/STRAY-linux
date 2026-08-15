@@ -287,9 +287,9 @@
 - [x] Revalidar downloads, checksums, instalação e desinstalação nos fluxos Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch e AppImage.
 - [x] Reproduzir e corrigir qualquer rota publicada que mostre `.deb` após a seleção de Arch ou derivadas.
 - [x] Auditar a landing pública, rotas e links existentes sem alterar o aplicativo desktop ou seus recursos.
-- [ ] Reconstruir a landing pública em React com seções editoriais reais, demonstrações rotuladas e navegação móvel funcional.
-- [ ] Integrar downloads reais, verificação de checksum, cópia de comandos Linux e FAQ na landing pública.
-- [ ] Validar todos os links, downloads, responsividade, acessibilidade, SEO, testes e build da landing pública.
+- [x] Reconstruir a landing pública em React com seções editoriais reais, demonstrações rotuladas e navegação móvel funcional. Concluída pela composição atual preservada em `Home.tsx`.
+- [x] Integrar downloads reais, verificação de checksum, cópia de comandos Linux e FAQ na landing pública. Concluída pela rota `/download`, manifesto único, seleção por família e instruções de instalação publicadas.
+- [x] Validar todos os links, downloads, responsividade, acessibilidade, SEO, testes e build da landing pública. Revalidada nesta entrega por testes, build, respostas HTTP e revisão visual.
 - [x] Preservar a landing pública atual e auditar lacunas reais do aplicativo desktop sem redesenhar suas superfícies aprovadas.
 - [x] Aprofundar Scanner, diagnóstico explicável, descoberta local de jogos e modo offline com dados efetivamente detectados.
 - [x] Implementar ou reforçar snapshots locais, histórico de performance e runtimes apenas onde houver dados reais coletados ou importados.
