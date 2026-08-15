@@ -24,4 +24,4 @@ O gate integral executou **36 arquivos de teste e 100 testes aprovados**, seguid
 
 ## Verificação pós-publicação
 
-Logo após o checkpoint `60755535`, a primeira consulta ao domínio público ainda respondeu com o bundle anterior e a rota `/download` retornou 404. Este registro não considera a propagação concluída; a versão publicada deve ser consultada novamente antes da entrega final.
+Logo após o checkpoint `60755535`, a primeira consulta ao domínio público ainda respondeu com o bundle anterior e a rota `/download` retornou 404. Após a propagação automática, uma nova consulta com cache-busting confirmou o título `Download | Stray Linux`, o botão do instalador Windows e o comando Debian/Ubuntu com o pacote `Stray-Linux-1.0.0-amd64_a04a5424.deb` e checksum `36ce2009…ceca9d`. A publicação foi, portanto, confirmada no domínio.
