@@ -23,3 +23,11 @@ Os cinco artefatos foram reconstruídos após a sincronização do snapshot SQLi
 A página `/download` não exibe mais Debian/Ubuntu como seleção inicial. Antes de mostrar qualquer comando, ela exige que a pessoa escolha uma família Linux e apresenta um aviso de seleção obrigatória. Com **pacman** escolhido, a interface confirma **“Arch / derivadas · pacote pacman”**, informa que `dpkg` e `apt-get` não existem em Arch e exibe somente `sudo pacman -U /tmp/stray-linux.pacman`.
 
 Todos os blocos Linux agora iniciam com `bash -c`, para que `set -e` seja interpretado pelo Bash quando o usuário cola o bloco em fish, zsh ou Bash. Essa mudança não altera o pacote escolhido: ela somente torna a execução do bloco portável entre shells.
+
+## Divergência observada no domínio publicado
+
+Após a publicação do checkpoint de correção, a rota publicada `/download` ainda respondeu com o bundle anterior: Debian/Ubuntu pré-selecionado, sem o invólucro `bash -c` e com o lote anterior de artefatos. O ambiente de desenvolvimento já apresenta a seleção obrigatória e o método Pacman. A publicação deve ser reemitida e verificada no domínio antes de considerar a correção entregue.
+
+Após a reimplantação, a mesma rota foi recarregada no domínio com um parâmetro de cache e passou a apresentar a seleção obrigatória, sem comando pré-selecionado, com o lote de artefatos atual. A confirmação do método Pacman é verificada em seguida como parte do fluxo publicado.
+
+O clique publicado em **pacman** exibiu **“Arch / derivadas · pacote pacman”**, a URL final `.pacman`, o checksum `5d5cc6d9…`, `sudo pacman -U /tmp/stray-linux.pacman` e nenhuma instrução `dpkg`, `apt-get` ou `.deb` no bloco escolhido.

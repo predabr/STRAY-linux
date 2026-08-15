@@ -44,6 +44,9 @@ describe("landing pública", () => {
     expect(landing).toContain("<TerminalInstaller");
     expect(landing).toContain('{ value: "21", label: "distribuições publicadas" }');
     expect(landing).toContain('useState<(typeof linuxInstallers)[number]["id"] | null>(null)');
+    expect(landing).toContain('selected ? linuxInstallers.find((item) => item.id === selected) : undefined');
+    expect(landing).toContain('{installer.name} · pacote {installer.signal}');
+    expect(landing).toContain('{installer.name.toUpperCase()}');
     expect(landing).toContain("SELEÇÃO OBRIGATÓRIA");
     expect(landing).toContain("O bloco inicia com `bash -c`");
     expect(landing).toContain("não use o pacote `.deb`");

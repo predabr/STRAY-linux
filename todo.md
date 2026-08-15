@@ -285,3 +285,4 @@
 - [x] Corrigir a seleção de pacote por distribuição para impedir comandos Debian/Ubuntu em Arch Linux.
 - [x] Adicionar comandos compatíveis com fish e orientação explícita de shell para a instalação Linux.
 - [x] Revalidar downloads, checksums, instalação e desinstalação nos fluxos Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch e AppImage.
+- [x] Reproduzir e corrigir qualquer rota publicada que mostre `.deb` após a seleção de Arch ou derivadas.
