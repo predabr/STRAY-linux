@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 describe("manifesto de distribuição pública", () => {
   it("mantém os cinco formatos publicados e um instalador Windows direto", () => {
     expect(distributionOrigin).toBe("https://linuxtoys-ckuyvpj5.manus.space");
-    expect(distributionAssets.exe).toBe("/manus-storage/Stray-Linux-1.0.0-Setup_f0b76dde.exe");
+    expect(distributionAssets.exe).toBe("/manus-storage/Stray-Linux-1.0.0-Setup_be527625.exe");
     expect(linuxInstallers.map((installer) => installer.id)).toEqual(["debian", "fedora", "opensuse", "arch", "appimage"]);
   });
 
@@ -15,7 +15,7 @@ describe("manifesto de distribuição pública", () => {
     }
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).not.toContain("pacman -S stray-linux");
-    expect(linuxInstallers.find((installer) => installer.id === "debian")?.command).toContain("85b469c0a351d26fba00f503a0d83a45d190c3b823cf74f200da8469f9ba70dc");
-    expect(linuxInstallers.find((installer) => installer.id === "appimage")?.command).toContain("408209b161b1c811835921d2c85e90c3d8c141ed8ce30037e438ec206fc1ea82");
+    expect(linuxInstallers.find((installer) => installer.id === "debian")?.command).toContain("cc39641f05a96ff314c893624fc5b0c33ca4bd967933e65498b5d575f0bf2ce7");
+    expect(linuxInstallers.find((installer) => installer.id === "appimage")?.command).toContain("8e411761c740afbc53c1a0e36b88afb58321e31639e72d9b4a67c36ea691b1ff");
   });
 });

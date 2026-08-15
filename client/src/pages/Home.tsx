@@ -21,13 +21,13 @@ const proofSignals = [
 
 export default function Home() {
   return <div id="top" className="min-h-screen overflow-x-hidden bg-[#050a16] text-white selection:bg-violet-500/40"><SiteNav />
-    <main>
+    <main className="stray-story-shell">
       <section className="relative isolate overflow-hidden border-b border-white/[.07]">
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_12%,rgba(92,48,255,.24),transparent_19%),radial-gradient(circle_at_6%_80%,rgba(33,84,255,.22),transparent_26%),linear-gradient(180deg,#07101f_0%,#050a16_92%)]" />
         <div aria-hidden="true" className="absolute inset-0 -z-10 opacity-30 [background-image:linear-gradient(rgba(155,175,255,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(155,175,255,.06)_1px,transparent_1px)] [background-size:52px_52px] [mask-image:linear-gradient(to_bottom,black,transparent_78%)]" />
         <div className="container grid gap-12 pb-16 pt-12 lg:grid-cols-[.76fr_1.24fr] lg:items-center lg:pb-24 lg:pt-20">
           <div className="relative z-10 max-w-xl"><p className="flex items-center gap-2 font-tech text-[10px] font-bold tracking-[.14em] text-blue-200"><span className="h-1.5 w-1.5 rounded-full bg-blue-300 shadow-[0_0_12px_#8ab4ff]" />PLATAFORMA COMPLETA PARA LINUX GAMING</p><h1 className="mt-5 text-[clamp(3.2rem,6vw,5.7rem)] font-semibold leading-[.94] tracking-[-.065em] text-white">Linux Gaming<br /><span className="bg-gradient-to-r from-blue-300 via-violet-300 to-blue-400 bg-clip-text text-transparent">Intelligence.</span></h1><p className="mt-6 max-w-md text-[15px] leading-7 text-slate-300/80">Entenda seu sistema. Descubra as evidências publicadas. Compare cenários quando houver amostras verificáveis. Resolva problemas com próximos passos seguros.</p><div className="mt-8 flex flex-wrap gap-3"><a href={assets.exe} download="Stray-Linux-1.0.0-Setup.exe"><Button size="lg" className="h-12 rounded-md bg-gradient-to-r from-blue-600 to-violet-600 px-5 shadow-[0_14px_35px_rgba(80,71,255,.28)] hover:from-blue-500 hover:to-violet-500"><Download className="mr-2 h-4 w-4" />Baixar Stray Linux</Button></a><a href="#como-funciona"><Button size="lg" variant="outline" className="h-12 rounded-md border-white/15 bg-white/[.025] px-5 text-white hover:bg-white/[.07]"><Play className="mr-2 h-4 w-4" />Ver como funciona</Button></a></div><div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-4">{proofSignals.map((signal) => <div key={signal.label} className="border-l border-white/10 pl-3"><p className="font-tech text-sm font-bold text-blue-200">{signal.value}</p><p className="mt-1 text-[10px] leading-4 text-white/46">{signal.label}</p></div>)}</div></div>
-          <ProductPreview />
+          <div className="stray-story-preview"><ProductPreview /></div>
         </div>
       </section>
 

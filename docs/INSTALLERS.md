@@ -1,6 +1,6 @@
 # Instalação desktop do Stray Linux 1.0.0
 
-Esta versão inclui pacotes **x86_64/amd64** para Windows e quatro rotas Linux, todos reconstruídos com o snapshot local de **10.000 jogos**. Antes de instalar, compare o checksum SHA-256 do arquivo baixado com o valor nesta página. Não instale um artefato que não corresponda à sua arquitetura ou cuja integridade não possa ser confirmada.
+Esta versão inclui pacotes **x86_64/amd64** para Windows e quatro rotas Linux, todos reconstruídos com o catálogo publicado de **10.013 jogos**. Antes de instalar, compare o checksum SHA-256 do arquivo baixado com o valor nesta página. Não instale um artefato que não corresponda à sua arquitetura ou cuja integridade não possa ser confirmada.
 
 Os arquivos de instrução, fontes e checksums são distribuídos **externamente ao runtime desktop**: acompanham o repositório e a entrega de release, enquanto os instaladores carregam somente os arquivos necessários para executar o aplicativo. Veja a inspeção de cada formato em [`PACKAGING-VALIDATION.md`](PACKAGING-VALIDATION.md).
 
@@ -17,11 +17,11 @@ Os arquivos de instrução, fontes e checksums são distribuídos **externamente
 ## Checksums SHA-256
 
 ```text
-1b2646bc3472e417d4d586e44998e50f3979ffc3e95c6c182c6f702577ae7244  Stray-Linux-1.0.0-Setup.exe
-408209b161b1c811835921d2c85e90c3d8c141ed8ce30037e438ec206fc1ea82  Stray-Linux-1.0.0-x86_64.AppImage
-85b469c0a351d26fba00f503a0d83a45d190c3b823cf74f200da8469f9ba70dc  Stray-Linux-1.0.0-amd64.deb
-844fda73baa330b5e1909cb0e2e6bfa01ae26d364a8d63013a73e3cfea86ec68  Stray-Linux-1.0.0-x86_64.rpm
-72fc51fa6249c78b96df9524147a8a5a03b7164ed0671f60c30bb029a90b9a6f  Stray-Linux-1.0.0-x64.pacman
+492a9d612a5695bb1a0cb741e0f9069ad365a2fd7f8707e32c69084a53186ed6  Stray-Linux-1.0.0-Setup.exe
+8e411761c740afbc53c1a0e36b88afb58321e31639e72d9b4a67c36ea691b1ff  Stray-Linux-1.0.0-x86_64.AppImage
+cc39641f05a96ff314c893624fc5b0c33ca4bd967933e65498b5d575f0bf2ce7  Stray-Linux-1.0.0-amd64.deb
+89ed08d1ef97a808a20756720d65835e9867322d20d60609a1c27c23dd88da7f  Stray-Linux-1.0.0-x86_64.rpm
+380968c1f5a5dae3a3e82adf650a1d891bc758c7946c062290575ee366f2e24f  Stray-Linux-1.0.0-x64.pacman
 ```
 
 Em Linux, execute `sha256sum <arquivo>` e compare a saída. Em Windows, use `Get-FileHash .\Stray-Linux-1.0.0-Setup.exe -Algorithm SHA256` no PowerShell.

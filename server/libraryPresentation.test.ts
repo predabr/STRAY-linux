@@ -9,6 +9,9 @@ describe("biblioteca local", () => {
     const component = fs.readFileSync(path.join(projectRoot, "client/src/pages/Library.tsx"), "utf8");
     expect(component).toContain("sourceFilter");
     expect(component).toContain("sourceCounts");
+    expect(component).toContain("lastLocalRead");
+    expect(component).toContain("stray-library-readout");
+    expect(component).toContain("stray-library-card");
     expect(component).toContain("Steam");
     expect(component).toContain("Heroic");
     expect(component).toContain("Nenhuma informação é enviada à rede.");

@@ -270,3 +270,6 @@
 - [x] Executar auditoria de erros em logs, rotas, dependências, build e desktop antes da publicação final.
 - [x] Corrigir a regressão da landing que substituiu a interface funcional por uma imagem estática e restaurar os blocos reais, responsivos e navegáveis.
 - [x] Retomar a evolução visual e funcional do aplicativo desktop após a correção publicada da landing.
+- [x] Sintetizar Linear, Raycast, Hermes, Vercel e ProtonDB em uma linguagem visual autoral para o Stray Linux, sem copiar marcas, conteúdo ou código de terceiros.
+- [x] Redesenhar a narrativa do site e as superfícies principais do aplicativo para apresentar produto, IA, compatibilidade e ações locais com maior clareza.
+- [x] Revalidar Biblioteca, Steam local, GameHub, LinuxFix, Stray AI, instaladores e desinstalação, corrigindo somente erros comprováveis.

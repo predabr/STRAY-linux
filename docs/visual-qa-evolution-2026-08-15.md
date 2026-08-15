@@ -35,3 +35,13 @@ No viewport de 375 × 812, Dashboard e Biblioteca mantiveram cabeçalho compacto
 ## Auditoria final de erros
 
 A inspeção dos trechos recentes de servidor, console do navegador e rede não encontrou erros ativos nem respostas HTTP 4xx/5xx novas. A única ocorrência de `ELIFECYCLE` no log corresponde a um restart histórico do servidor às 02:27; o processo foi reiniciado automaticamente e as verificações subsequentes de tipo, testes, build, auditoria de dependências e rotas concluíram sem falhas. O build mantém apenas o aviso conhecido de chunks grandes, que não impede a geração do bundle.
+
+## Narrativa autoral de produto
+
+A landing foi revisada em 1280 × 720 e 375 × 812 depois da nova camada de narrativa. Em desktop, o hero preserva um foco claro entre contexto editorial, dois CTAs e preview funcional do workspace, com gradação violeta/azul contida e superfícies de evidência legíveis. Em celular, o título, a cópia, os dois CTAs, os quatro sinais e o preview mantiveram ordenação vertical sem corte no viewport. O motion do preview é desabilitado quando o sistema solicita redução de movimento.
+
+As rotas `/assistant` e `/compare` foram revisadas em 1280 × 720 e 375 × 812. O Stray AI apresenta briefing, estado de sessão, método, segurança e escopo antes do chat; o Comparador apresenta estado, seleção e limite metodológico antes dos resultados. Em celular, as duas superfícies mantiveram leitura vertical e navegação inferior sem encobrir o conteúdo visível.
+
+## Biblioteca como leitura local
+
+A Biblioteca revisada foi verificada em 1280 × 720 e 375 × 812. Fora do Electron, ela mantém explicitamente o estado de disponibilidade desktop e a alternativa de explorar o GameHub, sem exibir jogos ou números de instalações sintéticos. A superfície móvel preservou breadcrumb, título, explicação de privacidade e CTA para o catálogo sem sobreposição com a navegação inferior.
