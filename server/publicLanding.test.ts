@@ -9,11 +9,11 @@ describe("landing pública", () => {
   it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
     const distribution = read("client/src/lib/distribution.ts");
-    expect(distribution).toContain("Stray-Linux-1.0.0-Setup_dce56390_159ec40e.exe");
-    expect(distribution).toContain("Stray-Linux-1.0.0-amd64_c20cdd7e_b75e1274.deb");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_bd4deed1_73c6c7a7.rpm");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x64_fae609b4_978f2139.pacman");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_2f46c6a7_14d42b06.AppImage");
+    expect(distribution).toContain("Stray-Linux-1.0.0-Setup_4f4cbae9_c8ec3c41.exe");
+    expect(distribution).toContain("Stray-Linux-1.0.0-amd64_e683dab5_262f4cef.deb");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_d4f8e02a_f3d37d87.rpm");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x64_5d5cc6d9_7cb33ddf.pacman");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_594083da_a6eadfe5.AppImage");
     expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
     expect(distribution).toContain("sha256sum -c -");
@@ -43,6 +43,10 @@ describe("landing pública", () => {
     expect(landing).toContain("<SystemPreview />");
     expect(landing).toContain("<TerminalInstaller");
     expect(landing).toContain('{ value: "21", label: "distribuições publicadas" }');
+    expect(landing).toContain('useState<(typeof linuxInstallers)[number]["id"] | null>(null)');
+    expect(landing).toContain("SELEÇÃO OBRIGATÓRIA");
+    expect(landing).toContain("O bloco inicia com `bash -c`");
+    expect(landing).toContain("não use o pacote `.deb`");
     expect(landing).not.toContain("stray-linux-landing-original_68a8e472.png");
     expect(landing).not.toContain("87 FPS");
     expect(landing).not.toContain("Excellent 92");

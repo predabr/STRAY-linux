@@ -282,3 +282,6 @@
 - [x] Auditar e ampliar as referências oficiais de distribuições, wikis, guias e LinuxFix sem publicar instruções ou compatibilidade não verificadas.
 - [x] Validar web, desktop, instaladores, desinstaladores, testes, build e publicação após as correções.
 - [x] Corrigir a contagem pública de distribuições na landing para refletir os 21 perfis publicados.
+- [x] Corrigir a seleção de pacote por distribuição para impedir comandos Debian/Ubuntu em Arch Linux.
+- [x] Adicionar comandos compatíveis com fish e orientação explícita de shell para a instalação Linux.
+- [x] Revalidar downloads, checksums, instalação e desinstalação nos fluxos Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch e AppImage.

@@ -14,14 +14,20 @@ Os arquivos de instrução, fontes e checksums são distribuídos **externamente
 
 > O pacote `.pacman` é um arquivo local para instalação direta pelo `pacman -U`; não é um pacote do repositório oficial do Arch. Em sistemas imutáveis, use preferencialmente o AppImage até que seja disponibilizado um método específico e verificado para a variante em uso.
 
+## Confirme a distribuição e o shell antes de instalar
+
+Antes de escolher um formato, execute `cat /etc/os-release`. Se a saída indicar **Arch Linux**, CachyOS, EndeavourOS ou Garuda, use exclusivamente o pacote `.pacman` com `pacman -U`; os comandos `dpkg` e `apt-get` pertencem a Debian/Ubuntu e não existem em Arch. Se houver dúvida, não instale o arquivo baixado: volte à página `/download` e escolha a família correta.
+
+Os blocos publicados pela página de download começam com `bash -c`, portanto podem ser colados em **fish**, zsh ou Bash. Isso faz `set -e` ser interpretado pelo Bash; não muda o pacote que deve ser escolhido para cada distribuição.
+
 ## Checksums SHA-256
 
 ```text
-dce56390abf1cdb42bca2ba17c5841f1741c615551ee77fe213054b3aa41f106  Stray-Linux-1.0.0-Setup.exe
-2f46c6a7508bbb4d38149e09cb84eae58d3769d3dece54f4c3f4ef4088623486  Stray-Linux-1.0.0-x86_64.AppImage
-c20cdd7e96a00eb82a55cc8d2103fb69d2f9aa3a0235442caf09b97ff61e16f3  Stray-Linux-1.0.0-amd64.deb
-bd4deed1189e2765e74d3bc090f17e9e097ed70181a513c9d944b1d20217feaa  Stray-Linux-1.0.0-x86_64.rpm
-fae609b4c94aa840ba0f632f8a9c6f247dcf76891fd9fea5e1c94b870dafbe24  Stray-Linux-1.0.0-x64.pacman
+4f4cbae9a4a934f440d8c3f14860acccd3c93b8257ba08f875d4206581da9786  Stray-Linux-1.0.0-Setup.exe
+594083dacccb83804df2b2900935ea303d9ca011c1a6219da6d6cd51b69f8f29  Stray-Linux-1.0.0-x86_64.AppImage
+e683dab519b731bd97f198e1d1784ddad4d5390b7a29e5e7f491c5aac42d5232  Stray-Linux-1.0.0-amd64.deb
+d4f8e02ab166d5f62f4f639d53891ff21a2107ade31df9146c4417185845ecb6  Stray-Linux-1.0.0-x86_64.rpm
+5d5cc6d92ecd9ac2c1d30b51ab9e111cd04ed03d7eb3dafd25e9a97b4806a3ba  Stray-Linux-1.0.0-x64.pacman
 ```
 
 Em Linux, execute `sha256sum <arquivo>` e compare a saída. Em Windows, use `Get-FileHash .\Stray-Linux-1.0.0-Setup.exe -Algorithm SHA256` no PowerShell.

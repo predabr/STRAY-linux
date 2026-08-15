@@ -12,8 +12,14 @@ Os cinco artefatos foram reconstruídos após a sincronização do snapshot SQLi
 
 | Formato | SHA-256 |
 | --- | --- |
-| Windows NSIS | `dce56390abf1cdb42bca2ba17c5841f1741c615551ee77fe213054b3aa41f106` |
-| Debian/Ubuntu | `c20cdd7e96a00eb82a55cc8d2103fb69d2f9aa3a0235442caf09b97ff61e16f3` |
-| RPM | `bd4deed1189e2765e74d3bc090f17e9e097ed70181a513c9d944b1d20217feaa` |
-| Pacman | `fae609b4c94aa840ba0f632f8a9c6f247dcf76891fd9fea5e1c94b870dafbe24` |
-| AppImage | `2f46c6a7508bbb4d38149e09cb84eae58d3769d3dece54f4c3f4ef4088623486` |
+| Windows NSIS | `4f4cbae9a4a934f440d8c3f14860acccd3c93b8257ba08f875d4206581da9786` |
+| Debian/Ubuntu | `e683dab519b731bd97f198e1d1784ddad4d5390b7a29e5e7f491c5aac42d5232` |
+| RPM | `d4f8e02ab166d5f62f4f639d53891ff21a2107ade31df9146c4417185845ecb6` |
+| Pacman | `5d5cc6d92ecd9ac2c1d30b51ab9e111cd04ed03d7eb3dafd25e9a97b4806a3ba` |
+| AppImage | `594083dacccb83804df2b2900935ea303d9ca011c1a6219da6d6cd51b69f8f29` |
+
+## Prevenção de pacote incorreto e fish
+
+A página `/download` não exibe mais Debian/Ubuntu como seleção inicial. Antes de mostrar qualquer comando, ela exige que a pessoa escolha uma família Linux e apresenta um aviso de seleção obrigatória. Com **pacman** escolhido, a interface confirma **“Arch / derivadas · pacote pacman”**, informa que `dpkg` e `apt-get` não existem em Arch e exibe somente `sudo pacman -U /tmp/stray-linux.pacman`.
+
+Todos os blocos Linux agora iniciam com `bash -c`, para que `set -e` seja interpretado pelo Bash quando o usuário cola o bloco em fish, zsh ou Bash. Essa mudança não altera o pacote escolhido: ela somente torna a execução do bloco portável entre shells.
