@@ -31,6 +31,12 @@ O crescimento do catálogo só poderá usar registros de fonte pública ou licen
 | Gentoo e Portage | A documentação explica que `emerge --info` relata informações do sistema e que `--ask` ou `--pretend` devem preceder mudanças planejadas. | O guia Gentoo registra primeiro o ambiente e não executa instalações ou remoções automáticas. | [11] [12] |
 | Bazzite | A documentação trata a imagem como sistema Atomic, recomenda `rpm-ostree status` para inspeção e alerta que layering pode bloquear atualizações. | O guia usa inspeção primeiro e exclui `dnf install`, layering e rebase como ações automáticas. | [13] [14] |
 | ChimeraOS | A documentação orienta atualizações pela tela System e exige reinicialização para aplicar mudanças. Também alerta que nem todos os jogos funcionam. | O guia não publica comando de pacote, não aciona remote launch e não converte a página de compatibilidade do projeto em score do Stray. | [15] |
+| Bazzite — atualização | A documentação informa atualização automática diária nas imagens desktop, atualização manual pelo Steam Gaming Mode nas imagens Deck e aplicação após reinicialização. | Orientar o usuário ao fluxo gráfico publicado e registrar que mudanças do sistema não se aplicam até reiniciar; não sugerir instalação de pacotes por DNF. | [16] |
+| Garuda Linux | A wiki oficial se apresenta como complemento da Arch Wiki e reúne rotas específicas de gaming, snapshots e manutenção. | Vincular o perfil aos guias Arch e à wiki Garuda; não tratar uma instrução do fórum como procedimento oficial. | [17] |
+| ChimeraOS — releases | As notas de release registram mudanças e limitações por versão, inclusive ressalvas específicas para NVIDIA em releases diferentes. | Exibir apenas referência de release e evitar concluir suporte universal de GPU, controle ou jogo a partir de uma nota específica. | [18] |
+| PikaOS | A wiki oficial apresenta base Debian Sid e ferramentas próprias para boas-vindas, atualização e gestão de kernel/dispositivo. | Descrever as ferramentas sem presumir que elas corrigem um jogo, driver ou problema de kernel. | [19] |
+| CachyOS | O guia oficial recomenda verificar drivers primeiro e alerta que otimizações podem ter impacto pequeno ou nulo conforme jogo e hardware. | Orientar uma mudança por vez; não publicar previsão de FPS ou usar Proton personalizado como padrão universal. | [20] |
+| Nobara | A wiki oficial orienta o atualizador do próprio projeto, diferencia drivers estáveis de alternativas e alerta sobre conflitos com repositórios externos. | Priorizar o fluxo Nobara e não converter instruções de Fedora genérica em reparo seguro para toda instalação Nobara. | [21] |
 
 > As referências técnicas acima descrevem ferramentas e opções, não resultados por jogo. Assim, os LinuxFix resultantes devem preservar fonte, nível de confiança e avisos de reversão, sem publicar FPS, scores ou alegações de compatibilidade.
 
@@ -65,3 +71,15 @@ O crescimento do catálogo só poderá usar registros de fonte pública ou licen
 [14] [Bazzite — FAQ](https://docs.bazzite.gg/General/FAQ/)
 
 [15] [ChimeraOS — Getting Started](https://github.com/ChimeraOS/chimeraos/wiki/Getting-Started)
+
+[16] [Bazzite Documentation — Update Guide](https://docs.bazzite.gg/Installing_and_Managing_Software/Updates_Rollbacks_and_Rebasing/updating_guide/)
+
+[17] [Garuda Linux Wiki](https://garudalinux.org/wiki)
+
+[18] [ChimeraOS — Release Notes](https://github.com/ChimeraOS/chimeraos/wiki/Release-Notes)
+
+[19] [PikaOS Wiki — What makes PikaOS different?](https://wiki.pika-os.com/en/why-pikaos)
+
+[20] [CachyOS Wiki — Gaming with CachyOS](https://wiki.cachyos.org/configuration/gaming/)
+
+[21] [Nobara Project Wiki — New User Guide and General Usage Guidelines](https://wiki.nobaraproject.org/en/new-user-guide-general-guidelines)

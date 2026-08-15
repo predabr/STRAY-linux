@@ -29,12 +29,17 @@ vi.mock("../_core/llm", () => ({
   invokeLLM: vi.fn(async () => ({ choices: [{ message: { content: "Resposta baseada no conteúdo interno." } }] })),
 }));
 
+import { invokeLLM } from "../_core/llm";
 import { appRouter } from "../routers";
 import { buildStrayAiSystemPrompt, extractContextTerms } from "./chat";
 import { isStrayAiDomainQuestion, STRAY_AI_OUT_OF_SCOPE_RESPONSE } from "../lib/strayAiScope";
 
 function caller() {
   return appRouter.createCaller({ user: { id: 71, role: "user", isBanned: false } } as any);
+}
+
+function visitorCaller() {
+  return appRouter.createCaller({ user: null } as any);
 }
 
 describe("assistente: continuidade, contexto e autorização", () => {
@@ -67,6 +72,7 @@ describe("assistente: continuidade, contexto e autorização", () => {
     expect(prompt).toContain("Ações seguras");
     expect(prompt).toContain("Limites");
     expect(prompt).toContain("guia da distribuição ativa");
+    expect(prompt).toContain("MODO DE SESSÃO: visitante");
     expect(prompt).toContain("não invente comandos, compatibilidade, FPS, versões, mídia, causa ou resultado");
   });
 
@@ -78,6 +84,20 @@ describe("assistente: continuidade, contexto e autorização", () => {
     expect(harness.writes).toHaveLength(2);
     expect(harness.writes[0]).toMatchObject({ sessionId: 42, role: "user" });
     expect(harness.writes[1]).toMatchObject({ sessionId: 42, role: "assistant" });
+  });
+
+  it("permite pergunta visitante no escopo sem gravar sessão ou histórico", async () => {
+    const result = await visitorCaller().chat.askPublic({ question: "Como verificar Vulkan no Linux?" });
+    expect(result.context).toMatchObject({ inScope: true, visitor: true, profileAvailable: false });
+    expect(result.answer).toContain("Resposta baseada no conteúdo interno.");
+    expect(harness.writes).toHaveLength(0);
+  });
+
+  it("entrega uma resposta baseada em evidência quando o provedor falha", async () => {
+    vi.mocked(invokeLLM).mockRejectedValueOnce(new Error("upstream unavailable"));
+    const result = await visitorCaller().chat.askPublic({ question: "Como verificar Vulkan no Linux?" });
+    expect(result.answer).toContain("O provedor do Stray AI não respondeu neste momento.");
+    expect(result.answer).toContain("### Limites");
   });
 
 });

@@ -1,4 +1,4 @@
-const accountRoutePrefixes = ["/dashboard", "/admin", "/assistant", "/scanner"] as const;
+const accountRoutePrefixes = ["/dashboard", "/admin", "/scanner"] as const;
 
 export function normalizeRoute(location: string): string {
   const pathOnly = location.split("?")[0]?.split("#")[0];

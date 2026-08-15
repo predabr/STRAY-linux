@@ -3,7 +3,7 @@ import { z } from "zod";
 import { chatMessages, chatSessions, linuxFixes, setupGuides, userHardwareProfiles, wikiArticles } from "../../drizzle/schema";
 import { invokeLLM } from "../_core/llm";
 import { isStrayAiDomainQuestion, STRAY_AI_OUT_OF_SCOPE_RESPONSE } from "../lib/strayAiScope";
-import { router } from "../_core/trpc";
+import { publicProcedure, router } from "../_core/trpc";
 import { activeUserProcedure, requireDatabase } from "./_guards";
 
 type Citation = { type: "wiki" | "guide" | "linuxfix"; title: string; slug: string; sourceUrl: string | null };
@@ -24,12 +24,27 @@ export function extractContextTerms(question: string): string[] {
 }
 
 export function buildStrayAiSystemPrompt(contextText: string): string {
-  return `Você é o Stray AI, o assistente técnico do aplicativo Stray Linux. Responda em português brasileiro SOMENTE sobre Stray Linux, gaming no Linux, perfil técnico do usuário, GameHub, LinuxFix, Scanner, bibliotecas locais e conteúdos publicados do aplicativo. Recuse pedidos de programação, criação de jogos, trabalhos escolares, entretenimento genérico ou qualquer tema externo usando exatamente esta frase: "${STRAY_AI_OUT_OF_SCOPE_RESPONSE}". Use SOMENTE o contexto interno e o perfil técnico fornecidos abaixo. Para diagnósticos, organize a resposta nestas seções quando forem aplicáveis: "Leitura do caso", "Evidência disponível", "Ações seguras" e "Limites". Em "Evidência disponível", diferencie fatos publicados, orientação comunitária e lacunas. Quando houver um guia da distribuição ativa, priorize-o; um guia de família não prova suporte idêntico em uma derivada. Declare confiança como alta, média, baixa ou indisponível apenas quando o contexto permitir. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade, FPS, versões, mídia, causa ou resultado. O assistente não executa comandos nem altera o sistema. Ao final, cite os títulos internos utilizados sob o cabeçalho "Fontes internas".\n\nCONTEXTO INTERNO:\n${contextText || "Nenhum conteúdo interno relacionado foi recuperado."}`;
+  return `Você é o Stray AI, o assistente técnico do aplicativo Stray Linux. Responda em português brasileiro SOMENTE sobre Stray Linux, gaming no Linux, perfil técnico do usuário, GameHub, LinuxFix, Scanner, bibliotecas locais e conteúdos publicados do aplicativo. Recuse pedidos de programação, criação de jogos, trabalhos escolares, entretenimento genérico ou qualquer tema externo usando exatamente esta frase: "${STRAY_AI_OUT_OF_SCOPE_RESPONSE}". Use SOMENTE o contexto interno e o perfil técnico fornecidos abaixo. Para diagnósticos, organize a resposta nestas seções quando forem aplicáveis: "Leitura do caso", "Evidência disponível", "Ações seguras" e "Limites". Em "Evidência disponível", diferencie fatos publicados, orientação comunitária e lacunas. Quando houver um guia da distribuição ativa, priorize-o; um guia de família não prova suporte idêntico em uma derivada. Se o contexto indicar MODO DE SESSÃO: visitante, nunca diga que existe conta, histórico, perfil salvo ou sincronização; informe somente que esta conversa não recebeu um perfil local. Declare confiança como alta, média, baixa ou indisponível apenas quando o contexto permitir. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade, FPS, versões, mídia, causa ou resultado. O assistente não executa comandos nem altera o sistema. Ao final, cite os títulos internos utilizados sob o cabeçalho "Fontes internas".\n\nCONTEXTO INTERNO:\n${contextText || "Nenhum conteúdo interno relacionado foi recuperado."}`;
 }
 
 function llmText(content: string | Array<{ type: "text"; text: string } | { type: "image_url" } | { type: "file_url" }>) {
   if (typeof content === "string") return content;
   return content.filter((part): part is { type: "text"; text: string } => part.type === "text").map((part) => part.text).join("\n");
+}
+
+function evidenceFallback(context: { citations: Citation[]; profileAvailable: boolean }) {
+  const sourceList = context.citations.length ? context.citations.map((citation) => `- ${citation.title}`).join("\n") : "- Nenhuma fonte interna diretamente relacionada foi recuperada.";
+  return `### Leitura do caso\nO provedor do Stray AI não respondeu neste momento. Para não criar uma resposta especulativa, esta sessão permanece limitada ao conteúdo publicado disponível.\n\n### Evidência disponível\n${sourceList}\n\n### Ações seguras\nConsulte as fontes internas listadas e confirme a versão da distribuição, o runtime e o erro exibido antes de aplicar qualquer ajuste.\n\n### Limites\nNão foi possível gerar uma síntese pelo modelo agora. Nenhum comando, causa, compatibilidade ou resultado foi inferido sem evidência.`;
+}
+
+async function answerFromModel(question: string, context: { citations: Citation[]; text: string; profileAvailable: boolean }) {
+  try {
+    const response = await invokeLLM({ model: "claude-haiku-4-5", messages: [{ role: "system", content: buildStrayAiSystemPrompt(context.text) }, { role: "user", content: question }], maxTokens: 900 });
+    return llmText(response.choices[0]?.message.content ?? "") || evidenceFallback(context);
+  } catch (error) {
+    console.error("[Stray AI] Provedor indisponível; usando resposta baseada em evidência.", error);
+    return evidenceFallback(context);
+  }
 }
 
 async function retrieveContext(question: string, userId?: number) {
@@ -63,6 +78,7 @@ async function retrieveContext(question: string, userId?: number) {
 }
 
 const questionInput = z.object({ sessionId: z.number().int().positive().optional(), question: z.string().trim().min(2).max(2500) });
+const visitorQuestionInput = z.object({ question: z.string().trim().min(2).max(2500) });
 
 export const chatRouter = router({
   sessions: activeUserProcedure.query(async ({ ctx }) => {
@@ -75,6 +91,16 @@ export const chatRouter = router({
     const session = (await db.select({ id: chatSessions.id }).from(chatSessions).where(and(eq(chatSessions.id, input.sessionId), eq(chatSessions.userId, ctx.user.id))).limit(1))[0];
     if (!session) return [];
     return db.select().from(chatMessages).where(eq(chatMessages.sessionId, session.id)).orderBy(asc(chatMessages.createdAt));
+  }),
+
+  askPublic: publicProcedure.input(visitorQuestionInput).mutation(async ({ input }) => {
+    if (!isStrayAiDomainQuestion(input.question)) {
+      return { answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [], context: { inScope: false, profileAvailable: false, internalSources: 0, visitor: true } };
+    }
+    const context = await retrieveContext(input.question);
+    const visitorContext = { ...context, text: `MODO DE SESSÃO: visitante. Não existe conta, histórico ou perfil local disponível nesta conversa.\n${context.text}` };
+    const answer = await answerFromModel(input.question, visitorContext);
+    return { answer, citations: context.citations, context: { inScope: true, profileAvailable: false, internalSources: context.citations.length, visitor: true } };
   }),
 
   ask: activeUserProcedure.input(questionInput).mutation(async ({ ctx, input }) => {
@@ -94,9 +120,7 @@ export const chatRouter = router({
       return { sessionId, answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [], context: { inScope: false, profileAvailable: false, internalSources: 0 } };
     }
     const context = await retrieveContext(input.question, ctx.user.id);
-    const system = buildStrayAiSystemPrompt(context.text);
-    const response = await invokeLLM({ messages: [{ role: "system", content: system }, { role: "user", content: input.question }], maxTokens: 900 });
-    const answer = llmText(response.choices[0]?.message.content ?? "Não consegui gerar uma resposta agora.") || "Não consegui gerar uma resposta agora.";
+    const answer = await answerFromModel(input.question, context);
     await db.insert(chatMessages).values({ sessionId, role: "assistant", content: answer, citations: context.citations });
     await db.update(chatSessions).set({ updatedAt: new Date() }).where(eq(chatSessions.id, sessionId));
     return { sessionId, answer, citations: context.citations, context: { inScope: true, profileAvailable: context.profileAvailable, internalSources: context.citations.length } };

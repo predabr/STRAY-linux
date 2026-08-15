@@ -277,3 +277,7 @@
 - [x] Ampliar conteúdo e conjuntos de dados somente com fontes autorizadas, sem criar descrições, compatibilidade, FPS ou mídia inventados.
 - [x] Aprimorar o Stray AI com contexto e atalhos seguros, mantendo os limites de escopo e as fontes internas visíveis.
 - [x] Criar uma área de apoio futuro funcional e transparente, sem processar doações antes da configuração de um provedor de pagamentos.
+- [x] Diagnosticar e corrigir o Stray AI no site e no modo desktop, preservando privacidade, limites de escopo e respostas fundamentadas.
+- [x] Revisar e corrigir somente falhas comprovadas de instalação, desinstalação, rotas públicas e navegação do aplicativo.
+- [x] Auditar e ampliar as referências oficiais de distribuições, wikis, guias e LinuxFix sem publicar instruções ou compatibilidade não verificadas.
+- [x] Validar web, desktop, instaladores, desinstaladores, testes, build e publicação após as correções.

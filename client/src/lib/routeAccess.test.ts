@@ -7,17 +7,17 @@ describe("route access policy", () => {
     expect(normalizeRoute("#intro")).toBe("/");
   });
 
-  it.each(["/", "/games", "/games/steam-123", "/benchmark", "/distros", "/wiki", "/setup", "/linuxfix", "/compare", "/windows", "/status", "/support"]) (
+  it.each(["/", "/games", "/games/steam-123", "/benchmark", "/distros", "/wiki", "/setup", "/linuxfix", "/compare", "/windows", "/status", "/support", "/assistant"]) (
     "keeps %s public",
     (route) => expect(routeRequiresAccount(route)).toBe(false),
   );
 
-  it.each(["/dashboard", "/dashboard/settings", "/admin", "/admin/sources", "/assistant", "/scanner"]) (
+  it.each(["/dashboard", "/dashboard/settings", "/admin", "/admin/sources", "/scanner"]) (
     "protects %s",
     (route) => expect(routeRequiresAccount(route)).toBe(true),
   );
 
   it("protects account routes even with query strings", () => {
-    expect(routeRequiresAccount("/assistant?mode=local#thread")).toBe(true);
+    expect(routeRequiresAccount("/dashboard?mode=local#thread")).toBe(true);
   });
 });

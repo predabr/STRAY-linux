@@ -25,6 +25,7 @@ describe("DesktopStore", () => {
     expect(store.one<{ slug: string; packageManager: string | null }>("SELECT slug, package_manager AS packageManager FROM distributions WHERE slug = ?", ["chimeraos"])).toEqual({ slug: "chimeraos", packageManager: null });
     expect(store.one<{ slug: string }>("SELECT slug FROM wiki_articles WHERE slug = ?", ["zorin-os-gaming-reference"])).toEqual({ slug: "zorin-os-gaming-reference" });
     expect(store.all<{ slug: string }>("SELECT slug FROM wiki_articles WHERE slug IN (?, ?, ?) ORDER BY slug", ["chimeraos-overview", "garuda-linux-overview", "pikaos-overview"])).toHaveLength(3);
+    expect(store.one<{ sourceUrl: string }>("SELECT source_url AS sourceUrl FROM wiki_articles WHERE slug = ?", ["pikaos-overview"])).toEqual({ sourceUrl: "https://wiki.pika-os.com/en/why-pikaos" });
     expect(store.all<{ slug: string }>("SELECT slug FROM setup_guides WHERE slug IN (?, ?, ?) ORDER BY slug", ["zorin-nvidia-driver-gaming", "zorin-steam-flatpak", "zorin-update-and-gaming-baseline"])).toHaveLength(3);
     expect(store.counts().guides).toBeGreaterThanOrEqual(54);
     expect(store.one<{ slug: string; distributionId: number }>("SELECT slug, distribution_id AS distributionId FROM setup_guides WHERE slug = ?", ["pikaos-gaming-family-baseline"])).toEqual({ slug: "pikaos-gaming-family-baseline", distributionId: 420001 });

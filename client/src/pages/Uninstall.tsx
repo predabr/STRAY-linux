@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { appImageInstallPath } from "@/lib/distribution";
 import { AlertTriangle, ArrowLeft, CheckCircle2, ExternalLink, FileWarning, HardDrive, MonitorSmartphone, ShieldCheck, TerminalSquare, Trash2 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -8,7 +9,7 @@ const removalTargets = [
   { title: "Fedora · RHEL", label: "PACOTE .RPM", instruction: "Remova o pacote pelo DNF.", command: "sudo dnf remove stray-linux", note: "O comando trata o pacote instalado; dados da sua conta e perfis locais não são parte desse pedido de remoção.", source: "Documentação do DNF", sourceUrl: "https://dnf.readthedocs.io/en/latest/command_ref.html" },
   { title: "openSUSE", label: "PACOTE .RPM", instruction: "Remova o pacote pelo Zypper.", command: "sudo zypper remove stray-linux", note: "Confirme a lista exibida pelo Zypper antes de aceitar qualquer mudança no sistema.", source: "Documentação do Zypper", sourceUrl: "https://documentation.suse.com/sles/15-SP4/html/SLES-all/cha-sw-cl.html" },
   { title: "Arch · derivadas", label: "PACOTE LOCAL", instruction: "Remova o pacote pelo Pacman.", command: "sudo pacman -R stray-linux", note: "O pacote foi instalado localmente; ele não pertence ao repositório oficial do Arch.", source: "Manual do Pacman", sourceUrl: "https://man.archlinux.org/man/pacman.8" },
-  { title: "AppImage", label: "ARQUIVO PORTÁTIL", instruction: "Remova somente o arquivo AppImage que você baixou.", command: "rm ./Stray-Linux-1.0.0-x86_64.AppImage", note: "Se você criou manualmente um atalho no menu do sistema, remova esse atalho de forma separada.", source: "Documentação AppImage", sourceUrl: "https://docs.appimage.org/" },
+  { title: "AppImage", label: "ARQUIVO PORTÁTIL", instruction: "Remova o executável AppImage instalado pelo comando publicado.", command: `rm -f "${appImageInstallPath}"`, note: "Se você criou manualmente um atalho no menu do sistema, remova esse atalho de forma separada. Este comando não remove configurações ou dados locais.", source: "Documentação AppImage", sourceUrl: "https://docs.appimage.org/" },
 ];
 
 export default function Uninstall() {
