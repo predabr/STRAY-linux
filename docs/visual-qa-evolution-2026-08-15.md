@@ -21,3 +21,7 @@ Em 375 × 812, as rotas `/scanner` e `/assistant` preservaram navegação compac
 ## Gate de qualidade
 
 O gate integral executou **36 arquivos de teste e 100 testes aprovados**, seguido de build de produção concluído. Os cinco artefatos desktop foram reconstruídos e verificados por presença. A inspeção do pacote Debian confirmou o mantenedor público resumido como `Pedro <creator@straylinux.local>`; o bundle Windows contém a política de URLs externas e a referência ao loopback local.
+
+## Verificação pós-publicação
+
+Logo após o checkpoint `60755535`, a primeira consulta ao domínio público ainda respondeu com o bundle anterior e a rota `/download` retornou 404. Este registro não considera a propagação concluída; a versão publicada deve ser consultada novamente antes da entrega final.
