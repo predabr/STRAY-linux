@@ -304,3 +304,9 @@
 - [x] Adicionar backup/restauração local com prévia, modo seguro, recuperação de falha, central de logs e atualizações apenas como estado transparente quando não houver atualizador real.
 - [x] Refinar busca, notificações e central de comandos para descoberta e navegação, sem execução automática de comandos de sistema.
 - [x] Validar as 11 localidades, acessibilidade, privacidade, testes, build, instaladores e publicação da fase 2.0.
+- [x] Auditar a landing pública, fluxos de download, aplicativo Electron e o mecanismo de atualização atualmente empacotado.
+- [x] Definir e documentar uma estratégia de atualização segura, com publicação de releases, verificação de integridade e limites transparentes por formato.
+- [x] Reduzir o site público a descrição institucional, autoria pública segura e todas as formas verificáveis de download por plataforma.
+- [x] Corrigir falhas comprovadas e elevar as superfícies prioritárias do aplicativo sem criar dados, telemetria ou atualizações falsas.
+- [x] Validar site, atualizações, testes, build, cinco instaladores, checksums e publicação desta rodada.
+- [x] Implementar atualização controlada escolhida pelo usuário: feed de release publicado, verificação de versão e integridade, download de artefato oficial e confirmação explícita antes de reiniciar.

@@ -9,11 +9,11 @@ describe("landing pública", () => {
   it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
     const distribution = read("client/src/lib/distribution.ts");
-    expect(distribution).toContain("Stray-Linux-1.0.0-Setup_c047dcd8.exe");
-    expect(distribution).toContain("Stray-Linux-1.0.0-amd64_90ee4160.deb");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_e0f23ad7.rpm");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x64_906cbf46.pacman");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_9a06525f.AppImage");
+    expect(distribution).toContain("Stray-Linux-1.1.0-Setup_13745d83.exe");
+    expect(distribution).toContain("Stray-Linux-1.1.0-amd64_2ab93e7d.deb");
+    expect(distribution).toContain("Stray-Linux-1.1.0-x86_64_a7254d36.rpm");
+    expect(distribution).toContain("Stray-Linux-1.1.0-x64_7363ce44.pacman");
+    expect(distribution).toContain("Stray-Linux-1.1.0-x86_64_ccc171dc.AppImage");
     expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
     expect(distribution).toContain("sha256sum -c -");
@@ -35,22 +35,17 @@ describe("landing pública", () => {
     expect(app).toContain("<ProductWorkspace><Router /></ProductWorkspace>");
   });
 
-  it("mantém a composição funcional e responsiva sem substituir a interface por imagem estática", () => {
+  it("mantém apresentação institucional e downloads sem substituir a interface por imagem estática", () => {
     const landing = read("client/src/pages/Home.tsx");
-    for (const route of ["/scanner", "/games", "/library", "/linuxfix", "/setup", "/benchmark", "/assistant", "/download", "/api/docs"]) {
-      expect(landing).toContain(`"${route}"`);
-    }
-    expect(landing).toContain("<ProductPreview />");
-    expect(landing).toContain("<SystemPreview />");
+    expect(landing).toContain("Clareza para");
+    expect(landing).toContain("Criado por Pedro, Brasil");
     expect(landing).toContain("<TerminalInstaller");
-    expect(landing).toContain('{ value: "21", label: "distribuições publicadas" }');
-    expect(landing).toContain('useState<(typeof linuxInstallers)[number]["id"] | null>(null)');
+    expect(landing).toContain('useState<Installer["id"] | null>(null)');
     expect(landing).toContain('selected ? linuxInstallers.find((item) => item.id === selected) : undefined');
     expect(landing).toContain('{installer.name} · pacote {installer.signal}');
-    expect(landing).toContain('{installer.name.toUpperCase()}');
     expect(landing).toContain("SELEÇÃO OBRIGATÓRIA");
-    expect(landing).toContain("O bloco inicia com `bash -c`");
-    expect(landing).toContain("não use o pacote `.deb`");
+    expect(landing).toContain("O bloco usa `bash -c`");
+    expect(landing).toContain("usam exclusivamente a aba");
     expect(landing).not.toContain("stray-linux-landing-original_68a8e472.png");
     expect(landing).not.toContain("87 FPS");
     expect(landing).not.toContain("Excellent 92");

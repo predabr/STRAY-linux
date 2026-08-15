@@ -1,4 +1,4 @@
-# Instalação desktop do Stray Linux 1.0.0
+# Instalação desktop do Stray Linux 1.1.0
 
 Esta versão inclui pacotes **x86_64/amd64** para Windows e quatro rotas Linux, todos reconstruídos com o catálogo publicado de **10.013 jogos**. Antes de instalar, compare o checksum SHA-256 do arquivo baixado com o valor nesta página. Não instale um artefato que não corresponda à sua arquitetura ou cuja integridade não possa ser confirmada.
 
@@ -6,11 +6,11 @@ Os arquivos de instrução, fontes e checksums são distribuídos **externamente
 
 | Plataforma ou família | Artefato | Instalação recomendada |
 |---|---|---|
-| Windows 10/11 x64 | `Stray-Linux-1.0.0-Setup.exe` | Execute o instalador NSIS e siga o assistente. O arquivo não possui assinatura de código nesta versão, portanto confira o SHA-256 antes da execução. |
-| Debian, Ubuntu e derivadas x64 | `Stray-Linux-1.0.0-amd64.deb` | Baixe o `.deb` primeiro, valide o SHA-256 e use `sudo dpkg -i /tmp/stray-linux.deb \|\| sudo apt-get -f install -y`. Não execute apenas o nome do arquivo se ele não estiver na pasta atual. |
-| Fedora, RHEL, openSUSE e derivadas x64 | `Stray-Linux-1.0.0-x86_64.rpm` | Fedora/RHEL: `sudo dnf install ./Stray-Linux-1.0.0-x86_64.rpm`; openSUSE: `sudo zypper install ./Stray-Linux-1.0.0-x86_64.rpm` |
-| Arch e derivadas x64 | `Stray-Linux-1.0.0-x64.pacman` | `sudo pacman -U ./Stray-Linux-1.0.0-x64.pacman` |
-| Outras distribuições x64 | `Stray-Linux-1.0.0-x86_64.AppImage` | `chmod +x ./Stray-Linux-1.0.0-x86_64.AppImage && ./Stray-Linux-1.0.0-x86_64.AppImage` |
+| Windows 10/11 x64 | `Stray-Linux-1.1.0-Setup.exe` | Execute o instalador NSIS e siga o assistente. O arquivo não possui assinatura de código nesta versão, portanto confira o SHA-256 antes da execução. |
+| Debian, Ubuntu e derivadas x64 | `Stray-Linux-1.1.0-amd64.deb` | Baixe o `.deb` primeiro, valide o SHA-256 e use `sudo dpkg -i /tmp/stray-linux.deb \|\| sudo apt-get -f install -y`. Não execute apenas o nome do arquivo se ele não estiver na pasta atual. |
+| Fedora, RHEL, openSUSE e derivadas x64 | `Stray-Linux-1.1.0-x86_64.rpm` | Fedora/RHEL: `sudo dnf install ./Stray-Linux-1.1.0-x86_64.rpm`; openSUSE: `sudo zypper install ./Stray-Linux-1.1.0-x86_64.rpm` |
+| Arch e derivadas x64 | `Stray-Linux-1.1.0-x64.pacman` | `sudo pacman -U ./Stray-Linux-1.1.0-x64.pacman` |
+| Outras distribuições x64 | `Stray-Linux-1.1.0-x86_64.AppImage` | `chmod +x ./Stray-Linux-1.1.0-x86_64.AppImage && ./Stray-Linux-1.1.0-x86_64.AppImage` |
 
 > O pacote `.pacman` é um arquivo local para instalação direta pelo `pacman -U`; não é um pacote do repositório oficial do Arch. Em sistemas imutáveis, use preferencialmente o AppImage até que seja disponibilizado um método específico e verificado para a variante em uso.
 
@@ -23,14 +23,18 @@ Os blocos publicados pela página de download começam com `bash -c`, portanto p
 ## Checksums SHA-256
 
 ```text
-6d9fd112eb8c9d32d54578b89c95917c460df2645c8d158fba4355dede0c7b77  Stray-Linux-1.0.0-Setup.exe
-c2e05c03fb95e8d3d973a5bb5bbd98ac51e58dd72f5edd5f936431c324d02f35  Stray-Linux-1.0.0-x86_64.AppImage
-3741412fc4097af1e97ce17b723316e53d5943bdd5818556a0b85f97cd57d9c1  Stray-Linux-1.0.0-amd64.deb
-c2c349e01da3fc8ac4e12bc172206ff9db19c53dbcb1fd7eb3b0acc7d251bda8  Stray-Linux-1.0.0-x86_64.rpm
-256dfd4ef3d6d95cd0e7bc13b9260a9124e96ad20876d51a89da7033918e5c49  Stray-Linux-1.0.0-x64.pacman
+c760f5cd3a2075b1699cc86343e76422532f81a26bf3180ce88c3e97323a24d7  Stray-Linux-1.1.0-Setup.exe
+b231a87c059568aee4dff38bae35f0f1698ce2db2901c08c0f404356a9be43ad  Stray-Linux-1.1.0-x86_64.AppImage
+48960d0744a9784c3ba8481f254836b964073ad3fa806c28b565c403391c1576  Stray-Linux-1.1.0-amd64.deb
+a0e97e6da511d6627e48618b83f8f60b34f0b02e79533006518f47d7e1a00a0f  Stray-Linux-1.1.0-x86_64.rpm
+b681da7acbd191d0cfadd46bca7347f6e87ea771b30be6c08fcf4dd5d1687872  Stray-Linux-1.1.0-x64.pacman
 ```
 
-Em Linux, execute `sha256sum <arquivo>` e compare a saída. Em Windows, use `Get-FileHash .\Stray-Linux-1.0.0-Setup.exe -Algorithm SHA256` no PowerShell.
+Em Linux, execute `sha256sum <arquivo>` e compare a saída. Em Windows, use `Get-FileHash .\Stray-Linux-1.1.0-Setup.exe -Algorithm SHA256` no PowerShell.
+
+## Atualizações controladas
+
+O aplicativo empacotado consulta um feed HTTPS de releases. Quando encontra uma versão mais nova, baixa o artefato publicado, valida os metadados de integridade e pede confirmação antes de reiniciar. Em Debian, RPM e Pacman, a conclusão permanece sujeita à autorização do sistema e ao gerenciador de pacotes. A arquitetura e seus limites estão em [`AUTO-UPDATE-ARCHITECTURE.md`](AUTO-UPDATE-ARCHITECTURE.md).
 
 ## Referências
 

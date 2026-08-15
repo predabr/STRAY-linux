@@ -3,9 +3,12 @@ const { spawn } = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
 const { isAllowedExternalUrl } = require("./security.cjs");
+const { autoUpdater } = require("electron-updater");
+const { createDesktopUpdater } = require("./updater.cjs");
 
 let serverProcess;
 let mainWindow;
+let desktopUpdater;
 const preferredPort = Number(process.env.LGH_PORT || 43819);
 
 function loadDesktopConfig() {
@@ -136,11 +139,21 @@ app.whenReady().then(async () => {
     await shell.openExternal(`steam://run/${appId}`);
     return { launched: true };
   });
+  ipcMain.handle("stray:updates:status", async (event) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de atualização recusada.");
+    return desktopUpdater?.getStatus() ?? { state: "unavailable", detail: "Atualizações não foram inicializadas." };
+  });
+  ipcMain.handle("stray:updates:check", async (event) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de atualização recusada.");
+    return desktopUpdater?.check() ?? { state: "unavailable", detail: "Atualizações não foram inicializadas." };
+  });
   const config = loadDesktopConfig();
   startLocalServer(config);
   try {
     await waitForServer(config.port);
     createWindow(config.port);
+    desktopUpdater = createDesktopUpdater({ app, autoUpdater, dialog });
+    if (app.isPackaged) setTimeout(() => { void desktopUpdater.check(); }, 15_000);
   } catch (error) {
     dialog.showErrorBox("Stray Linux", `${error.message}\n\nO aplicativo não exige DATABASE_URL. Verifique se o diretório local possui permissão de escrita e tente abrir novamente.`);
     app.quit();
