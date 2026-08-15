@@ -258,3 +258,5 @@
 - [x] Remover o nome completo dos metadados públicos distribuídos pelos instaladores, preservando somente Pedro, Brasil.
 - [x] Criar uma rota pública de download que reutilize comandos verificados, checksum e limites de distribuição sem expor o workspace.
 - [x] Revisar metadados públicos e navegação de descoberta para separar claramente download, documentação e aplicativo.
+- [x] Reconstruir a landing pública na composição visual da referência enviada, mantendo métricas e diagnósticos somente quando verificáveis.
+- [x] Ligar todos os CTAs da landing reconstruída a download, produto, Scanner, GameHub, LinuxFix, Stray AI e instalação por distribuição.

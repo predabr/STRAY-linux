@@ -1,0 +1,12 @@
+# QA visual — landing inspirada na referência fornecida
+
+## Composição validada
+
+Em 15 de agosto de 2026, a landing pública foi reconstruída em código a partir da referência visual fornecida pelo criador. A composição preserva o hero em duas colunas, fundo azul-marinho com acento violeta, preview de workspace, sequência de seis capacidades, painéis de sistema/jogo/benchmark/LinuxFix/Stray AI e instalação final em duas plataformas.
+
+| Viewport | Resultado observado |
+| --- | --- |
+| 1280 × 720, página completa | A hierarquia, distribuição de painéis, CTAs principais e rodapé renderizaram sem sobreposição visível. Os painéis de benchmark e compatibilidade exibem estados de evidência ou indisponibilidade, não métricas inventadas. |
+| 375 × 812, página completa | Hero, preview, sequência de capacidades, cartões e blocos de instalação empilharam sem corte horizontal visível. CTAs mantiveram área de toque e legibilidade. |
+
+Os links da landing são implementados como ações reais: download direto do instalador Windows publicado, âncoras para as seções públicas e rotas existentes para Scanner, GameHub, LinuxFix, biblioteca, Benchmark, Stray AI, documentação e métodos de instalação.

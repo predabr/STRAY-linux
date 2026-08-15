@@ -34,6 +34,17 @@ describe("landing pública", () => {
     expect(app).toContain("<ProductWorkspace><Router /></ProductWorkspace>");
   });
 
+  it("liga a composição de referência aos fluxos existentes sem declarar FPS ou notas fabricadas", () => {
+    const landing = read("client/src/pages/Home.tsx");
+    for (const route of ["/scanner", "/games", "/library", "/linuxfix", "/setup", "/benchmark", "/assistant", "/download", "/api/docs"]) {
+      expect(landing).toContain(`"${route}"`);
+    }
+    expect(landing).toContain('href={assets.exe}');
+    expect(landing).toContain("Aguardando evidência verificável");
+    expect(landing).not.toContain("87 FPS");
+    expect(landing).not.toContain("Excellent 92");
+  });
+
   it("documenta remoção segura sem limpar dados locais automaticamente", () => {
     const uninstall = read("client/src/pages/Uninstall.tsx");
     expect(uninstall).toContain("sudo apt remove stray-linux");
