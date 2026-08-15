@@ -25,3 +25,13 @@ O gate integral executou **36 arquivos de teste e 100 testes aprovados**, seguid
 ## Verificação pós-publicação
 
 Logo após o checkpoint `60755535`, a primeira consulta ao domínio público ainda respondeu com o bundle anterior e a rota `/download` retornou 404. Após a propagação automática, uma nova consulta com cache-busting confirmou o título `Download | Stray Linux`, o botão do instalador Windows e o comando Debian/Ubuntu com o pacote `Stray-Linux-1.0.0-amd64_a04a5424.deb` e checksum `36ce2009…ceca9d`. A publicação foi, portanto, confirmada no domínio.
+
+## Shell desktop refinado
+
+As capturas atuais de `/dashboard` e `/library` no viewport de 1280 × 720 confirmaram a rail de aplicativo refinada: superfície mais profunda, separador sob a marca, item ativo com gradiente de evidência e marcador luminoso, e painel de status local mais legível. O Dashboard preservou a densidade operacional; a Biblioteca continuou a exibir corretamente o limite de leitura local quando aberta fora do Electron, sem simular instalações Steam ou Heroic.
+
+No viewport de 375 × 812, Dashboard e Biblioteca mantiveram cabeçalho compacto, breadcrumbs legíveis, superfícies empilhadas e navegação inferior com alvo ativo distinguível. A página de Biblioteca mostrou a ação para explorar o GameHub publicado como alternativa ao detector local indisponível no navegador; não houve sobreposição observável no conteúdo visível.
+
+## Auditoria final de erros
+
+A inspeção dos trechos recentes de servidor, console do navegador e rede não encontrou erros ativos nem respostas HTTP 4xx/5xx novas. A única ocorrência de `ELIFECYCLE` no log corresponde a um restart histórico do servidor às 02:27; o processo foi reiniciado automaticamente e as verificações subsequentes de tipo, testes, build, auditoria de dependências e rotas concluíram sem falhas. O build mantém apenas o aviso conhecido de chunks grandes, que não impede a geração do bundle.

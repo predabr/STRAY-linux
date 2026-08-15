@@ -20,7 +20,7 @@ describe("biblioteca Steam local", () => {
       appId: 620,
       externalId: "620",
       name: "Portal 2",
-      installDir: "Portal 2",
+      installDir: path.join(steamApps, "common", "Portal 2"),
       libraryPath: steamApps,
       installationType: "flatpak",
       launcher: "steam",

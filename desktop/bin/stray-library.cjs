@@ -59,7 +59,12 @@ function scanSteamLibrary(home) {
       if (!/^appmanifest_\d+\.acf$/i.test(entry)) continue;
       const parsed = parseManifest(readText(path.join(steamApps.path, entry)) || "");
       if (!parsed || games.has(parsed.appId)) continue;
-      games.set(parsed.appId, { ...parsed, libraryPath: steamApps.path, installationType: steamApps.kind });
+      games.set(parsed.appId, {
+        ...parsed,
+        installDir: parsed.installDir ? path.join(steamApps.path, "common", parsed.installDir) : null,
+        libraryPath: steamApps.path,
+        installationType: steamApps.kind,
+      });
     }
   }
   return [...games.values()].sort((left, right) => left.name.localeCompare(right.name, "pt-BR"));

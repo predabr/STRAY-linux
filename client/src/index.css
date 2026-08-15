@@ -201,6 +201,77 @@
     background: radial-gradient(circle at 16% 17%, oklch(0.55 0.15 245 / 6%), transparent 23rem), radial-gradient(circle at 88% 88%, oklch(0.48 0.12 210 / 5%), transparent 26rem);
   }
 
+  .product-rail {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, oklch(0.145 0.012 260 / 98%), oklch(0.11 0.009 260 / 96%));
+  }
+
+  .product-rail::after {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    background: linear-gradient(160deg, oklch(0.56 0.15 250 / 9%), transparent 19rem), radial-gradient(circle at 5% 88%, oklch(0.58 0.13 210 / 6%), transparent 13rem);
+  }
+
+  .product-rail-brand {
+    position: relative;
+    padding-bottom: 1rem;
+  }
+
+  .product-rail-brand::after {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0;
+    left: 0.5rem;
+    height: 1px;
+    content: "";
+    background: linear-gradient(90deg, transparent, var(--stray-hairline), transparent);
+  }
+
+  .product-rail-navigation {
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.6 0.08 240 / 30%) transparent;
+  }
+
+  .product-rail-link {
+    position: relative;
+  }
+
+  .product-rail-link:hover:not(.product-rail-link-active) {
+    background: oklch(1 0 0 / 4%);
+    transform: translateX(1px);
+  }
+
+  .product-rail-link-active {
+    overflow: hidden;
+    background: linear-gradient(90deg, oklch(0.5 0.17 255 / 24%), oklch(0.42 0.13 265 / 11%));
+    box-shadow: inset 0 0 0 1px oklch(0.66 0.14 250 / 12%), 0 8px 20px oklch(0.08 0.02 260 / 22%);
+  }
+
+  .product-rail-link-active::before {
+    position: absolute;
+    top: 22%;
+    bottom: 22%;
+    left: 0;
+    width: 2px;
+    border-radius: 99px;
+    content: "";
+    background: linear-gradient(var(--stray-evidence), oklch(0.7 0.18 280));
+    box-shadow: 0 0 14px oklch(0.7 0.15 245 / 70%);
+  }
+
+  .product-rail-status {
+    position: relative;
+    border-top: 1px solid var(--stray-hairline);
+  }
+
+  .product-rail-status-dot {
+    box-shadow: 0 0 0 4px oklch(0.7 0.15 155 / 8%), 0 0 14px oklch(0.7 0.15 155 / 46%);
+  }
+
   .stray-surface {
     border: 1px solid var(--stray-hairline);
     background: var(--stray-surface);
