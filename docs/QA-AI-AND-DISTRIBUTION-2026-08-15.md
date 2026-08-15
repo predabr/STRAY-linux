@@ -12,11 +12,11 @@ Os cinco artefatos foram reconstruídos após a sincronização do snapshot SQLi
 
 | Formato | SHA-256 |
 | --- | --- |
-| Windows NSIS | `4f4cbae9a4a934f440d8c3f14860acccd3c93b8257ba08f875d4206581da9786` |
-| Debian/Ubuntu | `e683dab519b731bd97f198e1d1784ddad4d5390b7a29e5e7f491c5aac42d5232` |
-| RPM | `d4f8e02ab166d5f62f4f639d53891ff21a2107ade31df9146c4417185845ecb6` |
-| Pacman | `5d5cc6d92ecd9ac2c1d30b51ab9e111cd04ed03d7eb3dafd25e9a97b4806a3ba` |
-| AppImage | `594083dacccb83804df2b2900935ea303d9ca011c1a6219da6d6cd51b69f8f29` |
+| Windows NSIS | `205318a8f752de745f8a86dc79ed45bc88883acc86b94096878fa0930f606161` |
+| Debian/Ubuntu | `3941fe65e2614025a8decb0d024f991a8fe75f895462d78f9db49ee1cb8f1ae7` |
+| RPM | `cde87a9e0e20d524320a1e76fcaeafdd60cc116943697eb0d9b471394b1ca6ef` |
+| Pacman | `bb669a2890bbaa0481a278578705a0af3214609e374bc886928da791b0c2b279` |
+| AppImage | `5b6942a33499f8a499e91e3b12d52f50f5a73e4b2968696342d513a49816f2e6` |
 
 ## Prevenção de pacote incorreto e fish
 
@@ -30,4 +30,4 @@ Após a publicação do checkpoint de correção, a rota publicada `/download` a
 
 Após a reimplantação, a mesma rota foi recarregada no domínio com um parâmetro de cache e passou a apresentar a seleção obrigatória, sem comando pré-selecionado, com o lote de artefatos atual. A confirmação do método Pacman é verificada em seguida como parte do fluxo publicado.
 
-O clique publicado em **pacman** exibiu **“Arch / derivadas · pacote pacman”**, a URL final `.pacman`, o checksum `5d5cc6d9…`, `sudo pacman -U /tmp/stray-linux.pacman` e nenhuma instrução `dpkg`, `apt-get` ou `.deb` no bloco escolhido.
+O clique publicado em **pacman** exibe **“Arch / derivadas · pacote pacman”**, a URL final `.pacman`, o checksum `bb669a28…`, `sudo pacman -U /tmp/stray-linux.pacman` e nenhuma instrução `dpkg`, `apt-get` ou `.deb` no bloco escolhido.

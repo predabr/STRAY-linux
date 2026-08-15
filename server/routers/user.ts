@@ -154,6 +154,16 @@ export const userRouter = router({
     }),
   }),
 
+  snapshots: router({
+    list: activeUserProcedure.query(async () => [] as Array<{ id: number; label: string; createdAt: string; scan: z.infer<typeof scannerReportInput> }>),
+    create: activeUserProcedure.input(z.object({ label: z.string().trim().min(2).max(120), scan: scannerReportInput })).mutation(async () => {
+      throw new Error("Snapshots técnicos são locais e estão disponíveis somente no aplicativo desktop.");
+    }),
+    remove: activeUserProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async () => {
+      throw new Error("Snapshots técnicos são locais e estão disponíveis somente no aplicativo desktop.");
+    }),
+  }),
+
   reports: router({
     list: activeUserProcedure.query(async ({ ctx }) => {
       const db = await requireDatabase();

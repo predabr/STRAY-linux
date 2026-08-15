@@ -286,3 +286,13 @@
 - [x] Adicionar comandos compatíveis com fish e orientação explícita de shell para a instalação Linux.
 - [x] Revalidar downloads, checksums, instalação e desinstalação nos fluxos Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch e AppImage.
 - [x] Reproduzir e corrigir qualquer rota publicada que mostre `.deb` após a seleção de Arch ou derivadas.
+- [x] Auditar a landing pública, rotas e links existentes sem alterar o aplicativo desktop ou seus recursos.
+- [ ] Reconstruir a landing pública em React com seções editoriais reais, demonstrações rotuladas e navegação móvel funcional.
+- [ ] Integrar downloads reais, verificação de checksum, cópia de comandos Linux e FAQ na landing pública.
+- [ ] Validar todos os links, downloads, responsividade, acessibilidade, SEO, testes e build da landing pública.
+- [x] Preservar a landing pública atual e auditar lacunas reais do aplicativo desktop sem redesenhar suas superfícies aprovadas.
+- [x] Aprofundar Scanner, diagnóstico explicável, descoberta local de jogos e modo offline com dados efetivamente detectados.
+- [x] Implementar ou reforçar snapshots locais, histórico de performance e runtimes apenas onde houver dados reais coletados ou importados.
+- [x] Melhorar contexto, ações seguras e transparência do Stray AI sem permitir execução destrutiva automática.
+- [x] Refinar configurações, privacidade, estados de erro/vazio/offline e consistência de interface do desktop.
+- [x] Validar detecção, dados locais, IA, downloads, testes, build e instaladores suportados, sem introduzir benchmarks, FPS ou avaliações falsos.

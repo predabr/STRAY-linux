@@ -6,12 +6,12 @@ Esta validação registra a matriz de empacotamento que contém as áreas **Wind
 
 | Formato | Local inspecionado | Evidência de rota | SHA-256 |
 |---|---|---|---|
-| Windows NSIS | `dist/win-unpacked/resources/app.asar` | Ponte `stray:library:pick-external`, política de navegação externa, Stray AI com modo visitante, seleção obrigatória de sistema nos downloads e comandos portáveis para fish incluídos | `4f4cbae9a4a934f440d8c3f14860acccd3c93b8257ba08f875d4206581da9786` |
+| Windows NSIS | `dist/win-unpacked/resources/app.asar` | Scanner 1.3, Diagnóstico, Snapshots SQLite, Stray AI local contextual, configurações e privacidade local incluídos | `205318a8f752de745f8a86dc79ed45bc88883acc86b94096878fa0930f606161` |
 | Linux unpacked | `dist/linux-unpacked/resources/app.asar` | Ponte `stray:library:pick-external`, rotas operacionais e UI renovada encontrados | Runtime de referência dos formatos Linux |
-| AppImage | `Stray-Linux-1.0.0-x86_64.AppImage` | Reconstruído a partir do mesmo runtime Linux | `594083dacccb83804df2b2900935ea303d9ca011c1a6219da6d6cd51b69f8f29` |
-| Debian/Ubuntu `.deb` | `Stray-Linux-1.0.0-amd64.deb` | Reconstruído a partir do mesmo runtime Linux | `e683dab519b731bd97f198e1d1784ddad4d5390b7a29e5e7f491c5aac42d5232` |
-| RPM | `Stray-Linux-1.0.0-x86_64.rpm` | Reconstruído a partir do mesmo runtime Linux | `d4f8e02ab166d5f62f4f639d53891ff21a2107ade31df9146c4417185845ecb6` |
-| Pacman | `Stray-Linux-1.0.0-x64.pacman` | Reconstruído a partir do mesmo runtime Linux | `5d5cc6d92ecd9ac2c1d30b51ab9e111cd04ed03d7eb3dafd25e9a97b4806a3ba` |
+| AppImage | `Stray-Linux-1.0.0-x86_64.AppImage` | Reconstruído a partir do mesmo runtime Linux | `5b6942a33499f8a499e91e3b12d52f50f5a73e4b2968696342d513a49816f2e6` |
+| Debian/Ubuntu `.deb` | `Stray-Linux-1.0.0-amd64.deb` | Reconstruído a partir do mesmo runtime Linux | `3941fe65e2614025a8decb0d024f991a8fe75f895462d78f9db49ee1cb8f1ae7` |
+| RPM | `Stray-Linux-1.0.0-x86_64.rpm` | Reconstruído a partir do mesmo runtime Linux | `cde87a9e0e20d524320a1e76fcaeafdd60cc116943697eb0d9b471394b1ca6ef` |
+| Pacman | `Stray-Linux-1.0.0-x64.pacman` | Reconstruído a partir do mesmo runtime Linux | `bb669a2890bbaa0481a278578705a0af3214609e374bc886928da791b0c2b279` |
 
 ## Método reproduzível
 

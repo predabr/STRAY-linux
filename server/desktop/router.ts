@@ -21,6 +21,28 @@ function wikiList(input: { q?: string; page: number; pageSize: number }) {
   return paginate(rows.map((article) => ({ article, distributionName: article.distributionName })), input.page, input.pageSize).data;
 }
 
+function localAiKeyword(question: string) {
+  const normalized = question.toLowerCase();
+  return ["vulkan", "proton", "wine", "steam", "mesa", "driver", "stutter", "mangohud", "gamemode", "gamescope", "launch", "iniciar"].find((keyword) => normalized.includes(keyword)) ?? null;
+}
+
+function desktopAiAnswer(question: string) {
+  if (!isStrayAiDomainQuestion(question)) return { answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [], context: { inScope: false, profileAvailable: false, internalSources: 0 } };
+  const profile = store().one<any>("SELECT name, kernel_version AS kernelVersion, driver_version AS driverVersion, proton_version AS protonVersion, wine_version AS wineVersion, runtime_version AS runtimeVersion FROM profiles WHERE is_active = 1 ORDER BY updated_at DESC LIMIT 1");
+  const keyword = localAiKeyword(question);
+  const term = `%${keyword ?? ""}%`;
+  const guides = keyword ? store().all<any>("SELECT title, slug, source_url AS sourceUrl FROM setup_guides WHERE lower(title) LIKE ? OR lower(description) LIKE ? ORDER BY title LIMIT 2", [term, term]) : [];
+  const fixes = keyword ? store().all<any>("SELECT title, slug, source_url AS sourceUrl FROM linux_fixes WHERE lower(title) LIKE ? OR lower(symptoms) LIKE ? OR lower(possible_causes) LIKE ? ORDER BY title LIMIT 2", [term, term, term]) : [];
+  const citations = [...guides.map((item) => ({ type: "guide" as const, title: item.title, slug: item.slug, sourceUrl: item.sourceUrl ?? null })), ...fixes.map((item) => ({ type: "linuxfix" as const, title: item.title, slug: item.slug, sourceUrl: item.sourceUrl ?? null }))];
+  const known = profile ? [`Perfil ativo: ${profile.name}.`, `Kernel: ${profile.kernelVersion ?? "não informado"}.`, `Driver: ${profile.driverVersion ?? "não informado"}.`, `Proton: ${profile.protonVersion ?? "não informado"}.`, `Wine: ${profile.wineVersion ?? "não informado"}.`].join("\n") : "Não há perfil técnico ativo no armazenamento local.";
+  const sourceText = citations.length ? citations.map((item) => item.title).join(", ") : "Nenhum guia ou LinuxFix local correspondeu diretamente ao termo da pergunta.";
+  return {
+    answer: `### O que o Stray AI sabe\n${known}\n\n### Evidência local disponível\n${sourceText}\n\n### O que ele não sabe\nO modo desktop não possui benchmark, telemetria de FPS, histórico de performance ou compatibilidade por ambiente para esta pergunta, a menos que você importe uma evidência local posteriormente.\n\n### Próximo passo seguro\n${citations.length ? "Leia as fontes listadas e execute o Scanner novamente após qualquer alteração para verificar apenas campos detectáveis." : "Abra o Scanner, gere um relatório local e consulte LinuxFix ou guias por tema antes de mudar configurações."}\n\n### Por que esta resposta\nA resposta usa somente o perfil local ativo e o conteúdo empacotado no SQLite. Ela não executa comandos e não presume que uma solução funcione no seu ambiente.`,
+    citations,
+    context: { inScope: true, profileAvailable: Boolean(profile), internalSources: citations.length },
+  };
+}
+
 export const desktopRouter = router({
   auth: router({
     me: publicProcedure.query(() => localUser),
@@ -88,9 +110,14 @@ export const desktopRouter = router({
     favorites: router({ list: publicProcedure.query(() => store().all<any>("SELECT g.id, g.slug, g.title, g.description AS shortDescription, g.steam_app_id AS steamAppId FROM favorites f JOIN games g ON g.id = f.game_id ORDER BY f.created_at DESC").map((game) => ({ game }))), toggle: publicProcedure.input(z.object({ gameId: z.number() })).mutation(({ input }) => { const current = store().one<any>("SELECT game_id FROM favorites WHERE game_id = ?", [input.gameId]); if (current) { store().run("DELETE FROM favorites WHERE game_id = ?", [input.gameId]); return { favorited: false }; } store().run("INSERT INTO favorites (game_id) VALUES (?)", [input.gameId]); return { favorited: true }; }) }),
     savedGuides: router({ list: publicProcedure.query(() => store().all<any>("SELECT g.id, g.slug, g.title, g.description, g.difficulty, g.provenance FROM saved_guides s JOIN setup_guides g ON g.id = s.guide_id ORDER BY s.created_at DESC").map((guide) => ({ guide }))), toggle: publicProcedure.input(z.object({ guideId: z.number() })).mutation(({ input }) => { const current = store().one<any>("SELECT guide_id FROM saved_guides WHERE guide_id = ?", [input.guideId]); if (current) { store().run("DELETE FROM saved_guides WHERE guide_id = ?", [input.guideId]); return { saved: false }; } store().run("INSERT INTO saved_guides (guide_id) VALUES (?)", [input.guideId]); return { saved: true }; }) }),
     linuxFixHistory: router({ list: publicProcedure.query(() => store().all<any>("SELECT f.*, h.viewed_at AS viewedAt FROM fix_history h JOIN linux_fixes f ON f.id = h.fix_id ORDER BY h.viewed_at DESC").map((row) => ({ fix: { ...row, possibleCauses: row.possible_causes }, viewedAt: row.viewedAt }))), record: publicProcedure.input(z.object({ fixId: z.number() })).mutation(({ input }) => { store().run("INSERT INTO fix_history (fix_id) VALUES (?)", [input.fixId]); return { success: true }; }) }),
+    snapshots: router({
+      list: publicProcedure.query(() => store().all<any>("SELECT id, label, report_json AS reportJson, created_at AS createdAt FROM scanner_snapshots ORDER BY created_at DESC LIMIT 48").map((row) => ({ id: row.id, label: row.label, createdAt: row.createdAt, scan: scannerReportInput.parse(JSON.parse(row.reportJson)) }))),
+      create: publicProcedure.input(z.object({ label: z.string().trim().min(2).max(120), scan: scannerReportInput })).mutation(({ input }) => { const result = store().run("INSERT INTO scanner_snapshots (label, report_json) VALUES (?, ?)", [input.label, JSON.stringify(input.scan)]); return { id: Number(result.lastInsertRowid) }; }),
+      remove: publicProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => { store().run("DELETE FROM scanner_snapshots WHERE id = ?", [input.id]); return { success: true }; }),
+    }),
     reports: router({ list: publicProcedure.query(() => store().all<any>("SELECT id, subject_type AS subjectType, subject_id AS subjectId, type, description, status, created_at AS createdAt FROM reports ORDER BY created_at DESC")), create: publicProcedure.input(z.any()).mutation(({ input }) => { const result = store().run("INSERT INTO reports (subject_type, subject_id, type, description) VALUES (?, ?, ?, ?)", [input.subjectType, input.subjectId, input.type, input.description]); return { id: Number(result.lastInsertRowid), status: "open" as const }; }) }),
     hardwareOptions: publicProcedure.query(() => []), compatibilityForActiveProfile: publicProcedure.input(z.object({ gameId: z.number() })).query(() => ({ profile: null, records: [] })),
   }),
-  chat: router({ history: publicProcedure.query(() => []), ask: publicProcedure.input(z.object({ question: z.string().trim().min(2).max(2500) })).mutation(({ input }) => ({ answer: isStrayAiDomainQuestion(input.question) ? "No modo desktop, o Stray AI permanece focado no Stray Linux e usa apenas o conteúdo incluído no snapshot local. Para diagnósticos fundamentados, abra o Scanner e consulte os guias e LinuxFix disponíveis." : STRAY_AI_OUT_OF_SCOPE_RESPONSE, sources: [] })) }),
+  chat: router({ history: publicProcedure.query(() => []), ask: publicProcedure.input(z.object({ question: z.string().trim().min(2).max(2500) })).mutation(({ input }) => desktopAiAnswer(input.question)) }),
   admin: router({ overview: publicProcedure.query(() => ({ ...store().counts(), hardware: 0, pendingBenchmarks: store().one<{ count: number }>("SELECT count(*) as count FROM benchmarks WHERE verification_status = 'submitted'")?.count ?? 0, openReports: store().one<{ count: number }>("SELECT count(*) as count FROM reports WHERE status = 'open'")?.count ?? 0 })), listUsers: publicProcedure.query(() => [localUser]) }),
 });

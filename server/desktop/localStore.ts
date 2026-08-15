@@ -37,7 +37,9 @@ export class DesktopStore {
       CREATE TABLE IF NOT EXISTS fix_history (id INTEGER PRIMARY KEY AUTOINCREMENT, fix_id INTEGER NOT NULL, viewed_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, subject_type TEXT NOT NULL, subject_id INTEGER NOT NULL, type TEXT NOT NULL, description TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'open', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS benchmarks (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id INTEGER NOT NULL, source_label TEXT NOT NULL, source_url TEXT, evidence_note TEXT, verification_status TEXT NOT NULL DEFAULT 'submitted', provenance TEXT NOT NULL DEFAULT 'community', results_json TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS scanner_snapshots (id INTEGER PRIMARY KEY AUTOINCREMENT, label TEXT NOT NULL, report_json TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE INDEX IF NOT EXISTS idx_games_title ON games(title);
+      CREATE INDEX IF NOT EXISTS idx_scanner_snapshots_created ON scanner_snapshots(created_at DESC);
     `);
     const profileColumns = new Set(this.rows<{ name: string }>("PRAGMA table_info(profiles)").map((column) => column.name));
     if (!profileColumns.has("distribution_version_id")) this.db.run("ALTER TABLE profiles ADD COLUMN distribution_version_id INTEGER");

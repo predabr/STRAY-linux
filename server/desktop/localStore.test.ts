@@ -38,6 +38,8 @@ describe("DesktopStore", () => {
     expect(store.one<{ count: number }>("SELECT count(*) AS count FROM favorites")?.count).toBe(1);
     store.run("INSERT INTO profiles (name, distribution_id, distribution_version_id, wine_version, runtime_version, is_active) VALUES (?, ?, ?, ?, ?, 1)", ["Perfil local", 1, 2, "Wine 10", "Steam Linux Runtime"]);
     expect(store.one<{ distributionId: number; distributionVersionId: number; wineVersion: string; runtimeVersion: string }>("SELECT distribution_id AS distributionId, distribution_version_id AS distributionVersionId, wine_version AS wineVersion, runtime_version AS runtimeVersion FROM profiles WHERE name = ?", ["Perfil local"])).toMatchObject({ distributionId: 1, distributionVersionId: 2, wineVersion: "Wine 10", runtimeVersion: "Steam Linux Runtime" });
+    store.run("INSERT INTO scanner_snapshots (label, report_json) VALUES (?, ?)", ["Antes da atualização", JSON.stringify({ schemaVersion: 1 })]);
+    expect(store.one<{ label: string }>("SELECT label FROM scanner_snapshots WHERE label = ?", ["Antes da atualização"])).toEqual({ label: "Antes da atualização" });
     expect(fs.existsSync(path.join(directory, "linux-gaming-hub.sqlite"))).toBe(true);
   });
 });

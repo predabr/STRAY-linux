@@ -18,6 +18,9 @@ const AssistantPage = lazy(() => import("@/pages/Assistant"));
 const Benchmark = lazy(() => import("@/pages/Benchmark"));
 const Compare = lazy(() => import("@/pages/Compare"));
 const Controllers = lazy(() => import("@/pages/Controllers"));
+const Diagnostics = lazy(() => import("@/pages/Diagnostics"));
+const Snapshots = lazy(() => import("@/pages/Snapshots"));
+const SettingsCenter = lazy(() => import("@/pages/SettingsCenter"));
 const GameDetail = lazy(() => import("@/pages/GameDetail"));
 const Games = lazy(() => import("@/pages/Games"));
 const Home = lazy(() => import("@/pages/Home"));
@@ -49,6 +52,9 @@ function Router() {
     <Route path="/benchmark" component={Benchmark} />
     <Route path="/compare" component={Compare} />
     <Route path="/controllers" component={Controllers} />
+    <Route path="/diagnostics" component={Diagnostics} />
+    <Route path="/snapshots" component={Snapshots} />
+    <Route path="/settings" component={SettingsCenter} />
     <Route path="/windows" component={WindowsHub} />
     <Route path="/assistant" component={AssistantPage} />
     <Route path="/api/docs" component={ApiDocs} />

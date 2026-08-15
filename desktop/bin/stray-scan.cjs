@@ -6,7 +6,7 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
-const SCANNER_VERSION = "1.2.0";
+const SCANNER_VERSION = "1.3.0";
 
 function readText(file) { try { return fs.readFileSync(file, "utf8"); } catch { return null; } }
 
@@ -116,6 +116,51 @@ function detectProton(roots) {
   return [...tools].sort().slice(0, 12);
 }
 
+function detectProtonPrefixes(roots) {
+  let count = 0;
+  for (const root of roots) {
+    const compatData = path.join(root, "steamapps", "compatdata");
+    try {
+      for (const entry of fs.readdirSync(compatData, { withFileTypes: true })) {
+        if (entry.isDirectory() && fs.existsSync(path.join(compatData, entry.name, "pfx"))) count += 1;
+      }
+    } catch {}
+  }
+  return { detected: count > 0, knownPrefixCount: Math.min(count, 10000), sources: count ? ["steam-compatdata"] : [] };
+}
+
+function detectWinePrefixes() {
+  const home = os.homedir();
+  const sources = [];
+  let count = 0;
+  if (fs.existsSync(path.join(home, ".wine"))) { count += 1; sources.push("wine-default"); }
+  const managed = path.join(home, ".local", "share", "wineprefixes");
+  try {
+    const managedCount = fs.readdirSync(managed, { withFileTypes: true }).filter((entry) => entry.isDirectory()).length;
+    if (managedCount) { count += managedCount; sources.push("wineprefixes"); }
+  } catch {}
+  return { detected: count > 0, knownPrefixCount: Math.min(count, 10000), sources };
+}
+
+function detectHeroic() {
+  const home = os.homedir();
+  const candidates = [
+    { path: path.join(process.env.XDG_CONFIG_HOME || path.join(home, ".config"), "heroic", "legendaryConfig", "legendary"), kind: "native" },
+    { path: path.join(home, ".var", "app", "com.heroicgameslauncher.hgl", "config", "heroic", "legendaryConfig", "legendary"), kind: "flatpak" },
+  ];
+  const kinds = [];
+  const installs = new Set();
+  for (const candidate of candidates) {
+    if (!fs.existsSync(candidate.path)) continue;
+    kinds.push(candidate.kind);
+    try {
+      const entries = JSON.parse(fs.readFileSync(path.join(candidate.path, "installed.json"), "utf8"));
+      for (const key of Object.keys(entries || {})) installs.add(key);
+    } catch {}
+  }
+  return { detected: kinds.length > 0, installedGameCount: installs.size, installKinds: [...new Set(kinds)] };
+}
+
 function detectDesktopEnvironment() { return process.env.XDG_CURRENT_DESKTOP || process.env.DESKTOP_SESSION || process.env.GDMSESSION || null; }
 
 function detectStorage() {
@@ -162,6 +207,7 @@ function detectControllers() {
 function createReport() {
   const roots = steamRoots();
   const steam = detectSteam(roots);
+  const heroic = detectHeroic();
   const protonTools = detectProton(roots);
   const gpu = detectGpu();
   return {
@@ -179,7 +225,7 @@ function createReport() {
       storage: detectStorage(),
       displays: detectDisplays(),
       graphics: detectGraphics(gpu),
-      runtime: { wineVersion: firstLine("wine", ["--version"]), protonVersion: protonTools[0] || null, protonTools, steamDetected: steam.detected, steamInstallKinds: steam.installKinds, installedGameCount: steam.installedGameCount, gaming: detectGamingEnvironment() },
+      runtime: { wineVersion: firstLine("wine", ["--version"]), protonVersion: protonTools[0] || null, protonTools, steamDetected: steam.detected, steamInstallKinds: steam.installKinds, installedGameCount: steam.installedGameCount, discovery: { heroicDetected: heroic.detected, heroicInstallKinds: heroic.installKinds, heroicInstalledGameCount: heroic.installedGameCount, winePrefixes: detectWinePrefixes(), protonPrefixes: detectProtonPrefixes(roots) }, gaming: detectGamingEnvironment() },
       controllers: detectControllers(),
     },
   };

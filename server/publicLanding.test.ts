@@ -9,11 +9,11 @@ describe("landing pública", () => {
   it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
     const distribution = read("client/src/lib/distribution.ts");
-    expect(distribution).toContain("Stray-Linux-1.0.0-Setup_4f4cbae9_c8ec3c41.exe");
-    expect(distribution).toContain("Stray-Linux-1.0.0-amd64_e683dab5_262f4cef.deb");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_d4f8e02a_f3d37d87.rpm");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x64_5d5cc6d9_7cb33ddf.pacman");
-    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_594083da_a6eadfe5.AppImage");
+    expect(distribution).toContain("Stray-Linux-1.0.0-Setup_5f0e4b96.exe");
+    expect(distribution).toContain("Stray-Linux-1.0.0-amd64_a95df672.deb");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_0f1e960b.rpm");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x64_5fceb89c.pacman");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_73ae752d.AppImage");
     expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
     expect(distribution).toContain("sha256sum -c -");
@@ -29,6 +29,7 @@ describe("landing pública", () => {
   it("mantém a página inicial fora do shell operacional", () => {
     const app = read("client/src/App.tsx");
     expect(app).toContain('if (location === "/") return <Home />;');
+    expect(app).toContain('const DownloadPage = lazy(() => import("@/pages/Home")');
     expect(app).toContain('if (location === "/download") return <DownloadPage />;');
     expect(app).toContain('if (location === "/uninstall") return <Uninstall />;');
     expect(app).toContain("<ProductWorkspace><Router /></ProductWorkspace>");
