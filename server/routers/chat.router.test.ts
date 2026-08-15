@@ -53,6 +53,7 @@ describe("assistente: continuidade, contexto e autorização", () => {
 
     const result = await caller().chat.ask({ question: "Crie um código para um jogo em Python" });
     expect(result.answer).toBe(STRAY_AI_OUT_OF_SCOPE_RESPONSE);
+    expect(result.context).toEqual({ inScope: false, profileAvailable: false, internalSources: 0 });
     expect(harness.writes).toHaveLength(3);
     expect(harness.writes[2]).toMatchObject({ role: "assistant", content: STRAY_AI_OUT_OF_SCOPE_RESPONSE });
   });
@@ -69,6 +70,8 @@ describe("assistente: continuidade, contexto e autorização", () => {
   it("reutiliza a sessão da plataforma e grava somente os dois novos turnos", async () => {
     const result = await caller().chat.ask({ sessionId: 42, question: "Como instalar Steam pelo Flatpak?" });
     expect(result.sessionId).toBe(42);
+    expect(result.context).toMatchObject({ inScope: true, internalSources: 0 });
+    expect(typeof result.context.profileAvailable).toBe("boolean");
     expect(harness.writes).toHaveLength(2);
     expect(harness.writes[0]).toMatchObject({ sessionId: 42, role: "user" });
     expect(harness.writes[1]).toMatchObject({ sessionId: 42, role: "assistant" });

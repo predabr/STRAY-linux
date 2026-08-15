@@ -14,6 +14,7 @@ import { createTrpcRateLimitMiddleware } from "../lib/requestRateLimit";
 import { refreshSourceHandler } from "../scheduled/sourceRefresh";
 import { getOperationalStatus } from "../lib/operationalStatus";
 import { registerPublicApi } from "../publicApi";
+import { serverBindingHost } from "../lib/serverBinding";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -91,7 +92,7 @@ async function startServer() {
     console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
   }
 
-  server.listen(port, () => {
+  server.listen(port, serverBindingHost(process.env.DESKTOP_MODE), () => {
     console.log(`Server running on http://localhost:${port}/`);
   });
 }

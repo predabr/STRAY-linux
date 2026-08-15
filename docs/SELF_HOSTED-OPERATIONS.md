@@ -1,5 +1,9 @@
 # Operação autônoma sem conta externa
 
+## Escuta local do desktop
+
+No modo desktop, o processo HTTP embutido escuta exclusivamente em `127.0.0.1`. A janela Electron carrega o mesmo loopback; por isso, o conteúdo e a API SQLite local não são expostos deliberadamente à rede local. A hospedagem web mantém o bind administrado pela plataforma de publicação.
+
 ## Padrão ativo
 
 O Stray Linux pode operar sem Cloudflare, Better Stack, CDN, monitor de terceiros ou conta externa adicional. O modo ativo utiliza apenas o próprio aplicativo, o banco já configurado no web app e o SQLite embutido no desktop.

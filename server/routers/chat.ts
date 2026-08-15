@@ -58,7 +58,7 @@ async function retrieveContext(question: string, userId?: number) {
     ...guides.map((item) => `GUIA: ${item.title}\n${item.description ?? ""}`),
     ...fixes.map((item) => `LINUXFIX: ${item.title}\nSintomas: ${item.symptoms}\nCausas: ${item.possibleCauses}`),
   ].join("\n\n---\n\n");
-  return { citations, text };
+  return { citations, text, profileAvailable: Boolean(activeProfile) };
 }
 
 const questionInput = z.object({ sessionId: z.number().int().positive().optional(), question: z.string().trim().min(2).max(2500) });
@@ -90,7 +90,7 @@ export const chatRouter = router({
     if (!isStrayAiDomainQuestion(input.question)) {
       await db.insert(chatMessages).values({ sessionId, role: "assistant", content: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [] });
       await db.update(chatSessions).set({ updatedAt: new Date() }).where(eq(chatSessions.id, sessionId));
-      return { sessionId, answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [] };
+      return { sessionId, answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [], context: { inScope: false, profileAvailable: false, internalSources: 0 } };
     }
     const context = await retrieveContext(input.question, ctx.user.id);
     const system = buildStrayAiSystemPrompt(context.text);
@@ -98,6 +98,6 @@ export const chatRouter = router({
     const answer = llmText(response.choices[0]?.message.content ?? "Não consegui gerar uma resposta agora.") || "Não consegui gerar uma resposta agora.";
     await db.insert(chatMessages).values({ sessionId, role: "assistant", content: answer, citations: context.citations });
     await db.update(chatSessions).set({ updatedAt: new Date() }).where(eq(chatSessions.id, sessionId));
-    return { sessionId, answer, citations: context.citations };
+    return { sessionId, answer, citations: context.citations, context: { inScope: true, profileAvailable: context.profileAvailable, internalSources: context.citations.length } };
   }),
 });

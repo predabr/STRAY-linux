@@ -21,6 +21,7 @@ const Controllers = lazy(() => import("@/pages/Controllers"));
 const GameDetail = lazy(() => import("@/pages/GameDetail"));
 const Games = lazy(() => import("@/pages/Games"));
 const Home = lazy(() => import("@/pages/Home"));
+const DownloadPage = lazy(() => import("@/pages/Home").then((module) => ({ default: module.DownloadPage })));
 const WikiPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ default: module.WikiPage })));
 const WikiDetailPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ default: module.WikiDetailPage })));
 const SetupPage = lazy(() => import("@/pages/Knowledge").then((module) => ({ default: module.SetupPage })));
@@ -82,6 +83,7 @@ function App() {
 function ApplicationSurface() {
   const [location] = useLocation();
   if (location === "/") return <Home />;
+  if (location === "/download") return <DownloadPage />;
   if (location === "/uninstall") return <Uninstall />;
   return <StrayEntryGate><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate>;
 }

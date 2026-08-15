@@ -244,3 +244,17 @@
 - [x] Validar na prática o download publicado, o SHA-256 e o fluxo de instalação Debian/Ubuntu.
 - [x] Atualizar os comandos e a documentação para evitar a execução de nomes de arquivo sem o passo de download.
 - [x] Revalidar testes, build e publicação da correção de instalação.
+- [x] Auditar o ecossistema atual, componentes reutilizáveis, rotas, dados e limitações antes do redesign amplo.
+- [x] Formalizar um design system Stray Linux unificado com tokens, tipografia, espaçamento, superfícies, estados e microinterações acessíveis.
+- [x] Evoluir GameHub e perfis de jogo com descoberta, descrições, mídia opcional, compatibilidade e métricas somente quando houver dados rastreáveis.
+- [x] Consolidar Steam, Heroic, jogos externos, Meu PC e diagnósticos como fluxos seguros de leitura local e consentida.
+- [x] Refinar Benchmark, comparação, LinuxFix e indicadores de proveniência, sem criar FPS, scores ou recomendações inventadas.
+- [x] Elevar Stray AI para respostas estruturadas por causa provável, confiança, evidência, ações seguras e fontes internas.
+- [x] Reestruturar website, download, páginas de descoberta, SEO e experiência móvel sem confundir o papel do desktop.
+- [x] Revisar administração, moderação, IPC, arquivos, execução, offline, segurança e desempenho.
+- [x] Executar QA visual de páginas prioritárias, acessibilidade, testes, build e instaladores antes de publicar.
+- [x] Restringir o servidor embutido do desktop ao loopback e cobrir a decisão de bind com regressão automatizada.
+- [x] Bloquear pop-ups e navegação Electron fora do loopback, liberando links HTTP(S) externos apenas no navegador do sistema.
+- [x] Remover o nome completo dos metadados públicos distribuídos pelos instaladores, preservando somente Pedro, Brasil.
+- [x] Criar uma rota pública de download que reutilize comandos verificados, checksum e limites de distribuição sem expor o workspace.
+- [x] Revisar metadados públicos e navegação de descoberta para separar claramente download, documentação e aplicativo.

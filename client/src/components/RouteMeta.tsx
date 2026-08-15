@@ -15,6 +15,7 @@ function metaFor(path: string) {
   if (path.startsWith("/setup")) return { title: "Linux Setup | Stray Linux", description: "Guias técnicos com comandos copiáveis, avisos e progresso por etapa." };
   if (path.startsWith("/linuxfix")) return { title: "LinuxFix | Stray Linux", description: "Diagnósticos, soluções e feedback de uso para problemas de Linux gaming." };
   if (path.startsWith("/assistant")) return { title: "Assistente | Stray Linux", description: "Assistente contextual para dúvidas sobre Linux gaming e configuração." };
+  if (path.startsWith("/download")) return { title: "Download | Stray Linux", description: "Baixe o instalador Windows ou copie o comando Linux correspondente ao seu formato, com verificação SHA-256." };
   if (path.startsWith("/uninstall")) return { title: "Desinstalar | Stray Linux", description: "Remova o Stray Linux com o método correto para Windows, Debian, Fedora, openSUSE, Arch ou AppImage." };
   return defaults;
 }

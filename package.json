@@ -2,7 +2,7 @@
   "name": "stray-linux",
   "version": "1.0.0",
   "description": "Stray Linux: central de gaming, compatibilidade, guias e configuração Linux com proveniência.",
-  "author": "Pedro Henrique Gouveia Araújo de Souza (Brasil)",
+  "author": "Pedro (Brasil)",
   "homepage": "https://straylinux.local",
   "desktopName": "br.straylinux.desktop",
   "type": "module",
@@ -150,7 +150,7 @@
       "category": "Game",
       "syncDesktopName": true,
       "executableName": "stray-linux",
-      "maintainer": "Pedro Henrique Gouveia Araújo de Souza <creator@straylinux.local>",
+      "maintainer": "Pedro <creator@straylinux.local>",
       "synopsis": "Central de gaming, compatibilidade e configuração Linux.",
       "target": [
         "AppImage",

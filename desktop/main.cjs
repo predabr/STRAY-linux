@@ -2,6 +2,7 @@ const { app, BrowserWindow, dialog, ipcMain, shell } = require("electron");
 const { spawn } = require("node:child_process");
 const fs = require("node:fs");
 const path = require("node:path");
+const { isAllowedExternalUrl } = require("./security.cjs");
 
 let serverProcess;
 let mainWindow;
@@ -59,6 +60,7 @@ async function waitForServer(port, attempts = 80) {
 }
 
 function createWindow(port) {
+  const localOrigin = `http://127.0.0.1:${port}`;
   mainWindow = new BrowserWindow({
     width: 1440,
     height: 940,
@@ -66,9 +68,18 @@ function createWindow(port) {
     minHeight: 720,
     backgroundColor: "#09090b",
     title: "Stray Linux",
-    webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true, preload: path.join(__dirname, "preload.cjs") },
+    webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true, preload: path.join(__dirname, "preload.cjs") },
   });
-  mainWindow.loadURL(`http://127.0.0.1:${port}`);
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (isAllowedExternalUrl(url)) void shell.openExternal(url).catch((error) => console.error("[external-link]", error));
+    return { action: "deny" };
+  });
+  mainWindow.webContents.on("will-navigate", (event, url) => {
+    if (url === localOrigin || url.startsWith(`${localOrigin}/`)) return;
+    event.preventDefault();
+    if (isAllowedExternalUrl(url)) void shell.openExternal(url).catch((error) => console.error("[external-link]", error));
+  });
+  mainWindow.loadURL(localOrigin);
 }
 
 function runScanner() {

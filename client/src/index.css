@@ -43,6 +43,15 @@
 }
 
 :root {
+  --stray-canvas: oklch(0.985 0.003 260);
+  --stray-surface: oklch(1 0 0 / 88%);
+  --stray-surface-raised: oklch(1 0 0 / 96%);
+  --stray-hairline: oklch(0.2 0.01 260 / 13%);
+  --stray-evidence: oklch(0.62 0.14 220);
+  --stray-success: oklch(0.64 0.16 150);
+  --stray-warning: oklch(0.74 0.15 82);
+  --stray-danger: oklch(0.61 0.2 25);
+  --stray-shadow: 0 18px 48px oklch(0.15 0.02 260 / 10%);
   --primary: var(--color-blue-700);
   --primary-foreground: var(--color-blue-50);
   --sidebar-primary: var(--color-blue-600);
@@ -79,6 +88,15 @@
 }
 
 .dark {
+  --stray-canvas: oklch(0.12 0.009 260);
+  --stray-surface: oklch(0.18 0.009 260 / 92%);
+  --stray-surface-raised: oklch(0.215 0.011 260 / 96%);
+  --stray-hairline: oklch(1 0 0 / 9%);
+  --stray-evidence: oklch(0.76 0.12 220);
+  --stray-success: oklch(0.76 0.15 155);
+  --stray-warning: oklch(0.81 0.14 84);
+  --stray-danger: oklch(0.7 0.18 25);
+  --stray-shadow: 0 20px 56px oklch(0.03 0.008 260 / 38%);
   --primary: var(--color-blue-700);
   --primary-foreground: var(--color-blue-50);
   --sidebar-primary: var(--color-blue-500);
@@ -120,7 +138,8 @@
   body {
     @apply bg-background text-foreground;
     text-rendering: optimizeLegibility;
-    background-image: radial-gradient(circle at 12% -10%, oklch(0.45 0.2 260 / 12%), transparent 28rem), radial-gradient(circle at 88% 8%, oklch(0.36 0.15 210 / 8%), transparent 26rem);
+    background-color: var(--stray-canvas);
+    background-image: radial-gradient(ellipse 54rem 36rem at 8% -10%, oklch(0.45 0.16 250 / 10%), transparent 68%), radial-gradient(ellipse 46rem 32rem at 98% 12%, oklch(0.4 0.12 210 / 7%), transparent 70%);
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -165,12 +184,12 @@
   .technical-grid {
     position: relative;
     isolation: isolate;
-    background-color: oklch(0.135 0.008 285);
-    background-image: radial-gradient(ellipse 58% 45% at 8% -8%, oklch(0.47 0.17 250 / 13%), transparent 72%), radial-gradient(ellipse 54% 44% at 94% 12%, oklch(0.42 0.14 200 / 10%), transparent 72%), linear-gradient(138deg, oklch(1 0 0 / 2%) 0 1px, transparent 1px 100%);
+    background-color: var(--stray-canvas);
+    background-image: radial-gradient(ellipse 60% 44% at 5% -10%, oklch(0.45 0.15 250 / 10%), transparent 70%), radial-gradient(ellipse 48% 42% at 99% 18%, oklch(0.43 0.12 210 / 8%), transparent 72%);
   }
 
   .product-workspace .technical-grid {
-    background-image: radial-gradient(ellipse 46% 34% at 38% 0%, oklch(0.46 0.16 260 / 9%), transparent 72%), radial-gradient(ellipse 45% 42% at 98% 75%, oklch(0.43 0.14 210 / 8%), transparent 72%), linear-gradient(138deg, oklch(1 0 0 / 2%) 0 1px, transparent 1px 100%);
+    background-image: radial-gradient(ellipse 46% 34% at 38% 0%, oklch(0.46 0.14 260 / 8%), transparent 72%), radial-gradient(ellipse 45% 42% at 98% 75%, oklch(0.43 0.11 210 / 7%), transparent 72%);
   }
 
   .product-workspace::before {
@@ -179,8 +198,38 @@
     z-index: -1;
     pointer-events: none;
     content: "";
-    background: radial-gradient(circle at 16% 17%, oklch(0.55 0.17 245 / 7%), transparent 23rem), radial-gradient(circle at 88% 88%, oklch(0.48 0.14 210 / 6%), transparent 26rem);
+    background: radial-gradient(circle at 16% 17%, oklch(0.55 0.15 245 / 6%), transparent 23rem), radial-gradient(circle at 88% 88%, oklch(0.48 0.12 210 / 5%), transparent 26rem);
   }
+
+  .stray-surface {
+    border: 1px solid var(--stray-hairline);
+    background: var(--stray-surface);
+    box-shadow: var(--stray-shadow);
+  }
+
+  .stray-surface-raised {
+    border: 1px solid var(--stray-hairline);
+    background: var(--stray-surface-raised);
+    box-shadow: var(--stray-shadow);
+  }
+
+  .stray-kicker {
+    color: var(--stray-evidence);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    font-size: 0.64rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .stray-empty-state {
+    border: 1px dashed var(--stray-hairline);
+    background: color-mix(in oklab, var(--stray-surface) 82%, transparent);
+  }
+
+  .stray-status-success { color: var(--stray-success); }
+  .stray-status-warning { color: var(--stray-warning); }
+  .stray-status-danger { color: var(--stray-danger); }
 
   .evidence-label {
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;

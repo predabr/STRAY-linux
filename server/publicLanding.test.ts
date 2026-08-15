@@ -8,14 +8,16 @@ const read = (relativePath: string) => fs.readFileSync(path.join(projectRoot, re
 describe("landing pública", () => {
   it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
-    expect(landing).toContain("Stray-Linux-1.0.0-Setup_fd81114a.exe");
-    expect(landing).toContain("Stray-Linux-1.0.0-amd64_8506c6fc.deb");
-    expect(landing).toContain("Stray-Linux-1.0.0-x86_64_032c51b2.rpm");
-    expect(landing).toContain("Stray-Linux-1.0.0-x64_0d745038.pacman");
-    expect(landing).toContain("Stray-Linux-1.0.0-x86_64_68775b31.AppImage");
-    expect(landing).toContain("sudo pacman -U /tmp/stray-linux.pacman");
-    expect(landing).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
-    expect(landing).toContain("sha256sum -c -");
+    const distribution = read("client/src/lib/distribution.ts");
+    expect(distribution).toContain("Stray-Linux-1.0.0-Setup_77d35f72.exe");
+    expect(distribution).toContain("Stray-Linux-1.0.0-amd64_a04a5424.deb");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_fad145a2.rpm");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x64_e47eaca5.pacman");
+    expect(distribution).toContain("Stray-Linux-1.0.0-x86_64_aa80474b.AppImage");
+    expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
+    expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
+    expect(distribution).toContain("sha256sum -c -");
+    expect(landing).toContain('import { distributionAssets as assets, linuxInstallers } from "@/lib/distribution";');
     expect(landing).toContain('href={assets.exe}');
     expect(landing).not.toContain('href={assets.deb}');
     expect(landing).not.toContain('href={assets.rpm}');
@@ -27,6 +29,7 @@ describe("landing pública", () => {
   it("mantém a página inicial fora do shell operacional", () => {
     const app = read("client/src/App.tsx");
     expect(app).toContain('if (location === "/") return <Home />;');
+    expect(app).toContain('if (location === "/download") return <DownloadPage />;');
     expect(app).toContain('if (location === "/uninstall") return <Uninstall />;');
     expect(app).toContain("<ProductWorkspace><Router /></ProductWorkspace>");
   });
