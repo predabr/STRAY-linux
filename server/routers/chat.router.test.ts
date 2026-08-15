@@ -49,6 +49,8 @@ describe("assistente: continuidade, contexto e autorização", () => {
 
   it("aceita somente questões do Stray Linux e bloqueia criação de código antes do modelo", async () => {
     expect(isStrayAiDomainQuestion("Como verificar Vulkan no meu PC Linux?")).toBe(true);
+    expect(isStrayAiDomainQuestion("Estou no PikaOS: qual guia do Stray devo consultar?")).toBe(true);
+    expect(isStrayAiDomainQuestion("Como atualizo o ChimeraOS pela interface Steam?")).toBe(true);
     expect(isStrayAiDomainQuestion("Crie um código para um jogo em Python")).toBe(false);
 
     const result = await caller().chat.ask({ question: "Crie um código para um jogo em Python" });
@@ -64,6 +66,7 @@ describe("assistente: continuidade, contexto e autorização", () => {
     expect(prompt).toContain("Evidência disponível");
     expect(prompt).toContain("Ações seguras");
     expect(prompt).toContain("Limites");
+    expect(prompt).toContain("guia da distribuição ativa");
     expect(prompt).toContain("não invente comandos, compatibilidade, FPS, versões, mídia, causa ou resultado");
   });
 

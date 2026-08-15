@@ -36,6 +36,7 @@ const Performance = lazy(() => import("@/pages/Performance"));
 const SearchPage = lazy(() => import("@/pages/Search"));
 const Scanner = lazy(() => import("@/pages/Scanner"));
 const Status = lazy(() => import("@/pages/Status"));
+const Support = lazy(() => import("@/pages/Support"));
 const Sync = lazy(() => import("@/pages/Sync"));
 const Uninstall = lazy(() => import("@/pages/Uninstall"));
 const WindowsHub = lazy(() => import("@/pages/WindowsHub"));
@@ -85,6 +86,7 @@ function ApplicationSurface() {
   if (location === "/") return <Home />;
   if (location === "/download") return <DownloadPage />;
   if (location === "/uninstall") return <Uninstall />;
+  if (location === "/support") return <Support />;
   return <StrayEntryGate><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate>;
 }
 

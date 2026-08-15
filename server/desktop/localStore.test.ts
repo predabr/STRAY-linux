@@ -18,10 +18,17 @@ describe("DesktopStore", () => {
     const store = await DesktopStore.create(directory, seedPath);
 
     expect(store.counts().games).toBeGreaterThanOrEqual(10000);
-    expect(store.counts().distributions).toBeGreaterThanOrEqual(18);
+    expect(store.counts().distributions).toBeGreaterThanOrEqual(21);
     expect(store.one<{ slug: string; packageManager: string }>("SELECT slug, package_manager AS packageManager FROM distributions WHERE slug = ?", ["zorin-os"])).toEqual({ slug: "zorin-os", packageManager: "apt" });
+    expect(store.one<{ slug: string; packageManager: string | null }>("SELECT slug, package_manager AS packageManager FROM distributions WHERE slug = ?", ["pikaos"])).toEqual({ slug: "pikaos", packageManager: "apt" });
+    expect(store.one<{ slug: string; packageManager: string | null }>("SELECT slug, package_manager AS packageManager FROM distributions WHERE slug = ?", ["garuda-linux"])).toEqual({ slug: "garuda-linux", packageManager: "pacman" });
+    expect(store.one<{ slug: string; packageManager: string | null }>("SELECT slug, package_manager AS packageManager FROM distributions WHERE slug = ?", ["chimeraos"])).toEqual({ slug: "chimeraos", packageManager: null });
     expect(store.one<{ slug: string }>("SELECT slug FROM wiki_articles WHERE slug = ?", ["zorin-os-gaming-reference"])).toEqual({ slug: "zorin-os-gaming-reference" });
+    expect(store.all<{ slug: string }>("SELECT slug FROM wiki_articles WHERE slug IN (?, ?, ?) ORDER BY slug", ["chimeraos-overview", "garuda-linux-overview", "pikaos-overview"])).toHaveLength(3);
     expect(store.all<{ slug: string }>("SELECT slug FROM setup_guides WHERE slug IN (?, ?, ?) ORDER BY slug", ["zorin-nvidia-driver-gaming", "zorin-steam-flatpak", "zorin-update-and-gaming-baseline"])).toHaveLength(3);
+    expect(store.counts().guides).toBeGreaterThanOrEqual(54);
+    expect(store.one<{ slug: string; distributionId: number }>("SELECT slug, distribution_id AS distributionId FROM setup_guides WHERE slug = ?", ["pikaos-gaming-family-baseline"])).toEqual({ slug: "pikaos-gaming-family-baseline", distributionId: 420001 });
+    expect(store.all<{ slug: string }>("SELECT slug FROM linux_fixes WHERE slug IN (?, ?, ?) ORDER BY slug", ["flatpak-steam-permission-reset", "proton-log-collect", "wine-version-context"])).toHaveLength(3);
     const game = store.one<{ id: number; sourcePositiveReviews: number }>("SELECT id, source_positive_reviews AS sourcePositiveReviews FROM games ORDER BY source_positive_reviews DESC LIMIT 1");
     expect(game?.id).toBeTypeOf("number");
     expect(game?.sourcePositiveReviews).toBeGreaterThan(0);

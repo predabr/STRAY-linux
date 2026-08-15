@@ -273,3 +273,7 @@
 - [x] Sintetizar Linear, Raycast, Hermes, Vercel e ProtonDB em uma linguagem visual autoral para o Stray Linux, sem copiar marcas, conteúdo ou código de terceiros.
 - [x] Redesenhar a narrativa do site e as superfícies principais do aplicativo para apresentar produto, IA, compatibilidade e ações locais com maior clareza.
 - [x] Revalidar Biblioteca, Steam local, GameHub, LinuxFix, Stray AI, instaladores e desinstalação, corrigindo somente erros comprováveis.
+- [x] Auditar lacunas de dados, informações, relações e suporte para jogos, distros, LinuxFix e guias publicados.
+- [x] Ampliar conteúdo e conjuntos de dados somente com fontes autorizadas, sem criar descrições, compatibilidade, FPS ou mídia inventados.
+- [x] Aprimorar o Stray AI com contexto e atalhos seguros, mantendo os limites de escopo e as fontes internas visíveis.
+- [x] Criar uma área de apoio futuro funcional e transparente, sem processar doações antes da configuração de um provedor de pagamentos.

@@ -24,7 +24,7 @@ export function extractContextTerms(question: string): string[] {
 }
 
 export function buildStrayAiSystemPrompt(contextText: string): string {
-  return `Você é o Stray AI, o assistente técnico do aplicativo Stray Linux. Responda em português brasileiro SOMENTE sobre Stray Linux, gaming no Linux, perfil técnico do usuário, GameHub, LinuxFix, Scanner, bibliotecas locais e conteúdos publicados do aplicativo. Recuse pedidos de programação, criação de jogos, trabalhos escolares, entretenimento genérico ou qualquer tema externo usando exatamente esta frase: "${STRAY_AI_OUT_OF_SCOPE_RESPONSE}". Use SOMENTE o contexto interno e o perfil técnico fornecidos abaixo. Para diagnósticos, organize a resposta nestas seções quando forem aplicáveis: "Leitura do caso", "Evidência disponível", "Ações seguras" e "Limites". Em "Evidência disponível", diferencie fatos publicados, orientação comunitária e lacunas. Declare confiança como alta, média, baixa ou indisponível apenas quando o contexto permitir. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade, FPS, versões, mídia, causa ou resultado. O assistente não executa comandos nem altera o sistema. Ao final, cite os títulos internos utilizados sob o cabeçalho "Fontes internas".\n\nCONTEXTO INTERNO:\n${contextText || "Nenhum conteúdo interno relacionado foi recuperado."}`;
+  return `Você é o Stray AI, o assistente técnico do aplicativo Stray Linux. Responda em português brasileiro SOMENTE sobre Stray Linux, gaming no Linux, perfil técnico do usuário, GameHub, LinuxFix, Scanner, bibliotecas locais e conteúdos publicados do aplicativo. Recuse pedidos de programação, criação de jogos, trabalhos escolares, entretenimento genérico ou qualquer tema externo usando exatamente esta frase: "${STRAY_AI_OUT_OF_SCOPE_RESPONSE}". Use SOMENTE o contexto interno e o perfil técnico fornecidos abaixo. Para diagnósticos, organize a resposta nestas seções quando forem aplicáveis: "Leitura do caso", "Evidência disponível", "Ações seguras" e "Limites". Em "Evidência disponível", diferencie fatos publicados, orientação comunitária e lacunas. Quando houver um guia da distribuição ativa, priorize-o; um guia de família não prova suporte idêntico em uma derivada. Declare confiança como alta, média, baixa ou indisponível apenas quando o contexto permitir. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade, FPS, versões, mídia, causa ou resultado. O assistente não executa comandos nem altera o sistema. Ao final, cite os títulos internos utilizados sob o cabeçalho "Fontes internas".\n\nCONTEXTO INTERNO:\n${contextText || "Nenhum conteúdo interno relacionado foi recuperado."}`;
 }
 
 function llmText(content: string | Array<{ type: "text"; text: string } | { type: "image_url" } | { type: "file_url" }>) {
@@ -39,18 +39,19 @@ async function retrieveContext(question: string, userId?: number) {
   const wikiConditions = searchTerms.flatMap((term) => [like(wikiArticles.title, `%${term}%`), like(wikiArticles.excerpt, `%${term}%`), like(wikiArticles.body, `%${term}%`)]);
   const guideConditions = searchTerms.flatMap((term) => [like(setupGuides.title, `%${term}%`), like(setupGuides.description, `%${term}%`)]);
   const fixConditions = searchTerms.flatMap((term) => [like(linuxFixes.title, `%${term}%`), like(linuxFixes.symptoms, `%${term}%`), like(linuxFixes.possibleCauses, `%${term}%`)]);
-  const [wiki, guides, fixes, profile] = await Promise.all([
+  const profile = userId ? await db.select().from(userHardwareProfiles).where(and(eq(userHardwareProfiles.userId, userId), eq(userHardwareProfiles.isActive, true))).limit(1) : [];
+  const activeProfile = profile[0];
+  const guideMatch = activeProfile?.distributionId ? or(eq(setupGuides.distributionId, activeProfile.distributionId), or(...guideConditions)!) : or(...guideConditions)!;
+  const [wiki, guides, fixes] = await Promise.all([
     db.select({ title: wikiArticles.title, slug: wikiArticles.slug, body: wikiArticles.body, sourceUrl: wikiArticles.sourceUrl }).from(wikiArticles).where(and(eq(wikiArticles.status, "published"), isNull(wikiArticles.deletedAt), or(...wikiConditions)!)).orderBy(desc(wikiArticles.updatedAt)).limit(3),
-    db.select({ title: setupGuides.title, slug: setupGuides.slug, description: setupGuides.description, sourceUrl: setupGuides.sourceUrl }).from(setupGuides).where(and(eq(setupGuides.status, "published"), isNull(setupGuides.deletedAt), or(...guideConditions)!)).orderBy(desc(setupGuides.updatedAt)).limit(3),
+    db.select({ title: setupGuides.title, slug: setupGuides.slug, description: setupGuides.description, sourceUrl: setupGuides.sourceUrl }).from(setupGuides).where(and(eq(setupGuides.status, "published"), isNull(setupGuides.deletedAt), guideMatch)).orderBy(desc(setupGuides.updatedAt)).limit(3),
     db.select({ title: linuxFixes.title, slug: linuxFixes.slug, symptoms: linuxFixes.symptoms, possibleCauses: linuxFixes.possibleCauses, sourceUrl: linuxFixes.sourceUrl }).from(linuxFixes).where(and(eq(linuxFixes.status, "published"), isNull(linuxFixes.deletedAt), or(...fixConditions)!)).orderBy(desc(linuxFixes.updatedAt)).limit(3),
-    userId ? db.select().from(userHardwareProfiles).where(and(eq(userHardwareProfiles.userId, userId), eq(userHardwareProfiles.isActive, true))).limit(1) : Promise.resolve([]),
   ]);
   const citations: Citation[] = [
     ...wiki.map((item) => ({ type: "wiki" as const, title: item.title, slug: item.slug, sourceUrl: item.sourceUrl })),
     ...guides.map((item) => ({ type: "guide" as const, title: item.title, slug: item.slug, sourceUrl: item.sourceUrl })),
     ...fixes.map((item) => ({ type: "linuxfix" as const, title: item.title, slug: item.slug, sourceUrl: item.sourceUrl })),
   ];
-  const activeProfile = profile[0];
   const profileText = activeProfile ? `PERFIL TÉCNICO ATIVO: CPU=${activeProfile.detectedCpu ?? "não informado"}; GPU=${activeProfile.detectedGpu ?? "não informado"}; RAM=${activeProfile.detectedRamGb ? `${activeProfile.detectedRamGb} GB` : "não informada"}; distribuição=${activeProfile.detectedDistribution ?? "não informada"}; kernel=${activeProfile.kernelVersion ?? "não informado"}; driver=${activeProfile.driverVersion ?? "não informado"}; Proton=${activeProfile.protonVersion ?? "não informado"}; Wine=${activeProfile.wineVersion ?? "não informado"}.` : "PERFIL TÉCNICO ATIVO: indisponível.";
   const text = [
     profileText,

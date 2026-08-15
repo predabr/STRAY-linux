@@ -7,7 +7,7 @@ type Seed = {
   games: Array<{ id: number; slug: string; title: string; shortDescription?: string | null; steamAppId?: number | null; sourcePositiveReviews?: number | null }>;
   distributions: Array<{ id: number; slug: string; name: string; family?: string | null; packageManager?: string | null; defaultDesktop?: string | null; officialUrl?: string | null; sourceUrl?: string | null }>;
   wiki: Array<{ id: number; slug: string; title: string; excerpt?: string | null; body: string; category: string; versionLabel?: string | null; provenance: string; sourceUrl?: string | null }>;
-  guides: Array<{ id: number; slug: string; title: string; description?: string | null; difficulty: string; guideVersion?: string | null; provenance: string; sourceUrl?: string | null; steps: unknown[] }>;
+  guides: Array<{ id: number; slug: string; title: string; description?: string | null; difficulty: string; guideVersion?: string | null; distributionId?: number | null; provenance: string; sourceUrl?: string | null; steps: unknown[] }>;
   fixes: Array<{ id: number; slug: string; title: string; category: string; symptoms: string; possibleCauses: string; confidence: string; provenance: string; sourceUrl?: string | null; solutions: unknown[] }>;
 };
 
@@ -29,7 +29,7 @@ export class DesktopStore {
       CREATE TABLE IF NOT EXISTS games (id INTEGER PRIMARY KEY, slug TEXT UNIQUE NOT NULL, title TEXT NOT NULL, description TEXT, steam_app_id INTEGER, source_positive_reviews INTEGER);
       CREATE TABLE IF NOT EXISTS distributions (id INTEGER PRIMARY KEY, slug TEXT UNIQUE NOT NULL, name TEXT NOT NULL, family TEXT, package_manager TEXT, desktop TEXT, official_url TEXT, source_url TEXT);
       CREATE TABLE IF NOT EXISTS wiki_articles (id INTEGER PRIMARY KEY, slug TEXT UNIQUE NOT NULL, title TEXT NOT NULL, excerpt TEXT, body TEXT NOT NULL, category TEXT NOT NULL, version_label TEXT, provenance TEXT NOT NULL, source_url TEXT);
-      CREATE TABLE IF NOT EXISTS setup_guides (id INTEGER PRIMARY KEY, slug TEXT UNIQUE NOT NULL, title TEXT NOT NULL, description TEXT, difficulty TEXT NOT NULL, guide_version TEXT, provenance TEXT NOT NULL, source_url TEXT, steps_json TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS setup_guides (id INTEGER PRIMARY KEY, slug TEXT UNIQUE NOT NULL, title TEXT NOT NULL, description TEXT, difficulty TEXT NOT NULL, guide_version TEXT, distribution_id INTEGER, provenance TEXT NOT NULL, source_url TEXT, steps_json TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS linux_fixes (id INTEGER PRIMARY KEY, slug TEXT UNIQUE NOT NULL, title TEXT NOT NULL, category TEXT NOT NULL, symptoms TEXT NOT NULL, possible_causes TEXT NOT NULL, confidence TEXT NOT NULL, provenance TEXT NOT NULL, source_url TEXT, solutions_json TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS favorites (game_id INTEGER PRIMARY KEY, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS saved_guides (guide_id INTEGER PRIMARY KEY, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
@@ -48,6 +48,9 @@ export class DesktopStore {
     const gameColumns = new Set(this.rows<{ name: string }>("PRAGMA table_info(games)").map((column) => column.name));
     if (!gameColumns.has("source_positive_reviews")) this.db.run("ALTER TABLE games ADD COLUMN source_positive_reviews INTEGER");
     this.db.run("CREATE INDEX IF NOT EXISTS idx_games_popularity ON games(source_positive_reviews)");
+    const guideColumns = new Set(this.rows<{ name: string }>("PRAGMA table_info(setup_guides)").map((column) => column.name));
+    if (!guideColumns.has("distribution_id")) this.db.run("ALTER TABLE setup_guides ADD COLUMN distribution_id INTEGER");
+    this.db.run("CREATE INDEX IF NOT EXISTS idx_setup_guides_distribution ON setup_guides(distribution_id)");
     this.persist();
   }
   private seed(seedPath: string) {
@@ -61,7 +64,7 @@ export class DesktopStore {
       seed.games.forEach((item) => insert("INSERT INTO games (id, slug, title, description, steam_app_id, source_positive_reviews) VALUES (?, ?, ?, ?, ?, ?)", [item.id, item.slug, item.title, item.shortDescription ?? null, item.steamAppId ?? null, item.sourcePositiveReviews ?? null]));
       seed.distributions.forEach((item) => insert("INSERT INTO distributions (id, slug, name, family, package_manager, desktop, official_url, source_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [item.id, item.slug, item.name, item.family ?? null, item.packageManager ?? null, item.defaultDesktop ?? null, item.officialUrl ?? null, item.sourceUrl ?? null]));
       seed.wiki.forEach((item) => insert("INSERT INTO wiki_articles (id, slug, title, excerpt, body, category, version_label, provenance, source_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [item.id, item.slug, item.title, item.excerpt ?? null, item.body, item.category, item.versionLabel ?? null, item.provenance, item.sourceUrl ?? null]));
-      seed.guides.forEach((item) => insert("INSERT INTO setup_guides (id, slug, title, description, difficulty, guide_version, provenance, source_url, steps_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [item.id, item.slug, item.title, item.description ?? null, item.difficulty, item.guideVersion ?? null, item.provenance, item.sourceUrl ?? null, JSON.stringify(item.steps)]));
+      seed.guides.forEach((item) => insert("INSERT INTO setup_guides (id, slug, title, description, difficulty, guide_version, distribution_id, provenance, source_url, steps_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [item.id, item.slug, item.title, item.description ?? null, item.difficulty, item.guideVersion ?? null, item.distributionId ?? null, item.provenance, item.sourceUrl ?? null, JSON.stringify(item.steps)]));
       seed.fixes.forEach((item) => insert("INSERT INTO linux_fixes (id, slug, title, category, symptoms, possible_causes, confidence, provenance, source_url, solutions_json) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [item.id, item.slug, item.title, item.category, item.symptoms, item.possibleCauses, item.confidence, item.provenance, item.sourceUrl ?? null, JSON.stringify(item.solutions)]));
       insert("INSERT INTO metadata (key, value) VALUES ('seed_exported_at', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value", [seed.exportedAt]);
       this.db.run("COMMIT");

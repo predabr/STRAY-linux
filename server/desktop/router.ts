@@ -52,10 +52,10 @@ export const desktopRouter = router({
     guides: router({
       list: publicProcedure.input(pageInput.extend({ q: z.string().optional(), difficulty: z.string().optional(), distributionId: z.number().optional() })).query(({ input }) => {
         const term = input.q?.trim() ? `%${input.q.trim()}%` : "%";
-        const rows = store().all<any>("SELECT * FROM setup_guides WHERE title LIKE ? AND (? IS NULL OR difficulty = ?) ORDER BY title", [term, input.difficulty ?? null, input.difficulty ?? null]);
-        return paginate(rows.map((guide) => ({ guide, distributionName: null })), input.page, input.pageSize).data;
+        const rows = store().all<any>("SELECT g.*, g.distribution_id AS distributionId, d.name AS distributionName FROM setup_guides g LEFT JOIN distributions d ON d.id = g.distribution_id WHERE g.title LIKE ? AND (? IS NULL OR g.difficulty = ?) AND (? IS NULL OR g.distribution_id = ?) ORDER BY g.title", [term, input.difficulty ?? null, input.difficulty ?? null, input.distributionId ?? null, input.distributionId ?? null]);
+        return paginate(rows.map(({ distributionName, ...guide }) => ({ guide, distributionName: distributionName ?? null })), input.page, input.pageSize).data;
       }),
-      bySlug: publicProcedure.input(z.object({ slug: z.string() })).query(({ input }) => { const guide = store().one<any>("SELECT * FROM setup_guides WHERE slug = ?", [input.slug]); return guide ? { ...guide, guideVersion: guide.guide_version, sourceUrl: guide.source_url, steps: JSON.parse(guide.steps_json) } : null; }),
+      bySlug: publicProcedure.input(z.object({ slug: z.string() })).query(({ input }) => { const guide = store().one<any>("SELECT *, distribution_id AS distributionId FROM setup_guides WHERE slug = ?", [input.slug]); return guide ? { ...guide, guideVersion: guide.guide_version, sourceUrl: guide.source_url, steps: JSON.parse(guide.steps_json) } : null; }),
     }),
     linuxFix: router({
       list: publicProcedure.input(pageInput.extend({ q: z.string().optional(), category: z.string().optional() })).query(({ input }) => {

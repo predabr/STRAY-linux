@@ -7,7 +7,7 @@ describe("route access policy", () => {
     expect(normalizeRoute("#intro")).toBe("/");
   });
 
-  it.each(["/", "/games", "/games/steam-123", "/benchmark", "/distros", "/wiki", "/setup", "/linuxfix", "/compare", "/windows", "/status"]) (
+  it.each(["/", "/games", "/games/steam-123", "/benchmark", "/distros", "/wiki", "/setup", "/linuxfix", "/compare", "/windows", "/status", "/support"]) (
     "keeps %s public",
     (route) => expect(routeRequiresAccount(route)).toBe(false),
   );

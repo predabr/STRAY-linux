@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { distroProfileCopy } from "@/i18n/distroProfileCopy";
+import { linuxInstallers } from "@/lib/distribution";
 import { distroRegistry, type DistroRegistryEntry } from "@shared/distro-registry";
 import { AlertTriangle, ArrowLeft, Check, CheckCircle2, Copy, ExternalLink, ShieldCheck, Terminal } from "lucide-react";
 import { useState } from "react";
@@ -14,16 +15,29 @@ const bigLinuxCommunityUrl = "https://forum.biglinux.com.br/";
 
 type InstallationProfile = { artifact: string; validate: string; install: string; update: string; warning: string };
 
-function profileFor(entry: DistroRegistryEntry): InstallationProfile {
-  const byInstaller: Record<string, InstallationProfile> = {
-    pacman: { artifact: ".pacman", validate: "cat /etc/os-release && uname -m", install: "sudo pacman -U ./Stray-Linux-1.0.0-x64.pacman", update: "sudo pacman -Syu", warning: "Faça uma atualização completa antes da instalação. Não sincronize os repositórios sem atualizar o sistema." },
-    apt: { artifact: ".deb", validate: "cat /etc/os-release && dpkg --print-architecture", install: "sudo apt install ./Stray-Linux-1.0.0-amd64.deb", update: "sudo apt update && sudo apt upgrade", warning: "Instale somente o pacote da arquitetura correta e não misture repositórios de Debian e Ubuntu." },
-    dnf: { artifact: ".rpm", validate: "cat /etc/os-release && uname -m", install: "sudo dnf install ./Stray-Linux-1.0.0-x86_64.rpm", update: "sudo dnf upgrade --refresh", warning: "O RPM se aplica às variantes tradicionais; em sistemas Atomic use a rota imutável ou portátil." },
-    zypper: { artifact: ".rpm", validate: "cat /etc/os-release && uname -m", install: "sudo zypper install ./Stray-Linux-1.0.0-x86_64.rpm", update: "sudo zypper refresh && sudo zypper update", warning: "Não instale pacotes de outra release ou de outra família RPM." },
-    "flatpak-or-appimage": { artifact: ".AppImage", validate: "cat /etc/os-release && uname -m", install: "chmod +x ./Stray-Linux-1.0.0-x86_64.AppImage && ./Stray-Linux-1.0.0-x86_64.AppImage", update: "flatpak update", warning: "A base é transacional. Não sobreponha pacotes do sistema para instalar o aplicativo." },
-    apk: { artifact: ".apk", validate: "cat /etc/os-release && uname -m", install: "sudo apk add --allow-untrusted ./Stray-Linux-1.0.0-x86_64.apk", update: "sudo apk upgrade", warning: "O APK exige um build publicado especificamente para Alpine e para a mesma arquitetura." },
-  };
-  return byInstaller[entry.installer ?? ""] ?? { artifact: ".AppImage", validate: "cat /etc/os-release && uname -m", install: "chmod +x ./Stray-Linux-1.0.0-x86_64.AppImage && ./Stray-Linux-1.0.0-x86_64.AppImage", update: "# Consulte a documentação oficial desta distribuição", warning: "Esta entrada não possui um pacote nativo genérico seguro. Use somente um artefato cuja compatibilidade tenha sido verificada para a distribuição, arquitetura e release." };
+export function profileFor(entry: DistroRegistryEntry): InstallationProfile {
+  const installers = {
+    pacman: linuxInstallers.find((item) => item.id === "arch"),
+    apt: linuxInstallers.find((item) => item.id === "debian"),
+    dnf: linuxInstallers.find((item) => item.id === "fedora"),
+    zypper: linuxInstallers.find((item) => item.id === "opensuse"),
+    "flatpak-or-appimage": linuxInstallers.find((item) => item.id === "appimage"),
+  } as const;
+  const installer = entry.installer ? installers[entry.installer as keyof typeof installers] : undefined;
+  if (installer) {
+    const metadata: Record<keyof typeof installers, Pick<InstallationProfile, "artifact" | "validate" | "update" | "warning">> = {
+      pacman: { artifact: ".pacman", validate: "cat /etc/os-release && uname -m", update: "sudo pacman -Syu", warning: "Faça uma atualização completa antes da instalação. Não sincronize os repositórios sem atualizar o sistema." },
+      apt: { artifact: ".deb", validate: "cat /etc/os-release && dpkg --print-architecture", update: "sudo apt update && sudo apt upgrade", warning: "Instale somente o pacote da arquitetura correta e não misture repositórios de Debian e Ubuntu." },
+      dnf: { artifact: ".rpm", validate: "cat /etc/os-release && uname -m", update: "sudo dnf upgrade --refresh", warning: "O RPM se aplica às variantes tradicionais; em sistemas Atomic use a rota imutável ou portátil." },
+      zypper: { artifact: ".rpm", validate: "cat /etc/os-release && uname -m", update: "sudo zypper refresh && sudo zypper update", warning: "Não instale pacotes de outra release ou de outra família RPM." },
+      "flatpak-or-appimage": { artifact: ".AppImage", validate: "cat /etc/os-release && uname -m", update: "# Consulte a distribuição oficial para atualizações do AppImage", warning: "A base pode ser transacional. Não sobreponha pacotes do sistema para instalar o aplicativo." },
+    };
+    const policy = metadata[entry.installer as keyof typeof installers];
+    return { ...policy, install: installer.command };
+  }
+  const portable = linuxInstallers.find((item) => item.id === "appimage");
+  if (!portable) throw new Error("O instalador AppImage publicado não está disponível.");
+  return { artifact: ".AppImage", validate: "cat /etc/os-release && uname -m", install: portable.command, update: "# Consulte a documentação oficial desta distribuição", warning: "Esta entrada não possui um pacote nativo genérico seguro. Use somente o AppImage publicado e confirme a arquitetura e a release antes de executar." };
 }
 
 function editorialLinksFor(entry: DistroRegistryEntry) {
