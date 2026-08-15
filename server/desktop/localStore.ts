@@ -38,8 +38,20 @@ export class DesktopStore {
       CREATE TABLE IF NOT EXISTS reports (id INTEGER PRIMARY KEY AUTOINCREMENT, subject_type TEXT NOT NULL, subject_id INTEGER NOT NULL, type TEXT NOT NULL, description TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'open', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS benchmarks (id INTEGER PRIMARY KEY AUTOINCREMENT, game_id INTEGER NOT NULL, source_label TEXT NOT NULL, source_url TEXT, evidence_note TEXT, verification_status TEXT NOT NULL DEFAULT 'submitted', provenance TEXT NOT NULL DEFAULT 'community', results_json TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE TABLE IF NOT EXISTS scanner_snapshots (id INTEGER PRIMARY KEY AUTOINCREMENT, label TEXT NOT NULL, report_json TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS evidence_records (id INTEGER PRIMARY KEY AUTOINCREMENT, scope TEXT NOT NULL, subject_type TEXT NOT NULL, subject_id TEXT, evidence_class TEXT NOT NULL CHECK(evidence_class IN ('official', 'verified', 'community', 'estimated', 'unknown')), summary TEXT NOT NULL, source_url TEXT, observed_at TEXT, payload_json TEXT NOT NULL DEFAULT '{}', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS system_events (id INTEGER PRIMARY KEY AUTOINCREMENT, event_type TEXT NOT NULL, label TEXT NOT NULL, details_json TEXT NOT NULL DEFAULT '{}', evidence_id INTEGER, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS local_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, level TEXT NOT NULL CHECK(level IN ('info', 'warning', 'error')), module TEXT NOT NULL, message TEXT NOT NULL, details_json TEXT NOT NULL DEFAULT '{}', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS performance_sessions (id TEXT PRIMARY KEY, game_id INTEGER NOT NULL, game_title TEXT NOT NULL, profile_name TEXT, started_at INTEGER NOT NULL, ended_at INTEGER, metrics_json TEXT NOT NULL DEFAULT '{}', created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS local_preferences (key TEXT PRIMARY KEY, value_json TEXT NOT NULL, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS ai_memory_entries (id INTEGER PRIMARY KEY AUTOINCREMENT, memory_type TEXT NOT NULL, summary TEXT NOT NULL, payload_json TEXT NOT NULL DEFAULT '{}', consented INTEGER NOT NULL DEFAULT 0 CHECK(consented IN (0, 1)), created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+      CREATE TABLE IF NOT EXISTS local_backups (id INTEGER PRIMARY KEY AUTOINCREMENT, label TEXT NOT NULL, backup_json TEXT NOT NULL, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
       CREATE INDEX IF NOT EXISTS idx_games_title ON games(title);
       CREATE INDEX IF NOT EXISTS idx_scanner_snapshots_created ON scanner_snapshots(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_evidence_scope ON evidence_records(scope, created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_system_events_created ON system_events(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_local_logs_created ON local_logs(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_performance_sessions_game ON performance_sessions(game_id, started_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_local_backups_created ON local_backups(created_at DESC);
     `);
     const profileColumns = new Set(this.rows<{ name: string }>("PRAGMA table_info(profiles)").map((column) => column.name));
     if (!profileColumns.has("distribution_version_id")) this.db.run("ALTER TABLE profiles ADD COLUMN distribution_version_id INTEGER");
@@ -87,6 +99,59 @@ export class DesktopStore {
     const changes = this.one<{ count: number }>("SELECT changes() AS count")?.count ?? 0;
     this.persist();
     return { lastInsertRowid, changes };
+  }
+  exportLocalData() {
+    return {
+      schemaVersion: 1,
+      exportedAt: new Date().toISOString(),
+      snapshots: this.all<{ id: number; label: string; reportJson: string; createdAt: string }>("SELECT id, label, report_json AS reportJson, created_at AS createdAt FROM scanner_snapshots ORDER BY created_at DESC"),
+      sessions: this.all<{ id: string; gameId: number; gameTitle: string; profileName: string | null; startedAt: number; endedAt: number | null; metricsJson: string; createdAt: string }>("SELECT id, game_id AS gameId, game_title AS gameTitle, profile_name AS profileName, started_at AS startedAt, ended_at AS endedAt, metrics_json AS metricsJson, created_at AS createdAt FROM performance_sessions ORDER BY started_at DESC"),
+      preferences: this.all<{ key: string; valueJson: string; updatedAt: string }>("SELECT key, value_json AS valueJson, updated_at AS updatedAt FROM local_preferences ORDER BY key"),
+      localGameMetadata: this.all<{ id: number; slug: string; title: string; steamAppId: number | null }>("SELECT id, slug, title, steam_app_id AS steamAppId FROM games ORDER BY title"),
+      evidence: this.all<{ id: number; scope: string; subjectType: string; subjectId: string | null; evidenceClass: string; summary: string; sourceUrl: string | null; observedAt: string | null; payloadJson: string; createdAt: string }>("SELECT id, scope, subject_type AS subjectType, subject_id AS subjectId, evidence_class AS evidenceClass, summary, source_url AS sourceUrl, observed_at AS observedAt, payload_json AS payloadJson, created_at AS createdAt FROM evidence_records ORDER BY created_at DESC"),
+      events: this.all<{ id: number; eventType: string; label: string; detailsJson: string; evidenceId: number | null; createdAt: string }>("SELECT id, event_type AS eventType, label, details_json AS detailsJson, evidence_id AS evidenceId, created_at AS createdAt FROM system_events ORDER BY created_at DESC"),
+      aiMemory: this.all<{ id: number; memoryType: string; summary: string; payloadJson: string; consented: number; createdAt: string; updatedAt: string }>("SELECT id, memory_type AS memoryType, summary, payload_json AS payloadJson, consented, created_at AS createdAt, updated_at AS updatedAt FROM ai_memory_entries WHERE consented = 1 ORDER BY updated_at DESC"),
+    };
+  }
+  private userDataSnapshot() {
+    return {
+      schemaVersion: 1,
+      exportedAt: new Date().toISOString(),
+      favorites: this.all<any>("SELECT game_id AS gameId, created_at AS createdAt FROM favorites ORDER BY created_at DESC"),
+      savedGuides: this.all<any>("SELECT guide_id AS guideId, created_at AS createdAt FROM saved_guides ORDER BY created_at DESC"),
+      profiles: this.all<any>("SELECT id, name, cpu_id AS cpuId, gpu_id AS gpuId, ram_id AS ramId, distribution_id AS distributionId, distribution_version_id AS distributionVersionId, kernel_version AS kernelVersion, driver_version AS driverVersion, proton_version AS protonVersion, wine_version AS wineVersion, runtime_version AS runtimeVersion, storage_description AS storageDescription, monitor_description AS monitorDescription, is_active AS isActive, updated_at AS updatedAt FROM profiles ORDER BY id"),
+      snapshots: this.all<any>("SELECT id, label, report_json AS reportJson, created_at AS createdAt FROM scanner_snapshots ORDER BY id"),
+      preferences: this.all<any>("SELECT key, value_json AS valueJson, updated_at AS updatedAt FROM local_preferences ORDER BY key"),
+      evidence: this.all<any>("SELECT id, scope, subject_type AS subjectType, subject_id AS subjectId, evidence_class AS evidenceClass, summary, source_url AS sourceUrl, observed_at AS observedAt, payload_json AS payloadJson, created_at AS createdAt FROM evidence_records ORDER BY id"),
+      events: this.all<any>("SELECT id, event_type AS eventType, label, details_json AS detailsJson, evidence_id AS evidenceId, created_at AS createdAt FROM system_events ORDER BY id"),
+      aiMemory: this.all<any>("SELECT id, memory_type AS memoryType, summary, payload_json AS payloadJson, consented, created_at AS createdAt, updated_at AS updatedAt FROM ai_memory_entries WHERE consented = 1 ORDER BY id"),
+    };
+  }
+  private backupPreview(data: ReturnType<DesktopStore["userDataSnapshot"]>) { return { schemaVersion: data.schemaVersion, exportedAt: data.exportedAt, profiles: data.profiles.length, snapshots: data.snapshots.length, preferences: data.preferences.length, evidence: data.evidence.length, events: data.events.length, aiMemory: data.aiMemory.length, excludes: ["catálogo empacotado", "credenciais", "memórias sem consentimento"] }; }
+  createLocalBackup(label: string) { const data = this.userDataSnapshot(); this.db.run("INSERT INTO local_backups (label, backup_json) VALUES (?, ?)", [label, JSON.stringify(data)]); const id = this.one<{ id: number }>("SELECT id FROM local_backups ORDER BY id DESC LIMIT 1")?.id ?? 0; this.persist(); return { id, preview: this.backupPreview(data) }; }
+  listLocalBackups() { return this.all<{ id: number; label: string; createdAt: string }>("SELECT id, label, created_at AS createdAt FROM local_backups ORDER BY created_at DESC"); }
+  previewLocalBackup(id: number) { const row = this.one<{ backupJson: string }>("SELECT backup_json AS backupJson FROM local_backups WHERE id = ?", [id]); if (!row) throw new Error("Backup local não encontrado."); return this.backupPreview(JSON.parse(row.backupJson)); }
+  restoreLocalBackup(id: number) {
+    const row = this.one<{ backupJson: string }>("SELECT backup_json AS backupJson FROM local_backups WHERE id = ?", [id]);
+    if (!row) throw new Error("Backup local não encontrado.");
+    const data = JSON.parse(row.backupJson) as ReturnType<DesktopStore["userDataSnapshot"]>;
+    if (data.schemaVersion !== 1) throw new Error("Formato de backup local incompatível.");
+    this.db.run("BEGIN");
+    try {
+      this.db.run("DELETE FROM favorites; DELETE FROM saved_guides; DELETE FROM profiles; DELETE FROM scanner_snapshots; DELETE FROM local_preferences; DELETE FROM evidence_records; DELETE FROM system_events; DELETE FROM ai_memory_entries;");
+      data.favorites.forEach((item) => this.db.run("INSERT INTO favorites (game_id, created_at) VALUES (?, ?)", [item.gameId, item.createdAt]));
+      data.savedGuides.forEach((item) => this.db.run("INSERT INTO saved_guides (guide_id, created_at) VALUES (?, ?)", [item.guideId, item.createdAt]));
+      data.profiles.forEach((item) => this.db.run("INSERT INTO profiles (id, name, cpu_id, gpu_id, ram_id, distribution_id, distribution_version_id, kernel_version, driver_version, proton_version, wine_version, runtime_version, storage_description, monitor_description, is_active, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [item.id, item.name, item.cpuId, item.gpuId, item.ramId, item.distributionId, item.distributionVersionId, item.kernelVersion, item.driverVersion, item.protonVersion, item.wineVersion, item.runtimeVersion, item.storageDescription, item.monitorDescription, item.isActive, item.updatedAt]));
+      data.snapshots.forEach((item) => this.db.run("INSERT INTO scanner_snapshots (id, label, report_json, created_at) VALUES (?, ?, ?, ?)", [item.id, item.label, item.reportJson, item.createdAt]));
+      data.preferences.forEach((item) => this.db.run("INSERT INTO local_preferences (key, value_json, updated_at) VALUES (?, ?, ?)", [item.key, item.valueJson, item.updatedAt]));
+      data.evidence.forEach((item) => this.db.run("INSERT INTO evidence_records (id, scope, subject_type, subject_id, evidence_class, summary, source_url, observed_at, payload_json, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [item.id, item.scope, item.subjectType, item.subjectId, item.evidenceClass, item.summary, item.sourceUrl, item.observedAt, item.payloadJson, item.createdAt]));
+      data.events.forEach((item) => this.db.run("INSERT INTO system_events (id, event_type, label, details_json, evidence_id, created_at) VALUES (?, ?, ?, ?, ?, ?)", [item.id, item.eventType, item.label, item.detailsJson, item.evidenceId, item.createdAt]));
+      data.aiMemory.forEach((item) => this.db.run("INSERT INTO ai_memory_entries (id, memory_type, summary, payload_json, consented, created_at, updated_at) VALUES (?, ?, ?, ?, 1, ?, ?)", [item.id, item.memoryType, item.summary, item.payloadJson, item.createdAt, item.updatedAt]));
+      this.db.run("INSERT INTO system_events (event_type, label, details_json) VALUES (?, ?, ?)", ["backup.restored", "Backup local restaurado", JSON.stringify({ backupId: id })]);
+      this.db.run("COMMIT");
+    } catch (error) { this.db.run("ROLLBACK"); throw error; }
+    this.persist();
+    return { success: true, preview: this.backupPreview(data) };
   }
   private persist() { fs.writeFileSync(this.databasePath, Buffer.from(this.db.export())); }
   counts() { return { games: this.one<{ count: number }>("SELECT count(*) as count FROM games")?.count ?? 0, distributions: this.one<{ count: number }>("SELECT count(*) as count FROM distributions")?.count ?? 0, wiki: this.one<{ count: number }>("SELECT count(*) as count FROM wiki_articles")?.count ?? 0, guides: this.one<{ count: number }>("SELECT count(*) as count FROM setup_guides")?.count ?? 0, fixes: this.one<{ count: number }>("SELECT count(*) as count FROM linux_fixes")?.count ?? 0 }; }

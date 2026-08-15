@@ -296,3 +296,11 @@
 - [x] Melhorar contexto, ações seguras e transparência do Stray AI sem permitir execução destrutiva automática.
 - [x] Refinar configurações, privacidade, estados de erro/vazio/offline e consistência de interface do desktop.
 - [x] Validar detecção, dados locais, IA, downloads, testes, build e instaladores suportados, sem introduzir benchmarks, FPS ou avaliações falsos.
+- [x] Auditar e documentar as capacidades existentes contra o briefing Stray Linux 2.0, delimitando recursos dependentes de dados reais.
+- [x] Modelar e implementar evidências, eventos técnicos locais, logs minimizados, consentimento de memória e exportação segura de dados.
+- [x] Aprofundar Scanner, System Graph, Driver Health, Vulkan Diagnostics e Gaming Stack com campos observados e explicações verificáveis.
+- [x] Implementar timeline, comparação de configurações, snapshots, pré-voo de jogo e detecção de regressão somente quando houver leituras comparáveis.
+- [x] Evoluir perfis de otimização, matriz de runtime, recomendações e Stray AI com classificação de evidência, incerteza e justificativa rastreável.
+- [x] Adicionar backup/restauração local com prévia, modo seguro, recuperação de falha, central de logs e atualizações apenas como estado transparente quando não houver atualizador real.
+- [x] Refinar busca, notificações e central de comandos para descoberta e navegação, sem execução automática de comandos de sistema.
+- [x] Validar as 11 localidades, acessibilidade, privacidade, testes, build, instaladores e publicação da fase 2.0.

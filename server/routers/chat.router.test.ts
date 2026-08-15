@@ -60,7 +60,7 @@ describe("assistente: continuidade, contexto e autorização", () => {
 
     const result = await caller().chat.ask({ question: "Crie um código para um jogo em Python" });
     expect(result.answer).toBe(STRAY_AI_OUT_OF_SCOPE_RESPONSE);
-    expect(result.context).toEqual({ inScope: false, profileAvailable: false, internalSources: 0 });
+    expect(result.context).toEqual({ inScope: false, profileAvailable: false, internalSources: 0, memoryUsed: false });
     expect(harness.writes).toHaveLength(3);
     expect(harness.writes[2]).toMatchObject({ role: "assistant", content: STRAY_AI_OUT_OF_SCOPE_RESPONSE });
   });

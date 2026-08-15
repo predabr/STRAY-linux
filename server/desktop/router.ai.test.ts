@@ -7,5 +7,7 @@ describe("Stray AI no modo desktop", () => {
     const result = await caller.chat.ask({ question: "Crie o código de um jogo de corrida" });
     expect(result.context.inScope).toBe(false);
     expect(result.citations).toEqual([]);
+    expect(result.context.memoryUsed).toBe(false);
+    expect(result.explanation.unknowns.join(" ")).toContain("fora do escopo");
   });
 });

@@ -9,7 +9,7 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { trpc } from "@/lib/trpc";
-import { BookOpen, Gamepad2, Gauge, GitCompareArrows, LayoutDashboard, MonitorCog, Search, Server, Settings2, Wrench } from "lucide-react";
+import { BookOpen, FileSearch, Gamepad2, Gauge, GitCompareArrows, LayoutDashboard, MonitorCog, Network, Search, Server, Settings2, ShieldCheck, Wrench } from "lucide-react";
 import { windowsActions, windowsApps } from "@/data/windowsCatalog";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
@@ -23,13 +23,21 @@ const quickLinks = [
   { label: "Ver Linux Setup", hint: "Guias e comandos", href: "/setup", icon: Settings2 },
   { label: "Diagnosticar no LinuxFix", hint: "Soluções rastreáveis", href: "/linuxfix", icon: Wrench },
   { label: "Abrir painel", hint: "Perfil e histórico", href: "/dashboard", icon: LayoutDashboard },
+  { label: "Abrir System Graph", hint: "Relações do snapshot local", href: "/system-graph", icon: Network },
+  { label: "Abrir pré-voo", hint: "Checagens antes de abrir jogo", href: "/preflight", icon: ShieldCheck },
+  { label: "Abrir Recuperação", hint: "Backup e modo seguro locais", href: "/recovery", icon: ShieldCheck },
+  { label: "Abrir Logs", hint: "Registros técnicos locais", href: "/logs", icon: FileSearch },
+  { label: "Abrir Alertas", hint: "Eventos locais relevantes", href: "/notifications", icon: ShieldCheck },
 ];
+const recentKey = "stray-command-recent-v1";
+function readRecent() { try { const value = JSON.parse(localStorage.getItem(recentKey) || "[]"); return Array.isArray(value) ? value.filter((item): item is string => typeof item === "string").slice(0, 6) : []; } catch { return []; } }
 
 type PaletteProps = { open?: boolean; onOpenChange?: (open: boolean) => void };
 
 export function GlobalCommandPalette({ open: controlledOpen, onOpenChange }: PaletteProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
   const [term, setTerm] = useState("");
+  const [recent, setRecent] = useState<string[]>(readRecent);
   const [, setLocation] = useLocation();
   const open = controlledOpen ?? uncontrolledOpen;
   const setOpen = (value: boolean) => {
@@ -51,6 +59,9 @@ export function GlobalCommandPalette({ open: controlledOpen, onOpenChange }: Pal
   }, [open]);
 
   const go = (href: string) => {
+    const nextRecent = [href, ...recent.filter((item) => item !== href)].slice(0, 6);
+    setRecent(nextRecent);
+    localStorage.setItem(recentKey, JSON.stringify(nextRecent));
     setOpen(false);
     setTerm("");
     setLocation(href);
@@ -70,12 +81,12 @@ export function GlobalCommandPalette({ open: controlledOpen, onOpenChange }: Pal
       <CommandList>
         <CommandEmpty>{results.isLoading ? "Pesquisando dados indexados…" : "Nenhuma ação ou resultado encontrado."}</CommandEmpty>
         {term.trim().length < 2 ? (
-          <CommandGroup heading="Acesso rápido">
+          <><CommandGroup heading="Acesso rápido">
             {quickLinks.map((item) => {
               const Icon = item.icon;
               return <CommandItem key={item.href} value={`${item.label} ${item.hint}`} onSelect={() => go(item.href)}><Icon /><span>{item.label}</span><span className="ml-auto truncate text-xs text-muted-foreground">{item.hint}</span></CommandItem>;
             })}
-          </CommandGroup>
+          </CommandGroup>{recent.length ? <CommandGroup heading="Recentes">{recent.map((href) => { const item = quickLinks.find((entry) => entry.href === href); if (!item) return null; const Icon = item.icon; return <CommandItem key={`recent-${href}`} value={`Recente ${item.label}`} onSelect={() => go(href)}><Icon /><span>{item.label}</span><span className="ml-auto text-xs text-muted-foreground">recente</span></CommandItem>; })}</CommandGroup> : null}</>
         ) : null}
         {searchedGroups.length ? <CommandSeparator /> : null}
         {searchedGroups.map((group) => {

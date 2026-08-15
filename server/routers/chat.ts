@@ -7,6 +7,7 @@ import { publicProcedure, router } from "../_core/trpc";
 import { activeUserProcedure, requireDatabase } from "./_guards";
 
 type Citation = { type: "wiki" | "guide" | "linuxfix"; title: string; slug: string; sourceUrl: string | null };
+type AiExplanation = { facts: string[]; inferences: string[]; estimates: string[]; unknowns: string[]; why: { internalSources: number; profileUsed: boolean; memoryUsed: boolean; confidence: "medium" | "low" | "unavailable" } };
 
 const CONTEXT_STOPWORDS = new Set([
   "a", "ao", "aos", "as", "com", "como", "da", "das", "de", "do", "dos", "e", "em", "eu", "isso", "na", "nas", "no", "nos", "o", "os", "ou", "para", "por", "pra", "que", "sobre", "um", "uma", "ver", "qual", "quais",
@@ -35,6 +36,16 @@ function llmText(content: string | Array<{ type: "text"; text: string } | { type
 function evidenceFallback(context: { citations: Citation[]; profileAvailable: boolean }) {
   const sourceList = context.citations.length ? context.citations.map((citation) => `- ${citation.title}`).join("\n") : "- Nenhuma fonte interna diretamente relacionada foi recuperada.";
   return `### Leitura do caso\nO provedor do Stray AI não respondeu neste momento. Para não criar uma resposta especulativa, esta sessão permanece limitada ao conteúdo publicado disponível.\n\n### Evidência disponível\n${sourceList}\n\n### Ações seguras\nConsulte as fontes internas listadas e confirme a versão da distribuição, o runtime e o erro exibido antes de aplicar qualquer ajuste.\n\n### Limites\nNão foi possível gerar uma síntese pelo modelo agora. Nenhum comando, causa, compatibilidade ou resultado foi inferido sem evidência.`;
+}
+
+function buildExplanation(context: { citations: Citation[]; profileAvailable: boolean }, memoryUsed = false): AiExplanation {
+  return {
+    facts: [context.profileAvailable ? "Um perfil técnico ativo foi incluído no contexto." : "Nenhum perfil técnico ativo foi usado.", context.citations.length ? `${context.citations.length} fonte(s) interna(s) relacionada(s) foram recuperadas.` : "Nenhuma fonte interna diretamente relacionada foi recuperada."],
+    inferences: context.citations.length ? ["A priorização considera a relação textual entre a pergunta e as fontes internas recuperadas; isso não confirma que a orientação resolverá o caso."] : [],
+    estimates: [],
+    unknowns: ["Não há conclusão automática sobre FPS, desempenho, compatibilidade, causa raiz ou resultado sem evidência específica."],
+    why: { internalSources: context.citations.length, profileUsed: context.profileAvailable, memoryUsed, confidence: context.citations.length ? "medium" : "unavailable" },
+  };
 }
 
 async function answerFromModel(question: string, context: { citations: Citation[]; text: string; profileAvailable: boolean }) {
@@ -95,12 +106,12 @@ export const chatRouter = router({
 
   askPublic: publicProcedure.input(visitorQuestionInput).mutation(async ({ input }) => {
     if (!isStrayAiDomainQuestion(input.question)) {
-      return { answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [], context: { inScope: false, profileAvailable: false, internalSources: 0, visitor: true } };
+      return { answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [], explanation: buildExplanation({ citations: [], profileAvailable: false }), context: { inScope: false, profileAvailable: false, internalSources: 0, visitor: true, memoryUsed: false } };
     }
     const context = await retrieveContext(input.question);
     const visitorContext = { ...context, text: `MODO DE SESSÃO: visitante. Não existe conta, histórico ou perfil local disponível nesta conversa.\n${context.text}` };
     const answer = await answerFromModel(input.question, visitorContext);
-    return { answer, citations: context.citations, context: { inScope: true, profileAvailable: false, internalSources: context.citations.length, visitor: true } };
+    return { answer, citations: context.citations, explanation: buildExplanation(context), context: { inScope: true, profileAvailable: false, internalSources: context.citations.length, visitor: true, memoryUsed: false } };
   }),
 
   ask: activeUserProcedure.input(questionInput).mutation(async ({ ctx, input }) => {
@@ -117,12 +128,12 @@ export const chatRouter = router({
     if (!isStrayAiDomainQuestion(input.question)) {
       await db.insert(chatMessages).values({ sessionId, role: "assistant", content: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [] });
       await db.update(chatSessions).set({ updatedAt: new Date() }).where(eq(chatSessions.id, sessionId));
-      return { sessionId, answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [], context: { inScope: false, profileAvailable: false, internalSources: 0 } };
+      return { sessionId, answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [], explanation: buildExplanation({ citations: [], profileAvailable: false }), context: { inScope: false, profileAvailable: false, internalSources: 0, memoryUsed: false } };
     }
     const context = await retrieveContext(input.question, ctx.user.id);
     const answer = await answerFromModel(input.question, context);
     await db.insert(chatMessages).values({ sessionId, role: "assistant", content: answer, citations: context.citations });
     await db.update(chatSessions).set({ updatedAt: new Date() }).where(eq(chatSessions.id, sessionId));
-    return { sessionId, answer, citations: context.citations, context: { inScope: true, profileAvailable: context.profileAvailable, internalSources: context.citations.length } };
+    return { sessionId, answer, citations: context.citations, explanation: buildExplanation(context), context: { inScope: true, profileAvailable: context.profileAvailable, internalSources: context.citations.length, memoryUsed: false } };
   }),
 });

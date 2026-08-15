@@ -2,7 +2,7 @@ import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
-import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Camera, Cloud, ExternalLink, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Camera, Cloud, ExternalLink, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Network, Settings, ShieldCheck, Wrench } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 
@@ -28,6 +28,13 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
     { href: "/scanner", label: t("scanner"), icon: ShieldCheck },
     { href: "/diagnostics", label: "Diagnóstico", icon: Activity },
     { href: "/snapshots", label: "Snapshots", icon: Camera },
+    { href: "/system-graph", label: "System Graph", icon: Network },
+    { href: "/system-timeline", label: "Timeline", icon: Activity },
+    { href: "/preflight", label: "Pré-voo", icon: ShieldCheck },
+    { href: "/regression", label: "Regressão", icon: Gauge },
+    { href: "/recovery", label: "Recuperação", icon: ShieldCheck },
+    { href: "/logs", label: "Logs", icon: Activity },
+    { href: "/notifications", label: "Alertas", icon: Activity },
     { href: "/controllers", label: "Controles", icon: Gamepad2 },
     { href: "/performance", label: "Performance", icon: Activity },
     { href: "/assistant", label: "Stray AI", icon: BotMessageSquare },

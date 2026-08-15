@@ -8,15 +8,15 @@ O atalho **“Verifique meu ambiente para Vulkan indisponível”** foi enviado 
 
 ## Pacotes desktop
 
-Os cinco artefatos foram reconstruídos após a sincronização do snapshot SQLite e o ajuste do modo visitante. A inspeção de metadados confirmou `stray-linux` na versão `1.0.0` para os formatos Debian e RPM. Os checksums publicados em `INSTALLERS.md` e `Stray-Linux-1.0.0-SHA256SUMS.txt` correspondem ao lote final enviado ao armazenamento do projeto.
+Os cinco artefatos foram reconstruídos após a fase 2.0 de inteligência local. A inspeção de metadados confirmou `stray-linux` na versão `1.0.0` para Debian, RPM e Pacman; o lote inclui Scanner com sinais Vulkan minimizados, System Graph, timeline, pré-voo, Stray AI explicável, recuperação, logs e alertas locais. Os checksums publicados em `INSTALLERS.md` e `Stray-Linux-1.0.0-SHA256SUMS.txt` correspondem ao lote final enviado ao armazenamento do projeto.
 
 | Formato | SHA-256 |
 | --- | --- |
-| Windows NSIS | `205318a8f752de745f8a86dc79ed45bc88883acc86b94096878fa0930f606161` |
-| Debian/Ubuntu | `3941fe65e2614025a8decb0d024f991a8fe75f895462d78f9db49ee1cb8f1ae7` |
-| RPM | `cde87a9e0e20d524320a1e76fcaeafdd60cc116943697eb0d9b471394b1ca6ef` |
-| Pacman | `bb669a2890bbaa0481a278578705a0af3214609e374bc886928da791b0c2b279` |
-| AppImage | `5b6942a33499f8a499e91e3b12d52f50f5a73e4b2968696342d513a49816f2e6` |
+| Windows NSIS | `6d9fd112eb8c9d32d54578b89c95917c460df2645c8d158fba4355dede0c7b77` |
+| Debian/Ubuntu | `3741412fc4097af1e97ce17b723316e53d5943bdd5818556a0b85f97cd57d9c1` |
+| RPM | `c2c349e01da3fc8ac4e12bc172206ff9db19c53dbcb1fd7eb3b0acc7d251bda8` |
+| Pacman | `256dfd4ef3d6d95cd0e7bc13b9260a9124e96ad20876d51a89da7033918e5c49` |
+| AppImage | `c2e05c03fb95e8d3d973a5bb5bbd98ac51e58dd72f5edd5f936431c324d02f35` |
 
 ## Prevenção de pacote incorreto e fish
 
@@ -30,4 +30,8 @@ Após a publicação do checkpoint de correção, a rota publicada `/download` a
 
 Após a reimplantação, a mesma rota foi recarregada no domínio com um parâmetro de cache e passou a apresentar a seleção obrigatória, sem comando pré-selecionado, com o lote de artefatos atual. A confirmação do método Pacman é verificada em seguida como parte do fluxo publicado.
 
-O clique publicado em **pacman** exibe **“Arch / derivadas · pacote pacman”**, a URL final `.pacman`, o checksum `bb669a28…`, `sudo pacman -U /tmp/stray-linux.pacman` e nenhuma instrução `dpkg`, `apt-get` ou `.deb` no bloco escolhido.
+O clique publicado em **pacman** deve exibir **“Arch / derivadas · pacote pacman”**, a URL final `.pacman`, o checksum `256dfd4e…`, `sudo pacman -U /tmp/stray-linux.pacman` e nenhuma instrução `dpkg`, `apt-get` ou `.deb` no bloco escolhido.
+
+## Confirmação pública do lote 2.0
+
+Em 15 de agosto de 2026, os cinco URLs do armazenamento do projeto responderam `206 Partial Content` a uma requisição de faixa de um byte: Windows NSIS, Debian/Ubuntu `.deb`, RPM, Pacman e AppImage. Essa checagem confirma que os downloads estão publicamente acessíveis sem baixar os arquivos completos; a integridade do conteúdo é confirmada pelos SHA-256 registrados acima.

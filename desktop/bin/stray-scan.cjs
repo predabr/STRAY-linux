@@ -6,7 +6,7 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
-const SCANNER_VERSION = "1.3.0";
+const SCANNER_VERSION = "1.4.0";
 
 function readText(file) { try { return fs.readFileSync(file, "utf8"); } catch { return null; } }
 
@@ -83,8 +83,12 @@ function detectGraphics(gpu) {
   const openGl = (glx || "").match(/OpenGL version string:\s*(.+)$/im)?.[1]?.trim() || null;
   const openGlRenderer = (glx || "").match(/OpenGL renderer string:\s*(.+)$/im)?.[1]?.trim() || null;
   const vulkanVersion = (vulkan || "").match(/Vulkan Instance Version:\s*([0-9.]+)/i)?.[1] || null;
+  const vulkanApiVersion = (vulkan || "").match(/apiVersion\s*=\s*([0-9.]+)/i)?.[1] || null;
+  const vulkanDeviceName = (vulkan || "").match(/deviceName\s*=\s*(.+)$/im)?.[1]?.trim() || null;
+  const vulkanDriverName = (vulkan || "").match(/driverName\s*=\s*(.+)$/im)?.[1]?.trim() || null;
+  const vulkanDeviceCount = (vulkan || "").match(/^GPU\d+:/gim)?.length || 0;
   const driverVersion = nvidiaDriver || gpu.driverVersion || (mesa ? `Mesa ${mesa}` : null);
-  return { driverVersion, driverProvider: nvidiaDriver ? "nvidia-smi" : mesa ? "mesa/glxinfo" : null, mesaVersion: mesa, vulkanVersion, openGlVersion: openGl, openGlRenderer, vulkanSummaryAvailable: Boolean(vulkan), glxInfoAvailable: Boolean(glx) };
+  return { driverVersion, driverProvider: nvidiaDriver ? "nvidia-smi" : mesa ? "mesa/glxinfo" : null, mesaVersion: mesa, vulkanVersion, vulkanApiVersion, vulkanDeviceName, vulkanDriverName, vulkanDeviceCount, openGlVersion: openGl, openGlRenderer, vulkanSummaryAvailable: Boolean(vulkan), glxInfoAvailable: Boolean(glx) };
 }
 
 function steamRoots() {

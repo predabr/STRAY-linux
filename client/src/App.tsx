@@ -21,6 +21,13 @@ const Controllers = lazy(() => import("@/pages/Controllers"));
 const Diagnostics = lazy(() => import("@/pages/Diagnostics"));
 const Snapshots = lazy(() => import("@/pages/Snapshots"));
 const SettingsCenter = lazy(() => import("@/pages/SettingsCenter"));
+const SystemGraph = lazy(() => import("@/pages/SystemGraph"));
+const SystemTimeline = lazy(() => import("@/pages/SystemTimeline"));
+const GamePreflight = lazy(() => import("@/pages/GamePreflight"));
+const Regression = lazy(() => import("@/pages/Regression"));
+const RecoveryCenter = lazy(() => import("@/pages/RecoveryCenter"));
+const LogsCenter = lazy(() => import("@/pages/LogsCenter"));
+const NotificationsCenter = lazy(() => import("@/pages/NotificationsCenter"));
 const GameDetail = lazy(() => import("@/pages/GameDetail"));
 const Games = lazy(() => import("@/pages/Games"));
 const Home = lazy(() => import("@/pages/Home"));
@@ -55,6 +62,13 @@ function Router() {
     <Route path="/diagnostics" component={Diagnostics} />
     <Route path="/snapshots" component={Snapshots} />
     <Route path="/settings" component={SettingsCenter} />
+    <Route path="/system-graph" component={SystemGraph} />
+    <Route path="/system-timeline" component={SystemTimeline} />
+    <Route path="/preflight" component={GamePreflight} />
+    <Route path="/regression" component={Regression} />
+    <Route path="/recovery" component={RecoveryCenter} />
+    <Route path="/logs" component={LogsCenter} />
+    <Route path="/notifications" component={NotificationsCenter} />
     <Route path="/windows" component={WindowsHub} />
     <Route path="/assistant" component={AssistantPage} />
     <Route path="/api/docs" component={ApiDocs} />

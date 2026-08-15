@@ -6,12 +6,12 @@ Esta validação registra a matriz de empacotamento que contém as áreas **Wind
 
 | Formato | Local inspecionado | Evidência de rota | SHA-256 |
 |---|---|---|---|
-| Windows NSIS | `dist/win-unpacked/resources/app.asar` | Scanner 1.3, Diagnóstico, Snapshots SQLite, Stray AI local contextual, configurações e privacidade local incluídos | `205318a8f752de745f8a86dc79ed45bc88883acc86b94096878fa0930f606161` |
+| Windows NSIS | `dist/win-unpacked/resources/app.asar` | Scanner 1.3, System Graph, Timeline, Pré-voo, Snapshots SQLite, recuperação, logs, alertas locais, Stray AI explicável e configurações de privacidade incluídos | `6d9fd112eb8c9d32d54578b89c95917c460df2645c8d158fba4355dede0c7b77` |
 | Linux unpacked | `dist/linux-unpacked/resources/app.asar` | Ponte `stray:library:pick-external`, rotas operacionais e UI renovada encontrados | Runtime de referência dos formatos Linux |
-| AppImage | `Stray-Linux-1.0.0-x86_64.AppImage` | Reconstruído a partir do mesmo runtime Linux | `5b6942a33499f8a499e91e3b12d52f50f5a73e4b2968696342d513a49816f2e6` |
-| Debian/Ubuntu `.deb` | `Stray-Linux-1.0.0-amd64.deb` | Reconstruído a partir do mesmo runtime Linux | `3941fe65e2614025a8decb0d024f991a8fe75f895462d78f9db49ee1cb8f1ae7` |
-| RPM | `Stray-Linux-1.0.0-x86_64.rpm` | Reconstruído a partir do mesmo runtime Linux | `cde87a9e0e20d524320a1e76fcaeafdd60cc116943697eb0d9b471394b1ca6ef` |
-| Pacman | `Stray-Linux-1.0.0-x64.pacman` | Reconstruído a partir do mesmo runtime Linux | `bb669a2890bbaa0481a278578705a0af3214609e374bc886928da791b0c2b279` |
+| AppImage | `Stray-Linux-1.0.0-x86_64.AppImage` | Reconstruído a partir do mesmo runtime Linux | `c2e05c03fb95e8d3d973a5bb5bbd98ac51e58dd72f5edd5f936431c324d02f35` |
+| Debian/Ubuntu `.deb` | `Stray-Linux-1.0.0-amd64.deb` | Reconstruído a partir do mesmo runtime Linux | `3741412fc4097af1e97ce17b723316e53d5943bdd5818556a0b85f97cd57d9c1` |
+| RPM | `Stray-Linux-1.0.0-x86_64.rpm` | Reconstruído a partir do mesmo runtime Linux | `c2c349e01da3fc8ac4e12bc172206ff9db19c53dbcb1fd7eb3b0acc7d251bda8` |
+| Pacman | `Stray-Linux-1.0.0-x64.pacman` | Reconstruído a partir do mesmo runtime Linux | `256dfd4ef3d6d95cd0e7bc13b9260a9124e96ad20876d51a89da7033918e5c49` |
 
 ## Método reproduzível
 
@@ -21,4 +21,4 @@ Os hashes da tabela também estão em [`INSTALLERS.md`](INSTALLERS.md) e no arqu
 
 ## Lote de evolução do aplicativo
 
-O lote atual foi reconstruído depois da correção do modo visitante do Stray AI, do fallback baseado em evidência, da sincronização de conteúdo oficial no SQLite local e da correção do caminho de remoção do AppImage. A inspeção confirmou que os cinco artefatos existem; a validação de metadados e downloads públicos é executada antes da publicação. As rotas públicas de instalação e desinstalação continuam cobertas por regressão de manifesto.
+O lote atual foi reconstruído após a fase 2.0 de inteligência local: sinais minimizados de Vulkan no Scanner, grafo técnico, comparação de snapshots, pré-voo, detector de regressão condicionado a medições importadas, Stray AI explicável, backup local com prévia, logs e alertas locais. A inspeção confirmou os cinco artefatos, os metadados Debian/RPM/Pacman e os hashes antes da publicação. As rotas públicas de instalação e desinstalação continuam cobertas por regressão de manifesto.

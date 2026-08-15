@@ -39,6 +39,7 @@ const profileInput = z.object({
   scannedAt: z.coerce.date().nullable().optional(),
   isActive: z.boolean().default(false),
 });
+type LocalBackupPreview = { schemaVersion: number; exportedAt: string; profiles: number; snapshots: number; preferences: number; evidence: number; events: number; aiMemory: number; excludes: string[] };
 
 export const userRouter = router({
   dashboard: activeUserProcedure.query(async ({ ctx }) => {
@@ -162,6 +163,21 @@ export const userRouter = router({
     remove: activeUserProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async () => {
       throw new Error("Snapshots técnicos são locais e estão disponíveis somente no aplicativo desktop.");
     }),
+  }),
+
+  backups: router({
+    list: activeUserProcedure.query(async () => [] as Array<{ id: number; label: string; createdAt: string }>),
+    create: activeUserProcedure.input(z.object({ label: z.string().trim().min(2).max(120) })).mutation(async () => { throw new Error("Backups técnicos são locais e estão disponíveis somente no aplicativo desktop."); }),
+    preview: activeUserProcedure.input(z.object({ id: z.number().int().positive() })).query(async (): Promise<LocalBackupPreview> => { throw new Error("Backups técnicos são locais e estão disponíveis somente no aplicativo desktop."); }),
+    restore: activeUserProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async () => { throw new Error("Backups técnicos são locais e estão disponíveis somente no aplicativo desktop."); }),
+  }),
+
+  timeline: router({
+    list: activeUserProcedure.query(async () => [] as Array<{ id: number; eventType: string; label: string; detailsJson: string; createdAt: string }>),
+  }),
+
+  logs: router({
+    list: activeUserProcedure.input(z.object({ level: z.enum(["info", "warning", "error"]).optional() })).query(async () => [] as Array<{ id: number; level: "info" | "warning" | "error"; module: string; message: string; detailsJson: string; createdAt: string }>),
   }),
 
   reports: router({
