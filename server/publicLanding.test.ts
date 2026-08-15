@@ -20,6 +20,17 @@ describe("landing pública", () => {
   it("mantém a página inicial fora do shell operacional", () => {
     const app = read("client/src/App.tsx");
     expect(app).toContain('if (location === "/") return <Home />;');
+    expect(app).toContain('if (location === "/uninstall") return <Uninstall />;');
     expect(app).toContain("<ProductWorkspace><Router /></ProductWorkspace>");
+  });
+
+  it("documenta remoção segura sem limpar dados locais automaticamente", () => {
+    const uninstall = read("client/src/pages/Uninstall.tsx");
+    expect(uninstall).toContain("sudo apt remove stray-linux");
+    expect(uninstall).toContain("sudo dnf remove stray-linux");
+    expect(uninstall).toContain("sudo zypper remove stray-linux");
+    expect(uninstall).toContain("sudo pacman -R stray-linux");
+    expect(uninstall).toContain("rm ./Stray-Linux-1.0.0-x86_64.AppImage");
+    expect(uninstall).toContain("não apaga automaticamente configurações ou dados locais");
   });
 });

@@ -2,7 +2,7 @@ import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
-import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Cloud, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Cloud, ExternalLink, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Settings, ShieldCheck, Wrench } from "lucide-react";
 import type { ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 
@@ -49,7 +49,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
         <NavigationGroup label={copy.system} items={system} location={location} />
         <NavigationGroup label={copy.personal} items={personal} location={location} />
       </nav>
-      <div className="mt-4 border-t border-white/8 px-2 pt-4"><p className="inline-flex items-center gap-2 font-tech text-[10px] uppercase tracking-[0.12em] text-emerald-300"><span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />{copy.status}</p><p className="mt-2 font-tech text-[10px] text-white/35">{copy.version}</p></div>
+      <div className="mt-4 border-t border-white/8 px-2 pt-4"><p className="inline-flex items-center gap-2 font-tech text-[10px] uppercase tracking-[0.12em] text-emerald-300"><span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />{copy.status}</p><p className="mt-2 font-tech text-[10px] text-white/35">{copy.version}</p><a href="https://linuxtoys-ckuyvpj5.manus.space/uninstall" target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-xs text-white/45 transition-colors hover:text-cyan-100">Guia de desinstalação<ExternalLink className="h-3 w-3" /></a></div>
     </aside>
     <div className="min-h-screen pb-16 lg:ps-56 lg:pb-0">{children}</div>
     <nav aria-label="Navegação rápida" className="fixed inset-x-0 bottom-0 z-50 flex h-16 border-t border-white/10 bg-[#111318]/95 px-2 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">{bottomNavigation.map((item) => <RailLink key={item.href} item={item} location={location} compact />)}</nav>

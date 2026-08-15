@@ -225,3 +225,7 @@
 - [x] Exibir downloads e comandos de instalação por Windows, Debian/Ubuntu, Fedora/RHEL/openSUSE, Arch e AppImage com checksums e fontes.
 - [x] Publicar uma descrição concisa inspirada no README, sem expor passos internos de desenvolvimento.
 - [x] Validar a landing pública em desktop e celular, testes, build e publicação.
+- [x] Criar uma página pública de desinstalação com métodos seguros por Windows e cada formato Linux publicado.
+- [x] Explicar a diferença entre remover o aplicativo e apagar dados locais, sem recomendar remoções automáticas.
+- [x] Adicionar links para a página de desinstalação no site e no aplicativo, sem embutir um desinstalador no workspace.
+- [x] Validar rotas, acessibilidade, testes, build e publicação da documentação de desinstalação.

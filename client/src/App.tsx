@@ -36,6 +36,7 @@ const SearchPage = lazy(() => import("@/pages/Search"));
 const Scanner = lazy(() => import("@/pages/Scanner"));
 const Status = lazy(() => import("@/pages/Status"));
 const Sync = lazy(() => import("@/pages/Sync"));
+const Uninstall = lazy(() => import("@/pages/Uninstall"));
 const WindowsHub = lazy(() => import("@/pages/WindowsHub"));
 
 function Router() {
@@ -81,6 +82,7 @@ function App() {
 function ApplicationSurface() {
   const [location] = useLocation();
   if (location === "/") return <Home />;
+  if (location === "/uninstall") return <Uninstall />;
   return <StrayEntryGate><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate>;
 }
 
