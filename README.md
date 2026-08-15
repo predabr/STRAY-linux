@@ -30,7 +30,7 @@ A área Windows não executa comandos, não aplica scripts de “debloat” e n�
 
 ## Instalação para usuários
 
-No Windows, baixe o instalador direto [na página oficial do Stray Linux](https://linuxtoys-ckuyvpj5.manus.space/#instalar). Em Linux, a página exibe um comando específico para Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch ou AppImage. Cada comando baixa o pacote correto, valida o SHA-256 antes da instalação e remove o arquivo temporário quando aplicável.
+No Windows, baixe o instalador direto [na página oficial do Stray Linux](https://linuxtoys-ckuyvpj5.manus.space/#instalar). Em Linux, a página exibe um comando específico para Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch ou AppImage. Cada comando baixa o pacote correto, valida o SHA-256 antes da instalação e remove o arquivo temporário quando aplicável. **Copie o bloco inteiro:** executar apenas `sudo apt install ./Stray-Linux-1.0.0-amd64.deb` não baixa o arquivo e pode falhar em versões do APT que não aceitam um `.deb` local dessa forma.
 
 > A distribuição Linux é intencionalmente apresentada pelo terminal. O Stray Linux não anuncia repositórios APT, DNF ou Pacman que não foram publicados e mantidos como repositórios de pacotes.
 

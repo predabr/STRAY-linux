@@ -240,3 +240,7 @@
 - [x] Publicar os artefatos Linux em um destino de distribuição que permita comandos de terminal reais, sem URLs ou repositórios inventados.
 - [x] Atualizar o README público e a documentação de distribuição para o novo fluxo.
 - [x] Validar responsividade, acessibilidade, testes, build e publicação da landing de distribuição.
+- [x] Corrigir a instalação Linux quando o usuário tenta instalar um pacote que ainda não foi baixado para o diretório atual.
+- [x] Validar na prática o download publicado, o SHA-256 e o fluxo de instalação Debian/Ubuntu.
+- [x] Atualizar os comandos e a documentação para evitar a execução de nomes de arquivo sem o passo de download.
+- [x] Revalidar testes, build e publicação da correção de instalação.

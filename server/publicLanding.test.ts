@@ -14,6 +14,7 @@ describe("landing pública", () => {
     expect(landing).toContain("Stray-Linux-1.0.0-x64_0d745038.pacman");
     expect(landing).toContain("Stray-Linux-1.0.0-x86_64_68775b31.AppImage");
     expect(landing).toContain("sudo pacman -U /tmp/stray-linux.pacman");
+    expect(landing).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
     expect(landing).toContain("sha256sum -c -");
     expect(landing).toContain('href={assets.exe}');
     expect(landing).not.toContain('href={assets.deb}');
