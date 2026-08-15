@@ -163,12 +163,23 @@
   }
 
   .technical-grid {
-    background-image: linear-gradient(oklch(1 0 0 / 4%) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 4%) 1px, transparent 1px);
-    background-size: 28px 28px;
+    position: relative;
+    isolation: isolate;
+    background-color: oklch(0.135 0.008 285);
+    background-image: radial-gradient(ellipse 58% 45% at 8% -8%, oklch(0.47 0.17 250 / 13%), transparent 72%), radial-gradient(ellipse 54% 44% at 94% 12%, oklch(0.42 0.14 200 / 10%), transparent 72%), linear-gradient(138deg, oklch(1 0 0 / 2%) 0 1px, transparent 1px 100%);
   }
 
   .product-workspace .technical-grid {
-    background-size: 22px 22px;
+    background-image: radial-gradient(ellipse 46% 34% at 38% 0%, oklch(0.46 0.16 260 / 9%), transparent 72%), radial-gradient(ellipse 45% 42% at 98% 75%, oklch(0.43 0.14 210 / 8%), transparent 72%), linear-gradient(138deg, oklch(1 0 0 / 2%) 0 1px, transparent 1px 100%);
+  }
+
+  .product-workspace::before {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    content: "";
+    background: radial-gradient(circle at 16% 17%, oklch(0.55 0.17 245 / 7%), transparent 23rem), radial-gradient(circle at 88% 88%, oklch(0.48 0.14 210 / 6%), transparent 26rem);
   }
 
   .evidence-label {
@@ -204,9 +215,8 @@
     inset: 0;
     pointer-events: none;
     content: "";
-    background-image: linear-gradient(oklch(1 0 0 / 4%) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 4%) 1px, transparent 1px);
-    background-size: 24px 24px;
-    mask-image: linear-gradient(135deg, black, transparent 70%);
+    background: linear-gradient(125deg, oklch(0.62 0.2 250 / 8%), transparent 28%, transparent 72%, oklch(0.55 0.15 210 / 5%));
+    mask-image: linear-gradient(135deg, black, transparent 82%);
   }
 
   @media (min-width: 640px) {
@@ -241,16 +251,26 @@
   .intro-curtain { position: absolute; inset-inline: 0; bottom: -18%; z-index: 30; height: 130%; background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--card))); transform: translateY(105%); transition: transform 720ms cubic-bezier(0.77, 0, 0.175, 1); }
   .intro-curtain-open { transform: translateY(-112%); }
   .system-status-pulse { animation: stray-system-pulse 1.8s ease-out infinite; }
+  .stray-loader-shell { overflow: hidden; }
+  .stray-loader-core { animation: stray-loader-float 1.8s cubic-bezier(0.77, 0, 0.175, 1) infinite alternate; }
+  .stray-loader-sweep { animation: stray-loader-sweep 1.25s cubic-bezier(0.77, 0, 0.175, 1) infinite; }
+  .stray-loader-dot { animation: stray-loader-dot 1.35s ease-in-out infinite; }
+  .stray-loader-dot:nth-child(2) { animation-delay: 120ms; }
+  .stray-loader-dot:nth-child(3) { animation-delay: 240ms; }
 
   @keyframes stray-intro-logo-reveal { to { opacity: 1; transform: translateY(0); } }
   @keyframes stray-intro-logo-pop { 0% { opacity: 0; transform: scale(0.95); } 68% { opacity: 1; transform: scale(1.04); } 100% { opacity: 1; transform: scale(1); } }
   @keyframes stray-intro-scan { from { transform: translateX(0) skewX(-12deg); opacity: 0; } 18% { opacity: 1; } to { transform: translateX(500%) skewX(-12deg); opacity: 0; } }
   @keyframes stray-intro-character { to { opacity: 1; transform: translateY(0); } }
   @keyframes stray-system-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgb(110 231 183 / 0); } 40% { box-shadow: 0 0 0 6px rgb(110 231 183 / 0.16); } }
+  @keyframes stray-loader-float { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+  @keyframes stray-loader-sweep { from { transform: translateX(-115%); } to { transform: translateX(235%); } }
+  @keyframes stray-loader-dot { 0%, 100% { opacity: .25; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
 }
 
 .font-tech { font-family: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
 
 @media (prefers-reduced-motion: reduce) {
   .intro-curtain-open { display: none; }
+  .stray-loader-core, .stray-loader-sweep, .stray-loader-dot { animation: none; }
 }

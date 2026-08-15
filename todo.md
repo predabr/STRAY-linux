@@ -229,3 +229,9 @@
 - [x] Explicar a diferença entre remover o aplicativo e apagar dados locais, sem recomendar remoções automáticas.
 - [x] Adicionar links para a página de desinstalação no site e no aplicativo, sem embutir um desinstalador no workspace.
 - [x] Validar rotas, acessibilidade, testes, build e publicação da documentação de desinstalação.
+- [x] Ampliar a biblioteca local para Steam, Heroic e jogos externos selecionados pelo usuário, sem classificar procedência nem alterar arquivos.
+- [x] Modernizar o fundo, reduzir a repetição de linhas e aplicar animações leves com respeito à redução de movimento.
+- [x] Criar uma transição de carregamento do aplicativo com estado acessível e sem bloquear interações necessárias.
+- [x] Aprimorar o Stray AI com sugestões de diagnóstico e respostas orientadas a evidência, mantendo a recusa fora do escopo.
+- [x] Melhorar cartões e páginas de jogos com descrição, origem e mídia somente quando autorizada/localmente disponível.
+- [x] Revalidar idiomas, acessibilidade, testes, build, instaladores e publicação da atualização.

@@ -25,9 +25,13 @@ export function StrayEntryGate({ children }: { children: ReactNode }) {
 
   if (pathOnly === "/" && introPreviewRequested && !introComplete) return <Intro locale={locale} onComplete={() => { sessionStorage.setItem(introStorageKey, "1"); setIntroComplete(true); }} />;
   if (!requiresAccount) return <>{children}</>;
-  if (loading) return <div className="grid min-h-screen place-items-center bg-background"><CircleDotDashed className="h-7 w-7 animate-spin text-primary" /></div>;
+  if (loading) return <ProductLoader />;
   if (isAuthenticated || (desktopMode && localEntry)) return <>{children}</>;
   return <Access locale={locale} desktopMode={desktopMode} onLocalContinue={() => { sessionStorage.setItem("stray-local-entry", "1"); setLocalEntry(true); }} />;
+}
+
+function ProductLoader() {
+  return <main className="stray-loader-shell relative grid min-h-screen place-items-center overflow-hidden bg-[#0a0d13] px-6 text-white" aria-busy="true" aria-live="polite"><div className="absolute inset-0 bg-[radial-gradient(ellipse_at_28%_15%,rgba(59,130,246,.16),transparent_36%),radial-gradient(ellipse_at_78%_86%,rgba(34,211,238,.09),transparent_34%)]" /><section className="stray-loader-core relative z-10 flex w-full max-w-sm flex-col items-center text-center"><div className="relative grid h-20 w-20 place-items-center overflow-hidden rounded-[1.5rem] border border-cyan-200/20 bg-white/[.045] shadow-[0_18px_60px_rgba(0,0,0,.3)]"><StrayBrandMark compact /><span aria-hidden="true" className="stray-loader-sweep absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-cyan-100/70 to-transparent blur-md" /></div><p className="mt-7 font-tech text-[10px] uppercase tracking-[.2em] text-cyan-200">STRAY LINUX / INICIANDO</p><h1 className="mt-3 text-2xl font-semibold tracking-tight">Preparando seu ambiente.</h1><p className="mt-3 text-sm leading-6 text-white/52">Verificando sessão e carregando a interface local.</p><div className="mt-7 h-1.5 w-full overflow-hidden rounded-full bg-white/8"><div className="stray-loader-sweep h-full w-[45%] rounded-full bg-gradient-to-r from-cyan-300 via-blue-400 to-violet-400" /></div><div className="mt-4 flex items-center justify-center gap-1.5" aria-label="Carregando"><span className="stray-loader-dot h-1.5 w-1.5 rounded-full bg-cyan-200" /><span className="stray-loader-dot h-1.5 w-1.5 rounded-full bg-cyan-200" /><span className="stray-loader-dot h-1.5 w-1.5 rounded-full bg-cyan-200" /></div></section></main>;
 }
 
 function Intro({ locale, onComplete }: { locale: keyof typeof introCopy; onComplete: () => void }) {

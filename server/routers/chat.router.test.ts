@@ -30,7 +30,7 @@ vi.mock("../_core/llm", () => ({
 }));
 
 import { appRouter } from "../routers";
-import { extractContextTerms } from "./chat";
+import { buildStrayAiSystemPrompt, extractContextTerms } from "./chat";
 import { isStrayAiDomainQuestion, STRAY_AI_OUT_OF_SCOPE_RESPONSE } from "../lib/strayAiScope";
 
 function caller() {
@@ -55,6 +55,15 @@ describe("assistente: continuidade, contexto e autorização", () => {
     expect(result.answer).toBe(STRAY_AI_OUT_OF_SCOPE_RESPONSE);
     expect(harness.writes).toHaveLength(3);
     expect(harness.writes[2]).toMatchObject({ role: "assistant", content: STRAY_AI_OUT_OF_SCOPE_RESPONSE });
+  });
+
+  it("exige diagnóstico estruturado, evidência e limites sem prometer resultado", () => {
+    const prompt = buildStrayAiSystemPrompt("PERFIL TÉCNICO ATIVO: indisponível.");
+    expect(prompt).toContain("Leitura do caso");
+    expect(prompt).toContain("Evidência disponível");
+    expect(prompt).toContain("Ações seguras");
+    expect(prompt).toContain("Limites");
+    expect(prompt).toContain("não invente comandos, compatibilidade, FPS, versões, mídia, causa ou resultado");
   });
 
   it("reutiliza a sessão da plataforma e grava somente os dois novos turnos", async () => {

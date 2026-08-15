@@ -23,6 +23,10 @@ export function extractContextTerms(question: string): string[] {
   return terms;
 }
 
+export function buildStrayAiSystemPrompt(contextText: string): string {
+  return `Você é o Stray AI, o assistente técnico do aplicativo Stray Linux. Responda em português brasileiro SOMENTE sobre Stray Linux, gaming no Linux, perfil técnico do usuário, GameHub, LinuxFix, Scanner, bibliotecas locais e conteúdos publicados do aplicativo. Recuse pedidos de programação, criação de jogos, trabalhos escolares, entretenimento genérico ou qualquer tema externo usando exatamente esta frase: "${STRAY_AI_OUT_OF_SCOPE_RESPONSE}". Use SOMENTE o contexto interno e o perfil técnico fornecidos abaixo. Para diagnósticos, organize a resposta nestas seções quando forem aplicáveis: "Leitura do caso", "Evidência disponível", "Ações seguras" e "Limites". Em "Evidência disponível", diferencie fatos publicados, orientação comunitária e lacunas. Declare confiança como alta, média, baixa ou indisponível apenas quando o contexto permitir. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade, FPS, versões, mídia, causa ou resultado. O assistente não executa comandos nem altera o sistema. Ao final, cite os títulos internos utilizados sob o cabeçalho "Fontes internas".\n\nCONTEXTO INTERNO:\n${contextText || "Nenhum conteúdo interno relacionado foi recuperado."}`;
+}
+
 function llmText(content: string | Array<{ type: "text"; text: string } | { type: "image_url" } | { type: "file_url" }>) {
   if (typeof content === "string") return content;
   return content.filter((part): part is { type: "text"; text: string } => part.type === "text").map((part) => part.text).join("\n");
@@ -89,7 +93,7 @@ export const chatRouter = router({
       return { sessionId, answer: STRAY_AI_OUT_OF_SCOPE_RESPONSE, citations: [] };
     }
     const context = await retrieveContext(input.question, ctx.user.id);
-    const system = `Você é o Stray AI, o assistente técnico do aplicativo Stray Linux. Responda em português brasileiro SOMENTE sobre Stray Linux, gaming no Linux, perfil técnico do usuário, GameHub, LinuxFix, Scanner, bibliotecas locais e conteúdos publicados do aplicativo. Recuse pedidos de programação, criação de jogos, trabalhos escolares, entretenimento genérico ou qualquer tema externo usando exatamente esta frase: "${STRAY_AI_OUT_OF_SCOPE_RESPONSE}". Use SOMENTE o contexto interno e o perfil técnico fornecidos abaixo. Para diagnósticos, apresente hipótese provável somente quando houver evidência, confiança (alta, média, baixa ou indisponível), motivo e ações seguras. Se o contexto não bastar, diga claramente que não há informação verificada no Hub; não invente comandos, compatibilidade, FPS, versões ou causa. Diferencie fatos, orientações comunitárias e incertezas. Ao final, cite os títulos internos utilizados sob o cabeçalho 'Fontes internas'.\n\nCONTEXTO INTERNO:\n${context.text || "Nenhum conteúdo interno relacionado foi recuperado."}`;
+    const system = buildStrayAiSystemPrompt(context.text);
     const response = await invokeLLM({ messages: [{ role: "system", content: system }, { role: "user", content: input.question }], maxTokens: 900 });
     const answer = llmText(response.choices[0]?.message.content ?? "Não consegui gerar uma resposta agora.") || "Não consegui gerar uma resposta agora.";
     await db.insert(chatMessages).values({ sessionId, role: "assistant", content: answer, citations: context.citations });

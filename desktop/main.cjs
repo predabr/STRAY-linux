@@ -107,6 +107,14 @@ app.whenReady().then(async () => {
     const { scanSteamWorkshop } = require(libraryPath);
     return scanSteamWorkshop();
   });
+  ipcMain.handle("stray:library:pick-external", async (event) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de pasta externa recusada.");
+    const selected = await dialog.showOpenDialog(mainWindow, { title: "Selecionar pasta de jogo externo", properties: ["openDirectory", "dontAddToRecent"] });
+    if (selected.canceled || !selected.filePaths[0]) return { cancelled: true, game: null };
+    const libraryPath = app.isPackaged ? path.join(process.resourcesPath, "app.asar", "desktop", "bin", "stray-library.cjs") : path.join(app.getAppPath(), "desktop", "bin", "stray-library.cjs");
+    const { describeExternalGameDirectory } = require(libraryPath);
+    return { cancelled: false, game: describeExternalGameDirectory(selected.filePaths[0]) };
+  });
   ipcMain.handle("stray:library:launch", async (event, gameId) => {
     if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de execução recusada.");
     if (typeof gameId !== "string" || !/^steam:\d+$/.test(gameId)) throw new Error("O Stray Linux não inicia jogos do Heroic; abra-o pelo próprio launcher.");

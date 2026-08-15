@@ -3,6 +3,7 @@
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
+const crypto = require("node:crypto");
 
 function readText(file) { try { return fs.readFileSync(file, "utf8"); } catch { return null; } }
 function readJson(file) { try { const value = JSON.parse(fs.readFileSync(file, "utf8")); return value && typeof value === "object" ? value : null; } catch { return null; } }
@@ -134,6 +135,34 @@ function scanHeroicLibrary(home) {
   return [...games.values()].sort((left, right) => left.name.localeCompare(right.name, "pt-BR"));
 }
 
+/**
+ * Descreve uma pasta escolhida conscientemente pelo usuário. Não examina
+ * subdiretórios, não abre executáveis, não usa rede e não tenta determinar a
+ * origem ou licença do conteúdo. O item serve apenas para organização local.
+ */
+function describeExternalGameDirectory(directory) {
+  if (typeof directory !== "string" || !path.isAbsolute(directory) || !fs.existsSync(directory)) throw new Error("Pasta de jogo inválida.");
+  const resolved = realPath(directory);
+  let stats;
+  try { stats = fs.statSync(resolved); } catch { throw new Error("Não foi possível ler a pasta selecionada."); }
+  if (!stats.isDirectory()) throw new Error("Selecione uma pasta de jogo, não um arquivo.");
+  const title = path.basename(resolved).trim() || "Jogo externo";
+  const externalId = crypto.createHash("sha256").update(resolved).digest("hex").slice(0, 16);
+  return {
+    id: `external:${externalId}`,
+    appId: null,
+    externalId,
+    name: title,
+    installDir: resolved,
+    libraryPath: resolved,
+    installationType: "external",
+    launcher: "external",
+    store: "external",
+    coverUrl: null,
+    coverSource: null,
+  };
+}
+
 function scanLocalLibrary(home) {
   const steam = scanSteamLibrary(home).map((game) => ({
     id: `steam:${game.appId}`,
@@ -147,7 +176,7 @@ function scanLocalLibrary(home) {
   return [...steam, ...scanHeroicLibrary(home)].sort((left, right) => left.name.localeCompare(right.name, "pt-BR"));
 }
 
-module.exports = { getSteamRoots, getSteamAppsFolders, parseManifest, scanSteamLibrary, scanSteamWorkshop, heroicLegendaryCandidates, scanHeroicLibrary, scanLocalLibrary };
+module.exports = { getSteamRoots, getSteamAppsFolders, parseManifest, scanSteamLibrary, scanSteamWorkshop, heroicLegendaryCandidates, scanHeroicLibrary, describeExternalGameDirectory, scanLocalLibrary };
 
 if (require.main === module) {
   const homeIndex = process.argv.indexOf("--home");
