@@ -316,15 +316,15 @@
 - [x] Auditar a marca exibida, as animações atuais e a configuração do repositório GitHub conectado.
 - [x] Corrigir a assinatura visual da marca e reforçar transições, movimento e feedback visual da landing monocromática.
 - [x] Validar visualmente a landing refinada, seus testes, acessibilidade e build.
-- [ ] Publicar o checkpoint e sincronizar o GitHub com README, link do site e a versão validada.
-- [ ] Criar `predabr/stray-linux` como repositório privado quando a permissão de criação do GitHub estiver disponível, sincronizar código e README sem tocar no `TRAX-AI`.
-- [ ] Entregar o link do site publicado e do repositório privado após a sincronização validada.
+- [x] Publicar o checkpoint e sincronizar o GitHub com README, link do site e a versão validada.
+- [x] Substituir, por autorização expressa do proprietário, o requisito de repositório privado pela sincronização temporária no repositório público `predabr/STRAY-linux`, sem tocar no `TRAX-AI`.
+- [x] Preparar a entrega com o link do site publicado e do repositório público temporário após a sincronização validada.
 - [x] Preparar a automação de qualidade para GitHub, executando testes, checagem de tipos e build em cada envio ao repositório privado.
 - [x] Avaliar a divisão do bundle público por domínios técnicos sem modificar dados, downloads ou contratos da aplicação; a configuração manual foi revertida por aumentar o runtime inicial, preservando os imports dinâmicos existentes.
 - [x] Corrigir a narrativa horizontal para responder de modo contínuo e natural à rolagem do mouse, preservando teclado, toque e redução de movimento.
 - [x] Enriquecer a landing institucional com informações verificáveis e sinais visuais moderados, sem confundir o site público com o aplicativo desktop.
 - [x] Simplificar a navegação e os painéis principais do aplicativo para reduzir a carga cognitiva e manter gráficos modernos somente onde houver dados reais.
 - [x] Revalidar instaladores, downloads, checksums, testes, build, desktop e responsividade após a evolução visual e de usabilidade.
-- [ ] Sincronizar temporariamente o código validado no repositório público `predabr/STRAY-linux` por autorização expressa do proprietário, sem alterar nenhum outro repositório.
-- [ ] Corrigir os workflows GitHub para instalar o pnpm antes de configurar o cache e executar a validação remota com sucesso.
-- [ ] Corrigir a regressão do teste Heroic que depende de caminho local e falha no ambiente limpo do GitHub Actions.
+- [x] Sincronizar temporariamente o código validado no repositório público `predabr/STRAY-linux` por autorização expressa do proprietário, sem alterar nenhum outro repositório.
+- [x] Corrigir os workflows GitHub para instalar o pnpm antes de configurar o cache e executar a validação remota com sucesso.
+- [x] Corrigir a regressão do teste Heroic que depende de caminho local e falha no ambiente limpo do GitHub Actions.
