@@ -351,3 +351,5 @@
 - [x] Revalidar o artefato Pacman, o launcher Linux, o site, os testes, o build e sincronizar a correção no GitHub.
 - [x] Adicionar fallback seguro de GPU no launcher Linux e tratar colisão de porta para evitar o timeout do servidor local.
 - [x] Atualizar regressões do manifesto de distribuição para os cinco artefatos 1.1.1 reconstruídos com launcher Arch corrigido.
+- [x] Substituir integralmente a marca do Stray Linux pela nova logo fornecida no site, aplicativo, metadados e cinco instaladores.
+- [x] Reforçar e revalidar o bloqueio de GPU do Electron Linux após o smoke test da reconstrução de marca.
