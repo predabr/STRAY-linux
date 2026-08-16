@@ -18,4 +18,17 @@ describe("bootstrap desktop Linux", () => {
     expect(source).toContain("O servidor local encerrou antes de responder");
     expect(source).toContain("await waitForServer(port, child)");
   });
+
+  it("encaminha o WASM SQLite externo incluído no pacote Linux", () => {
+    const source = mainSource();
+    expect(source).toContain('path.join(process.resourcesPath, "sql-wasm.wasm")');
+    expect(source).toContain("DESKTOP_SQL_WASM_PATH");
+    expect(source).toContain("resolveSqlWasmPath");
+  });
+
+  it("captura stdout e stderr do servidor local para diagnóstico do código 1", () => {
+    const source = mainSource();
+    expect(source).toContain("serverProcess.stdout.on");
+    expect(source).toContain("serverProcess.stderr.on");
+  });
 });

@@ -359,3 +359,9 @@
 - [x] Reconstruir e validar os cinco instaladores após separar a dependência Vite do servidor de produção.
 - [x] Remover a esfera azul da landing e criar uma animação de brilhos sutis com suporte a redução de movimento.
 - [x] Atualizar artefatos, feeds, site, README, testes e GitHub após a correção.
+
+- [x] Corrigir o erro real de inicialização no Arch: o launcher agora encaminha o `sql-wasm.wasm` externo incluído em `resources` e não depende do diretório de trabalho do menu.
+- [x] Capturar stdout/stderr do servidor local e adicionar regressões para o diagnóstico do código 1.
+- [x] Reconstruir a release 1.1.4, atualizar hashes/feeds e validar o pacote Linux com SQLite, health check e Electron completo sob display virtual.
+
+Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía, mas a abertura mostrava "O servidor local encerrou antes de responder (código 1)".

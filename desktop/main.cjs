@@ -46,6 +46,16 @@ function loadDesktopConfig() {
   }
 }
 
+function resolveSqlWasmPath() {
+  const candidates = app.isPackaged
+    ? [path.join(process.resourcesPath, "sql-wasm.wasm")]
+    : [
+        path.join(app.getAppPath(), "node_modules", "sql.js", "dist", "sql-wasm.wasm"),
+        path.join(process.cwd(), "node_modules", "sql.js", "dist", "sql-wasm.wasm"),
+      ];
+  return candidates.find((candidate) => fs.existsSync(candidate)) ?? null;
+}
+
 function startLocalServer(config) {
   const serverEntry = app.isPackaged
     ? path.join(process.resourcesPath, "app.asar", "dist", "index.js")
@@ -53,20 +63,25 @@ function startLocalServer(config) {
   const seedPath = app.isPackaged
     ? path.join(process.resourcesPath, "app.asar", "desktop", "seed", "initial-data.json")
     : path.join(app.getAppPath(), "desktop", "seed", "initial-data.json");
+  const sqlWasmPath = resolveSqlWasmPath();
+  const serverEnv = {
+    ...process.env,
+    ELECTRON_RUN_AS_NODE: "1",
+    NODE_ENV: "production",
+    ELECTRON_DISABLE_GPU: "1",
+    DESKTOP_MODE: "1",
+    PORT: String(config.port),
+    DESKTOP_DATA_DIR: app.getPath("userData"),
+    DESKTOP_SEED_PATH: seedPath,
+  };
+  if (sqlWasmPath) serverEnv.DESKTOP_SQL_WASM_PATH = sqlWasmPath;
+  else delete serverEnv.DESKTOP_SQL_WASM_PATH;
   serverProcess = spawn(process.execPath, [serverEntry], {
-    env: {
-      ...process.env,
-      ELECTRON_RUN_AS_NODE: "1",
-      NODE_ENV: "production",
-      ELECTRON_DISABLE_GPU: "1",
-      DESKTOP_MODE: "1",
-      PORT: String(config.port),
-      DESKTOP_DATA_DIR: app.getPath("userData"),
-      DESKTOP_SEED_PATH: seedPath,
-    },
+    env: serverEnv,
     stdio: "pipe",
     windowsHide: true,
   });
+  serverProcess.stdout.on("data", (chunk) => console.log(`[local-server] ${chunk}`));
   serverProcess.stderr.on("data", (chunk) => console.error(`[local-server] ${chunk}`));
   serverProcess.on("error", (error) => console.error(`[local-server] spawn error: ${error.message}`));
   serverProcess.on("exit", (code, signal) => console.error(`[local-server] exited with code ${code ?? "null"}${signal ? ` signal ${signal}` : ""}`));
@@ -187,7 +202,8 @@ app.whenReady().then(async () => {
     desktopUpdater = createDesktopUpdater({ app, autoUpdater, dialog });
     if (app.isPackaged) setTimeout(() => { void desktopUpdater.check(); }, 15_000);
   } catch (error) {
-    dialog.showErrorBox("Stray Linux", `${error.message}\n\nO aplicativo não exige DATABASE_URL. Verifique se o diretório local possui permissão de escrita e tente abrir novamente.`);
+    const message = error instanceof Error ? error.message : String(error);
+    dialog.showErrorBox("Stray Linux", `${message}\n\nO aplicativo não exige DATABASE_URL. O log do servidor local foi enviado ao console do aplicativo. Verifique se o diretório local possui permissão de escrita e tente abrir novamente.`);
     app.quit();
   }
 });
