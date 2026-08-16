@@ -325,3 +325,4 @@
 - [x] Enriquecer a landing institucional com informações verificáveis e sinais visuais moderados, sem confundir o site público com o aplicativo desktop.
 - [x] Simplificar a navegação e os painéis principais do aplicativo para reduzir a carga cognitiva e manter gráficos modernos somente onde houver dados reais.
 - [x] Revalidar instaladores, downloads, checksums, testes, build, desktop e responsividade após a evolução visual e de usabilidade.
+- [ ] Sincronizar temporariamente o código validado no repositório público `predabr/STRAY-linux` por autorização expressa do proprietário, sem alterar nenhum outro repositório.
