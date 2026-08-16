@@ -1,6 +1,5 @@
 const { app, BrowserWindow, dialog, ipcMain, shell } = require("electron");
 const { spawn } = require("node:child_process");
-const net = require("node:net");
 const fs = require("node:fs");
 const path = require("node:path");
 const { isAllowedExternalUrl } = require("./security.cjs");
@@ -11,28 +10,6 @@ let serverProcess;
 let mainWindow;
 let desktopUpdater;
 const preferredPort = Number(process.env.LGH_PORT || 43819);
-if (process.platform === "linux") {
-  app.disableHardwareAcceleration();
-  app.commandLine.appendSwitch("disable-gpu");
-  app.commandLine.appendSwitch("disable-gpu-compositing");
-}
-
-function findAvailablePort(preferred) {
-  return new Promise((resolve, reject) => {
-    const probe = net.createServer();
-    probe.once("error", () => {
-      probe.close();
-      const fallback = net.createServer();
-      fallback.once("error", reject);
-      fallback.listen(0, "127.0.0.1", () => {
-        const address = fallback.address();
-        const port = typeof address === "object" && address ? address.port : 0;
-        fallback.close(() => resolve(port));
-      });
-    });
-    probe.listen(preferred, "127.0.0.1", () => probe.close(() => resolve(preferred)));
-  });
-}
 
 function loadDesktopConfig() {
   const configPath = path.join(app.getPath("userData"), "stray-linux.config.json");
@@ -62,7 +39,6 @@ function startLocalServer(config) {
       ...process.env,
       ELECTRON_RUN_AS_NODE: "1",
       NODE_ENV: "production",
-      ELECTRON_DISABLE_GPU: "1",
       DESKTOP_MODE: "1",
       PORT: String(config.port),
       DESKTOP_DATA_DIR: app.getPath("userData"),
@@ -72,29 +48,18 @@ function startLocalServer(config) {
     windowsHide: true,
   });
   serverProcess.stderr.on("data", (chunk) => console.error(`[local-server] ${chunk}`));
-  serverProcess.on("error", (error) => console.error(`[local-server] spawn error: ${error.message}`));
-  serverProcess.on("exit", (code, signal) => console.error(`[local-server] exited with code ${code ?? "null"}${signal ? ` signal ${signal}` : ""}`));
-  return serverProcess;
+  serverProcess.on("exit", (code) => console.error(`[local-server] exited with code ${code}`));
 }
 
-async function waitForServer(port, child, attempts = 80) {
-  let exited = false;
-  let exitCode = null;
-  const onExit = (code) => { exited = true; exitCode = code; };
-  child.once("exit", onExit);
-  try {
-    for (let attempt = 0; attempt < attempts; attempt += 1) {
-      if (exited) throw new Error(`O servidor local encerrou antes de responder${exitCode === null ? "" : ` (código ${exitCode})`}.`);
-      try {
-        const response = await fetch(`http://127.0.0.1:${port}/api/health`);
-        if (response.ok) return;
-      } catch {}
-      await new Promise((resolve) => setTimeout(resolve, 250));
-    }
-    throw new Error("O servidor local não iniciou a tempo.");
-  } finally {
-    child.removeListener("exit", onExit);
+async function waitForServer(port, attempts = 80) {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      const response = await fetch(`http://127.0.0.1:${port}/api/health`);
+      if (response.ok) return;
+    } catch {}
+    await new Promise((resolve) => setTimeout(resolve, 250));
   }
+  throw new Error("O servidor local não iniciou a tempo.");
 }
 
 function createWindow(port) {
@@ -183,11 +148,10 @@ app.whenReady().then(async () => {
     return desktopUpdater?.check() ?? { state: "unavailable", detail: "Atualizações não foram inicializadas." };
   });
   const config = loadDesktopConfig();
+  startLocalServer(config);
   try {
-    const port = await findAvailablePort(config.port);
-    const child = startLocalServer({ ...config, port });
-    await waitForServer(port, child);
-    createWindow(port);
+    await waitForServer(config.port);
+    createWindow(config.port);
     desktopUpdater = createDesktopUpdater({ app, autoUpdater, dialog });
     if (app.isPackaged) setTimeout(() => { void desktopUpdater.check(); }, 15_000);
   } catch (error) {
