@@ -26,9 +26,12 @@ describe("bootstrap desktop Linux", () => {
     expect(source).toContain("resolveSqlWasmPath");
   });
 
-  it("captura stdout e stderr do servidor local para diagnóstico do código 1", () => {
+  it("persiste stdout, stderr e o caminho do diagnóstico do servidor local", () => {
     const source = mainSource();
     expect(source).toContain("serverProcess.stdout.on");
     expect(source).toContain("serverProcess.stderr.on");
+    expect(source).toContain("stray-linux-server.log");
+    expect(source).toContain("appendLocalServerLog");
+    expect(source).toContain("A causa técnica foi registrada em:");
   });
 });

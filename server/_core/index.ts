@@ -36,7 +36,7 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
   throw new Error(`No available port found starting from ${startPort}`);
 }
 
-async function startServer() {
+export async function startServer(setupDevelopment?: (app: express.Express, server: ReturnType<typeof createServer>) => Promise<void>) {
   if (process.env.DESKTOP_MODE === "1") await initializeDesktopStore();
   const app = express();
   app.set("trust proxy", 1);
@@ -84,8 +84,8 @@ async function startServer() {
   );
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
-    const { setupVite } = await import("./vite");
-    await setupVite(app, server);
+    if (!setupDevelopment) throw new Error("O entrypoint de desenvolvimento não forneceu o middleware Vite.");
+    await setupDevelopment(app, server);
   } else {
     serveStatic(app);
   }
@@ -102,4 +102,4 @@ async function startServer() {
   });
 }
 
-startServer().catch(console.error);
+if (process.env.NODE_ENV !== "development") startServer().catch(console.error);

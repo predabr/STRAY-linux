@@ -13,6 +13,25 @@ let desktopUpdater;
 const preferredPort = Number(process.env.LGH_PORT || 43819);
 if (process.platform === "linux") app.disableHardwareAcceleration();
 
+function localServerLogPath() {
+  return path.join(app.getPath("userData"), "stray-linux-server.log");
+}
+
+function appendLocalServerLog(kind, value) {
+  try {
+    const logPath = localServerLogPath();
+    const line = `[${new Date().toISOString()}] [${kind}] ${String(value).trim()}\n`;
+    fs.appendFileSync(logPath, line, "utf8");
+    if (fs.statSync(logPath).size > 512_000) {
+      const recent = fs.readFileSync(logPath, "utf8").slice(-384_000);
+      fs.writeFileSync(logPath, recent, "utf8");
+    }
+    return logPath;
+  } catch {
+    return null;
+  }
+}
+
 function findAvailablePort(preferred) {
   return new Promise((resolve, reject) => {
     const probe = net.createServer();
@@ -76,15 +95,16 @@ function startLocalServer(config) {
   };
   if (sqlWasmPath) serverEnv.DESKTOP_SQL_WASM_PATH = sqlWasmPath;
   else delete serverEnv.DESKTOP_SQL_WASM_PATH;
+  appendLocalServerLog("startup", `Iniciando servidor local em ${serverEntry}; SQLite WASM: ${sqlWasmPath ?? "ausente"}`);
   serverProcess = spawn(process.execPath, [serverEntry], {
     env: serverEnv,
     stdio: "pipe",
     windowsHide: true,
   });
-  serverProcess.stdout.on("data", (chunk) => console.log(`[local-server] ${chunk}`));
-  serverProcess.stderr.on("data", (chunk) => console.error(`[local-server] ${chunk}`));
-  serverProcess.on("error", (error) => console.error(`[local-server] spawn error: ${error.message}`));
-  serverProcess.on("exit", (code, signal) => console.error(`[local-server] exited with code ${code ?? "null"}${signal ? ` signal ${signal}` : ""}`));
+  serverProcess.stdout.on("data", (chunk) => { appendLocalServerLog("stdout", chunk); console.log(`[local-server] ${chunk}`); });
+  serverProcess.stderr.on("data", (chunk) => { appendLocalServerLog("stderr", chunk); console.error(`[local-server] ${chunk}`); });
+  serverProcess.on("error", (error) => { appendLocalServerLog("spawn-error", error.stack || error.message); console.error(`[local-server] spawn error: ${error.message}`); });
+  serverProcess.on("exit", (code, signal) => { const event = `Servidor local encerrou: código ${code ?? "null"}${signal ? `; sinal ${signal}` : ""}`; appendLocalServerLog("exit", event); console.error(`[local-server] exited with code ${code ?? "null"}${signal ? ` signal ${signal}` : ""}`); });
   return serverProcess;
 }
 
@@ -203,7 +223,8 @@ app.whenReady().then(async () => {
     if (app.isPackaged) setTimeout(() => { void desktopUpdater.check(); }, 15_000);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    dialog.showErrorBox("Stray Linux", `${message}\n\nO aplicativo não exige DATABASE_URL. O log do servidor local foi enviado ao console do aplicativo. Verifique se o diretório local possui permissão de escrita e tente abrir novamente.`);
+    const logPath = appendLocalServerLog("startup-failure", message) || localServerLogPath();
+    dialog.showErrorBox("Stray Linux", `${message}\n\nO aplicativo não exige DATABASE_URL. A causa técnica foi registrada em:\n${logPath}\n\nEnvie esse arquivo pela opção “Exportar diagnóstico” ou confira as permissões do diretório local antes de abrir novamente.`);
     app.quit();
   }
 });

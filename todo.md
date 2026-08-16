@@ -371,3 +371,8 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Adicionar um botão para exportar diagnóstico e logs locais sem incluir dados sensíveis por padrão.
 - [x] Exibir uma notificação amigável quando a conexão com o banco local falhar.
 - [x] Implementar tentativa controlada de recuperação do SQLite durante a inicialização e cobrir o fluxo com testes.
+
+- [x] Baixar o Pacman entregue pelo domínio público, inventariar cada arquivo e confirmar a versão realmente instalada pelo usuário.
+- [x] Reproduzir o código 1 no launcher empacotado: o bundle de produção importava `vite.config.ts`, que por sua vez exigia `@builder.io/vite-plugin-jsx-loc`, ausente no pacote final.
+- [x] Auditar caminhos, permissões, dependências e recursos dentro do pacote Pacman arquivo por arquivo.
+- [x] Reconstruir a release 1.1.6 e validar a instalação equivalente ao Arch, a primeira abertura, o health check, o redirect e o SHA-256 antes da publicação.

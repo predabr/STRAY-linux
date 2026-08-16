@@ -6,11 +6,11 @@
 
 O **Stray Linux** é um aplicativo desktop técnico para descoberta de jogos, compatibilidade Linux, benchmarks rastreáveis, Atlas de distribuições, Linux Setup, LinuxFix e perfis de hardware. A interface web é React/TypeScript, o backend é Express/tRPC e a persistência usa Drizzle com MySQL/TiDB. O aplicativo Electron usa SQLite local e não exige `DATABASE_URL` do usuário.
 
-## Versão 1.1.5
+## Versão 1.1.6
 
-A apresentação pública utiliza uma composição editorial própria com navegação vertical, brilhos discretos com suporte a redução de movimento e downloads verificáveis. A release 1.1.5 incorpora a nova identidade visual, exporta um diagnóstico local seguro e torna a recuperação SQLite mais resiliente: o launcher encaminha explicitamente o `sql-wasm.wasm` incluído em `resources`, faz tentativas controladas de inicialização e preserva uma cópia quando detecta corrupção.
+A apresentação pública utiliza uma composição editorial própria com navegação vertical, brilhos discretos com suporte a redução de movimento e downloads verificáveis. A release 1.1.6 corrige o entrypoint empacotado: Vite e `vite.config.ts` agora existem apenas no entrypoint de desenvolvimento e não são incluídos no servidor executado pelo Pacman. O launcher também grava stdout, stderr e o caminho exato do log persistente antes de apresentar uma falha.
 
-Os caminhos públicos de download da série 1.1.5 respondem com redirecionamento HTTP para o artefato verificado da plataforma escolhida. Assim, futuras renovações de artefatos não quebram os links usados pela página, pelo README ou por instalações existentes.
+Os caminhos públicos de download da série 1.1.6 respondem com redirecionamento HTTP para o artefato verificado da plataforma escolhida. Assim, futuras renovações de artefatos não quebram os links usados pela página, pelo README ou por instalações existentes.
 
 O aplicativo empacotado verifica atualizações a partir de um feed HTTPS com metadados de integridade. A instalação da atualização exige confirmação antes de reiniciar. Em Linux, pacotes `.deb`, `.rpm`, `.pacman` e AppImage continuam respeitando o fluxo explícito da distribuição; o aplicativo não executa comandos do sistema automaticamente.
 
@@ -42,7 +42,7 @@ A área Windows não executa comandos, não aplica scripts de “debloat” e n�
 
 ## Instalação para usuários
 
-No Windows, baixe o instalador direto [na página oficial do Stray Linux](https://linuxtoys-ckuyvpj5.manus.space/download). Em Linux, a página exibe um comando específico para Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch ou AppImage. Cada comando baixa o pacote correto por uma URL estável, valida o SHA-256 antes da instalação e remove o arquivo temporário quando aplicável. As URLs estáveis redirecionam ao artefato atual publicado, evitando que uma recompilação altere o link que está no aplicativo instalado. **Copie o bloco inteiro:** executar apenas `sudo apt install ./Stray-Linux-1.1.5-amd64.deb` não baixa o arquivo e pode falhar em versões do APT que não aceitam um `.deb` local dessa forma.
+No Windows, baixe o instalador direto [na página oficial do Stray Linux](https://linuxtoys-ckuyvpj5.manus.space/download). Em Linux, a página exibe um comando específico para Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch ou AppImage. Cada comando baixa o pacote correto por uma URL estável, valida o SHA-256 antes da instalação e remove o arquivo temporário quando aplicável. As URLs estáveis redirecionam ao artefato atual publicado, evitando que uma recompilação altere o link que está no aplicativo instalado. **Copie o bloco inteiro:** executar apenas `sudo apt install ./Stray-Linux-1.1.6-amd64.deb` não baixa o arquivo e pode falhar em versões do APT que não aceitam um `.deb` local dessa forma.
 
 > A distribuição Linux é intencionalmente apresentada pelo terminal. O Stray Linux não anuncia repositórios APT, DNF ou Pacman que não foram publicados e mantidos como repositórios de pacotes.
 
