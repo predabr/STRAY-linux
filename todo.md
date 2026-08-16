@@ -320,3 +320,4 @@
 - [ ] Criar `predabr/stray-linux` como repositório privado quando a permissão de criação do GitHub estiver disponível, sincronizar código e README sem tocar no `TRAX-AI`.
 - [ ] Entregar o link do site publicado e do repositório privado após a sincronização validada.
 - [x] Preparar a automação de qualidade para GitHub, executando testes, checagem de tipos e build em cada envio ao repositório privado.
+- [x] Avaliar a divisão do bundle público por domínios técnicos sem modificar dados, downloads ou contratos da aplicação; a configuração manual foi revertida por aumentar o runtime inicial, preservando os imports dinâmicos existentes.
