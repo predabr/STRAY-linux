@@ -15,9 +15,10 @@ export class DesktopStore {
   constructor(private db: Database, private databasePath: string) {}
   static async create(dataDir: string, seedPath: string) {
     fs.mkdirSync(dataDir, { recursive: true });
-    const SQL = await initSqlJs();
+    const wasmPath = process.env.DESKTOP_SQL_WASM_PATH;
+    const SQL = wasmPath ? await initSqlJs({ locateFile: (file) => file === "sql-wasm.wasm" ? wasmPath : file }) : await initSqlJs();
     const databasePath = path.join(dataDir, "linux-gaming-hub.sqlite");
-    const db = fs.existsSync(databasePath) ? new SQL.Database(fs.readFileSync(databasePath)) : new SQL.Database();
+    const db = fs.existsSync(databasePath) ? (() => { try { const existing = new SQL.Database(fs.readFileSync(databasePath)); existing.exec("PRAGMA schema_version;"); return existing; } catch { fs.renameSync(databasePath, databasePath + ".corrupt-" + Date.now() + ".bak"); return new SQL.Database(); } })() : new SQL.Database();
     const store = new DesktopStore(db, databasePath);
     store.createSchema();
     store.seed(seedPath);
