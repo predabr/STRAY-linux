@@ -321,3 +321,7 @@
 - [ ] Entregar o link do site publicado e do repositório privado após a sincronização validada.
 - [x] Preparar a automação de qualidade para GitHub, executando testes, checagem de tipos e build em cada envio ao repositório privado.
 - [x] Avaliar a divisão do bundle público por domínios técnicos sem modificar dados, downloads ou contratos da aplicação; a configuração manual foi revertida por aumentar o runtime inicial, preservando os imports dinâmicos existentes.
+- [x] Corrigir a narrativa horizontal para responder de modo contínuo e natural à rolagem do mouse, preservando teclado, toque e redução de movimento.
+- [x] Enriquecer a landing institucional com informações verificáveis e sinais visuais moderados, sem confundir o site público com o aplicativo desktop.
+- [x] Simplificar a navegação e os painéis principais do aplicativo para reduzir a carga cognitiva e manter gráficos modernos somente onde houver dados reais.
+- [x] Revalidar instaladores, downloads, checksums, testes, build, desktop e responsividade após a evolução visual e de usabilidade.

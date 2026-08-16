@@ -2,7 +2,7 @@ import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
-import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Camera, Cloud, ExternalLink, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Network, Settings, ShieldCheck, Wrench } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Camera, ChevronDown, Cloud, ExternalLink, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Network, Settings, ShieldCheck, Wrench } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 
@@ -13,20 +13,25 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
   const { locale, t } = useLanguage();
   const { user } = useAuth();
   const copy = productShellCopy[locale];
+  const [advancedOpen, setAdvancedOpen] = useState(false);
   const workspace: NavigationItem[] = [
     { href: "/dashboard", label: t("overview"), icon: LayoutDashboard },
     { href: "/games", label: t("gameHub"), icon: Gamepad2 },
     { href: "/library", label: t("installedGames"), icon: Library },
-    { href: "/mods", label: "Mods", icon: Boxes },
-    { href: "/compare", label: copy.compare, icon: BarChart3 },
-    { href: "/benchmark", label: t("benchmark"), icon: Gauge },
     { href: "/linuxfix", label: t("linuxFix"), icon: Wrench },
-    { href: "/setup", label: t("setup"), icon: BookOpenCheck },
+    { href: "/assistant", label: "Stray AI", icon: BotMessageSquare },
   ];
   const system: NavigationItem[] = [
     { href: "/dashboard/pc", label: t("myPc"), icon: MonitorCog },
     { href: "/scanner", label: t("scanner"), icon: ShieldCheck },
     { href: "/diagnostics", label: "Diagnóstico", icon: Activity },
+    { href: "/performance", label: "Performance", icon: Activity },
+  ];
+  const advancedTools: NavigationItem[] = [
+    { href: "/mods", label: "Mods", icon: Boxes },
+    { href: "/compare", label: copy.compare, icon: BarChart3 },
+    { href: "/benchmark", label: t("benchmark"), icon: Gauge },
+    { href: "/setup", label: t("setup"), icon: BookOpenCheck },
     { href: "/snapshots", label: "Snapshots", icon: Camera },
     { href: "/system-graph", label: "System Graph", icon: Network },
     { href: "/system-timeline", label: "Timeline", icon: Activity },
@@ -36,8 +41,6 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
     { href: "/logs", label: "Logs", icon: Activity },
     { href: "/notifications", label: "Alertas", icon: Activity },
     { href: "/controllers", label: "Controles", icon: Gamepad2 },
-    { href: "/performance", label: "Performance", icon: Activity },
-    { href: "/assistant", label: "Stray AI", icon: BotMessageSquare },
   ];
   const personal: NavigationItem[] = [
     { href: "/dashboard/favorites", label: t("favorites"), icon: Heart },
@@ -47,6 +50,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
   ];
   if (user?.role === "moderator" || user?.role === "admin") personal.unshift({ href: "/moderation", label: t("reports"), icon: ShieldCheck });
   const bottomNavigation = [workspace[0]!, workspace[1]!, workspace[2]!, system[1]!];
+  const advancedRouteActive = advancedTools.some((item) => location === item.href || location.startsWith(`${item.href}/`));
   const isDashboardRoute = location.startsWith("/admin");
   if (isDashboardRoute) return <>{children}</>;
 
@@ -56,6 +60,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
       <nav aria-label="Navegação do aplicativo" className="product-rail-navigation mt-8 flex-1 space-y-6 overflow-y-auto">
         <NavigationGroup label={copy.workspace} items={workspace} location={location} />
         <NavigationGroup label={copy.system} items={system} location={location} />
+        <ExpandableNavigationGroup label={copy.tools} items={advancedTools} location={location} open={advancedOpen || advancedRouteActive} onToggle={() => setAdvancedOpen((value) => !value)} />
         <NavigationGroup label={copy.personal} items={personal} location={location} />
       </nav>
       <div className="product-rail-status mt-4 px-2 pt-4"><p className="inline-flex items-center gap-2 font-tech text-[10px] uppercase tracking-[0.12em] text-emerald-300"><span className="product-rail-status-dot h-1.5 w-1.5 rounded-full bg-emerald-300" />{copy.status}</p><OfflineStatus /><p className="mt-2 font-tech text-[10px] text-white/35">{copy.version}</p><a href="https://linuxtoys-ckuyvpj5.manus.space/support" target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1.5 text-xs text-white/45 transition-colors hover:text-cyan-100">Apoio ao projeto<ExternalLink className="h-3 w-3" /></a><a href="https://linuxtoys-ckuyvpj5.manus.space/uninstall" target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1.5 text-xs text-white/45 transition-colors hover:text-cyan-100">Guia de desinstalação<ExternalLink className="h-3 w-3" /></a></div>
@@ -67,6 +72,10 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
 
 function NavigationGroup({ label, items, location }: { label: string; items: NavigationItem[]; location: string }) {
   return <section><p className="mb-2 px-3 font-tech text-[10px] font-bold tracking-[0.16em] text-white/35">{label}</p><div className="space-y-1">{items.map((item) => <RailLink key={item.href} item={item} location={location} />)}</div></section>;
+}
+
+function ExpandableNavigationGroup({ label, items, location, open, onToggle }: { label: string; items: NavigationItem[]; location: string; open: boolean; onToggle: () => void }) {
+  return <section><button type="button" aria-expanded={open} onClick={onToggle} className="flex w-full items-center justify-between px-3 py-1.5 text-left font-tech text-[10px] font-bold tracking-[0.16em] text-white/35 transition-colors hover:text-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"><span>{label}</span><ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`} /></button>{open ? <div className="mt-1 space-y-1">{items.map((item) => <RailLink key={item.href} item={item} location={location} />)}</div> : null}</section>;
 }
 
 function RailLink({ item, location, compact = false }: { item: NavigationItem; location: string; compact?: boolean }) {

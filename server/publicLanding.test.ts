@@ -46,11 +46,27 @@ describe("landing pública", () => {
     expect(landing).toContain('{installer.name} · pacote {installer.signal}');
     expect(landing).toContain("SELEÇÃO OBRIGATÓRIA");
     expect(landing).toContain("SCROLL TO EXPLORE");
+    expect(landing).toContain("CENA {String(Math.min(3, Math.floor(progress * 3) + 1)).padStart(2, \"0\")} / 03");
+    expect(landing).toContain("landing-horizontal-story");
+    expect(landing).toContain("landing-mobile-story");
+    expect(landing).toContain("function SignalStrip()");
+    expect(landing).toContain("Clareza para jogar.");
     expect(landing).toContain("O bloco usa `bash -c`");
     expect(landing).toContain("usam exclusivamente a aba");
     expect(landing).not.toContain("stray-linux-landing-original_68a8e472.png");
     expect(landing).not.toContain("87 FPS");
     expect(landing).not.toContain("Excellent 92");
+  });
+
+  it("reduz a sobrecarga da navegação sem remover ferramentas avançadas", () => {
+    const workspace = read("client/src/components/platform/ProductWorkspace.tsx");
+    const copy = read("client/src/i18n/productShellCopy.ts");
+    expect(workspace).toContain("const advancedTools: NavigationItem[]");
+    expect(workspace).toContain("ExpandableNavigationGroup");
+    expect(workspace).toContain("advancedOpen || advancedRouteActive");
+    expect(workspace).toContain('href: "/assistant", label: "Stray AI"');
+    expect(copy).toContain('tools: "MAIS FERRAMENTAS"');
+    expect(copy).toContain('version: "Versão 1.1.0"');
   });
 
   it("documenta remoção segura sem limpar dados locais automaticamente", () => {

@@ -509,6 +509,11 @@
   @keyframes stray-landing-pulse { 0%, 100% { opacity: .35; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.2); } }
 }
 
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .landing-horizontal-story { display: none; }
+  .landing-mobile-story { display: block; }
+}
+
 .font-tech { font-family: "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
 
 @media (prefers-reduced-motion: reduce) {
