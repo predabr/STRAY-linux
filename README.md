@@ -1,6 +1,16 @@
 # Stray Linux
 
-O **Stray Linux**, criado no Brasil, é um aplicativo desktop técnico para descoberta de jogos, compatibilidade Linux, benchmarks rastreáveis, Atlas de distribuições, Linux Setup, LinuxFix e perfis de hardware. A interface web é React/TypeScript, o backend é Express/tRPC e a persistência usa Drizzle com MySQL/TiDB. O aplicativo Electron usa SQLite local e não exige `DATABASE_URL` do usuário.
+> Aplicativo desktop local para leitura de ambiente, diagnósticos rastreáveis e gaming no Linux — criado por **Pedro, Brasil**.
+
+[Abrir o site oficial](https://linuxtoys-ckuyvpj5.manus.space) · [Downloads verificados](https://linuxtoys-ckuyvpj5.manus.space/download) · [Desinstalação](https://linuxtoys-ckuyvpj5.manus.space/uninstall)
+
+O **Stray Linux** é um aplicativo desktop técnico para descoberta de jogos, compatibilidade Linux, benchmarks rastreáveis, Atlas de distribuições, Linux Setup, LinuxFix e perfis de hardware. A interface web é React/TypeScript, o backend é Express/tRPC e a persistência usa Drizzle com MySQL/TiDB. O aplicativo Electron usa SQLite local e não exige `DATABASE_URL` do usuário.
+
+## Versão 1.1.0
+
+A apresentação pública adota uma narrativa monocromática com rolagem horizontal em desktop e fallback vertical em telas menores ou quando a redução de movimento está ativa. A identidade utiliza a marca original do projeto e mantém os downloads verificáveis após a sequência de produto.
+
+O aplicativo empacotado verifica atualizações a partir de um feed HTTPS com metadados de integridade. A instalação da atualização exige confirmação antes de reiniciar. Em Linux, pacotes `.deb`, `.rpm`, `.pacman` e AppImage continuam respeitando o fluxo explícito da distribuição; o aplicativo não executa comandos do sistema automaticamente.
 
 > A plataforma não apresenta FPS como medição se não houver proveniência. Benchmarks são classificados como **Verified**, **Community**, **Estimated** ou **Unknown**; a ausência de evidência é exibida como indisponibilidade, e não substituída por dados fictícios.
 
@@ -30,7 +40,7 @@ A área Windows não executa comandos, não aplica scripts de “debloat” e n�
 
 ## Instalação para usuários
 
-No Windows, baixe o instalador direto [na página oficial do Stray Linux](https://linuxtoys-ckuyvpj5.manus.space/#instalar). Em Linux, a página exibe um comando específico para Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch ou AppImage. Cada comando baixa o pacote correto, valida o SHA-256 antes da instalação e remove o arquivo temporário quando aplicável. **Copie o bloco inteiro:** executar apenas `sudo apt install ./Stray-Linux-1.0.0-amd64.deb` não baixa o arquivo e pode falhar em versões do APT que não aceitam um `.deb` local dessa forma.
+No Windows, baixe o instalador direto [na página oficial do Stray Linux](https://linuxtoys-ckuyvpj5.manus.space/download). Em Linux, a página exibe um comando específico para Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch ou AppImage. Cada comando baixa o pacote correto, valida o SHA-256 antes da instalação e remove o arquivo temporário quando aplicável. **Copie o bloco inteiro:** executar apenas `sudo apt install ./Stray-Linux-1.1.0-amd64.deb` não baixa o arquivo e pode falhar em versões do APT que não aceitam um `.deb` local dessa forma.
 
 > A distribuição Linux é intencionalmente apresentada pelo terminal. O Stray Linux não anuncia repositórios APT, DNF ou Pacman que não foram publicados e mantidos como repositórios de pacotes.
 

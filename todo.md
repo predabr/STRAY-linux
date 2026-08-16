@@ -313,3 +313,9 @@
 - [x] Auditar e definir a navegação horizontal por rolagem, incluindo fallback com leitura vertical e redução de movimento.
 - [x] Redesenhar a landing em preto e branco com painéis horizontais, transições suaves e downloads revelados após a narrativa.
 - [x] Validar rolagem, teclado, mobile, downloads e build da landing animada antes da publicação.
+- [x] Auditar a marca exibida, as animações atuais e a configuração do repositório GitHub conectado.
+- [x] Corrigir a assinatura visual da marca e reforçar transições, movimento e feedback visual da landing monocromática.
+- [x] Validar visualmente a landing refinada, seus testes, acessibilidade e build.
+- [ ] Publicar o checkpoint e sincronizar o GitHub com README, link do site e a versão validada.
+- [ ] Criar `predabr/stray-linux` como repositório privado quando a permissão de criação do GitHub estiver disponível, sincronizar código e README sem tocar no `TRAX-AI`.
+- [ ] Entregar o link do site publicado e do repositório privado após a sincronização validada.
