@@ -1,7 +1,7 @@
 from pathlib import Path
 from PIL import Image
 
-source = Path("/home/ubuntu/webdev-static-assets/stray-linux/stray-linux-logo-v2.png")
+source = Path("/home/ubuntu/webdev-static-assets/stray-linux/stray-linux-logo.png")
 output = Path("/home/ubuntu/webdev-static-assets/stray-linux/build-assets")
 icons = output / "icons"
 icons.mkdir(parents=True, exist_ok=True)

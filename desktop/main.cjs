@@ -11,11 +11,7 @@ let serverProcess;
 let mainWindow;
 let desktopUpdater;
 const preferredPort = Number(process.env.LGH_PORT || 43819);
-if (process.platform === "linux") {
-  app.disableHardwareAcceleration();
-  app.commandLine.appendSwitch("disable-gpu");
-  app.commandLine.appendSwitch("disable-gpu-compositing");
-}
+if (process.platform === "linux") app.disableHardwareAcceleration();
 
 function findAvailablePort(preferred) {
   return new Promise((resolve, reject) => {

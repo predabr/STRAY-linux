@@ -9,11 +9,11 @@ describe("landing pública", () => {
   it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
     const distribution = read("client/src/lib/distribution.ts");
-    expect(distribution).toContain("Stray-Linux-1.1.1-Setup_143e412d.exe");
-    expect(distribution).toContain("Stray-Linux-1.1.1-amd64_2834a9d2.deb");
-    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_8ff5fc5c.rpm");
-    expect(distribution).toContain("Stray-Linux-1.1.1-x64_bde3b7ab.pacman");
-    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_024abcfc.AppImage");
+    expect(distribution).toContain("Stray-Linux-1.1.1-Setup_eb412ad7.exe");
+    expect(distribution).toContain("Stray-Linux-1.1.1-amd64_f33eda20.deb");
+    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_ea8994da.rpm");
+    expect(distribution).toContain("Stray-Linux-1.1.1-x64_9d9f82e1.pacman");
+    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_aa851244.AppImage");
     expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
     expect(distribution).toContain("sha256sum -c -");
