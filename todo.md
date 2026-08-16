@@ -344,5 +344,5 @@
 - [x] Alinhar o workflow de instalador Windows ao Corepack/pnpm fixado para evitar incompatibilidade remota de versões.
 - [x] Remover integralmente a rolagem lateral e a narrativa em cenas do site público.
 - [x] Criar uma landing vertical limpa com descrição do produto, recursos essenciais, privacidade, downloads verificados e desinstalação.
-- [ ] Validar a landing simplificada em desktop/mobile, downloads, testes, build, publicação e GitHub.
+- [x] Validar a landing simplificada em desktop/mobile, downloads, testes, build, publicação e GitHub.
 - [x] Atualizar a regressão de narrativa visual para validar a landing vertical limpa em vez da rolagem removida.
