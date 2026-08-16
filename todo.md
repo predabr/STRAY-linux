@@ -342,3 +342,7 @@
 - [x] Publicar os artefatos corrigidos como versão 1.1.1 para que instalações 1.1.0 existentes recebam a atualização controlada.
 - [x] Corrigir a referência pública desatualizada à versão 1.0.0 na página de desinstalação.
 - [x] Alinhar o workflow de instalador Windows ao Corepack/pnpm fixado para evitar incompatibilidade remota de versões.
+- [x] Remover integralmente a rolagem lateral e a narrativa em cenas do site público.
+- [x] Criar uma landing vertical limpa com descrição do produto, recursos essenciais, privacidade, downloads verificados e desinstalação.
+- [ ] Validar a landing simplificada em desktop/mobile, downloads, testes, build, publicação e GitHub.
+- [x] Atualizar a regressão de narrativa visual para validar a landing vertical limpa em vez da rolagem removida.

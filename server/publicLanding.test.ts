@@ -37,18 +37,15 @@ describe("landing pública", () => {
 
   it("mantém apresentação institucional e downloads sem substituir a interface por imagem estática", () => {
     const landing = read("client/src/pages/Home.tsx");
-    expect(landing).toContain("HorizontalStory");
     expect(landing).toContain("Seu Linux.");
     expect(landing).toContain("Criado por Pedro, Brasil");
+    expect(landing).toContain("O QUE O APP ENTREGA");
+    expect(landing).toContain("Ver downloads");
     expect(landing).toContain("<TerminalInstaller");
     expect(landing).toContain('useState<Installer["id"] | null>(null)');
     expect(landing).toContain('selected ? linuxInstallers.find((item) => item.id === selected) : undefined');
     expect(landing).toContain('{installer.name} · pacote {installer.signal}');
     expect(landing).toContain("SELEÇÃO OBRIGATÓRIA");
-    expect(landing).toContain("SCROLL TO EXPLORE");
-    expect(landing).toContain("CENA {String(Math.min(3, Math.floor(progress * 3) + 1)).padStart(2, \"0\")} / 03");
-    expect(landing).toContain("landing-horizontal-story");
-    expect(landing).toContain("landing-mobile-story");
     expect(landing).toContain("function SignalStrip()");
     expect(landing).toContain("Clareza para jogar.");
     expect(landing).toContain("O bloco usa `bash -c`");
@@ -58,14 +55,12 @@ describe("landing pública", () => {
     expect(landing).not.toContain("Excellent 92");
   });
 
-  it("converte o wheel em avanço lateral e libera a página nas bordas da história", () => {
+  it("usa a rolagem vertical nativa e não recupera a narrativa lateral", () => {
     const landing = read("client/src/pages/Home.tsx");
-    expect(landing).toContain('window.addEventListener("wheel", onWheel, { passive: false })');
-    expect(landing).toContain("event?.preventDefault()");
-    expect(landing).toContain("current <= 0");
-    expect(landing).toContain("current >= 1");
-    expect(landing).toContain("setStoryProgress(current + delta / 900)");
-    expect(landing).toContain("aria-label=\"Narrativa horizontal do Stray Linux\"");
+    expect(landing).not.toContain('addEventListener("wheel"');
+    expect(landing).not.toContain("Narrativa horizontal do Stray Linux");
+    expect(landing).not.toContain("landing-horizontal-story");
+    expect(landing).not.toContain("SCROLL TO EXPLORE");
   });
 
   it("reduz a sobrecarga da navegação sem remover ferramentas avançadas", () => {
