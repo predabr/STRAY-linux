@@ -355,3 +355,7 @@
 - [x] Redesenhar a landing pública com linguagem editorial, grade assimétrica e tipografia de alto contraste inspiradas em padrões contemporâneos de portfólios web.
 - [x] Adicionar microinterações, revelações por rolagem e navegação contextual, com suporte a teclado e preferência por movimento reduzido.
 - [x] Validar a landing nova em desktop e mobile, atualizar testes e sincronizar a reformulação no GitHub.
+- [x] Corrigir o runtime empacotado que tenta importar Vite em produção e encerra o servidor local com ERR_MODULE_NOT_FOUND.
+- [x] Reconstruir e validar os cinco instaladores após separar a dependência Vite do servidor de produção.
+- [x] Remover a esfera azul da landing e criar uma animação de brilhos sutis com suporte a redução de movimento.
+- [x] Atualizar artefatos, feeds, site, README, testes e GitHub após a correção.

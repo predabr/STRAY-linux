@@ -20,6 +20,9 @@ describe("linguagem autoral de produto", () => {
     expect(home).not.toContain('href="/assistant"');
     expect(home).not.toContain("landing-horizontal-story");
     expect(home).not.toContain('addEventListener("wheel"');
+    expect(home).toContain("editorial-sparkles");
+    expect(home).not.toContain("editorial-orb");
+    expect(css).toContain("editorial-twinkle");
     expect(css).toContain("prefers-reduced-motion");
   });
 });

@@ -9,11 +9,12 @@ import { appRouter } from "../routers";
 import { desktopRouter } from "../desktop/router";
 import { initializeDesktopStore } from "../desktop/localStore";
 import { createContext } from "./context";
-import { serveStatic, setupVite } from "./vite";
+import { serveStatic } from "./static";
 import { createTrpcRateLimitMiddleware } from "../lib/requestRateLimit";
 import { refreshSourceHandler } from "../scheduled/sourceRefresh";
 import { getOperationalStatus } from "../lib/operationalStatus";
 import { registerPublicApi } from "../publicApi";
+import { registerPublicDownloadRedirects } from "../publicDownloads";
 import { serverBindingHost } from "../lib/serverBinding";
 
 function isPortAvailable(port: number): Promise<boolean> {
@@ -53,7 +54,10 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "8mb", extended: true }));
   app.get("/api/health", (_req, res) => res.json({ ok: true, mode: process.env.DESKTOP_MODE === "1" ? "desktop" : "web", timestamp: new Date().toISOString() }));
   app.get("/api/status", async (_req, res) => { const status = await getOperationalStatus(process.env.DESKTOP_MODE === "1"); res.status(status.status === "operational" ? 200 : 503).json(status); });
-  if (process.env.DESKTOP_MODE !== "1") registerPublicApi(app);
+  if (process.env.DESKTOP_MODE !== "1") {
+    registerPublicApi(app);
+    registerPublicDownloadRedirects(app);
+  }
   app.get("/robots.txt", (req, res) => {
     const origin = `${req.protocol}://${req.get("host")}`;
     res.type("text/plain").send(`User-agent: *\nAllow: /\nDisallow: /dashboard\nDisallow: /admin\nDisallow: /api/\nSitemap: ${origin}/sitemap.xml\n`);
@@ -80,6 +84,7 @@ async function startServer() {
   );
   // development mode uses Vite, production mode uses static files
   if (process.env.NODE_ENV === "development") {
+    const { setupVite } = await import("./vite");
     await setupVite(app, server);
   } else {
     serveStatic(app);
