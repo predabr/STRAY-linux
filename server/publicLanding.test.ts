@@ -58,6 +58,16 @@ describe("landing pública", () => {
     expect(landing).not.toContain("Excellent 92");
   });
 
+  it("converte o wheel em avanço lateral e libera a página nas bordas da história", () => {
+    const landing = read("client/src/pages/Home.tsx");
+    expect(landing).toContain('window.addEventListener("wheel", onWheel, { passive: false })');
+    expect(landing).toContain("event?.preventDefault()");
+    expect(landing).toContain("current <= 0");
+    expect(landing).toContain("current >= 1");
+    expect(landing).toContain("setStoryProgress(current + delta / 900)");
+    expect(landing).toContain("aria-label=\"Narrativa horizontal do Stray Linux\"");
+  });
+
   it("reduz a sobrecarga da navegação sem remover ferramentas avançadas", () => {
     const workspace = read("client/src/components/platform/ProductWorkspace.tsx");
     const copy = read("client/src/i18n/productShellCopy.ts");

@@ -332,3 +332,5 @@
 - [x] Mapear a taxonomia do arquivo enviado para o modelo existente sem importar classificações de IA ou níveis sem fonte rastreável.
 - [x] Integrar à experiência de compatibilidade uma leitura de fontes publicadas, com URL, data, status de coleta e ausência explícita quando não houver dado permitido.
 - [x] Cobrir a integração com testes, validação visual, build e sincronização no GitHub.
+- [x] Corrigir a captura do wheel da landing para manter a tela lateral durante os três painéis e liberar a rolagem vertical apenas na entrada e na saída da seção.
+- [x] Validar a correção em desktop, teclado, mobile, redução de movimento, testes, build e GitHub.
