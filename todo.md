@@ -350,4 +350,4 @@
 - [x] Melhorar no site as instruções Arch para iniciar, verificar permissões e desinstalar o pacote de forma segura.
 - [x] Revalidar o artefato Pacman, o launcher Linux, o site, os testes, o build e sincronizar a correção no GitHub.
 - [x] Adicionar fallback seguro de GPU no launcher Linux e tratar colisão de porta para evitar o timeout do servidor local.
-- [ ] Atualizar regressões do manifesto de distribuição para os cinco artefatos 1.1.1 reconstruídos com launcher Arch corrigido.
+- [x] Atualizar regressões do manifesto de distribuição para os cinco artefatos 1.1.1 reconstruídos com launcher Arch corrigido.
