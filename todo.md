@@ -334,3 +334,11 @@
 - [x] Cobrir a integração com testes, validação visual, build e sincronização no GitHub.
 - [x] Corrigir a captura do wheel da landing para manter a tela lateral durante os três painéis e liberar a rolagem vertical apenas na entrada e na saída da seção.
 - [x] Validar a correção em desktop, teclado, mobile, redução de movimento, testes, build e GitHub.
+- [x] Auditar site publicado, logs, rotas, links, manifestos de atualização e dependências para localizar falhas reproduzíveis.
+- [x] Revisar e validar instalação, atualização e desinstalação para Windows, Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch e AppImage.
+- [x] Corrigir defeitos comprovados nos fluxos públicos, no empacotamento ou no CI sem alterar comandos ou dados não verificados.
+- [ ] Executar QA completo, reconstruir artefatos se necessário, publicar e sincronizar as correções no GitHub.
+- [x] Atualizar regressões de distribuição com os identificadores, URLs e checksums dos artefatos reconstruídos.
+- [x] Publicar os artefatos corrigidos como versão 1.1.1 para que instalações 1.1.0 existentes recebam a atualização controlada.
+- [x] Corrigir a referência pública desatualizada à versão 1.0.0 na página de desinstalação.
+- [x] Alinhar o workflow de instalador Windows ao Corepack/pnpm fixado para evitar incompatibilidade remota de versões.

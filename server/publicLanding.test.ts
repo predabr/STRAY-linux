@@ -9,11 +9,11 @@ describe("landing pública", () => {
   it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
     const distribution = read("client/src/lib/distribution.ts");
-    expect(distribution).toContain("Stray-Linux-1.1.0-Setup_13745d83.exe");
-    expect(distribution).toContain("Stray-Linux-1.1.0-amd64_2ab93e7d.deb");
-    expect(distribution).toContain("Stray-Linux-1.1.0-x86_64_a7254d36.rpm");
-    expect(distribution).toContain("Stray-Linux-1.1.0-x64_7363ce44.pacman");
-    expect(distribution).toContain("Stray-Linux-1.1.0-x86_64_ccc171dc.AppImage");
+    expect(distribution).toContain("Stray-Linux-1.1.1-Setup_f6242bc4.exe");
+    expect(distribution).toContain("Stray-Linux-1.1.1-amd64_0c4d26dc.deb");
+    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_803efec2.rpm");
+    expect(distribution).toContain("Stray-Linux-1.1.1-x64_4c4761b1.pacman");
+    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_6fddb28c.AppImage");
     expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
     expect(distribution).toContain("sha256sum -c -");
@@ -81,11 +81,16 @@ describe("landing pública", () => {
 
   it("documenta remoção segura sem limpar dados locais automaticamente", () => {
     const uninstall = read("client/src/pages/Uninstall.tsx");
+    const windowsWorkflow = read(".github/workflows/windows-installer.yml");
+    expect(uninstall).toContain("artefatos da versão 1.1.0");
+    expect(uninstall).not.toContain("artefatos da versão 1.0.0");
     expect(uninstall).toContain("sudo apt remove stray-linux");
     expect(uninstall).toContain("sudo dnf remove stray-linux");
     expect(uninstall).toContain("sudo zypper remove stray-linux");
     expect(uninstall).toContain("sudo pacman -R stray-linux");
     expect(uninstall).toContain('rm -f "${appImageInstallPath}"');
     expect(uninstall).toContain("não apaga automaticamente configurações ou dados locais");
+    expect(windowsWorkflow).toContain("corepack enable");
+    expect(windowsWorkflow).not.toContain("pnpm/action-setup@v4");
   });
 });
