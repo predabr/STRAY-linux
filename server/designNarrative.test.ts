@@ -9,9 +9,9 @@ describe("linguagem autoral de produto", () => {
     const home = fs.readFileSync(path.join(projectRoot, "client/src/pages/Home.tsx"), "utf8");
     const css = fs.readFileSync(path.join(projectRoot, "client/src/index.css"), "utf8");
 
-    expect(home).toContain("Seu Linux.");
-    expect(home).toContain("O QUE O APP ENTREGA");
-    expect(home).toContain("Ver downloads");
+    expect(home).toContain("Jogue Linux.");
+    expect(home).toContain("STATUS LOCAL");
+    expect(home).toContain("Escolher formato");
     expect(home).toContain("Criado por Pedro, Brasil");
     expect(home).toContain("INSTALAÇÃO LINUX");
     expect(home).toContain("SELEÇÃO OBRIGATÓRIA");

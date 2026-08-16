@@ -522,3 +522,21 @@
   .stray-story-preview { animation: none; }
   .landing-logo-orbit, .landing-logo-mark, .landing-scroll-indicator span { animation: none; }
 }
+
+/* Landing editorial Stray Linux */
+.editorial-hero { isolation: isolate; }
+.editorial-grid { background-image: linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px); background-size: 52px 52px; mask-image: linear-gradient(to bottom, black, transparent 85%); }
+.editorial-orb { position:absolute; border-radius:999px; filter: blur(1px); pointer-events:none; }
+.editorial-orb-a { width:40vw; height:40vw; right:-11vw; top:14%; background:radial-gradient(circle at 35% 35%, rgba(126,171,255,.56), rgba(67,74,176,.10) 58%, transparent 70%); animation: editorial-float 12s ease-in-out infinite alternate; }
+.editorial-orb-b { width:26vw; height:26vw; left:30%; bottom:-12vw; background:radial-gradient(circle, rgba(158,117,255,.30), transparent 69%); animation: editorial-float 15s ease-in-out -4s infinite alternate-reverse; }
+.editorial-console { box-shadow: 0 24px 70px rgba(0,0,0,.28); }
+.editorial-card { overflow:hidden; }
+.editorial-card-accent { position:absolute; inset:auto -20% -55% auto; width:210px; height:210px; border-radius:50%; filter:blur(1px); opacity:.35; transform:scale(.8); transition:transform 420ms cubic-bezier(.23,1,.32,1), opacity 420ms cubic-bezier(.23,1,.32,1); }
+.editorial-card:hover .editorial-card-accent { transform:scale(1.2); opacity:.7; }
+.editorial-card-lime { background:#c9ff7a; }.editorial-card-violet { background:#bd9aff; }.editorial-card-blue { background:#8eb7ff; }
+.editorial-marquee-track { width:max-content; white-space:nowrap; animation: editorial-marquee 22s linear infinite; }.editorial-marquee-track span { margin-left:1.2ch; color:#b7d3ff; }
+@media (prefers-reduced-motion: no-preference) { .editorial-reveal { animation: editorial-reveal .7s cubic-bezier(.23,1,.32,1) both; }.editorial-reveal-delay { animation: editorial-reveal .7s .12s cubic-bezier(.23,1,.32,1) both; } }
+@keyframes editorial-reveal { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes editorial-float { from { transform:translate3d(-1.5%, -1%, 0) scale(.96); } to { transform:translate3d(2%, 1.5%, 0) scale(1.04); } }
+@keyframes editorial-marquee { to { transform:translateX(-25%); } }
+@media (prefers-reduced-motion: reduce) { .editorial-orb, .editorial-marquee-track { animation:none !important; } }

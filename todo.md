@@ -352,3 +352,6 @@
 - [x] Adicionar fallback seguro de GPU no launcher Linux e tratar colisão de porta para evitar o timeout do servidor local.
 - [x] Atualizar regressões do manifesto de distribuição para os cinco artefatos 1.1.1 reconstruídos com launcher Arch corrigido.
 - [x] Assinatura Authenticode permanece adiada por decisão do usuário; não publicar alegações de certificado nesta entrega.
+- [x] Redesenhar a landing pública com linguagem editorial, grade assimétrica e tipografia de alto contraste inspiradas em padrões contemporâneos de portfólios web.
+- [x] Adicionar microinterações, revelações por rolagem e navegação contextual, com suporte a teclado e preferência por movimento reduzido.
+- [x] Validar a landing nova em desktop e mobile, atualizar testes e sincronizar a reformulação no GitHub.
