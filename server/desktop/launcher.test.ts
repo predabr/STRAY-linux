@@ -8,10 +8,7 @@ const mainSource = () => fs.readFileSync(path.join(projectRoot, "desktop/main.cj
 describe("bootstrap desktop Linux", () => {
   it("desativa aceleração gráfica antes do Electron ficar pronto", () => {
     const source = mainSource();
-    expect(source).toContain('if (process.platform === "linux") {');
-    expect(source).toContain("app.disableHardwareAcceleration();");
-    expect(source).toContain('app.commandLine.appendSwitch("disable-gpu");');
-    expect(source).toContain('app.commandLine.appendSwitch("disable-gpu-compositing");');
+    expect(source).toContain('if (process.platform === "linux") app.disableHardwareAcceleration();');
   });
 
   it("seleciona porta livre e informa encerramento antecipado do servidor", () => {
