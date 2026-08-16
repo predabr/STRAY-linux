@@ -1,61 +1,70 @@
 # Stray Linux
 
-> Aplicativo desktop local para leitura de ambiente, diagnósticos rastreáveis e gaming no Linux — criado por **Pedro, Brasil**.
+> Plataforma desktop para Linux gaming com diagnóstico local, catálogo de jogos, compatibilidade rastreável e guias técnicos por distribuição. Criado por **Pedro, Brasil**.
 
-[Abrir o site oficial](https://linuxtoys-ckuyvpj5.manus.space) · [Downloads verificados](https://linuxtoys-ckuyvpj5.manus.space/download) · [Desinstalação](https://linuxtoys-ckuyvpj5.manus.space/uninstall)
+[Site oficial](https://linuxtoys-ckuyvpj5.manus.space) · [Downloads verificados](https://linuxtoys-ckuyvpj5.manus.space/download) · [Desinstalação segura](https://linuxtoys-ckuyvpj5.manus.space/uninstall) · [Contribuir](CONTRIBUTING.md)
 
-O **Stray Linux** é um aplicativo desktop técnico para descoberta de jogos, compatibilidade Linux, benchmarks rastreáveis, Atlas de distribuições, Linux Setup, LinuxFix e perfis de hardware. A interface web é React/TypeScript, o backend é Express/tRPC e a persistência usa Drizzle com MySQL/TiDB. O aplicativo Electron usa SQLite local e não exige `DATABASE_URL` do usuário.
+## Visão geral
 
-## Versão 1.1.0
+O **Stray Linux** reúne descoberta de jogos, análise de ambiente, Atlas de distribuições, Linux Setup, LinuxFix e evidências de benchmark em uma experiência única. O produto separa fatos publicados, inferências e lacunas de informação: não apresenta FPS, compatibilidade ou soluções como confirmados quando não há evidência declarada.
 
-A apresentação pública adota uma narrativa monocromática com rolagem horizontal em desktop e fallback vertical em telas menores ou quando a redução de movimento está ativa. A identidade utiliza a marca original do projeto e mantém os downloads verificáveis após a sequência de produto.
+A interface web usa React e TypeScript; a API usa Express e tRPC; o banco web é modelado com Drizzle. No modo desktop, o Electron executa um servidor local com **SQLite**, sem exigir `DATABASE_URL` da pessoa que instala o aplicativo.
 
-O aplicativo empacotado verifica atualizações a partir de um feed HTTPS com metadados de integridade. A instalação da atualização exige confirmação antes de reiniciar. Em Linux, pacotes `.deb`, `.rpm`, `.pacman` e AppImage continuam respeitando o fluxo explícito da distribuição; o aplicativo não executa comandos do sistema automaticamente.
+## Release atual — 1.1.1
 
-> A plataforma não apresenta FPS como medição se não houver proveniência. Benchmarks são classificados como **Verified**, **Community**, **Estimated** ou **Unknown**; a ausência de evidência é exibida como indisponibilidade, e não substituída por dados fictícios.
+A release pública atual usa a nova identidade visual do Stray Linux no site, no aplicativo, nos metadados de compartilhamento e nos ícones dos instaladores. O launcher Linux também inclui um fallback explícito de GPU para reduzir falhas de inicialização em ambientes com drivers ou processos gráficos instáveis. O aplicativo seleciona uma porta local disponível e informa quando o servidor local não inicia corretamente.
 
-## O que está incluído
+As atualizações são lidas de feeds HTTPS com metadados de integridade. O aplicativo pede confirmação antes de reiniciar para instalar uma atualização; ele não executa comandos administrativos automaticamente.
 
-| Área | Implementação |
+## Recursos
+
+| Área | O que o Stray Linux oferece |
 |---|---|
-| GameHub | Catálogo pesquisável com mais de 10.000 jogos distintos importados de snapshot licenciado, ordenação por popularidade declarada pela fonte, filtros server-side e páginas de detalhe. |
-| Compatibilidade | Modelo por jogo, distro, versão, kernel, CPU/GPU, drivers e Proton/Wine, com níveis de compatibilidade e proveniência. |
-| Benchmarks | Workflow de submissão, evidência obrigatória, revisão por MODERATOR/ADMIN, comparação V2 por GPU/CPU/distro/Proton e estimativa apenas a partir de benchmarks verificados com ambiente exato. |
-| Wiki e Setup | Wiki para 17 distribuições, 36 guias versionados, comandos copiáveis, passos recolhíveis e progresso autenticado por etapa. |
-| Atlas de Distribuições | Registro pesquisável de 753 entradas únicas da lista editorial, separado entre família de pacote, variante histórica, referência não Linux e avaliação necessária. |
-| LinuxFix | Soluções categorizadas com sintomas, causas, confiança, origem, comandos e alertas, com votos, comentários e confirmações persistentes de usuários autenticados. |
-| Windows | Área de diagnóstico, manutenção, reparo, energia, armazenamento e aplicativos úteis, com comandos individuais, requisitos, níveis de risco e fontes oficiais. |
-| Conta e moderação | Roles USER/MODERATOR/ADMIN, perfil de hardware completo, favoritos, guias salvos, reports, fila de benchmark e audit log. |
-| Navegação e indexação | Paleta global em `Ctrl/Cmd+K`, pesquisa categorizada, metadados por rota, OpenGraph, Twitter Cards, `robots.txt`, sitemap e JSON-LD. |
-| Assistente | Stray AI contextual para dúvidas sobre Stray Linux e gaming no Linux, com recusa explícita de pedidos fora do escopo. |
-| Desktop | Electron inicia o servidor Node local com SQLite, sem `DATABASE_URL`, detecta Steam, Heroic e pastas externas selecionadas manualmente e oferece pacotes Windows e Linux por formato compatível. |
+| **GameHub** | Catálogo pesquisável de mais de 10.000 jogos distintos, filtros, páginas de detalhe, metadados de origem e biblioteca local. |
+| **Compatibilidade** | Contexto por jogo, distribuição, kernel, CPU, GPU, driver, Proton/Wine e runtime, sempre com proveniência ou limitação explícita. |
+| **Benchmarks** | Evidências separadas em `Verified`, `Community`, `Estimated` e `Unknown`; não há FPS de demonstração inventado. |
+| **Scanner e diagnóstico** | Leitura local de sistema, Steam, Heroic, runtimes, drivers, Vulkan, ambiente gráfico e bibliotecas selecionadas. |
+| **Atlas, Wiki e Setup** | Perfis de distribuições, famílias de pacote, guias versionados, comandos copiáveis, avisos e progresso por etapa. |
+| **LinuxFix** | Base de problemas com sintomas, causas, confiança, fontes, soluções e confirmações persistentes de pessoas autenticadas. |
+| **Windows** | Diagnóstico, reparo, energia, armazenamento e aplicativos úteis com pré-requisitos, risco e referências oficiais. |
+| **Stray AI** | Assistente contextual limitado a Stray Linux, gaming no Linux e conteúdo técnico publicado no produto. |
+| **Conta e moderação** | Papéis `USER`, `MODERATOR` e `ADMIN`, perfil de hardware, favoritos, reports, fila de revisão e trilha de auditoria. |
 
-## Dados e proveniência
+## Instalação
 
-O catálogo ampliado usa somente metadados do arquivo `games.json` do dataset **Steam Games Metadata and Player Reviews (2020–2024)**, disponibilizado sob CC BY 4.0. O importador seleciona **10.000 títulos distintos** pelo sinal de avaliações positivas presente no próprio snapshot, grava o lote, AppID, URL e origem no banco, e mantém esse sinal como ordenação de popularidade. O snapshot não é apresentado como catálogo Steam em tempo real.[1]
+Use sempre a página oficial de [downloads verificados](https://linuxtoys-ckuyvpj5.manus.space/download). Ela entrega o formato correto, o SHA-256 correspondente e o comando completo de instalação.
 
-Os conteúdos iniciais de distribuição e configuração registram URL de fonte por artigo. O guia de Steam via Flatpak identifica explicitamente que o pacote Flathub é comunitário e sem suporte oficial da Valve, como informa sua página.[2] A sintaxe de instalação exibida segue a documentação do Flatpak.[3]
+| Plataforma ou família | Formato | Método publicado |
+|---|---|---|
+| Windows 10/11 x64 | `.exe` | Download direto do instalador NSIS. |
+| Debian, Ubuntu, Linux Mint e derivadas | `.deb` | Bloco de terminal que baixa, valida e instala com `dpkg`/APT. |
+| Fedora, RHEL e compatíveis | `.rpm` | Bloco de terminal que baixa, valida e instala com DNF. |
+| openSUSE Leap e Tumbleweed | `.rpm` | Bloco de terminal que baixa, valida e instala com Zypper. |
+| Arch, CachyOS, EndeavourOS e derivadas | `.pacman` | Bloco de terminal que baixa, valida e instala com `pacman -U`. |
+| Linux x64 em geral | AppImage | Alternativa portátil com checksum e permissão de execução. |
 
-A área Windows não executa comandos, não aplica scripts de “debloat” e não recomenda desativar componentes de segurança. Ela apresenta ações individuais com requisito, risco e fonte, priorizando WinGet, DISM/SFC e Storage Sense documentados pela Microsoft. Consulte [`docs/sources-windows.md`](docs/sources-windows.md) para o escopo e as referências.
+> **Importante:** o Stray Linux não declara repositórios APT, DNF, Zypper ou Pacman que não existem. Em Linux, copie o bloco completo da família escolhida; ele baixa o arquivo correto, verifica a integridade e remove o temporário quando aplicável.
 
-## Instalação para usuários
+Para remover o aplicativo, siga o [guia de desinstalação por plataforma](https://linuxtoys-ckuyvpj5.manus.space/uninstall). A remoção do pacote não apaga automaticamente os dados locais do usuário.
 
-No Windows, baixe o instalador direto [na página oficial do Stray Linux](https://linuxtoys-ckuyvpj5.manus.space/download). Em Linux, a página exibe um comando específico para Debian/Ubuntu, Fedora/RHEL, openSUSE, Arch ou AppImage. Cada comando baixa o pacote correto, valida o SHA-256 antes da instalação e remove o arquivo temporário quando aplicável. **Copie o bloco inteiro:** executar apenas `sudo apt install ./Stray-Linux-1.1.0-amd64.deb` não baixa o arquivo e pode falhar em versões do APT que não aceitam um `.deb` local dessa forma.
+## Dados, privacidade e proveniência
 
-> A distribuição Linux é intencionalmente apresentada pelo terminal. O Stray Linux não anuncia repositórios APT, DNF ou Pacman que não foram publicados e mantidos como repositórios de pacotes.
+O catálogo ampliado parte do arquivo `games.json` do dataset **Steam Games Metadata and Player Reviews (2020–2024)**, disponibilizado sob CC BY 4.0. A importação deduplica títulos, registra lote, AppID, URL e fonte, e não descreve esse snapshot como um catálogo Steam em tempo real.[1]
 
-Para desinstalar, consulte o [guia público de remoção](https://linuxtoys-ckuyvpj5.manus.space/uninstall). A remoção do aplicativo não apaga automaticamente dados locais.
+O scanner, a biblioteca e os diagnósticos começam no dispositivo. A aplicação não envia dados automaticamente. Os conteúdos técnicos publicados registram fonte por artigo; recomendações de comando são apresentadas com escopo, pré-requisitos e avisos. A área Windows não aplica scripts de “debloat” nem recomenda desativar mecanismos de segurança. Consulte [`docs/sources-windows.md`](docs/sources-windows.md) para as referências de manutenção Windows.
 
-## Desenvolvimento web
+## Desenvolvimento
 
-Instale dependências e inicie o ambiente:
+### Requisitos
+
+Use Node.js 22 e pnpm 10, de acordo com o campo `packageManager` do projeto.
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Os checks essenciais são:
+### Verificações
 
 ```bash
 pnpm check
@@ -63,45 +72,37 @@ pnpm test
 pnpm build
 ```
 
-O banco é modelado em `drizzle/schema.ts`. Após mudanças de esquema, gere a migration, revise o SQL e aplique-a pelo fluxo de banco do ambiente. O script `scripts/import-steam-catalog.mjs` é idempotente e pode recriar o catálogo a partir de um download local do snapshot licenciado.
+### Banco e catálogo
 
-Para importar a seleção de 10.000 jogos, disponibilize o arquivo `games.json` e execute:
+O schema web está em [`drizzle/schema.ts`](drizzle/schema.ts). Para alterações de banco, gere a migration, revise o SQL e aplique-o pelo fluxo apropriado do ambiente. O importador de jogos é idempotente e recebe um snapshot local licenciado:
 
 ```bash
 STEAM_DATASET_PATH=/caminho/para/games.json STEAM_IMPORT_LIMIT=10000 node scripts/import-steam-catalog.mjs
 DESKTOP_GAME_LIMIT=10000 node scripts/export-desktop-seed.mjs
 ```
 
-A migração `drizzle/0004_solid_exiles.sql` acrescenta a métrica `sourcePositiveReviews` e o índice utilizado na ordenação do catálogo. O modo desktop armazena a mesma métrica no snapshot SQLite e indexa o título e a popularidade para busca e listagem local. Consulte também [`docs/sources-game-catalog.md`](docs/sources-game-catalog.md).
+Veja também [`docs/sources-game-catalog.md`](docs/sources-game-catalog.md), [`docs/OPERATIONS.md`](docs/OPERATIONS.md) e [`docs/MODERATION.md`](docs/MODERATION.md).
 
-Para a evolução de perfil e engajamento, a migração `drizzle/0003_left_chat.sql` adiciona campos de armazenamento e monitor ao perfil, votos, comentários e confirmações de LinuxFix, além de progresso de guia por etapa. A migração é **aditiva** e não remove tabelas ou colunas existentes. O procedimento de trabalho, as rotas públicas e os limites de moderação estão descritos em [`docs/OPERATIONS.md`](docs/OPERATIONS.md).
-
-## Stray AI contextual
-
-O Stray AI recupera apenas contexto publicado de wiki, guias, LinuxFix e perfil técnico disponível. O fluxo exige que ele declare a falta de dados em vez de inventar compatibilidade, FPS ou comandos, e recusa pedidos que não estejam relacionados ao Stray Linux, ao gaming no Linux ou ao conteúdo técnico do aplicativo.
-
-## Desktop, Windows e Linux
-
-O comando abaixo cria um instalador Windows com NSIS:
+## Pacotes desktop
 
 ```bash
+# Instalador Windows NSIS
 pnpm desktop:build
+
+# EXE, DEB, RPM, Pacman e AppImage
+pnpm desktop:packages
 ```
 
-O instalador gerado é `dist/Stray-Linux-<versão>-Setup.exe`. A configuração desktop é criada em `stray-linux.config.json` na pasta de dados do aplicativo; uma configuração antiga é migrada na abertura. O modo desktop usa SQLite local e não exige `DATABASE_URL`.
+Os ícones de build são gerados a partir da marca oficial por `scripts/create_brand_icons.py`. O Electron usa SQLite no diretório de dados do usuário, migra a configuração legada quando existente e não depende de `DATABASE_URL` no computador instalado.
 
-Os alvos Linux são escolhidos por família: `.deb` para Debian/Ubuntu e derivadas, `.rpm` para Fedora/RHEL/openSUSE, `.pacman` para Arch e derivadas e `.AppImage` como rota portátil. O comando e o artefato devem corresponder à release e à arquitetura detectadas; variantes imutáveis são orientadas ao fluxo portátil. Consulte [`docs/sources-installers.md`](docs/sources-installers.md) e o Atlas no aplicativo.
+Em Linux, o launcher desativa aceleração GPU e composição antes da inicialização do Electron, além de reservar uma porta local disponível. Esse comportamento privilegia a abertura previsível em distribuições e drivers variados; o aplicativo não altera drivers, runtimes, jogos ou pacotes do sistema sem uma ação explícita.
 
-## Limitações deliberadas
+## Limites deliberados
 
-O repositório não finge que possui dados que ainda não foram pesquisados. Não há benchmark verificado de exemplo nem avaliação de usuário simulada. O Atlas não fornece comandos nativos para projetos descontinuados, sistemas não Linux ou formatos sem artefato publicado e validado; nesses casos, o produto apresenta o limite explicitamente.
+O projeto não cria avaliações, comentários, pontuações de comunidade ou benchmarks fictícios. Quando uma informação não foi pesquisada ou não possui evidência aplicável, a interface indica a indisponibilidade. Da mesma forma, o Atlas não oferece comandos nativos para projetos descontinuados, sistemas não Linux ou formatos sem artefato validado.
 
-Os workflows de revisão estão em [`docs/MODERATION.md`](docs/MODERATION.md) e as regras para contribuir no repositório estão em [`CONTRIBUTING.md`](CONTRIBUTING.md).
+O suporte a Steam, Heroic e pastas externas selecionadas manualmente serve para leitura e diagnóstico de bibliotecas. O Stray Linux não distribui jogos, não contorna licenças e não substitui launchers de terceiros.
 
 ## Referências
 
 [1] [Mendeley Data — Steam Games Metadata and Player Reviews (2020–2024)](https://data.mendeley.com/datasets/jxy85cr3th/2)
-
-[2] [Flathub — Steam](https://flathub.org/en/apps/com.valvesoftware.Steam)
-
-[3] [Flatpak Documentation — Using Flatpak](https://docs.flatpak.org/en/latest/using-flatpak.html)
