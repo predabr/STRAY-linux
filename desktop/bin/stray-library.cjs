@@ -88,8 +88,10 @@ function scanSteamWorkshop(home) {
 }
 
 function heroicLegendaryCandidates(home = os.homedir()) {
+  const usesRuntimeHome = home === os.homedir();
+  const configRoot = usesRuntimeHome ? process.env.XDG_CONFIG_HOME || path.join(home, ".config") : path.join(home, ".config");
   return [
-    { path: path.join(process.env.XDG_CONFIG_HOME || path.join(home, ".config"), "heroic", "legendaryConfig", "legendary"), installationType: "native" },
+    { path: path.join(configRoot, "heroic", "legendaryConfig", "legendary"), installationType: "native" },
     { path: path.join(home, ".var", "app", "com.heroicgameslauncher.hgl", "config", "heroic", "legendaryConfig", "legendary"), installationType: "flatpak" },
   ];
 }

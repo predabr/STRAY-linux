@@ -6,12 +6,18 @@ import { afterEach, describe, expect, it } from "vitest";
 const { scanHeroicLibrary } = require("../desktop/bin/stray-library.cjs") as { scanHeroicLibrary(home: string): Array<{ id: string; name: string; launcher: string; store: string; coverUrl: string | null }> };
 
 const temporaryDirectories: string[] = [];
-afterEach(() => temporaryDirectories.splice(0).forEach((directory) => fs.rmSync(directory, { recursive: true, force: true })));
+const initialXdgConfigHome = process.env.XDG_CONFIG_HOME;
+afterEach(() => {
+  temporaryDirectories.splice(0).forEach((directory) => fs.rmSync(directory, { recursive: true, force: true }));
+  if (initialXdgConfigHome === undefined) delete process.env.XDG_CONFIG_HOME;
+  else process.env.XDG_CONFIG_HOME = initialXdgConfigHome;
+});
 
 describe("scanHeroicLibrary", () => {
   it("lê somente um jogo Epic instalado e a capa já referenciada nos metadados locais do Heroic", () => {
     const home = fs.mkdtempSync(path.join(os.tmpdir(), "stray-heroic-"));
     temporaryDirectories.push(home);
+    process.env.XDG_CONFIG_HOME = path.join(os.tmpdir(), "stray-unrelated-xdg-config");
     const config = path.join(home, ".config", "heroic", "legendaryConfig", "legendary");
     const installation = path.join(home, "Games", "ExampleGame");
     fs.mkdirSync(path.join(config, "metadata"), { recursive: true });
