@@ -18,4 +18,14 @@ describe("apresentação de jogos", () => {
     expect(card).not.toContain("87 FPS");
     expect(card).not.toContain("Excellent");
   });
+
+  it("oferece fontes externas sem transformar seus rótulos em resultado do Stray", () => {
+    const detail = read("client/src/pages/GameDetail.tsx");
+    expect(detail).toContain("function CompatibilitySources");
+    expect(detail).toContain("https://www.protondb.com/app/${game.steamAppId}");
+    expect(detail).toContain("https://areweanticheatyet.com/");
+    expect(detail).toContain("Eles não alteram a matriz do Stray");
+    expect(detail).toContain("ausência de resultado não é incompatibilidade");
+    expect(detail).not.toContain("87 FPS");
+  });
 });

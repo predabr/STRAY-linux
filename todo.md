@@ -328,3 +328,7 @@
 - [x] Sincronizar temporariamente o código validado no repositório público `predabr/STRAY-linux` por autorização expressa do proprietário, sem alterar nenhum outro repositório.
 - [x] Corrigir os workflows GitHub para instalar o pnpm antes de configurar o cache e executar a validação remota com sucesso.
 - [x] Corrigir a regressão do teste Heroic que depende de caminho local e falha no ambiente limpo do GitHub Actions.
+- [x] Comparar fontes públicas oficiais e comunitárias de suporte Linux para jogos, documentando licença, acesso e limites de atualização.
+- [x] Mapear a taxonomia do arquivo enviado para o modelo existente sem importar classificações de IA ou níveis sem fonte rastreável.
+- [x] Integrar à experiência de compatibilidade uma leitura de fontes publicadas, com URL, data, status de coleta e ausência explícita quando não houver dado permitido.
+- [x] Cobrir a integração com testes, validação visual, build e sincronização no GitHub.
