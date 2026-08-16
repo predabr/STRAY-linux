@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { publicProcedure, router } from "../_core/trpc";
-import { getDesktopStore } from "./localStore";
+import { getDesktopStore, getDesktopStoreHealth } from "./localStore";
 import { scannerReportInput, scannerReportToProfile } from "../lib/scannerReport";
 import { isStrayAiDomainQuestion, STRAY_AI_OUT_OF_SCOPE_RESPONSE } from "../lib/strayAiScope";
 
@@ -150,6 +150,7 @@ export const desktopRouter = router({
       remove: publicProcedure.input(z.object({ id: z.number().int().positive() })).mutation(({ input }) => { store().run("DELETE FROM ai_memory_entries WHERE id = ?", [input.id]); return { success: true }; }),
     }),
     exportLocalData: publicProcedure.query(() => store().exportLocalData()),
+    localDatabaseStatus: publicProcedure.query(() => getDesktopStoreHealth()),
     reports: router({ list: publicProcedure.query(() => store().all<any>("SELECT id, subject_type AS subjectType, subject_id AS subjectId, type, description, status, created_at AS createdAt FROM reports ORDER BY created_at DESC")), create: publicProcedure.input(z.any()).mutation(({ input }) => { const result = store().run("INSERT INTO reports (subject_type, subject_id, type, description) VALUES (?, ?, ?, ?)", [input.subjectType, input.subjectId, input.type, input.description]); return { id: Number(result.lastInsertRowid), status: "open" as const }; }) }),
     hardwareOptions: publicProcedure.query(() => []), compatibilityForActiveProfile: publicProcedure.input(z.object({ gameId: z.number() })).query(() => ({ profile: null, records: [] })),
   }),

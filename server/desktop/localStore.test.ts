@@ -54,6 +54,7 @@ describe("DesktopStore", () => {
     expect(exportData.evidence).toHaveLength(1);
     expect(exportData.events).toHaveLength(1);
     expect(exportData.aiMemory).toHaveLength(1);
+    expect(exportData.diagnosticLogs).toEqual([expect.objectContaining({ level: "info", module: "scanner", message: "Relatório salvo localmente" })]);
     expect(JSON.stringify(exportData)).not.toContain("Não exportar sem consentimento");
     const backup = store.createLocalBackup("Antes da troca");
     expect(backup.preview.aiMemory).toBe(1);
@@ -63,5 +64,18 @@ describe("DesktopStore", () => {
     expect(store.one<{ valueJson: string }>("SELECT value_json AS valueJson FROM local_preferences WHERE key = ?", ["privacy.aiMemory"])?.valueJson).toBe(JSON.stringify({ enabled: true }));
     expect(store.listLocalBackups()).toHaveLength(1);
     expect(fs.existsSync(path.join(directory, "linux-gaming-hub.sqlite"))).toBe(true);
+  });
+
+  it("preserva um banco local corrompido e recria uma base utilizável", async () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "lgh-sqlite-recovery-test-"));
+    temporaryDirectories.push(directory);
+    fs.writeFileSync(path.join(directory, "linux-gaming-hub.sqlite"), "arquivo que não é SQLite");
+
+    const store = await DesktopStore.create(directory, path.resolve("desktop/seed/initial-data.json"));
+
+    expect(store.recoveredDatabase).toBe(true);
+    expect(store.counts().games).toBeGreaterThanOrEqual(10000);
+    expect(fs.readdirSync(directory).some((name) => name.startsWith("linux-gaming-hub.sqlite.corrupt-") && name.endsWith(".bak"))).toBe(true);
+    expect(store.one<{ level: string; module: string }>("SELECT level, module FROM local_logs WHERE module = ? ORDER BY id DESC LIMIT 1", ["database"])).toEqual({ level: "warning", module: "database" });
   });
 });

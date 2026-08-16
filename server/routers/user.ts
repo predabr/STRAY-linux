@@ -180,6 +180,17 @@ export const userRouter = router({
     list: activeUserProcedure.input(z.object({ level: z.enum(["info", "warning", "error"]).optional() })).query(async () => [] as Array<{ id: number; level: "info" | "warning" | "error"; module: string; message: string; detailsJson: string; createdAt: string }>),
   }),
 
+  exportLocalData: activeUserProcedure.query(async (): Promise<Record<string, unknown>> => {
+    throw new Error("A exportação de diagnóstico é local e está disponível somente no aplicativo desktop.");
+  }),
+
+  localDatabaseStatus: activeUserProcedure.query(async (): Promise<{ status: "ready" | "recovered" | "unavailable"; attempts: number; lastError: string | null; updatedAt: string }> => ({
+    status: "unavailable",
+    attempts: 0,
+    lastError: "O banco SQLite local existe apenas no aplicativo desktop.",
+    updatedAt: new Date().toISOString(),
+  })),
+
   reports: router({
     list: activeUserProcedure.query(async ({ ctx }) => {
       const db = await requireDatabase();

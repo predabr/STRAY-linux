@@ -12,16 +12,31 @@ type Seed = {
 };
 
 export class DesktopStore {
-  constructor(private db: Database, private databasePath: string) {}
+  constructor(private db: Database, private databasePath: string, readonly recoveredDatabase = false) {}
   static async create(dataDir: string, seedPath: string) {
     fs.mkdirSync(dataDir, { recursive: true });
     const wasmPath = process.env.DESKTOP_SQL_WASM_PATH;
     const SQL = wasmPath ? await initSqlJs({ locateFile: (file) => file === "sql-wasm.wasm" ? wasmPath : file }) : await initSqlJs();
     const databasePath = path.join(dataDir, "linux-gaming-hub.sqlite");
-    const db = fs.existsSync(databasePath) ? (() => { try { const existing = new SQL.Database(fs.readFileSync(databasePath)); existing.exec("PRAGMA schema_version;"); return existing; } catch { fs.renameSync(databasePath, databasePath + ".corrupt-" + Date.now() + ".bak"); return new SQL.Database(); } })() : new SQL.Database();
-    const store = new DesktopStore(db, databasePath);
+    let recoveredDatabase = false;
+    let db: Database;
+    if (fs.existsSync(databasePath)) {
+      try {
+        const existing = new SQL.Database(fs.readFileSync(databasePath));
+        existing.exec("PRAGMA schema_version;");
+        db = existing;
+      } catch {
+        fs.renameSync(databasePath, databasePath + ".corrupt-" + Date.now() + ".bak");
+        recoveredDatabase = true;
+        db = new SQL.Database();
+      }
+    } else {
+      db = new SQL.Database();
+    }
+    const store = new DesktopStore(db, databasePath, recoveredDatabase);
     store.createSchema();
     store.seed(seedPath);
+    if (recoveredDatabase) store.run("INSERT INTO local_logs (level, module, message, details_json) VALUES (?, ?, ?, ?)", ["warning", "database", "O banco local anterior estava corrompido e foi preservado como backup antes da recuperação.", JSON.stringify({ recovery: "corrupt-file-backup" })]);
     return store;
   }
   private createSchema() {
@@ -109,6 +124,7 @@ export class DesktopStore {
       sessions: this.all<{ id: string; gameId: number; gameTitle: string; profileName: string | null; startedAt: number; endedAt: number | null; metricsJson: string; createdAt: string }>("SELECT id, game_id AS gameId, game_title AS gameTitle, profile_name AS profileName, started_at AS startedAt, ended_at AS endedAt, metrics_json AS metricsJson, created_at AS createdAt FROM performance_sessions ORDER BY started_at DESC"),
       preferences: this.all<{ key: string; valueJson: string; updatedAt: string }>("SELECT key, value_json AS valueJson, updated_at AS updatedAt FROM local_preferences ORDER BY key"),
       localGameMetadata: this.all<{ id: number; slug: string; title: string; steamAppId: number | null }>("SELECT id, slug, title, steam_app_id AS steamAppId FROM games ORDER BY title"),
+      diagnosticLogs: this.all<{ level: string; module: string; message: string; createdAt: string }>("SELECT level, module, message, created_at AS createdAt FROM local_logs ORDER BY id DESC LIMIT 200"),
       evidence: this.all<{ id: number; scope: string; subjectType: string; subjectId: string | null; evidenceClass: string; summary: string; sourceUrl: string | null; observedAt: string | null; payloadJson: string; createdAt: string }>("SELECT id, scope, subject_type AS subjectType, subject_id AS subjectId, evidence_class AS evidenceClass, summary, source_url AS sourceUrl, observed_at AS observedAt, payload_json AS payloadJson, created_at AS createdAt FROM evidence_records ORDER BY created_at DESC"),
       events: this.all<{ id: number; eventType: string; label: string; detailsJson: string; evidenceId: number | null; createdAt: string }>("SELECT id, event_type AS eventType, label, details_json AS detailsJson, evidence_id AS evidenceId, created_at AS createdAt FROM system_events ORDER BY created_at DESC"),
       aiMemory: this.all<{ id: number; memoryType: string; summary: string; payloadJson: string; consented: number; createdAt: string; updatedAt: string }>("SELECT id, memory_type AS memoryType, summary, payload_json AS payloadJson, consented, created_at AS createdAt, updated_at AS updatedAt FROM ai_memory_entries WHERE consented = 1 ORDER BY updated_at DESC"),
@@ -158,14 +174,48 @@ export class DesktopStore {
   counts() { return { games: this.one<{ count: number }>("SELECT count(*) as count FROM games")?.count ?? 0, distributions: this.one<{ count: number }>("SELECT count(*) as count FROM distributions")?.count ?? 0, wiki: this.one<{ count: number }>("SELECT count(*) as count FROM wiki_articles")?.count ?? 0, guides: this.one<{ count: number }>("SELECT count(*) as count FROM setup_guides")?.count ?? 0, fixes: this.one<{ count: number }>("SELECT count(*) as count FROM linux_fixes")?.count ?? 0 }; }
 }
 
+type DesktopStoreHealth = {
+  status: "ready" | "recovered" | "unavailable";
+  attempts: number;
+  lastError: string | null;
+  updatedAt: string;
+};
+
 let store: DesktopStore | null = null;
+let initialization: Promise<DesktopStore> | null = null;
+let storeHealth: DesktopStoreHealth = { status: "unavailable", attempts: 0, lastError: null, updatedAt: new Date().toISOString() };
+
+const delay = (milliseconds: number) => new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
+
 export async function initializeDesktopStore() {
-  if (!store) {
-    const dataDir = process.env.DESKTOP_DATA_DIR;
-    const seedPath = process.env.DESKTOP_SEED_PATH;
-    if (!dataDir || !seedPath) throw new Error("Desktop SQLite paths were not configured.");
-    store = await DesktopStore.create(dataDir, seedPath);
+  if (store) return store;
+  if (initialization) return initialization;
+  const dataDir = process.env.DESKTOP_DATA_DIR;
+  const seedPath = process.env.DESKTOP_SEED_PATH;
+  if (!dataDir || !seedPath) throw new Error("Os caminhos do banco local não foram configurados.");
+  initialization = (async () => {
+    const maxAttempts = 3;
+    let lastError = "";
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      try {
+        const created = await DesktopStore.create(dataDir, seedPath);
+        store = created;
+        storeHealth = { status: created.recoveredDatabase ? "recovered" : "ready", attempts: attempt, lastError: null, updatedAt: new Date().toISOString() };
+        return created;
+      } catch (error) {
+        store = null;
+        lastError = error instanceof Error ? error.message : String(error);
+        storeHealth = { status: "unavailable", attempts: attempt, lastError, updatedAt: new Date().toISOString() };
+        if (attempt < maxAttempts) await delay(attempt * 220);
+      }
+    }
+    throw new Error(`Não foi possível preparar o banco local após ${maxAttempts} tentativas. ${lastError}`);
+  })();
+  try {
+    return await initialization;
+  } finally {
+    initialization = null;
   }
-  return store;
 }
 export function getDesktopStore() { if (!store) throw new Error("Desktop SQLite store was not initialized."); return store; }
+export function getDesktopStoreHealth() { return { ...storeHealth }; }

@@ -365,3 +365,9 @@
 - [x] Reconstruir a release 1.1.4, atualizar hashes/feeds e validar o pacote Linux com SQLite, health check e Electron completo sob display virtual.
 
 Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía, mas a abertura mostrava "O servidor local encerrou antes de responder (código 1)".
+
+- [x] Corrigir o checksum do pacote Pacman entregue pelo endpoint estável, validando o arquivo baixado no domínio público.
+- [x] Substituir a logo atual pela nova identidade Stray Linux fornecida pelo usuário e simplificar os pontos de marca da interface.
+- [x] Adicionar um botão para exportar diagnóstico e logs locais sem incluir dados sensíveis por padrão.
+- [x] Exibir uma notificação amigável quando a conexão com o banco local falhar.
+- [x] Implementar tentativa controlada de recuperação do SQLite durante a inicialização e cobrir o fluxo com testes.
