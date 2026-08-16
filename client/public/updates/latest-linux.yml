@@ -1,17 +1,17 @@
 version: 1.1.1
 files:
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-x86_64_6fddb28c.AppImage
-    sha512: Ujhg1yzt8zF41OVRNvofDBWY3CJRjgFBCkuj+vHEHNtj8kWo8boLgvD5NIMFyaMk+AOcM8roAFw91Ih8TtFI7w==
-    size: 175635800
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-amd64_0c4d26dc.deb
-    sha512: YzDd5B0gsTPGmo4qJNk1qL3J33mosU3Vx4oXu2nW01AhNl5sIgYaKdcXvLVQVrxW62jTl59JzH3u/jVKLlmp7Q==
-    size: 132114288
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-x86_64_803efec2.rpm
-    sha512: 50u4tg/t8zCavGiBRwPloXos1Zt+HnCvRCfZi4mjGVt57LYJxtqZB+MutOy/R30CXnAcaO05YBduIEa43TfncA==
-    size: 108420893
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-x64_4c4761b1.pacman
-    sha512: QVwSEg8wfy5ERntXOaeoU5sDfcyxQ5LgvSizOSN9acwyfK8c1XuVfoLiNLL/PzWMIgOZm9kHMoK1CX9fsndl3g==
-    size: 172856609
-path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-x86_64_6fddb28c.AppImage
-sha512: Ujhg1yzt8zF41OVRNvofDBWY3CJRjgFBCkuj+vHEHNtj8kWo8boLgvD5NIMFyaMk+AOcM8roAFw91Ih8TtFI7w==
-releaseDate: '2026-08-16T19:09:30.369Z'
+  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-x86_64_aa851244.AppImage
+    sha512: DITvnyr1cK51Pt3nUJ9Rkbs0AUfpT4OF+2jLP05NX1fz0Kb5dpYIi2B5oHkk+wzlQTffKqRC9fsojjnjKywbYA==
+    size: 175631602
+  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-amd64_f33eda20.deb
+    sha512: up230aab8rnC1wmHt8LXTdissGUrbdn0fPbYlBpb4llt9fIlx47hUO/REzw4mqpoouSA1gHUnTm3pMYaYr4EYA==
+    size: 132111836
+  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-x86_64_ea8994da.rpm
+    sha512: 8WrOoxxot+jZqTXUfxMBCbKyW+OMq9HWLSlXnODosi4EGx2Ku0Ek7racVCmjlTv5TCH/OswoN1bqMt88b0mi4A==
+    size: 108436569
+  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-x64_9d9f82e1.pacman
+    sha512: zvsxqpPMRWY+lDl3auQ1moa+fCsBG5+ky3g0pYDDbS3c9svn76TvNam/cKE3SWTsdpoQIH4bAiTHGBQjPpKqhw==
+    size: 172858472
+path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.1-x86_64_aa851244.AppImage
+sha512: DITvnyr1cK51Pt3nUJ9Rkbs0AUfpT4OF+2jLP05NX1fz0Kb5dpYIi2B5oHkk+wzlQTffKqRC9fsojjnjKywbYA==
+releaseDate: '2026-08-16T19:44:00.000Z'
