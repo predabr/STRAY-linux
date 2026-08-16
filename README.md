@@ -10,6 +10,8 @@ O **Stray Linux** é um aplicativo desktop técnico para descoberta de jogos, co
 
 A apresentação pública utiliza uma composição editorial própria com navegação vertical, brilhos discretos com suporte a redução de movimento e downloads verificáveis. A release 1.1.3 separa o runtime de produção do Vite: o servidor local empacotado não tenta carregar dependências de desenvolvimento e inicia somente com os recursos incluídos no instalador.
 
+Os caminhos públicos de download da série 1.1.3 respondem com redirecionamento HTTP para o artefato verificado da plataforma escolhida. Assim, futuras renovações de artefatos não quebram os links usados pela página, pelo README ou por instalações existentes.
+
 O aplicativo empacotado verifica atualizações a partir de um feed HTTPS com metadados de integridade. A instalação da atualização exige confirmação antes de reiniciar. Em Linux, pacotes `.deb`, `.rpm`, `.pacman` e AppImage continuam respeitando o fluxo explícito da distribuição; o aplicativo não executa comandos do sistema automaticamente.
 
 > A plataforma não apresenta FPS como medição se não houver proveniência. Benchmarks são classificados como **Verified**, **Community**, **Estimated** ou **Unknown**; a ausência de evidência é exibida como indisponibilidade, e não substituída por dados fictícios.
