@@ -346,3 +346,10 @@
 - [x] Criar uma landing vertical limpa com descrição do produto, recursos essenciais, privacidade, downloads verificados e desinstalação.
 - [x] Validar a landing simplificada em desktop/mobile, downloads, testes, build, publicação e GitHub.
 - [x] Atualizar a regressão de narrativa visual para validar a landing vertical limpa em vez da rolagem removida.
+- [x] Diagnosticar e corrigir o timeout de inicialização do aplicativo instalado via Pacman no Arch Linux, sem exigir DATABASE_URL.
+- [x] Melhorar no site as instruções Arch para iniciar, verificar permissões e desinstalar o pacote de forma segura.
+- [x] Revalidar o artefato Pacman, o launcher Linux, o site, os testes, o build e sincronizar a correção no GitHub.
+- [x] Adicionar fallback seguro de GPU no launcher Linux e tratar colisão de porta para evitar o timeout do servidor local.
+- [x] Atualizar regressões do manifesto de distribuição para os cinco artefatos 1.1.1 reconstruídos com launcher Arch corrigido.
+- [x] Substituir integralmente a marca do Stray Linux pela nova logo fornecida no site, aplicativo, metadados e cinco instaladores.
+- [x] Reforçar e revalidar o bloqueio de GPU do Electron Linux após o smoke test da reconstrução de marca.

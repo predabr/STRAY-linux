@@ -9,11 +9,11 @@ describe("landing pública", () => {
   it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
     const distribution = read("client/src/lib/distribution.ts");
-    expect(distribution).toContain("Stray-Linux-1.1.1-Setup_f6242bc4.exe");
-    expect(distribution).toContain("Stray-Linux-1.1.1-amd64_0c4d26dc.deb");
-    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_803efec2.rpm");
-    expect(distribution).toContain("Stray-Linux-1.1.1-x64_4c4761b1.pacman");
-    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_6fddb28c.AppImage");
+    expect(distribution).toContain("Stray-Linux-1.1.1-Setup_143e412d.exe");
+    expect(distribution).toContain("Stray-Linux-1.1.1-amd64_2834a9d2.deb");
+    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_8ff5fc5c.rpm");
+    expect(distribution).toContain("Stray-Linux-1.1.1-x64_bde3b7ab.pacman");
+    expect(distribution).toContain("Stray-Linux-1.1.1-x86_64_024abcfc.AppImage");
     expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
     expect(distribution).toContain("sha256sum -c -");
@@ -76,9 +76,13 @@ describe("landing pública", () => {
 
   it("documenta remoção segura sem limpar dados locais automaticamente", () => {
     const uninstall = read("client/src/pages/Uninstall.tsx");
+    const landing = read("client/src/pages/Home.tsx");
     const windowsWorkflow = read(".github/workflows/windows-installer.yml");
-    expect(uninstall).toContain("artefatos da versão 1.1.0");
+    expect(uninstall).toContain("artefatos da versão 1.1.1");
     expect(uninstall).not.toContain("artefatos da versão 1.0.0");
+    expect(landing).toContain('href="/uninstall"');
+    expect(landing).toContain("pacman -Q stray-linux");
+    expect(landing).toContain("which stray-linux");
     expect(uninstall).toContain("sudo apt remove stray-linux");
     expect(uninstall).toContain("sudo dnf remove stray-linux");
     expect(uninstall).toContain("sudo zypper remove stray-linux");
