@@ -416,3 +416,10 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Pesquisar referências de UX para dashboards técnicos, launchers de jogos, diagnóstico local e visualização honesta de hardware.
 - [x] Avaliar padrões de gráficos, botões, estados vazios, navegação e microinterações por impacto e adequação ao Stray Linux.
 - [x] Converter a pesquisa em roteiro priorizado de melhorias implementáveis, sem introduzir benchmarks ou compatibilidades inventados.
+
+## Revisão integral de informação, produto e landing
+- [x] Auditar rotas, contratos, dados publicados, traduções e estados funcionais para localizar lacunas e conteúdos desatualizados comprováveis.
+- [x] Atualizar README, documentação pública e informações de produto para refletir funcionalidades, fontes, limites e a distribuição atual.
+- [x] Completar traduções afetadas pela revisão, mantendo paridade dos 11 idiomas de interface sem inserir conteúdo técnico não verificado.
+- [x] Modernizar a landing com narrativa de produto, informações verificáveis e animações tipográficas que respeitem redução de movimento.
+- [x] Validar testes, typecheck, build, responsividade, fluxos críticos, downloads e instaladores antes da sincronização final do GitHub.

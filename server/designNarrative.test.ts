@@ -9,10 +9,9 @@ describe("linguagem autoral de produto", () => {
     const home = fs.readFileSync(path.join(projectRoot, "client/src/pages/Home.tsx"), "utf8");
     const css = fs.readFileSync(path.join(projectRoot, "client/src/index.css"), "utf8");
 
-    expect(home).toContain("Jogue Linux.");
-    expect(home).toContain("STATUS LOCAL");
-    expect(home).toContain("Escolher formato");
-    expect(home).toContain("Criado por Pedro, Brasil");
+    expect(home).toContain("landingCopy");
+    expect(home).toContain("LetterReveal");
+    expect(home).toContain("EvidenceSection");
     expect(home).toContain("INSTALAÇÃO LINUX");
     expect(home).toContain("SELEÇÃO OBRIGATÓRIA");
     expect(home).toContain('href={assets.exe}');
@@ -23,6 +22,7 @@ describe("linguagem autoral de produto", () => {
     expect(home).toContain("editorial-sparkles");
     expect(home).not.toContain("editorial-orb");
     expect(css).toContain("editorial-twinkle");
+    expect(css).toContain("editorial-letter-reveal");
     expect(css).toContain("prefers-reduced-motion");
   });
 });

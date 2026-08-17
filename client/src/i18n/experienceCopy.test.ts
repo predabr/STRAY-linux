@@ -4,6 +4,7 @@ import { homeDiagnosticsCopy } from "@/i18n/homeDiagnosticsCopy";
 import { introCopy } from "@/i18n/introCopy";
 import { gameCardCopy } from "@/i18n/gameCardCopy";
 import { linuxFixContributionCopy, linuxFixCopy, linuxFixModerationCopy } from "@/i18n/linuxFixCopy";
+import { landingCopy } from "@/i18n/landingCopy";
 import { overviewCopy } from "@/i18n/overviewCopy";
 import { productShellCopy } from "@/i18n/productShellCopy";
 import { distroRegistry } from "@shared/distro-registry";
@@ -21,6 +22,7 @@ describe("experience copy", () => {
       const linuxFix = linuxFixCopy[locale];
       const contribution = linuxFixContributionCopy[locale];
       const moderation = linuxFixModerationCopy[locale];
+      const landing = landingCopy[locale];
       expect(profile.backToAtlas.trim()).not.toBe("");
       expect(profile.bigLinuxTitle.trim()).not.toBe("");
       expect(profile.installArtifact(".deb")).toContain(".deb");
@@ -43,6 +45,10 @@ describe("experience copy", () => {
       expect(contribution.statuses.in_review.trim()).not.toBe("");
       expect(moderation.description.trim()).not.toBe("");
       expect(moderation.accept.trim()).not.toBe("");
+      expect(landing.heroMain.trim()).not.toBe("");
+      expect(landing.downloadsEyebrow).toContain("1.1.11");
+      expect(landing.cards).toHaveLength(3);
+      expect(landing.evidenceCards).toHaveLength(3);
     }
   });
 

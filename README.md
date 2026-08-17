@@ -6,21 +6,21 @@
 
 O **Stray Linux** combina um site institucional com um aplicativo desktop. O aplicativo é voltado a jogadores Linux que precisam entender o próprio ambiente, organizar a biblioteca local, consultar conteúdo técnico com origem visível e registrar sessões sem converter suposições em métricas. A interface utiliza React e TypeScript; o servidor usa Express/tRPC. No Electron, os dados operacionais ficam em um SQLite local, portanto **não é necessário fornecer `DATABASE_URL`**.
 
-## Versão 1.1.9
+## Versão 1.1.11
 
-A versão 1.1.9 consolida a descoberta automática da Biblioteca, a resolução local de GameHub e o diagnóstico do ambiente. Steam e Heroic são lidos localmente; jogos adicionados por pasta exigem uma escolha explícita do usuário. Quando houver Steam App ID ou uma correspondência no catálogo empacotado, a Biblioteca mostra nome, descrição, capa disponível, acesso ao detalhe no GameHub e abertura da pasta de instalação. O app não lê credenciais, não altera bibliotecas e não percorre o disco inteiro.
+A versão **1.1.11** consolida o aplicativo como uma estação local de diagnóstico para Linux gaming. A Biblioteca lê manifestos Steam e instalações Heroic locais para Epic, GOG e Amazon; títulos externos continuam exigindo escolha consciente do usuário. Quando o App ID ou o título encontra um registro no catálogo empacotado, o app declara o método da correspondência e apresenta detalhes, capa disponível e acesso ao GameHub. O Stray não lê credenciais, não modifica bibliotecas e não percorre o disco inteiro.
 
-O Scanner é executado automaticamente no aplicativo em segundo plano e também pode ser disparado manualmente. Seus snapshots alimentam **Meu PC**, Diagnóstico, Stray AI e a visão geral. A coleta permanece local até que o usuário escolha exportar ou importar um perfil. O Diagnóstico lista todos os sinais verificáveis observados no relatório, em vez de priorizar apenas o primeiro.
+O Scanner é executado automaticamente no aplicativo desktop e também pode ser iniciado manualmente. Ele usa fallbacks locais seguros para distribuição, kernel, CPU, GPU, telas, armazenamento, sessão Wayland/X11, APIs gráficas, drivers e runtimes de gaming. Campos que uma ferramenta não conseguiu observar permanecem como **não informados**, em vez de serem adivinhados. Snapshots alimentam Meu PC, Diagnóstico, Stray AI e a visão geral, e continuam no dispositivo até uma exportação explícita.
 
-Performance Center registra sessões locais com o ambiente técnico selecionado — perfil, CPU, GPU, driver, Proton, Wine e runtime. Isso registra contexto; **não cria FPS, benchmark, nota de compatibilidade ou telemetria inventada**.
+Os painéis técnicos foram redesenhados para separar inventário, disponibilidade, capacidade proporcional e ausência de dados. O aplicativo só traça comparações quando as unidades e as leituras são compatíveis. Performance Center registra sessões locais com perfil, CPU, GPU, driver, Proton, Wine e runtime; **isso não cria FPS, benchmark, nota de compatibilidade ou telemetria inventada**.
 
 ## Capacidades
 
 | Área | O que está disponível | Limite explícito |
 |---|---|---|
 | **GameHub** | Catálogo pesquisável com 10.000 jogos, filtros e páginas de detalhe. | O snapshot não é uma cópia em tempo real da Steam. |
-| **Biblioteca local** | Descoberta de Steam, Heroic e pastas escolhidas; capas por mídia local ou CDN pública derivada de App ID; detalhes quando o catálogo encontra correspondência. | Não lê contas, não modifica arquivos e só inicia via ação explícita do usuário. |
-| **Scanner e Meu PC** | Distro, kernel, CPU, GPU, RAM, armazenamento, tela, driver, APIs gráficas, runtimes e ferramentas gaming quando detectáveis. | Campos ausentes são apresentados como não informados. |
+| **Biblioteca local** | Descoberta de Steam, Heroic (Epic, GOG e Amazon) e pastas escolhidas; origem e método de correspondência declarados; detalhes quando o catálogo encontra registro. | Não lê contas, não modifica arquivos e só inicia via ação explícita do usuário. |
+| **Scanner e Meu PC** | Distro, kernel, CPU, GPU, RAM, armazenamento, tela, sessão, driver, APIs gráficas, runtimes e ferramentas gaming quando detectáveis. | Campos ausentes são apresentados como não informados; a coleta não é enviada automaticamente. |
 | **Diagnóstico** | Sinais técnicos, evidência observada, recomendação segura e nova verificação. | Não conclui causa raiz, compatibilidade ou desempenho sem evidência. |
 | **Performance Center** | Sessões locais com um retrato do perfil e runtime. | Duração de sessão não é benchmark. |
 | **LinuxFix** | Triagem por sintoma, runbooks categorizados, risco, verificação, reversão, fonte e contribuições moderadas. | Comentários e confirmações nunca são criados artificialmente. |

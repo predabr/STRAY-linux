@@ -38,17 +38,15 @@ describe("landing pública", () => {
 
   it("mantém apresentação institucional e downloads sem substituir a interface por imagem estática", () => {
     const landing = read("client/src/pages/Home.tsx");
-    expect(landing).toContain("Jogue Linux.");
-    expect(landing).toContain("Criado por Pedro, Brasil");
-    expect(landing).toContain("STATUS LOCAL");
-    expect(landing).toContain("Escolher formato");
+    expect(landing).toContain("landingCopy");
+    expect(landing).toContain("LetterReveal");
+    expect(landing).toContain("EvidenceSection");
     expect(landing).toContain("<TerminalInstaller");
     expect(landing).toContain('useState<Installer["id"] | null>(null)');
     expect(landing).toContain('selected ? linuxInstallers.find((item) => item.id === selected) : undefined');
     expect(landing).toContain('{installer.name} · pacote {installer.signal}');
     expect(landing).toContain("SELEÇÃO OBRIGATÓRIA");
-    expect(landing).toContain("const productCards");
-    expect(landing).toContain("Ferramentas que");
+    expect(landing).toContain("copy.cards.map");
     expect(landing).toContain("O bloco usa `bash -c`");
     expect(landing).toContain("usam exclusivamente a aba");
     expect(landing).not.toContain("stray-linux-landing-original_68a8e472.png");
@@ -72,18 +70,20 @@ describe("landing pública", () => {
     expect(workspace).toContain("advancedOpen || advancedRouteActive");
     expect(workspace).toContain('href: "/assistant", label: "Stray AI"');
     expect(copy).toContain('tools: "MAIS FERRAMENTAS"');
-    expect(copy).toContain('version: "Versão 1.1.0"');
+    expect(copy).toContain('version: "Versão 1.1.11"');
   });
 
   it("documenta remoção segura sem limpar dados locais automaticamente", () => {
     const uninstall = read("client/src/pages/Uninstall.tsx");
     const landing = read("client/src/pages/Home.tsx");
     const windowsWorkflow = read(".github/workflows/windows-installer.yml");
-    expect(uninstall).toContain("artefatos da versão 1.1.1");
+    expect(uninstall).toContain("artefatos publicados da versão atual");
     expect(uninstall).not.toContain("artefatos da versão 1.0.0");
     expect(landing).toContain('href="/uninstall"');
     expect(landing).toContain("pacman -Q stray-linux");
     expect(landing).toContain("which stray-linux");
+    expect(landing).toContain("landingCopy");
+    expect(landing).toContain("LetterReveal");
     expect(uninstall).toContain("sudo apt remove stray-linux");
     expect(uninstall).toContain("sudo dnf remove stray-linux");
     expect(uninstall).toContain("sudo zypper remove stray-linux");

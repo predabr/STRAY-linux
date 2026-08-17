@@ -1,11 +1,11 @@
 import type { Express } from "express";
 
 export const publicDownloadTargets = {
-  "/downloads/stray-linux/windows-x64.exe": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/VqVjrOHigDKlSYTC.exe",
-  "/downloads/stray-linux/debian-amd64.deb": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/aofiWiAdYHsgMhMU.deb",
-  "/downloads/stray-linux/rpm-x64.rpm": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/UMHdlePHNbFxNqQW.rpm",
-  "/downloads/stray-linux/arch-x64.pacman": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/fiiPVGUxscDvZuhO.pacman",
-  "/downloads/stray-linux/linux-x64.AppImage": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/KEpvLmpIgwJMpuVM.AppImage",
+  "/downloads/stray-linux/windows-x64.exe": "/manus-storage/Stray-Linux-1.1.11-Setup_40f600a6.exe",
+  "/downloads/stray-linux/debian-amd64.deb": "/manus-storage/Stray-Linux-1.1.11-amd64_65063921.deb",
+  "/downloads/stray-linux/rpm-x64.rpm": "/manus-storage/Stray-Linux-1.1.11-x86_64_0b1537f9.rpm",
+  "/downloads/stray-linux/arch-x64.pacman": "/manus-storage/Stray-Linux-1.1.11-x64_d1b15398.pacman",
+  "/downloads/stray-linux/linux-x64.AppImage": "/manus-storage/Stray-Linux-1.1.11-x86_64_2c3e06c5.AppImage",
 } as const;
 
 export function registerPublicDownloadRedirects(app: Express) {
