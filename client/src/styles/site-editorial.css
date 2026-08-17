@@ -1,0 +1,7 @@
+@media (prefers-reduced-motion: no-preference) {
+  .site-hero-depth::after { content: ""; position: absolute; inset: auto -15% -38% 30%; height: 42%; background: radial-gradient(ellipse, rgba(143,175,255,.22), transparent 68%); filter: blur(20px); pointer-events: none; animation: site-ambient-shift 9s ease-in-out infinite alternate; }
+  .site-console-glow { animation: site-console-float 5s var(--ease-out, cubic-bezier(.23,1,.32,1)) infinite alternate; }
+}
+.site-nav { will-change: backdrop-filter; }
+@keyframes site-ambient-shift { from { transform: translate3d(-4%, 5%, 0) scale(.94); opacity: .42; } to { transform: translate3d(5%, -7%, 0) scale(1.08); opacity: .78; } }
+@keyframes site-console-float { from { transform: translateY(0); } to { transform: translateY(-8px); } }

@@ -448,3 +448,17 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Avaliar linguagens adicionais: não introduzir runtime externo sem benefício mensurável; manter Node/TypeScript/Electron evita complexidade e incompatibilidade nos instaladores.
 - [x] Publicar o checkpoint da 1.1.13 e validar os downloads reais no domínio público após a propagação; os cinco formatos passaram SHA-256.
 - [x] Sincronizar o commit da release 1.1.13 com o GitHub quando a autenticação remota estiver válida; `main` recebeu o commit `1dafa84`.
+
+## Reconstrução profunda de produto e desempenho
+- [x] Auditar tamanho de bundles, rotas, renderizações, pontos de bloqueio e contratos para orientar a reconstrução por evidência.
+- [x] Criar tokens de design, tipografia técnica e primitivas de interação compartilhadas, com acessibilidade e redução de movimento.
+- [x] Criar módulos de estado e seleção para dados locais, evitando renderizações e consultas desnecessárias no aplicativo.
+- [x] Criar componentes reutilizáveis para estados de carregamento, erro, vazio, evidência e ações seguras.
+- [x] Reestruturar a casca desktop, navegação, atalhos e foco para fluxos de diagnóstico e biblioteca mais claros.
+- [x] Reestruturar a visão geral do aplicativo com leitura progressiva de hardware, biblioteca, atividade e próximos passos locais.
+- [ ] Reestruturar GameHub e Biblioteca com cartões, filtros, detalhes e capas de proporção estável, preservando dados observados.
+- [ ] Reestruturar Diagnóstico, Performance e Scanner com sinais explicáveis, telemetria opt-in e gráficos somente de dados reais.
+- [ ] Reestruturar Stray AI, LinuxFix e relatórios como superfícies técnicas enxutas, com escopo e evidência declarados.
+- [x] Reestruturar a landing institucional, downloads, desinstalação e status para narrativa clara, desempenho e confiabilidade de distribuição.
+- [x] Avaliar linguagens e ferramentas por superfície; adotar apenas componentes compilados ou runtimes novos com ganho mensurável e compatibilidade de pacote.
+- [ ] Validar arquitetura, interfaces, testes, build, instaladores, downloads públicos e sincronização GitHub após a reconstrução.

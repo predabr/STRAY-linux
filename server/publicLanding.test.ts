@@ -8,6 +8,7 @@ const read = (relativePath: string) => fs.readFileSync(path.join(projectRoot, re
 describe("landing pública", () => {
   it("expõe instaladores reais, Linux por terminal verificado e não simula um repositório Pacman", () => {
     const landing = read("client/src/pages/Home.tsx");
+    const windowsDownload = read("client/src/components/site/WindowsDownloadCard.tsx");
     const distribution = read("client/src/lib/distribution.ts");
     expect(distribution).toContain("downloads/stray-linux/windows-x64.exe");
     expect(distribution).toContain("downloads/stray-linux/debian-amd64.deb");
@@ -17,8 +18,8 @@ describe("landing pública", () => {
     expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
     expect(distribution).toContain("sha256sum -c -");
-    expect(landing).toContain('import { distributionAssets as assets, linuxInstallers } from "@/lib/distribution";');
-    expect(landing).toContain('href={assets.exe}');
+    expect(windowsDownload).toContain('import { distributionAssets } from "@/lib/distribution";');
+    expect(windowsDownload).toContain('href={distributionAssets.exe}');
     expect(landing).not.toContain('href={assets.deb}');
     expect(landing).not.toContain('href={assets.rpm}');
     expect(landing).not.toContain('href={assets.pacman}');
@@ -38,17 +39,20 @@ describe("landing pública", () => {
 
   it("mantém apresentação institucional e downloads sem substituir a interface por imagem estática", () => {
     const landing = read("client/src/pages/Home.tsx");
+    const hero = read("client/src/components/site/SiteHero.tsx");
+    const method = read("client/src/components/site/LandingMethod.tsx");
+    const evidence = read("client/src/components/site/LandingEvidence.tsx");
+    const installer = read("client/src/components/site/LinuxInstallerPanel.tsx");
     expect(landing).toContain("landingCopy");
-    expect(landing).toContain("LetterReveal");
-    expect(landing).toContain("EvidenceSection");
-    expect(landing).toContain("<TerminalInstaller");
-    expect(landing).toContain('useState<Installer["id"] | null>(null)');
-    expect(landing).toContain('selected ? linuxInstallers.find((item) => item.id === selected) : undefined');
-    expect(landing).toContain('{installer.name} · pacote {installer.signal}');
-    expect(landing).toContain("SELEÇÃO OBRIGATÓRIA");
-    expect(landing).toContain("copy.cards.map");
-    expect(landing).toContain("O bloco usa `bash -c`");
-    expect(landing).toContain("usam exclusivamente a aba");
+    expect(hero).toContain("LetterReveal");
+    expect(evidence).toContain("evidenceCards.map");
+    expect(installer).toContain('useState<Installer["id"] | null>(null)');
+    expect(installer).toContain('selected ? linuxInstallers.find((item) => item.id === selected) : undefined');
+    expect(installer).toContain('{installer.name} · pacote {installer.signal}');
+    expect(installer).toContain("SELEÇÃO OBRIGATÓRIA");
+    expect(method).toContain("copy.cards.map");
+    expect(installer).toContain("O bloco usa `bash -c`");
+    expect(installer).toContain("usam exclusivamente a aba");
     expect(landing).not.toContain("stray-linux-landing-original_68a8e472.png");
     expect(landing).not.toContain("87 FPS");
     expect(landing).not.toContain("Excellent 92");
@@ -65,8 +69,8 @@ describe("landing pública", () => {
   it("reduz a sobrecarga da navegação sem remover ferramentas avançadas", () => {
     const workspace = read("client/src/components/platform/ProductWorkspace.tsx");
     const copy = read("client/src/i18n/productShellCopy.ts");
-    expect(workspace).toContain("const advancedTools: NavigationItem[]");
-    expect(workspace).toContain("ExpandableNavigationGroup");
+    expect(workspace).toContain("const advancedTools: WorkspaceNavigationItem[]");
+    expect(workspace).toContain("WorkspaceDisclosureGroup");
     expect(workspace).toContain("advancedOpen || advancedRouteActive");
     expect(workspace).toContain('href: "/assistant", label: "Stray AI"');
     expect(copy).toContain('tools: "MAIS FERRAMENTAS"');
@@ -76,14 +80,17 @@ describe("landing pública", () => {
   it("documenta remoção segura sem limpar dados locais automaticamente", () => {
     const uninstall = read("client/src/pages/Uninstall.tsx");
     const landing = read("client/src/pages/Home.tsx");
+    const nav = read("client/src/components/site/SiteNav.tsx");
+    const hero = read("client/src/components/site/SiteHero.tsx");
+    const installer = read("client/src/components/site/LinuxInstallerPanel.tsx");
     const windowsWorkflow = read(".github/workflows/windows-installer.yml");
     expect(uninstall).toContain("artefatos publicados da versão atual");
     expect(uninstall).not.toContain("artefatos da versão 1.0.0");
-    expect(landing).toContain('href="/uninstall"');
-    expect(landing).toContain("pacman -Q stray-linux");
-    expect(landing).toContain("which stray-linux");
+    expect(nav).toContain('href="/uninstall"');
+    expect(installer).toContain("pacman -Q stray-linux");
+    expect(installer).toContain("which stray-linux");
     expect(landing).toContain("landingCopy");
-    expect(landing).toContain("LetterReveal");
+    expect(hero).toContain("LetterReveal");
     expect(uninstall).toContain("sudo apt remove stray-linux");
     expect(uninstall).toContain("sudo dnf remove stray-linux");
     expect(uninstall).toContain("sudo zypper remove stray-linux");
