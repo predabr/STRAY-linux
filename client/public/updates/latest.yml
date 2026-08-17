@@ -1,8 +1,8 @@
 version: 1.1.9
 files:
-  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/EJyLDpqjvRqFTrRd.exe
-    sha512: jl1zzjRMFHcx/FSiR9L/MS3sJOy0M1pDMrNnxCEcI0v5TWqi58aj5OvPgvjEAoFcEIKGywPBQMjXlC3YcvJ6QA==
-    size: 134372631
-path: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/EJyLDpqjvRqFTrRd.exe
-sha512: jl1zzjRMFHcx/FSiR9L/MS3sJOy0M1pDMrNnxCEcI0v5TWqi58aj5OvPgvjEAoFcEIKGywPBQMjXlC3YcvJ6QA==
-releaseDate: '2026-08-17T03:30:00.000Z'
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/llLdIGefkPkWCdbl.exe
+    sha512: 8fb0acca49a03990be411b22c78c22a82326aac660410d387977d631d5018b7ddc0215918190ae8b06291941dcdda3448db0f9f986127756b1246fb1dba6311a
+    size: 134369434
+path: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/llLdIGefkPkWCdbl.exe
+sha512: 8fb0acca49a03990be411b22c78c22a82326aac660410d387977d631d5018b7ddc0215918190ae8b06291941dcdda3448db0f9f986127756b1246fb1dba6311a
+releaseDate: '2026-08-17T03:40:00.000Z'

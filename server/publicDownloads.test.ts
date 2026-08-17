@@ -4,11 +4,11 @@ import { publicDownloadTargets } from "./publicDownloads";
 describe("downloads públicos estáveis", () => {
   it("mantém URLs estáveis por plataforma apontando aos cinco artefatos validados da release", () => {
     expect(publicDownloadTargets).toEqual({
-      "/downloads/stray-linux/windows-x64.exe": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/EJyLDpqjvRqFTrRd.exe",
-      "/downloads/stray-linux/debian-amd64.deb": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/ojgJFRnsUWKrTkct.deb",
-      "/downloads/stray-linux/rpm-x64.rpm": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/HvwiBlUkvPXorGhE.rpm",
-      "/downloads/stray-linux/arch-x64.pacman": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/cbKNPmMzAhshaKsX.pacman",
-      "/downloads/stray-linux/linux-x64.AppImage": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/AdFQIaqcdiVxQgMb.AppImage",
+      "/downloads/stray-linux/windows-x64.exe": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/llLdIGefkPkWCdbl.exe",
+      "/downloads/stray-linux/debian-amd64.deb": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/woPEVqDeUfPzGQSn.deb",
+      "/downloads/stray-linux/rpm-x64.rpm": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/RVSVsDMstknxbDCm.rpm",
+      "/downloads/stray-linux/arch-x64.pacman": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/mKbTdhMpNcwgAjkM.pacman",
+      "/downloads/stray-linux/linux-x64.AppImage": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/tZLjNMTiJUKYwuFB.AppImage",
     });
   });
 });

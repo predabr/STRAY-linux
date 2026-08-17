@@ -392,8 +392,8 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Validar instaladores, redirects, checksums, bootstrap desktop e fluxos críticos em uma matriz de regressão.
 
 ## Revisão completa solicitada — desktop, dados e experiência
-- [ ] Auditar detalhes do tema preto e branco, corrigir a capa/arte de abertura do aplicativo e alinhar o shell interno ao site.
-- [ ] Corrigir a IA para usar fatos do PC, apresentar contexto consultado e retornar falhas acionáveis.
+- [x] Auditar detalhes do tema preto e branco, corrigir a capa/arte de abertura do aplicativo e alinhar o shell interno ao site.
+- [x] Corrigir a IA para usar fatos do PC, apresentar contexto consultado e retornar falhas acionáveis.
 - [x] Corrigir catálogo, GameHub e descoberta automática de jogos instalados no computador.
 - [x] Completar nomes, capas, descrições, detalhes navegáveis e ação de abrir jogos detectados.
 - [x] Reorganizar e ampliar o LinuxFix com diagnósticos, causas, passos específicos por distro e estados claros.
