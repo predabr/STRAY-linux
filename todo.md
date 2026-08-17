@@ -490,3 +490,10 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Verificar app.asar, updater, versão, permissões e instalação/desinstalação sem executar ações destrutivas no host.
 - [x] Adicionar animações leves, profissionais e compatíveis com prefers-reduced-motion ao site.
 - [x] Validar todos os formatos, testes, build, domínio público e sincronização GitHub.
+
+## Polimento integral do produto
+- [x] Inventariar rotas, superfícies, componentes, estados, dependências e contratos do Stray Linux sem alterar a arquitetura funcional.
+- [x] Auditar visualmente todas as áreas em desktop e mobile para identificar inconsistências de sistema visual, navegação, tipografia, espaçamento, responsividade e acessibilidade.
+- [x] Aplicar refinamentos priorizados de design system, navegação, páginas, estados, imagens, formulários e textos preservando dados e recursos existentes.
+- [x] Auditar e otimizar somente gargalos comprovados de performance, robustez, código e segurança, com cobertura de regressão quando aplicável.
+- [x] Concluir duas passagens de QA funcional, visual e técnico em rotas públicas e operacionais, com testes, build, logs e revisão responsiva.

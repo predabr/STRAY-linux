@@ -58,6 +58,7 @@ function Router() {
     <Route path="/" component={Home} />
     <Route path="/games" component={Games} />
     <Route path="/games/:slug" component={GameDetail} />
+    <Route path="/compare" component={Compare} />
     <Route path="/benchmark" component={Benchmark} />
     <Route path="/support" component={Support} />
     <Route path="/project-support" component={ProjectSupport} />

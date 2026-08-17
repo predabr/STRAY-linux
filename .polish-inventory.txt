@@ -1,0 +1,205 @@
+=== pages ===
+Admin.tsx
+ApiDocs.tsx
+Assistant.tsx
+Benchmark.tsx
+Compare.tsx
+ComponentShowcase.tsx
+Controllers.tsx
+Dashboard.tsx
+Diagnostics.tsx
+DistroAtlas.tsx
+DistroProfile.tsx
+GameDetail.tsx
+GamePreflight.tsx
+Games.tsx
+Home.tsx
+Knowledge.tsx
+Library.tsx
+LogsCenter.tsx
+Moderation.tsx
+Mods.tsx
+NotFound.tsx
+NotificationsCenter.tsx
+Performance.tsx
+ProjectSupport.tsx
+RecoveryCenter.tsx
+Regression.tsx
+Scanner.tsx
+Search.tsx
+SettingsCenter.tsx
+Snapshots.tsx
+Status.tsx
+Support.tsx
+Sync.tsx
+SystemGraph.tsx
+SystemTimeline.tsx
+Uninstall.tsx
+WindowsHub.tsx
+=== component groups ===
+operational
+platform
+site
+ui
+=== top level feature files ===
+App.tsx
+components/AIChatBox.tsx
+components/DashboardLayout.tsx
+components/DashboardLayoutSkeleton.tsx
+components/ErrorBoundary.tsx
+components/ManusDialog.tsx
+components/Map.tsx
+components/RouteMeta.tsx
+components/StrayEntryGate.tsx
+const.ts
+contexts/LanguageContext.tsx
+contexts/ThemeContext.tsx
+data/windowsCatalog.ts
+hooks/useComposition.ts
+hooks/useMobile.tsx
+hooks/usePersistFn.ts
+hooks/useRoutePreload.ts
+i18n/atlasNavigationCopy.ts
+i18n/distroProfileCopy.ts
+i18n/experienceCopy.test.ts
+i18n/gameCardCopy.ts
+i18n/homeDiagnosticsCopy.ts
+i18n/introCopy.ts
+i18n/landingCopy.ts
+i18n/linuxFixCopy.ts
+i18n/overviewCopy.ts
+i18n/productShellCopy.ts
+i18n/trustCopy.ts
+lib/atlasNavigationCopy.test.ts
+lib/benchmarkComparison.ts
+lib/distribution.test.ts
+lib/distribution.ts
+lib/distroProfile.install.test.ts
+lib/performanceRegression.test.ts
+lib/performanceRegression.ts
+lib/preflight.test.ts
+lib/preflight.ts
+lib/releaseManifest.ts
+lib/routeAccess.test.ts
+lib/routeAccess.ts
+lib/routePreload.ts
+lib/snapshotComparison.test.ts
+lib/snapshotComparison.ts
+lib/systemGraph.test.ts
+lib/systemGraph.ts
+lib/trpc.ts
+lib/utils.ts
+main.tsx
+pages/Admin.tsx
+pages/ApiDocs.tsx
+pages/Assistant.tsx
+pages/Benchmark.tsx
+pages/Compare.tsx
+pages/ComponentShowcase.tsx
+pages/Controllers.tsx
+pages/Dashboard.tsx
+pages/Diagnostics.tsx
+pages/DistroAtlas.tsx
+pages/DistroProfile.tsx
+pages/GameDetail.tsx
+pages/GamePreflight.tsx
+pages/Games.tsx
+pages/Home.tsx
+pages/Knowledge.tsx
+pages/Library.tsx
+pages/LogsCenter.tsx
+pages/Moderation.tsx
+pages/Mods.tsx
+pages/NotFound.tsx
+pages/NotificationsCenter.tsx
+pages/Performance.tsx
+pages/ProjectSupport.tsx
+pages/RecoveryCenter.tsx
+pages/Regression.tsx
+pages/Scanner.tsx
+pages/Search.tsx
+pages/SettingsCenter.tsx
+pages/Snapshots.tsx
+pages/Status.tsx
+pages/Support.tsx
+pages/Sync.tsx
+pages/SystemGraph.tsx
+pages/SystemTimeline.tsx
+pages/Uninstall.tsx
+pages/WindowsHub.tsx
+types/desktop.d.ts
+=== route declarations ===
+client/src/App.tsx:58:    <Route path="/" component={Home} />
+client/src/App.tsx:59:    <Route path="/games" component={Games} />
+client/src/App.tsx:60:    <Route path="/games/:slug" component={GameDetail} />
+client/src/App.tsx:61:    <Route path="/benchmark" component={Benchmark} />
+client/src/App.tsx:62:    <Route path="/support" component={Support} />
+client/src/App.tsx:63:    <Route path="/project-support" component={ProjectSupport} />
+client/src/App.tsx:64:    <Route path="/controllers" component={Controllers} />
+client/src/App.tsx:65:    <Route path="/diagnostics" component={Diagnostics} />
+client/src/App.tsx:66:    <Route path="/snapshots" component={Snapshots} />
+client/src/App.tsx:67:    <Route path="/settings" component={SettingsCenter} />
+client/src/App.tsx:68:    <Route path="/system-graph" component={SystemGraph} />
+client/src/App.tsx:69:    <Route path="/system-timeline" component={SystemTimeline} />
+client/src/App.tsx:70:    <Route path="/preflight" component={GamePreflight} />
+client/src/App.tsx:71:    <Route path="/regression" component={Regression} />
+client/src/App.tsx:72:    <Route path="/recovery" component={RecoveryCenter} />
+client/src/App.tsx:73:    <Route path="/logs" component={LogsCenter} />
+client/src/App.tsx:74:    <Route path="/notifications" component={NotificationsCenter} />
+client/src/App.tsx:75:    <Route path="/windows" component={WindowsHub} />
+client/src/App.tsx:76:    <Route path="/assistant" component={AssistantPage} />
+client/src/App.tsx:77:    <Route path="/api/docs" component={ApiDocs} />
+client/src/App.tsx:78:    <Route path="/wiki" component={WikiPage} />
+client/src/App.tsx:79:    <Route path="/distros/:id" component={DistroProfile} />
+client/src/App.tsx:80:    <Route path="/distros" component={DistroAtlas} />
+client/src/App.tsx:81:    <Route path="/wiki/:slug" component={WikiDetailPage} />
+client/src/App.tsx:82:    <Route path="/setup" component={SetupPage} />
+client/src/App.tsx:83:    <Route path="/sync" component={Sync} />
+client/src/App.tsx:84:    <Route path="/setup/:slug" component={SetupDetailPage} />
+client/src/App.tsx:85:    <Route path="/linuxfix" component={LinuxFixPage} />
+client/src/App.tsx:86:    <Route path="/linuxfix/:slug" component={LinuxFixDetailPage} />
+client/src/App.tsx:87:    <Route path="/library" component={Library} />
+client/src/App.tsx:88:    <Route path="/performance" component={Performance} />
+client/src/App.tsx:89:    <Route path="/moderation" component={Moderation} />
+client/src/App.tsx:90:    <Route path="/mods" component={Mods} />
+client/src/App.tsx:91:    <Route path="/search" component={SearchPage} />
+client/src/App.tsx:92:    <Route path="/scanner" component={Scanner} />
+client/src/App.tsx:93:    <Route path="/status" component={Status} />
+client/src/App.tsx:94:    <Route path="/dashboard" component={Dashboard} />
+client/src/App.tsx:95:    <Route path="/dashboard/:section/:subsection" component={Dashboard} />
+client/src/App.tsx:96:    <Route path="/dashboard/:section" component={Dashboard} />
+client/src/App.tsx:97:    <Route path="/admin" component={Admin} />
+client/src/App.tsx:98:    <Route path="/404" component={NotFound} />
+client/src/App.tsx:99:    <Route component={NotFound} />
+client/src/App.tsx:104:  return <ErrorBoundary><LanguageProvider><ThemeProvider defaultTheme="dark" switchable><TooltipProvider><RouteMeta /><ApplicationSurface /><Toaster /></TooltipProvider></ThemeProvider></LanguageProvider></ErrorBoundary>;
+client/src/App.tsx:109:  const publicPage = location === "/" || location === "/download" || location === "/uninstall" || location === "/support";
+client/src/App.tsx:110:  if (publicPage) return location === "/" ? <Home /> : location === "/download" ? <DownloadPage /> : location === "/uninstall" ? <Uninstall /> : <Support />;
+client/src/App.tsx:111:  return <StrayEntryGate><DesktopStartupScanner /><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate>;
+client/src/components/DashboardLayout.tsx:187:                const isActive = location === item.path;
+client/src/components/platform/SiteHeader.tsx:29:  const active = (href: string) => href === "/" ? location === "/" : location === href || location.startsWith(`${href}/`);
+client/src/components/platform/ProductWorkspace.tsx:26:  const advancedRouteActive = advancedTools.some((item) => location === item.href || location.startsWith(`${item.href}/`));
+client/src/components/platform/WorkspaceNavItem.tsx:7:  const active = item.href === "/" ? location === "/" : location === item.href || location.startsWith(`${item.href}/`);
+client/src/components/ui/sidebar.tsx:85:      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+client/src/pages/GameDetail.tsx:22:  const [, params] = useRoute("/games/:slug"); const { isAuthenticated } = useAuth(); const utils = trpc.useUtils(); const [gameVersion, setGameVersion] = useState("");
+client/src/pages/Knowledge.tsx:28:  const [, params] = useRoute("/wiki/:slug");
+client/src/pages/Knowledge.tsx:50:  const [, params] = useRoute("/setup/:slug"); const guideQuery = trpc.knowledge.guides.bySlug.useQuery({ slug: params?.slug ?? "" }, { enabled: Boolean(params?.slug) }); const guide = guideQuery.data;
+client/src/pages/Knowledge.tsx:81:  const [, params] = useRoute("/linuxfix/:slug"); const fixQuery = trpc.knowledge.linuxFix.bySlug.useQuery({ slug: params?.slug ?? "" }, { enabled: Boolean(params?.slug) }); const fix = fixQuery.data;
+client/src/pages/DistroProfile.tsx:53:  const [, params] = useRoute("/distros/:id");
+client/src/pages/DistroProfile.tsx:83:    {blocked ? <section className="mt-6 rounded-2xl border border-amber-500/25 bg-amber-500/5 p-5"><div className="flex gap-3"><AlertTriangle className="h-5 w-5 shrink-0 text-amber-400" /><div><h2 className="font-semibold">{copy.noInstallerTitle}</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">{copy.noInstallerText}</p></div></div></section> : <section className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,.75fr)]"><div className="space-y-5"><section className="rounded-3xl border bg-card/80 p-5 md:p-6"><p className="evidence-label text-primary">{copy.route}</p><h2 className="mt-2 text-2xl font-semibold">{copy.commands}</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{copy.routeIntro}</p><ol className="mt-6 grid gap-3"><RouteStep number="01" title={copy.checkSystem} detail={copy.identifySystem} target="#commands" /><RouteStep number="02" title={copy.selectPackage} detail={copy.installArtifact(profile.artifact)} target="#commands" /><RouteStep number="03" title={copy.continueSafely} detail={copy.updateFamily} target="#commands" /></ol></section>
+=== test total ===
+57
+=== bundle scripts ===
+{
+  "dev": "NODE_ENV=development tsx watch server/_core/dev.ts",
+  "build": "vite build && esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+  "start": "NODE_ENV=production node dist/index.js",
+  "check": "tsc --noEmit",
+  "format": "prettier --write .",
+  "test": "vitest run",
+  "db:push": "drizzle-kit generate && drizzle-kit migrate",
+  "desktop:build": "pnpm build && electron-builder --win nsis --x64 --publish never",
+  "desktop:packages": "pnpm build && electron-builder --win nsis --linux AppImage deb rpm pacman --x64 --publish never",
+  "desktop:dir": "pnpm build && electron-builder --dir",
+  "verify:arch-download": "node scripts/verify-arch-download.mjs",
+  "audit:security": "node scripts/audit-dependencies.mjs"
+}

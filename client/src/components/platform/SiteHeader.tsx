@@ -28,12 +28,12 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const active = (href: string) => href === "/" ? location === "/" : location === href || location.startsWith(`${href}/`);
 
-  return <header className="sticky top-0 z-50 border-b border-border/70 bg-background/80 backdrop-blur-xl">
+  return <header className="stray-site-header sticky top-0 z-50 border-b backdrop-blur-xl">
     <div className="container flex h-14 items-center gap-3">
       <div className="lg:hidden"><StrayBrandMark /></div>
       <div className="hidden min-w-0 flex-1 lg:block" />
       <div className="ml-auto flex items-center gap-1.5">
-        <Button variant="ghost" size="sm" className="hidden gap-2 sm:inline-flex" onClick={() => setCommandOpen(true)} aria-label={t("openSearch")}>
+        <Button variant="ghost" size="sm" className="inline-flex h-9 w-9 justify-center px-0 sm:w-auto sm:px-3" onClick={() => setCommandOpen(true)} aria-label={t("openSearch")}>
           <Search className="h-4 w-4" /><span className="hidden xl:inline">{t("search")}</span><kbd className="hidden rounded border bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground xl:inline">⌘K</kbd>
         </Button>
         <DropdownMenu>
