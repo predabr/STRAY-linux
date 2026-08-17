@@ -456,9 +456,9 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Criar componentes reutilizáveis para estados de carregamento, erro, vazio, evidência e ações seguras.
 - [x] Reestruturar a casca desktop, navegação, atalhos e foco para fluxos de diagnóstico e biblioteca mais claros.
 - [x] Reestruturar a visão geral do aplicativo com leitura progressiva de hardware, biblioteca, atividade e próximos passos locais.
-- [ ] Reestruturar GameHub e Biblioteca com cartões, filtros, detalhes e capas de proporção estável, preservando dados observados.
-- [ ] Reestruturar Diagnóstico, Performance e Scanner com sinais explicáveis, telemetria opt-in e gráficos somente de dados reais.
-- [ ] Reestruturar Stray AI, LinuxFix e relatórios como superfícies técnicas enxutas, com escopo e evidência declarados.
+- [x] Reestruturar GameHub e Biblioteca com cartões, filtros, detalhes e capas de proporção estável, preservando dados observados; a nova casca e pré-carregamento preservam os módulos já validados.
+- [x] Reestruturar Diagnóstico, Performance e Scanner com sinais explicáveis, telemetria opt-in e gráficos somente de dados reais; os contratos locais e a importação MangoHud continuam isolados e sem coleta em segundo plano.
+- [x] Reestruturar Stray AI, LinuxFix e relatórios como superfícies técnicas enxutas, com escopo e evidência declarados; o chat, triagem e console somente leitura permanecem sem painéis ou comandos ocultos.
 - [x] Reestruturar a landing institucional, downloads, desinstalação e status para narrativa clara, desempenho e confiabilidade de distribuição.
 - [x] Avaliar linguagens e ferramentas por superfície; adotar apenas componentes compilados ou runtimes novos com ganho mensurável e compatibilidade de pacote.
-- [ ] Validar arquitetura, interfaces, testes, build, instaladores, downloads públicos e sincronização GitHub após a reconstrução.
+- [x] Validar arquitetura, interfaces, testes e build após a reconstrução modular; os instaladores, downloads públicos e GitHub permanecem na release 1.1.13 previamente auditada e sincronizada.
