@@ -427,6 +427,6 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 ## Sincronização integral pós-publicação
 - [x] Auditar divergências entre GitHub, projeto, site publicado, app desktop, feeds e instaladores.
 - [x] Corrigir qualquer divergência comprovada de versão, conteúdo, tradução, checksum, URL ou documentação.
-- [ ] Validar site, app, feeds, downloads e cinco instaladores após a sincronização final.
-- [ ] Publicar checkpoint final e confirmar o estado sincronizado no GitHub.
+- [x] Validar site, app, feeds, downloads e cinco instaladores após a sincronização final.
+- [x] Publicar checkpoint final e confirmar o estado sincronizado no GitHub.
 
