@@ -423,3 +423,10 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Completar traduções afetadas pela revisão, mantendo paridade dos 11 idiomas de interface sem inserir conteúdo técnico não verificado.
 - [x] Modernizar a landing com narrativa de produto, informações verificáveis e animações tipográficas que respeitem redução de movimento.
 - [x] Validar testes, typecheck, build, responsividade, fluxos críticos, downloads e instaladores antes da sincronização final do GitHub.
+
+## Sincronização integral pós-publicação
+- [x] Auditar divergências entre GitHub, projeto, site publicado, app desktop, feeds e instaladores.
+- [x] Corrigir qualquer divergência comprovada de versão, conteúdo, tradução, checksum, URL ou documentação.
+- [ ] Validar site, app, feeds, downloads e cinco instaladores após a sincronização final.
+- [ ] Publicar checkpoint final e confirmar o estado sincronizado no GitHub.
+
