@@ -11,9 +11,18 @@ const sidecarPath = `${stablePath}.sha256`;
 const allowNonArch = process.env.ALLOW_NON_ARCH === "1";
 
 async function get(path, options = {}) {
-  const response = await fetch(`${base}${path}`, { redirect: options.redirect ?? "follow" });
-  if (!response.ok) throw new Error(`${path} respondeu HTTP ${response.status}`);
-  return response;
+  let lastError;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const response = await fetch(`${base}${path}`, { redirect: options.redirect ?? "follow" });
+      if (!response.ok) throw new Error(`${path} respondeu HTTP ${response.status}`);
+      return response;
+    } catch (error) {
+      lastError = error;
+      if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, (attempt + 1) * 750));
+    }
+  }
+  throw lastError;
 }
 
 const redirect = await fetch(`${base}${stablePath}`, { redirect: "manual" });
