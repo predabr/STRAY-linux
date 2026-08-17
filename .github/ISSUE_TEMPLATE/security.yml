@@ -1,0 +1,29 @@
+name: Relatar vulnerabilidade
+description: Encaminhe um possível problema de segurança sem publicar detalhes sensíveis.
+title: "[Security]: "
+labels: [security]
+body:
+  - type: markdown
+    attributes:
+      value: "Para detalhes exploráveis, use o Security Advisory privado. Não publique tokens, payloads ou dados pessoais."
+  - type: input
+    id: component
+    attributes:
+      label: Componente afetado
+      placeholder: "Electron IPC, atualizador, download, site"
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impacto
+      description: Explique o impacto sem incluir uma prova de conceito executável.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reprodução segura
+      description: Forneça passos mínimos que não exponham dados nem executem comandos destrutivos.
+    validations:
+      required: true

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Relatar vulnerabilidade com privacidade
+    url: https://github.com/predabr/STRAY-linux/security/advisories/new
+    about: Não publique tokens, diagnósticos completos ou provas de conceito em issue pública.
+  - name: Site oficial e downloads
+    url: https://linuxtoys-ckuyvpj5.manus.space
+    about: Consulte a documentação e o formato correto antes de relatar uma instalação.

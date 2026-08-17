@@ -1,0 +1,43 @@
+name: Relatar bug
+description: Relate uma falha reproduzível no site, app, instalador ou fluxo local.
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Não inclua tokens, chaves, hostname, serial, arquivos pessoais ou diagnósticos completos."
+  - type: input
+    id: version
+    attributes:
+      label: Versão do Stray Linux
+      placeholder: "1.1.13"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Distribuição e ambiente
+      placeholder: "Arch Linux, Wayland, KDE"
+    validations:
+      required: true
+  - type: input
+    id: artifact
+    attributes:
+      label: Formato instalado
+      placeholder: ".pacman, .deb, .rpm, AppImage ou .exe"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Como reproduzir
+      description: Liste passos mínimos e o resultado esperado/observado.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidência segura
+      description: Cole apenas mensagens de erro sem credenciais ou dados privados.
+    validations:
+      required: true

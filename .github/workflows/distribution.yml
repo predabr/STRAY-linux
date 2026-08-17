@@ -1,0 +1,29 @@
+name: Distribution
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 5 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  arch-download:
+    name: Verify public Arch download
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      STRAY_DOWNLOAD_BASE_URL: https://linuxtoys-ckuyvpj5.manus.space
+      ALLOW_NON_ARCH: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify redirect, sidecar and archive
+        run: node scripts/verify-arch-download.mjs
