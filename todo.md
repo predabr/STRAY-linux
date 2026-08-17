@@ -503,4 +503,4 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Atualizar aplicativo, site, textos, documentação, feeds e updater para a versão 1.2 de maneira consistente.
 - [x] Gerar e auditar os cinco artefatos 1.2, com inspeção de metadados, `app.asar` e integridade por formato.
 - [x] Preparar os artefatos, sidecars SHA-256, redirects e feeds da release 1.2 para publicação no domínio público.
-- [ ] Executar testes, build, auditorias de downloads, revisão do site e sincronização de GitHub para a release 1.2.
+- [x] Executar testes, build, auditorias de downloads, revisão do site e sincronização de GitHub para a release 1.2.
