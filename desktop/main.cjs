@@ -148,7 +148,7 @@ function createWindow(port) {
     event.preventDefault();
     if (isAllowedExternalUrl(url)) void shell.openExternal(url).catch((error) => console.error("[external-link]", error));
   });
-  mainWindow.loadURL(localOrigin);
+  mainWindow.loadURL(`${localOrigin}/dashboard`);
 }
 
 function runScanner() {

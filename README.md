@@ -6,11 +6,11 @@
 
 O **Stray Linux** é um aplicativo desktop técnico para descoberta de jogos, compatibilidade Linux, benchmarks rastreáveis, Atlas de distribuições, Linux Setup, LinuxFix e perfis de hardware. A interface web é React/TypeScript, o backend é Express/tRPC e a persistência usa Drizzle com MySQL/TiDB. O aplicativo Electron usa SQLite local e não exige `DATABASE_URL` do usuário.
 
-## Versão 1.1.6
+## Versão 1.1.7
 
-A apresentação pública utiliza uma composição editorial própria com navegação vertical, brilhos discretos com suporte a redução de movimento e downloads verificáveis. A release 1.1.6 corrige o entrypoint empacotado: Vite e `vite.config.ts` agora existem apenas no entrypoint de desenvolvimento e não são incluídos no servidor executado pelo Pacman. O launcher também grava stdout, stderr e o caminho exato do log persistente antes de apresentar uma falha.
+A apresentação pública utiliza uma composição editorial própria com navegação vertical, brilhos discretos com suporte a redução de movimento e downloads verificáveis. A release 1.1.7 corrige o entrypoint empacotado: Vite e `vite.config.ts` agora existem apenas no entrypoint de desenvolvimento e não são incluídos no servidor executado pelo Pacman. O launcher também grava stdout, stderr e o caminho exato do log persistente antes de apresentar uma falha.
 
-Os caminhos públicos de download da série 1.1.6 respondem com redirecionamento HTTP para o artefato verificado da plataforma escolhida. Assim, futuras renovações de artefatos não quebram os links usados pela página, pelo README ou por instalações existentes.
+Os caminhos públicos de download da série 1.1.7 respondem com redirecionamento HTTP para o artefato verificado da plataforma escolhida. Assim, futuras renovações de artefatos não quebram os links usados pela página, pelo README ou por instalações existentes.
 
 O aplicativo empacotado verifica atualizações a partir de um feed HTTPS com metadados de integridade. A instalação da atualização exige confirmação antes de reiniciar. Em Linux, pacotes `.deb`, `.rpm`, `.pacman` e AppImage continuam respeitando o fluxo explícito da distribuição; o aplicativo não executa comandos do sistema automaticamente.
 

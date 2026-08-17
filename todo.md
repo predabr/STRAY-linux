@@ -376,3 +376,8 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Reproduzir o código 1 no launcher empacotado: o bundle de produção importava `vite.config.ts`, que por sua vez exigia `@builder.io/vite-plugin-jsx-loc`, ausente no pacote final.
 - [x] Auditar caminhos, permissões, dependências e recursos dentro do pacote Pacman arquivo por arquivo.
 - [x] Reconstruir a release 1.1.6 e validar a instalação equivalente ao Arch, a primeira abertura, o health check, o redirect e o SHA-256 antes da publicação.
+
+ - [x] Auditar por que o aplicativo instalado não apresenta todas as funcionalidades do app construído e comparar o pacote com o código atual.
+ - [x] Verificar entrypoint, rotas, assets, bundle, versão e navegação do app desktop completo.
+ - [x] Corrigir o empacotamento/roteamento caso o instalador esteja entregando somente a landing ou uma build incompleta.
+ - [x] Validar todas as telas e fluxos principais antes de reconstruir e publicar os instaladores novamente.

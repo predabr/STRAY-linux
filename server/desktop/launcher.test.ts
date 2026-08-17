@@ -35,3 +35,9 @@ describe("bootstrap desktop Linux", () => {
     expect(source).toContain("A causa técnica foi registrada em:");
   });
 });
+
+  it("abre o hub desktop em vez da landing pública", () => {
+    const source = mainSource();
+    expect(source).toContain('mainWindow.loadURL(`${localOrigin}/dashboard`);');
+    expect(source).not.toContain('mainWindow.loadURL(localOrigin);');
+  });
