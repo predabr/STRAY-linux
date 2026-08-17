@@ -516,3 +516,9 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Revisar arquivos rastreados, links públicos, referências de versão e documentação para a release 1.2.0.
 - [x] Atualizar as superfícies de apoio para não expor a chave Pix/CPF antes da configuração de checkout autenticado.
 - [x] Validar site, testes, build, downloads e sincronizar o estado atualizado no GitHub `main`.
+
+## Regressão de integridade dos instaladores
+- [x] Reproduzir cada download público, redirect e sidecar para identificar divergências de SHA, tamanho, URL ou comando.
+- [x] Corrigir sidecars, redirects, feeds e comandos de instalação que estejam apontando para artefatos divergentes.
+- [ ] Validar os cinco formatos com download completo, tamanho, SHA-256 e inspeção de pacote sem instalar no ambiente.
+- [ ] Publicar a correção de integridade e sincronizar GitHub `main`.

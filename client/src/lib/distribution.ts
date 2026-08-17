@@ -19,7 +19,17 @@ const installerCommand = (
   artifactName: string,
   installCommand: string,
   preparation = "",
-) => `bash -c '\nset -euo pipefail\numask 022\nartifact="${artifactPath}"\nchecksum="$(mktemp /tmp/stray-linux.XXXXXX.sha256)"\ncleanup() { rm -f "$artifact" "$checksum"; }\ntrap cleanup EXIT\n${preparation ? `${preparation}\\n` : ""}curl --fail --location --show-error --silent --retry 3 --retry-delay 2 "${distributionOrigin}${artifactUrl}" -o "$artifact"\ntest -s "$artifact"\ncurl --fail --location --show-error --silent --retry 3 --retry-delay 2 "${distributionOrigin}${checksumPath}" -o "$checksum"\ntest -s "$checksum"\nexpected="$(awk '\\''NF { print $1; exit }'\\'' "$checksum")"\nprintf '%s\\n' "$expected" | grep -Eq '\\''^[0-9a-fA-F]{64}$'\\''\nprintf '%s  %s\\n' "$expected" "$artifact" | sha256sum --check --status -\nprintf 'Stray Linux ${releaseManifest.version}: ${artifactName} verificado\\n'\n${installCommand}\n'`;
+) => [
+  preparation,
+  `curl --fail --location --show-error --silent --retry 5 --retry-all-errors --retry-delay 2 "${distributionOrigin}${artifactUrl}" -o "${artifactPath}"`,
+  `test -s "${artifactPath}"`,
+  `curl --fail --location --show-error --silent --retry 5 --retry-all-errors --retry-delay 2 "${distributionOrigin}${checksumPath}" -o "${artifactPath}.sha256"`,
+  `test -s "${artifactPath}.sha256"`,
+  `awk 'NF { print $1 "  ${artifactPath}"; exit }' "${artifactPath}.sha256" | sha256sum --check --status -`,
+  `printf 'Stray Linux ${releaseManifest.version}: ${artifactName} verificado\\n'`,
+  installCommand,
+  `rm -f "${artifactPath}" "${artifactPath}.sha256"`,
+].filter(Boolean).join(" && ");
 
 export const linuxInstallers = [
   { id: "debian", name: "Debian / Ubuntu", signal: "apt", description: "Debian, Ubuntu, Linux Mint e derivadas.", command: installerCommand(distributionAssets.deb, "/tmp/stray-linux.deb", releaseManifest.integrityAssets.deb, ".deb", "sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y") },
