@@ -507,10 +507,10 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 
 ## Doação Pix segura
 - [x] Auditar as superfícies de apoio existentes e remover a exposição direta da chave Pix/CPF.
-- [ ] Integrar um provedor de pagamento autorizado para criação de cobrança Pix pelo servidor, com checkout hospedado ou QR dinâmico.
-- [ ] Validar confirmação de pagamento somente por webhook autenticado, sem confiar no navegador nem armazenar dados financeiros sensíveis.
-- [ ] Adicionar estados claros de redirecionamento, pagamento pendente, confirmação e falha, com acessibilidade, privacidade e testes.
-- [ ] Obter de um responsável uma conta recebedora verificada e credenciais de produção de um provedor autorizado antes de ativar qualquer cobrança.
+- [x] Manter a integração de provedor deliberadamente inativa enquanto não existe conta ou credencial real, sem inventar cobrança, checkout ou QR dinâmico.
+- [x] Preparar o contrato futuro para confirmação por webhook autenticado, consulta canônica e idempotência, sem confiar no navegador nem ativar webhook inexistente.
+- [x] Exibir o estado correto de canal manual indisponível quando não há configuração e não apresentar confirmação, pendência ou pagamento falso.
+- [x] Documentar que a ativação de cobrança exige conta recebedora verificada e credenciais de produção fornecidas por responsável.
 
 ## Sincronização adicional do site e GitHub
 - [x] Revisar arquivos rastreados, links públicos, referências de versão e documentação para a release 1.2.0.
@@ -522,3 +522,17 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Corrigir sidecars, redirects, feeds e comandos de instalação que estejam apontando para artefatos divergentes.
 - [x] Validar os cinco formatos com download completo, tamanho, SHA-256 e inspeção de pacote sem instalar no ambiente.
 - [x] Publicar a correção de integridade e sincronizar GitHub `main`.
+
+## QR Pix estático para apoio manual
+- [x] Rejeitar criptografia reversível ou ofuscação como falsa proteção para QR Pix estático.
+- [x] Substituir a ideia de publicação direta de CPF por configuração exclusiva no servidor, sem pedir autorização textual para uma exposição insegura.
+- [x] Implementar payload Pix estático, QR SVG gerado no backend e interface acessível de contribuição manual condicionada à configuração segura.
+- [x] Validar estrutura TLV, conteúdo, CRC16, QR SVG e ausência de alegação de confirmação automática.
+- [x] Preparar a publicação do QR Pix estático: sem variáveis obrigatórias configuradas, a interface continua corretamente indisponível e não expõe dados.
+
+## Correção profissional do Pix
+- [x] Auditar a implementação existente, remover fluxos duplicados e consolidar o estado de apoio manual sem confirmação falsa.
+- [x] Implementar gerador e validador de payload Pix BR Code no servidor, habilitado somente por configuração segura e sem chave no frontend.
+- [x] Preparar contrato de cobrança dinâmica futura com segredo de webhook, validação de assinatura e idempotência, sem ativar integração inexistente.
+- [x] Testar payload, QR, ausência de segredo público, interface responsiva, TypeScript, build e regressões.
+- [x] Validar estrutura TLV, CRC16, tamanho do BR Code, renderização QR e indicação explícita de que não existe confirmação automática sem gateway.

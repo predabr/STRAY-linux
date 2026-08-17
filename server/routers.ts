@@ -12,6 +12,7 @@ import { distributionsRouter, gamesRouter, hardwareRouter, searchRouter } from "
 import { knowledgeRouter } from "./routers/knowledge";
 import { linuxFixCommunityRouter } from "./routers/linuxFixCommunity";
 import { userRouter } from "./routers/user";
+import { supportRouter } from "./routers/support";
 
 export const appRouter = router({
   system: systemRouter,
@@ -36,6 +37,7 @@ export const appRouter = router({
   knowledge: knowledgeRouter,
   linuxFixCommunity: linuxFixCommunityRouter,
   user: userRouter,
+  support: supportRouter,
 });
 
 export type AppRouter = typeof appRouter;
