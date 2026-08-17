@@ -18,8 +18,8 @@ describe("manifesto de distribuição pública", () => {
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).not.toContain("dpkg");
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).not.toContain("apt-get");
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).not.toContain("pacman -S stray-linux");
-    expect(linuxInstallers.find((installer) => installer.id === "debian")?.command).toContain("99b8feec23af5bc3ed4ee7937c65fc0ca186b26b53db8392dd707ef2e665f044");
-    expect(linuxInstallers.find((installer) => installer.id === "appimage")?.command).toContain("086e0fb32d433a20b3eafa5a54a5bb4b285818c1b6924a8f93f617423ad9c75b");
+    expect(linuxInstallers.find((installer) => installer.id === "debian")?.command).toContain("13114e6ac7dc8a6f5826cedeae0744947ae91b79f7815f2add228d2f03c81099");
+    expect(linuxInstallers.find((installer) => installer.id === "appimage")?.command).toContain("38d3964ddaf364e31407697ef979c6543be66a4bb806583c27f538000ee04c06");
     expect(linuxInstallers.find((installer) => installer.id === "appimage")?.command).toContain(appImageInstallPath);
   });
 });

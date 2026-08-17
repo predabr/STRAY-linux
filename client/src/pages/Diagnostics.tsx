@@ -11,6 +11,7 @@ import { Link } from "wouter";
 
 export default function Diagnostics() {
   const [scan, setScan] = useState<ScannerReport | null>(null);
+  const [rawScan, setRawScan] = useState<unknown>(null);
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [exportError, setExportError] = useState<string | null>(null);
@@ -18,11 +19,11 @@ export default function Diagnostics() {
   const desktopAvailable = Boolean(window.strayDesktop?.scanner);
   const databaseStatus = trpc.user.localDatabaseStatus.useQuery(undefined, { enabled: desktopAvailable, retry: false });
   const exportLocalData = trpc.user.exportLocalData.useQuery(undefined, { enabled: false, retry: false });
+  const createSnapshot = trpc.user.snapshots.create.useMutation();
   const run = async () => {
     if (!window.strayDesktop?.scanner) return;
     setRunning(true); setError(null);
-    try { setScan(scannerReportInput.parse(await window.strayDesktop.scanner.run())); }
-    catch { setError("O Scanner não retornou um relatório técnico válido. Nenhuma alteração foi aplicada ao sistema."); }
+    try { const candidate = await window.strayDesktop.scanner.run(); setRawScan(candidate); const parsed = scannerReportInput.safeParse(candidate); if (!parsed.success) { const issues = parsed.error.issues.slice(0, 4).map((issue) => (issue.path.join(".") || "relatório") + ": " + issue.message).join("; "); setScan(null); setError("O Scanner coletou dados, mas alguns campos variaram nesta máquina: " + issues + ". O relatório bruto foi preservado para exportação."); return; } setScan(parsed.data); await createSnapshot.mutateAsync({ label: "Scanner local " + new Date(parsed.data.generatedAt).toLocaleString("pt-BR"), scan: parsed.data }); } catch (cause) { setError(cause instanceof Error ? "Falha ao coletar o PC: " + cause.message : "O Scanner não conseguiu ler o sistema. Nenhuma alteração foi aplicada."); }
     finally { setRunning(false); }
   };
   const findings = scan ? assessLinuxGamingEnvironment(scan) : [];
@@ -34,7 +35,7 @@ export default function Diagnostics() {
     try {
       const result = await exportLocalData.refetch();
       if (!result.data) throw new Error("Não foi possível preparar o diagnóstico local.");
-      const payload = { schemaVersion: 1, kind: "stray-linux-diagnostic-export", exportedAt: new Date().toISOString(), currentScan: scan, localData: result.data };
+      const payload = { schemaVersion: 1, kind: "stray-linux-diagnostic-export", exportedAt: new Date().toISOString(), currentScan: scan, rawScan, localData: result.data };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const anchor = document.createElement("a");

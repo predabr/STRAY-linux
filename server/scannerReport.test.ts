@@ -48,3 +48,11 @@ describe("contrato do stray-scan", () => {
     expect(findings.every((finding) => finding.recommendedAction.length > 20)).toBe(true);
   });
 });
+
+describe("compatibilidade do payload real do scanner", () => {
+  it("aceita controladores detectados sem aceitar identificadores pessoais", () => {
+    const parsed = scannerReportInput.parse({ ...report, system: { ...report.system, controllers: { detected: true, source: "procfs/dev-input", devices: [{ id: "js0", name: "Controle USB", path: "/dev/input/js0" }] } } });
+    expect(parsed.system.controllers?.devices[0]?.id).toBe("js0");
+    expect(() => scannerReportInput.parse({ ...parsed, system: { ...parsed.system, username: "não-permitido" } })).toThrow();
+  });
+});

@@ -381,3 +381,12 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
  - [x] Verificar entrypoint, rotas, assets, bundle, versão e navegação do app desktop completo.
  - [x] Corrigir o empacotamento/roteamento caso o instalador esteja entregando somente a landing ou uma build incompleta.
  - [x] Validar todas as telas e fluxos principais antes de reconstruir e publicar os instaladores novamente.
+
+## Auditoria do scanner, IA e compatibilidade — 1.1.8
+
+ - [x] Tornar o scanner tolerante a variações reais de hardware, distro, driver, Wayland/X11 e campos opcionais, preservando o payload bruto.
+ - [x] Exibir e persistir o erro detalhado de coleta quando a validação falhar, em vez de mostrar somente uma mensagem genérica.
+ - [x] Persistir automaticamente o último snapshot local do scanner e disponibilizá-lo para diagnóstico.
+ - [x] Fazer a IA consultar o snapshot local atual antes de responder sobre hardware, distro, drivers e problemas do PC.
+ - [x] Unificar o app com o design preto e branco moderno do site usando tokens monocromáticos, sem prejudicar legibilidade ou acessibilidade.
+- [x] Validar instaladores, redirects, checksums, bootstrap desktop e fluxos críticos em uma matriz de regressão.

@@ -1,8 +1,8 @@
-version: 1.1.7
+version: 1.1.8
 files:
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.7-Setup_6697dee2.exe
-    sha512: gVCKkQ1rPyhgQeVskLTOXjfKNLt85YoGCk7G1ZE/QD8NWLhomrGb6Gh4NodxVlbT7IfbL280zzwam0PnzHWlxw==
-    size: 134365168
-path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.7-Setup_6697dee2.exe
-sha512: gVCKkQ1rPyhgQeVskLTOXjfKNLt85YoGCk7G1ZE/QD8NWLhomrGb6Gh4NodxVlbT7IfbL280zzwam0PnzHWlxw==
-releaseDate: '2026-08-16T23:08:00.000Z'
+  - url: Stray-Linux-1.1.8-Setup.exe
+    sha512: unqza+RlPDrfElR0nJ4DhNSAlMHrNGrjfB28Kj6TY9GDkP9IgkcSQewQ5Z0z8/L1QX2zO7CQGpFBrFoa5XQMKg==
+    size: 134368826
+path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.8-Setup_6e7a5524.exe
+sha512: unqza+RlPDrfElR0nJ4DhNSAlMHrNGrjfB28Kj6TY9GDkP9IgkcSQewQ5Z0z8/L1QX2zO7CQGpFBrFoa5XQMKg==
+releaseDate: '2026-08-17T02:20:00.000Z'

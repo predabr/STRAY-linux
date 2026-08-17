@@ -12,7 +12,7 @@ function readText(file) { try { return fs.readFileSync(file, "utf8"); } catch { 
 
 function commandOutput(command, args) {
   try {
-    const result = spawnSync(command, args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 2500, maxBuffer: 512 * 1024 });
+    const result = spawnSync(command, args, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 7000, maxBuffer: 512 * 1024 });
     if (result.status !== 0 || !result.stdout) return null;
     return result.stdout.trim() || null;
   } catch { return null; }

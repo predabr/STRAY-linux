@@ -1,17 +1,17 @@
-version: 1.1.7
+version: 1.1.8
 files:
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.7-x86_64_fe52445f.AppImage
-    sha512: yk0GjUMc1RidmZk2AzlBpocXrabP9PbEBwklcOho/IfavDMNFpdS6BkXyrvY6E4T81BOwXdSqTSMwNGGiKQ4+A==
-    size: 176132361
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.7-amd64_70177ac0.deb
-    sha512: JDiUoiKxZZ1mZMo62GFs8vl0LegcUw5C7LotPh1Z9h28uE2gwS/vpMtS9lKXkbXXbJoco790rVrpPYVPNbrJ4g==
-    size: 132577320
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.7-x86_64_cf14227a.rpm
-    sha512: clweAFX4mLwgGxXc755RNq4UgVNcgn4t9Qn1Kinby5TmsHOmKCuerwjRkdtMH/s3tUQ3XFSMao7wQXVVWMSvwg==
-    size: 108609429
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.7-x64_d6cadf98.pacman
-    sha512: fexFZ7h7h5+WAkjv6tKXWIDgazbQDq20vE8YEx9/urN8zK2fU3MJQc+XCn4z6EliD9VToh/peiBl2+PtVrLBDg==
-    size: 173352911
-path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.7-x86_64_fe52445f.AppImage
-sha512: yk0GjUMc1RidmZk2AzlBpocXrabP9PbEBwklcOho/IfavDMNFpdS6BkXyrvY6E4T81BOwXdSqTSMwNGGiKQ4+A==
-releaseDate: '2026-08-16T23:08:00.000Z'
+  - url: Stray-Linux-1.1.8-x86_64.AppImage
+    sha512: NgwZm2hw3BLFPWuLyHN2LpDvdgJkUAAeX4ulWKigVrx2WHV7/FF2sqiwRwG1SU2ASw3Fmw8qDBKdxMSacYTJ3Q==
+    size: 176132659
+  - url: Stray-Linux-1.1.8-amd64.deb
+    sha512: o1Cbl3qjqbZuzgrWeE9/TmZ/NPK7kf+Zj6Ed/WRy1VoWlqTVoWeJv8dHgVtUykz3LjLH131hNH0uXpFaQAtXLg==
+    size: 132578696
+  - url: Stray-Linux-1.1.8-x86_64.rpm
+    sha512: pnthBOFcGPNreI2Ib0/2neEHJl/l/sU+N8DQU9e+61YgRyMen8CMOAqZrHQRsiElg7zqqjj8pd/LLWW5/9SRMg==
+    size: 108630273
+  - url: Stray-Linux-1.1.8-x64.pacman
+    sha512: ZWyH11q/qRlNmmOKDNKBGgyw+IhgaFzo/tbTZFOl81aWeR9zr92Mh7wMmXm26s8rZcI++JpqdoH+7zS1jRUOhg==
+    size: 173353596
+path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.8-x86_64_e94bc095.AppImage
+sha512: NgwZm2hw3BLFPWuLyHN2LpDvdgJkUAAeX4ulWKigVrx2WHV7/FF2sqiwRwG1SU2ASw3Fmw8qDBKdxMSacYTJ3Q==
+releaseDate: '2026-08-17T02:20:00.000Z'
