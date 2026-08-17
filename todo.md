@@ -468,3 +468,7 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Atualizar README, arquivos de contribuição e metadados públicos para refletir arquitetura, segurança local, downloads e release atual.
 - [x] Ampliar o site institucional com conteúdo de produto, navegação e estados úteis sem simular resultados, compatibilidade ou telemetria.
 - [x] Validar tipos, testes, build, rotas públicas e sincronizar todos os arquivos atualizados no GitHub; `main` remoto corresponde ao checkpoint e `/`, `/download`, `/uninstall` e `/support` responderam 200.
+
+## Incidente de disponibilidade pública
+- [x] Reproduzir a falha de abertura do domínio público e identificar o ponto de indisponibilidade: uma dependência circular criada pela divisão manual de chunks falhava em `recharts` antes da montagem React.
+- [ ] Restaurar o site, validar as rotas públicas e registrar a correção no GitHub.

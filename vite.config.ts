@@ -167,20 +167,6 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (!id.includes("node_modules")) return;
-          if (id.includes("/node_modules/react/") || id.includes("/node_modules/react-dom/") || id.includes("/node_modules/scheduler/") || id.includes("/node_modules/wouter/")) return "framework";
-          if (id.includes("lucide-react")) return "icons";
-          if (id.includes("recharts") || id.includes("d3-")) return "charts";
-          if (id.includes("mermaid")) return "diagrams";
-          if (id.includes("framer-motion")) return "motion";
-          if (id.includes("@radix-ui")) return "primitives";
-          if (id.includes("@tanstack") || id.includes("@trpc") || id.includes("superjson")) return "data-client";
-        },
-      },
-    },
   },
   server: {
     host: true,
