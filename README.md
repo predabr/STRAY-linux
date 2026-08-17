@@ -6,13 +6,13 @@
 
 O **Stray Linux** combina um site institucional com um aplicativo desktop. O aplicativo é voltado a jogadores Linux que precisam entender o próprio ambiente, organizar a biblioteca local, consultar conteúdo técnico com origem visível e registrar sessões sem converter suposições em métricas. A interface utiliza React e TypeScript; o servidor usa Express/tRPC. No Electron, os dados operacionais ficam em um SQLite local, portanto **não é necessário fornecer `DATABASE_URL`**.
 
-## Versão 1.1.11
+## Versão 1.1.12
 
-A versão **1.1.11** consolida o aplicativo como uma estação local de diagnóstico para Linux gaming. A Biblioteca lê manifestos Steam e instalações Heroic locais para Epic, GOG e Amazon; títulos externos continuam exigindo escolha consciente do usuário. Quando o App ID ou o título encontra um registro no catálogo empacotado, o app declara o método da correspondência e apresenta detalhes, capa disponível e acesso ao GameHub. O Stray não lê credenciais, não modifica bibliotecas e não percorre o disco inteiro.
+A versão **1.1.12** consolida o aplicativo como uma estação local de diagnóstico para Linux gaming. GameHub e Biblioteca toleram metadados parciais, normalizam capas a uma proporção consistente e mantêm fallback quando não há mídia disponível. A Biblioteca lê manifestos Steam e instalações Heroic locais para Epic, GOG e Amazon; títulos externos continuam exigindo escolha consciente do usuário. Quando o App ID ou o título encontra um registro no catálogo empacotado, o app declara o método da correspondência e apresenta detalhes, capa disponível e acesso ao GameHub. O Stray não lê credenciais, não modifica bibliotecas e não percorre o disco inteiro.
 
 O Scanner é executado automaticamente no aplicativo desktop e também pode ser iniciado manualmente. Ele usa fallbacks locais seguros para distribuição, kernel, CPU, GPU, telas, armazenamento, sessão Wayland/X11, APIs gráficas, drivers e runtimes de gaming. Campos que uma ferramenta não conseguiu observar permanecem como **não informados**, em vez de serem adivinhados. Snapshots alimentam Meu PC, Diagnóstico, Stray AI e a visão geral, e continuam no dispositivo até uma exportação explícita.
 
-Os painéis técnicos foram redesenhados para separar inventário, disponibilidade, capacidade proporcional e ausência de dados. O aplicativo só traça comparações quando as unidades e as leituras são compatíveis. Performance Center registra sessões locais com perfil, CPU, GPU, driver, Proton, Wine e runtime; **isso não cria FPS, benchmark, nota de compatibilidade ou telemetria inventada**.
+Os painéis técnicos separam inventário, disponibilidade, capacidade proporcional e ausência de dados. Diagnóstico traz uma prévia de manutenção por família de pacotes — `pacman -Qdtq`, simulação `apt-get --simulate autoremove` ou `dnf --assumeno autoremove` quando aplicável — apenas para leitura. O aplicativo não remove pacotes, limpa cache, usa `sudo` ou solicita elevação automaticamente. Performance Center registra sessões locais com perfil, CPU, GPU, driver, Proton, Wine e runtime; também permite importar, por escolha explícita, um CSV/LOG/TXT MangoHud local de até 8 MB. A importação não é enviada, não vira benchmark público e só desenha FPS ou frame time se a série existir no arquivo.
 
 ## Capacidades
 
@@ -21,8 +21,8 @@ Os painéis técnicos foram redesenhados para separar inventário, disponibilida
 | **GameHub** | Catálogo pesquisável com 10.000 jogos, filtros e páginas de detalhe. | O snapshot não é uma cópia em tempo real da Steam. |
 | **Biblioteca local** | Descoberta de Steam, Heroic (Epic, GOG e Amazon) e pastas escolhidas; origem e método de correspondência declarados; detalhes quando o catálogo encontra registro. | Não lê contas, não modifica arquivos e só inicia via ação explícita do usuário. |
 | **Scanner e Meu PC** | Distro, kernel, CPU, GPU, RAM, armazenamento, tela, sessão, driver, APIs gráficas, runtimes e ferramentas gaming quando detectáveis. | Campos ausentes são apresentados como não informados; a coleta não é enviada automaticamente. |
-| **Diagnóstico** | Sinais técnicos, evidência observada, recomendação segura e nova verificação. | Não conclui causa raiz, compatibilidade ou desempenho sem evidência. |
-| **Performance Center** | Sessões locais com um retrato do perfil e runtime. | Duração de sessão não é benchmark. |
+| **Diagnóstico** | Sinais técnicos, evidência observada, recomendação segura, nova verificação e prévia consultiva de pacotes. | Não executa limpeza, remoção, cache purge ou elevação de privilégio. |
+| **Performance Center** | Sessões locais com retrato do perfil/runtime, gráfico de duração real e importação opt-in de log MangoHud. | Duração de sessão não é benchmark; FPS/frame time só aparecem se existirem no arquivo selecionado. |
 | **LinuxFix** | Triagem por sintoma, runbooks categorizados, risco, verificação, reversão, fonte e contribuições moderadas. | Comentários e confirmações nunca são criados artificialmente. |
 | **Atlas e Setup** | Conteúdo para 21 distribuições publicadas, guias por família, comandos copiáveis e fontes registradas. | Nenhum comando é apresentado como universal quando depende da distribuição. |
 | **Stray AI** | Respostas limitadas ao Stray Linux e gaming no Linux, com contexto de perfil, snapshot e conteúdo interno quando disponível. | Recusa perguntas fora de escopo e não executa comandos. |
@@ -54,7 +54,7 @@ Para remover o aplicativo ou entender a diferença entre removê-lo e apagar dad
 
 ## Atualizações
 
-O aplicativo consulta o feed HTTPS em `https://linuxtoys-ckuyvpj5.manus.space/updates/`. Ele não depende da API de Releases do GitHub. Quando existir uma atualização compatível, o usuário vê a proposta, confere o artefato e confirma antes do reinício. O feed contém metadados de versão e integridade; os links estáveis de download redirecionam ao artefato da release atual.
+O aplicativo consulta o feed HTTPS em `https://linuxtoys-ckuyvpj5.manus.space/updates/`. Ele não depende da API de Releases do GitHub. Quando existir uma atualização compatível, o usuário vê a proposta, confere o artefato e confirma antes do reinício. A release **1.1.12** publica feed, blockmap Windows e cinco artefatos com metadados SHA-512 do construtor; os links estáveis de download redirecionam ao arquivo atual.
 
 ## Diagnóstico de instalação e inicialização
 

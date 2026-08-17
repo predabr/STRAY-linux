@@ -1,8 +1,8 @@
-version: 1.1.11
+version: 1.1.12
 files:
-  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.11-Setup_40f600a6.exe
-    sha512: D6iFAYHcwbtwOCIttYtgzkVwIxwo67+B6fX6NcePgnncrFUDojfKRc58wBG5zqH2dEFGEJckYk864QOaseOY6w==
-    size: 134389477
-path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.11-Setup_40f600a6.exe
-sha512: D6iFAYHcwbtwOCIttYtgzkVwIxwo67+B6fX6NcePgnncrFUDojfKRc58wBG5zqH2dEFGEJckYk864QOaseOY6w==
-releaseDate: '2026-08-17T04:34:49.000Z'
+  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.12-Setup_f90915d2.exe
+    sha512: NutHMw0l/k9yUv60nMtjo8AgySq/QnlR4yspH1rjlGEHmNl95Yb9fZhoaaNscdcIfWt2T7A9KbpJAK+HvotOew==
+    size: 134394957
+path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.12-Setup_f90915d2.exe
+sha512: NutHMw0l/k9yUv60nMtjo8AgySq/QnlR4yspH1rjlGEHmNl95Yb9fZhoaaNscdcIfWt2T7A9KbpJAK+HvotOew==
+releaseDate: '2026-08-17T10:51:54.421Z'

@@ -97,10 +97,10 @@
   --stray-warning: oklch(0.81 0.14 84);
   --stray-danger: oklch(0.7 0.18 25);
   --stray-shadow: 0 20px 56px oklch(0.03 0.008 260 / 38%);
-  --primary: oklch(0.16 0.004 260);
-  --primary-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.92 0 0);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --primary: oklch(0.73 0.14 245);
+  --primary-foreground: oklch(0.16 0.01 260);
+  --sidebar-primary: oklch(0.73 0.14 245);
+  --sidebar-primary-foreground: oklch(0.16 0.01 260);
   --background: oklch(0.141 0.005 285.823);
   --foreground: oklch(0.85 0.005 65);
   --card: oklch(0.21 0.006 285.885);
@@ -118,11 +118,11 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.76 0.004 260);
-  --chart-1: oklch(0.28 0 0);
-  --chart-2: oklch(0.42 0 0);
-  --chart-3: oklch(0.58 0 0);
-  --chart-4: oklch(0.74 0 0);
-  --chart-5: oklch(0.9 0 0);
+  --chart-1: oklch(0.73 0.14 245);
+  --chart-2: oklch(0.72 0.14 175);
+  --chart-3: oklch(0.7 0.16 300);
+  --chart-4: oklch(0.78 0.14 82);
+  --chart-5: oklch(0.78 0.12 25);
   --sidebar: oklch(0.21 0.006 285.885);
   --sidebar-foreground: oklch(0.85 0.005 65);
   --sidebar-accent: oklch(0.274 0.006 286.033);
@@ -270,6 +270,19 @@
 
   .product-rail-status-dot {
     box-shadow: 0 0 0 4px oklch(0.7 0.15 155 / 8%), 0 0 14px oklch(0.7 0.15 155 / 46%);
+  }
+
+  :root[data-stray-density="compact"] .product-workspace main .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+
+  :root[data-stray-motion="reduce"] *,
+  :root[data-stray-motion="reduce"] *::before,
+  :root[data-stray-motion="reduce"] *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 
   .stray-surface {

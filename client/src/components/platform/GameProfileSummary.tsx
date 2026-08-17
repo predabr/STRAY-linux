@@ -12,12 +12,15 @@ export function GameIdentityMeta({ game }: { game: any }) {
 }
 
 export function GameProfileSummary({ game }: { game: any }) {
+  const compatibility = Array.isArray(game.compatibility) ? game.compatibility : [];
+  const fixes = Array.isArray(game.fixes) ? game.fixes : [];
+  const guides = Array.isArray(game.guides) ? game.guides : [];
   const areas = [
     { label: "Overview", value: "Registro de catálogo", icon: ShieldCheck, ready: true },
-    { label: "Compatibility", value: `${game.compatibility.length} registro(s)`, icon: CheckCircle2, ready: game.compatibility.length > 0 },
+    { label: "Compatibility", value: `${compatibility.length} registro(s)`, icon: CheckCircle2, ready: compatibility.length > 0 },
     { label: "Performance", value: "Benchmark Lab", icon: Gauge, ready: false },
-    { label: "LinuxFix", value: `${game.fixes.length} relacionado(s)`, icon: Wrench, ready: game.fixes.length > 0 },
-    { label: "Guides", value: `${game.guides.length} relacionado(s)`, icon: BookOpen, ready: game.guides.length > 0 },
+    { label: "LinuxFix", value: `${fixes.length} relacionado(s)`, icon: Wrench, ready: fixes.length > 0 },
+    { label: "Guides", value: `${guides.length} relacionado(s)`, icon: BookOpen, ready: guides.length > 0 },
     { label: "Community", value: "Reports moderados", icon: MessagesSquare, ready: false },
   ];
   return <section className="mt-5"><div className="mb-3 flex items-center justify-between gap-3"><div><p className="font-tech text-[10px] uppercase tracking-[0.14em] text-cyan-200">ÁREAS DO PERFIL</p><p className="mt-1 text-sm text-muted-foreground">A disponibilidade representa registros vinculados; não é uma avaliação do jogo.</p></div></div><div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">{areas.map((area) => { const Icon = area.icon; return <div key={area.label} className="flex items-center gap-3 rounded-xl border border-white/8 bg-card/60 p-3"><div className={`grid h-8 w-8 place-items-center rounded-lg ${area.ready ? "bg-emerald-400/10 text-emerald-300" : "bg-muted text-muted-foreground"}`}><Icon className="h-4 w-4" /></div><div className="min-w-0"><p className="font-tech text-[9px] uppercase tracking-[0.12em] text-muted-foreground">{area.label}</p><p className="mt-0.5 truncate text-sm font-medium">{area.value}</p></div></div>; })}</div></section>;

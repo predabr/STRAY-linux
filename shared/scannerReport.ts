@@ -11,6 +11,7 @@ export const scannerReportInput = z.object({
     kernelVersion: nullableText,
     desktopEnvironment: nullableText.optional(),
     architecture: nullableText.optional(),
+    privileges: z.object({ elevated: z.boolean(), mode: z.enum(["standard", "elevated"]) }).strict().optional(),
     cpu: z.object({ model: nullableText, architecture: nullableText.optional(), logicalCores: z.number().int().min(1).max(10_000).nullable().optional(), physicalCores: z.number().int().min(1).max(10_000).nullable().optional(), maxMhz: z.number().int().min(1).max(20_000).nullable().optional() }).strict(),
     gpu: z.object({ model: nullableText, vendor: nullableText.optional(), vramMb: z.number().int().min(0).max(1_000_000).nullable(), driverVersion: nullableText.optional(), adapters: z.array(z.object({ model: nullableText, vendor: nullableText, vramMb: z.number().int().min(0).max(1_000_000).nullable(), driverVersion: nullableText }).strict()).max(4).optional() }).strict(),
     memoryGb: z.number().int().min(0).max(1_000_000).nullable(),

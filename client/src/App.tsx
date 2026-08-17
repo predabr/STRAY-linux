@@ -125,6 +125,12 @@ function DesktopStartupScanner() {
     const desktop = window.strayDesktop;
     if (!desktop?.scanner || started.current) return;
     started.current = true;
+    try {
+      const preferences = JSON.parse(window.localStorage.getItem("stray-desktop-settings-v1") || "{}");
+      if (preferences.automaticScanner === false) return;
+    } catch {
+      // Preferências inválidas não impedem a leitura local padrão.
+    }
     const storageKey = "stray-linux:last-automatic-scan";
     const lastRun = Number(window.localStorage.getItem(storageKey) ?? 0);
     if (Date.now() - lastRun < 15 * 60 * 1000) return;

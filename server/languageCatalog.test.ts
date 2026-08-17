@@ -13,7 +13,7 @@ describe("catálogo de idiomas", () => {
 
   it("mantém os textos estáticos de interface completos em cada localidade", () => {
     const referenceKeys = Object.keys(staticTranslationCatalog["pt-BR"]).sort();
-    expect(referenceKeys).toHaveLength(481);
+    expect(referenceKeys).toHaveLength(493);
     for (const locale of SUPPORTED_LOCALES) {
       expect(Object.keys(staticTranslationCatalog[locale]).sort()).toEqual(referenceKeys);
       expect(Object.values(staticTranslationCatalog[locale]).every((text) => text.trim().length > 0)).toBe(true);

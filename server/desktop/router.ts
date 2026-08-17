@@ -121,7 +121,7 @@ export const desktopRouter = router({
     bySlug: publicProcedure.input(z.object({ slug: z.string() })).query(({ input }) => {
       const game = store().one<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE slug = ?", [input.slug]);
       if (!game) return null;
-      return { ...publicGame(game), description: game.shortDescription, compatibility: [], guides: [] };
+      return { ...publicGame(game), description: game.shortDescription, compatibility: [], guides: [], fixes: [] };
     }),
     showcase: publicProcedure.input(z.object({ limit: z.number().int().min(1).max(12).default(6) })).query(({ input }) => {
       const fields = "id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews";

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog, ipcMain, shell } = require("electron");
+const { app, BrowserWindow, dialog, ipcMain, Menu, shell } = require("electron");
 const { spawn } = require("node:child_process");
 const net = require("node:net");
 const fs = require("node:fs");
@@ -137,8 +137,10 @@ function createWindow(port) {
     minHeight: 720,
     backgroundColor: "#09090b",
     title: "Stray Linux",
+    autoHideMenuBar: true,
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true, webSecurity: true, preload: path.join(__dirname, "preload.cjs") },
   });
+  mainWindow.setMenuBarVisibility(false);
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (isAllowedExternalUrl(url)) void shell.openExternal(url).catch((error) => console.error("[external-link]", error));
     return { action: "deny" };
@@ -173,9 +175,27 @@ function scanLibrary() {
 }
 
 app.whenReady().then(async () => {
+  Menu.setApplicationMenu(null);
   ipcMain.handle("stray:scanner:run", async (event) => {
     if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação do scanner recusada.");
     return runScanner();
+  });
+  ipcMain.handle("stray:maintenance:preview", async (event) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de manutenção recusada.");
+    const maintenancePath = app.isPackaged ? path.join(process.resourcesPath, "app.asar", "desktop", "bin", "stray-maintenance.cjs") : path.join(app.getAppPath(), "desktop", "bin", "stray-maintenance.cjs");
+    const { previewMaintenance } = require(maintenancePath);
+    return previewMaintenance();
+  });
+  ipcMain.handle("stray:performance:pick-log", async (event) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de log recusada.");
+    const selected = await dialog.showOpenDialog(mainWindow, { title: "Selecionar log MangoHud", filters: [{ name: "Logs e CSV", extensions: ["csv", "log", "txt"] }], properties: ["openFile", "dontAddToRecent"] });
+    if (selected.canceled || !selected.filePaths[0]) return { cancelled: true, log: null };
+    const filePath = selected.filePaths[0];
+    const size = fs.statSync(filePath).size;
+    if (size > 8 * 1024 * 1024) throw new Error("O log selecionado excede o limite local de 8 MB.");
+    const performancePath = app.isPackaged ? path.join(process.resourcesPath, "app.asar", "desktop", "bin", "stray-performance-log.cjs") : path.join(app.getAppPath(), "desktop", "bin", "stray-performance-log.cjs");
+    const { parsePerformanceLog } = require(performancePath);
+    return { cancelled: false, log: parsePerformanceLog(filePath, fs.readFileSync(filePath, "utf8")) };
   });
   ipcMain.handle("stray:library:scan", async (event) => {
     if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação da biblioteca recusada.");

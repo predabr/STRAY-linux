@@ -430,3 +430,13 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Validar site, app, feeds, downloads e cinco instaladores após a sincronização final.
 - [x] Publicar checkpoint final e confirmar o estado sincronizado no GitHub.
 
+## Correções críticas de GameHub e sistema
+- [x] Corrigir a rota de detalhe de jogo para nunca acessar coleções indefinidas e proteger GameHub contra falhas de dados parciais.
+- [x] Normalizar proporções, carregamento e fallback de capas nas páginas GameHub e Biblioteca.
+- [x] Simplificar e recuperar o Stray AI para responder somente ao chat do aplicativo com contexto local disponível e erro acionável.
+- [x] Substituir Meu PC por uma visão completa, somente leitura e explicável das informações detectadas do sistema.
+- [x] Ampliar o Scanner com fallbacks seguros e indicação explícita do nível de privilégio, sem elevação automática.
+- [x] Expandir Diagnóstico com inventário de pacotes e prévia de limpeza por distribuição, sem executar nenhuma limpeza sem confirmação explícita.
+- [x] Reestruturar Performance com importação local opt-in de log MangoHud, gráfico de sessões reais e estados honestos quando não houver métricas.
+- [x] Substituir Favoritos por uma área operacional, aprimorar relatórios com console local somente leitura e corrigir configurações, idiomas, botões, imagens e menu nativo.
+- [x] Validar testes, build, desktop, pacotes, feeds, checksums, rotas públicas e publicação após as correções.

@@ -15,6 +15,7 @@ import { refreshSourceHandler } from "../scheduled/sourceRefresh";
 import { getOperationalStatus } from "../lib/operationalStatus";
 import { registerPublicApi } from "../publicApi";
 import { registerPublicDownloadRedirects } from "../publicDownloads";
+import { registerPublicUpdateRedirects } from "../publicUpdates";
 import { serverBindingHost } from "../lib/serverBinding";
 
 function isPortAvailable(port: number): Promise<boolean> {
@@ -57,6 +58,7 @@ export async function startServer(setupDevelopment?: (app: express.Express, serv
   if (process.env.DESKTOP_MODE !== "1") {
     registerPublicApi(app);
     registerPublicDownloadRedirects(app);
+    registerPublicUpdateRedirects(app);
   }
   app.get("/robots.txt", (req, res) => {
     const origin = `${req.protocol}://${req.get("host")}`;

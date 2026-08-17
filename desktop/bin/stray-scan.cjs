@@ -49,6 +49,11 @@ function detectMemoryGb() {
   return match ? Math.round(Number(match[1]) / 1024 / 1024) : null;
 }
 
+function detectPrivileges() {
+  const elevated = typeof process.getuid === "function" ? process.getuid() === 0 : false;
+  return { elevated, mode: elevated ? "elevated" : "standard" };
+}
+
 function inferGpuVendor(model) {
   if (/nvidia|geforce|quadro|tesla/i.test(model || "")) return "NVIDIA";
   if (/amd|radeon|ati/i.test(model || "")) return "AMD";
@@ -241,6 +246,7 @@ function createReport() {
       kernelVersion: firstLine("uname", ["-r"]),
       desktopEnvironment: detectDesktopEnvironment(),
       architecture: firstLine("uname", ["-m"]),
+      privileges: detectPrivileges(),
       cpu: detectCpu(),
       gpu,
       memoryGb: detectMemoryGb(),

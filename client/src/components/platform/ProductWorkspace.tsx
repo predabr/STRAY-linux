@@ -2,7 +2,7 @@ import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
-import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Camera, ChevronDown, Cloud, ExternalLink, Gamepad2, Gauge, Heart, LayoutDashboard, Library, MonitorCog, Network, Settings, ShieldCheck, Wrench } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Camera, ChevronDown, ExternalLink, Gamepad2, Gauge, LayoutDashboard, Library, MonitorCog, Network, Settings, ShieldCheck, Wrench } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 
@@ -22,7 +22,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
     { href: "/assistant", label: "Stray AI", icon: BotMessageSquare },
   ];
   const system: NavigationItem[] = [
-    { href: "/dashboard/pc", label: t("myPc"), icon: MonitorCog },
+    { href: "/dashboard/pc", label: "Informações do sistema", icon: MonitorCog },
     { href: "/scanner", label: t("scanner"), icon: ShieldCheck },
     { href: "/diagnostics", label: "Diagnóstico", icon: Activity },
     { href: "/performance", label: "Performance", icon: Activity },
@@ -43,10 +43,8 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
     { href: "/controllers", label: "Controles", icon: Gamepad2 },
   ];
   const personal: NavigationItem[] = [
-    { href: "/dashboard/favorites", label: t("favorites"), icon: Heart },
-    { href: "/dashboard/reports", label: t("reports"), icon: ShieldCheck },
+    { href: "/dashboard/activity", label: "Atividade local", icon: Activity },
     { href: "/settings", label: t("settings"), icon: Settings },
-    { href: "/sync", label: t("syncing"), icon: Cloud },
   ];
   if (user?.role === "moderator" || user?.role === "admin") personal.unshift({ href: "/moderation", label: t("reports"), icon: ShieldCheck });
   const bottomNavigation = [workspace[0]!, workspace[1]!, workspace[2]!, system[1]!];
