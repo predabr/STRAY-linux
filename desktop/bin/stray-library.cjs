@@ -177,8 +177,8 @@ function scanLocalLibrary(home) {
     externalId: String(game.appId),
     launcher: "steam",
     store: "steam",
-    coverUrl: null,
-    coverSource: null,
+    coverUrl: `https://cdn.cloudflare.steamstatic.com/steam/apps/${game.appId}/library_600x900.jpg`,
+    coverSource: "steam-public-cdn",
   }));
   return [...steam, ...scanHeroicLibrary(home)].sort((left, right) => left.name.localeCompare(right.name, "pt-BR"));
 }

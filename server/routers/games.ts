@@ -140,6 +140,16 @@ export const gamesRouter = router({
     };
   }),
 
+  resolveInstalled: publicProcedure.input(z.object({ steamAppIds: z.array(z.number().int().positive()).max(512).default([]), titles: z.array(z.string().trim().min(1).max(240)).max(512).default([]) })).query(async ({ input }) => {
+    const db = await requireDatabase();
+    if (!input.steamAppIds.length && !input.titles.length) return [];
+    const published = and(eq(games.status, "published"), isNull(games.deletedAt));
+    const rows = await db.select().from(games).where(published);
+    const steamIds = new Set(input.steamAppIds);
+    const titles = new Set(input.titles.map((title) => title.toLocaleLowerCase("pt-BR")));
+    return rows.filter((game) => steamIds.has(game.steamAppId ?? -1) || titles.has(game.title.toLocaleLowerCase("pt-BR")));
+  }),
+
   filterOptions: publicProcedure.query(async () => {
     const db = await requireDatabase();
     const genres = await db.select({ slug: tags.slug, name: tags.name }).from(tags).where(eq(tags.kind, "genre")).orderBy(asc(tags.name)).limit(100);

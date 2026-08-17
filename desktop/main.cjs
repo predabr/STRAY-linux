@@ -205,6 +205,15 @@ app.whenReady().then(async () => {
     await shell.openExternal(`steam://run/${appId}`);
     return { launched: true };
   });
+  ipcMain.handle("stray:library:reveal", async (event, gameId) => {
+    if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de pasta recusada.");
+    if (typeof gameId !== "string") throw new Error("Identificador de jogo inválido.");
+    const game = scanLibrary().games.find((entry) => entry.id === gameId);
+    if (!game?.installDir) throw new Error("A pasta de instalação deste jogo não foi encontrada.");
+    const message = await shell.openPath(game.installDir);
+    if (message) throw new Error(message);
+    return { revealed: true };
+  });
   ipcMain.handle("stray:updates:status", async (event) => {
     if (!mainWindow || event.sender.id !== mainWindow.webContents.id) throw new Error("Solicitação de atualização recusada.");
     return desktopUpdater?.getStatus() ?? { state: "unavailable", detail: "Atualizações não foram inicializadas." };

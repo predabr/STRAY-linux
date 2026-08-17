@@ -14,7 +14,9 @@ describe("biblioteca local", () => {
     expect(component).toContain("stray-library-card");
     expect(component).toContain("Steam");
     expect(component).toContain("Heroic");
-    expect(component).toContain("Nenhuma informação é enviada à rede.");
+    expect(component).toContain("Nenhum catálogo, conta, token ou lista de jogos é enviado para fora do dispositivo.");
+    expect(component).toContain("games.resolveInstalled");
+    expect(component).toContain("onReveal");
     expect(component).not.toContain("biblioteca sincronizada");
   });
 });

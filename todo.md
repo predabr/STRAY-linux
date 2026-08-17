@@ -390,3 +390,17 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
  - [x] Fazer a IA consultar o snapshot local atual antes de responder sobre hardware, distro, drivers e problemas do PC.
  - [x] Unificar o app com o design preto e branco moderno do site usando tokens monocromáticos, sem prejudicar legibilidade ou acessibilidade.
 - [x] Validar instaladores, redirects, checksums, bootstrap desktop e fluxos críticos em uma matriz de regressão.
+
+## Revisão completa solicitada — desktop, dados e experiência
+- [ ] Auditar detalhes do tema preto e branco, corrigir a capa/arte de abertura do aplicativo e alinhar o shell interno ao site.
+- [ ] Corrigir a IA para usar fatos do PC, apresentar contexto consultado e retornar falhas acionáveis.
+- [x] Corrigir catálogo, GameHub e descoberta automática de jogos instalados no computador.
+- [x] Completar nomes, capas, descrições, detalhes navegáveis e ação de abrir jogos detectados.
+- [x] Reorganizar e ampliar o LinuxFix com diagnósticos, causas, passos específicos por distro e estados claros.
+- [x] Adicionar controles reais de Performance para CPU, GPU, Proton, driver e perfil de execução.
+- [x] Tornar o Scanner automático na inicialização, sem apagar a execução manual e sem bloquear a interface.
+- [x] Corrigir Diagnóstico e Meu PC para persistir e permitir selecionar CPU/GPU quando houver alternativas reais.
+- [x] Substituir a visão geral genérica por um painel alimentado por dados locais, jogos e alertas reais.
+- [x] Melhorar o fluxo de download do site, os feeds de atualização e a estratégia de atualização automática do aplicativo.
+- [x] Atualizar o README do GitHub com arquitetura, recursos, instalação, atualizações, limitações e diagnóstico.
+- [x] Validar no pacote desktop e nos cinco instaladores todos os fluxos corrigidos antes de publicar.

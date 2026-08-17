@@ -4,11 +4,11 @@ import { publicDownloadTargets } from "./publicDownloads";
 describe("downloads públicos estáveis", () => {
   it("mantém URLs estáveis por plataforma apontando aos cinco artefatos validados da release", () => {
     expect(publicDownloadTargets).toEqual({
-      "/downloads/stray-linux/windows-x64.exe": "/manus-storage/Stray-Linux-1.1.8-Setup_6e7a5524.exe",
-      "/downloads/stray-linux/debian-amd64.deb": "/manus-storage/Stray-Linux-1.1.8-amd64_7eadaea1.deb",
-      "/downloads/stray-linux/rpm-x64.rpm": "/manus-storage/Stray-Linux-1.1.8-x86_64_4e0c635e.rpm",
-      "/downloads/stray-linux/arch-x64.pacman": "/manus-storage/Stray-Linux-1.1.8-x64_af068a90.pacman",
-      "/downloads/stray-linux/linux-x64.AppImage": "/manus-storage/Stray-Linux-1.1.8-x86_64_e94bc095.AppImage",
+      "/downloads/stray-linux/windows-x64.exe": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/hvWZjdCpcxjegBwb.exe",
+      "/downloads/stray-linux/debian-amd64.deb": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/sewnpfplypuhscRe.deb",
+      "/downloads/stray-linux/rpm-x64.rpm": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/VGQPLXStHfkTFUPq.rpm",
+      "/downloads/stray-linux/arch-x64.pacman": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/aCeCPSwiDsOpwktV.pacman",
+      "/downloads/stray-linux/linux-x64.AppImage": "https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/DtVhWQVFDrpSfXbT.AppImage",
     });
   });
 });

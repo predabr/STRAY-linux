@@ -9,10 +9,51 @@ const localUser = { id: 1, openId: "desktop-local-user", name: "Usuário local",
 const paginate = <T>(data: T[], page: number, pageSize: number) => ({ data: data.slice((page - 1) * pageSize, page * pageSize), meta: { page, pageSize, total: data.length } });
 const store = () => getDesktopStore();
 
+function steamCoverUrl(appId: number | null | undefined) {
+  return appId ? `https://cdn.cloudflare.steamstatic.com/steam/apps/${appId}/library_600x900.jpg` : null;
+}
+
+function publicGame(game: any) {
+  return {
+    ...game,
+    coverImageUrl: game.coverImageUrl || steamCoverUrl(game.steamAppId),
+    platforms: game.steamAppId ? [{ id: game.id, platform: "steam", antiCheat: null }] : [],
+    tags: [],
+  };
+}
+
+function stableHardwareId(kind: string, value: string) {
+  let hash = 0;
+  for (const character of `${kind}:${value}`) hash = ((hash * 31) + character.charCodeAt(0)) >>> 0;
+  return 1_000_000 + (hash % 900_000_000);
+}
+
+function detectedHardwareOptions() {
+  const options = new Map<number, { id: number; kind: "cpu" | "gpu" | "ram"; manufacturer: string; model: string; source: string }>();
+  const snapshots = store().all<{ reportJson: string }>("SELECT report_json AS reportJson FROM scanner_snapshots ORDER BY created_at DESC LIMIT 24");
+  for (const snapshot of snapshots) {
+    try {
+      const report = scannerReportInput.parse(JSON.parse(snapshot.reportJson));
+      const add = (kind: "cpu" | "gpu" | "ram", manufacturer: string | null | undefined, model: string | null | undefined) => {
+        if (!model?.trim()) return;
+        const id = stableHardwareId(kind, model);
+        options.set(id, { id, kind, manufacturer: manufacturer?.trim() || "Detectado localmente", model: model.trim(), source: "scanner-local" });
+      };
+      add("cpu", null, report.system.cpu.model);
+      add("gpu", report.system.gpu.vendor, report.system.gpu.model);
+      if (report.system.memoryGb) add("ram", "Memória detectada", `${report.system.memoryGb} GB RAM`);
+      for (const adapter of report.system.gpu.adapters ?? []) add("gpu", adapter.vendor, adapter.model);
+    } catch {
+      // Snapshots antigos ou inválidos não impedem o uso das demais leituras locais.
+    }
+  }
+  return Array.from(options.values()).sort((left, right) => left.kind.localeCompare(right.kind) || left.model.localeCompare(right.model, "pt-BR"));
+}
+
 function gameList(input: { q?: string; page: number; pageSize: number }) {
   const query = input.q?.trim() ? `%${input.q.trim()}%` : "%";
-  const games = store().all<any>("SELECT id, slug, title, description AS shortDescription, cover_image_url AS coverImageUrl, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE title LIKE ? ORDER BY source_positive_reviews DESC, title", [query]);
-  return paginate(games.map((game) => ({ ...game, platforms: game.steamAppId ? [{ id: game.id, platform: "steam", antiCheat: null }] : [], tags: [] })), input.page, input.pageSize);
+  const games = store().all<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE title LIKE ? ORDER BY source_positive_reviews DESC, title", [query]);
+  return paginate(games.map(publicGame), input.page, input.pageSize);
 }
 
 function wikiList(input: { q?: string; page: number; pageSize: number }) {
@@ -57,9 +98,22 @@ export const desktopRouter = router({
   games: router({
     list: publicProcedure.input(pageInput.extend({ q: z.string().optional(), distributionId: z.number().optional(), gpuId: z.number().optional(), cpuId: z.number().optional(), compatibility: z.string().optional(), platform: z.string().optional(), genre: z.string().optional(), multiplayer: z.boolean().optional(), antiCheat: z.enum(["has", "none"]).optional(), tagSlugs: z.array(z.string()).optional(), sort: z.string().optional() })).query(({ input }) => gameList(input)),
     bySlug: publicProcedure.input(z.object({ slug: z.string() })).query(({ input }) => {
-      const game = store().one<any>("SELECT id, slug, title, description AS shortDescription, cover_image_url AS coverImageUrl, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE slug = ?", [input.slug]);
+      const game = store().one<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE slug = ?", [input.slug]);
       if (!game) return null;
-      return { ...game, platforms: game.steamAppId ? [{ id: game.id, platform: "steam", antiCheat: null }] : [], tags: [], compatibility: [], guides: [] };
+      return { ...publicGame(game), description: game.shortDescription, compatibility: [], guides: [] };
+    }),
+    showcase: publicProcedure.input(z.object({ limit: z.number().int().min(1).max(12).default(6) })).query(({ input }) => {
+      const fields = "id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews";
+      return {
+        featured: store().all<any>(`SELECT ${fields} FROM games ORDER BY source_positive_reviews DESC, title LIMIT ?`, [input.limit]).map(publicGame),
+        recent: store().all<any>(`SELECT ${fields} FROM games ORDER BY id DESC LIMIT ?`, [input.limit]).map(publicGame),
+      };
+    }),
+    resolveInstalled: publicProcedure.input(z.object({ steamAppIds: z.array(z.number().int().positive()).max(512).default([]), titles: z.array(z.string().trim().min(1).max(240)).max(512).default([]) })).query(({ input }) => {
+      const steamIds = new Set(input.steamAppIds);
+      const titles = new Set(input.titles.map((title) => title.toLocaleLowerCase("pt-BR")));
+      const rows = store().all<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games");
+      return rows.filter((game) => steamIds.has(game.steamAppId) || titles.has(String(game.title).toLocaleLowerCase("pt-BR"))).map(publicGame);
     }),
     filterOptions: publicProcedure.query(() => ({ genres: [] })),
   }),
@@ -71,7 +125,11 @@ export const desktopRouter = router({
     }),
     versions: publicProcedure.input(z.object({ distributionId: z.number() })).query(() => []),
   }),
-  hardware: router({ list: publicProcedure.input(pageInput.extend({ q: z.string().optional(), kind: z.string().optional() })).query(({ input }) => ({ data: [], meta: { page: input.page, pageSize: input.pageSize, total: 0 } })) }),
+  hardware: router({ list: publicProcedure.input(pageInput.extend({ q: z.string().optional(), kind: z.string().optional() })).query(({ input }) => {
+    const term = input.q?.trim().toLocaleLowerCase("pt-BR");
+    const options = detectedHardwareOptions().filter((item) => (!input.kind || item.kind === input.kind) && (!term || `${item.manufacturer} ${item.model}`.toLocaleLowerCase("pt-BR").includes(term)));
+    return paginate(options, input.page, input.pageSize);
+  }) }),
   knowledge: router({
     wiki: router({
       list: publicProcedure.input(pageInput.extend({ q: z.string().optional() })).query(({ input }) => wikiList(input)),
@@ -97,7 +155,7 @@ export const desktopRouter = router({
   search: router({
     query: publicProcedure.input(z.object({ q: z.string().min(1), limit: z.number().int().min(1).max(20).default(6) })).query(({ input }) => {
       const term = `%${input.q}%`;
-      return { games: store().all<any>("SELECT id, slug, title, description FROM games WHERE title LIKE ? ORDER BY title LIMIT ?", [term, input.limit]), distributions: store().all<any>("SELECT id, slug, name AS title, family AS description FROM distributions WHERE name LIKE ? ORDER BY name LIMIT ?", [term, input.limit]), hardware: [], guides: store().all<any>("SELECT id, slug, title, description FROM setup_guides WHERE title LIKE ? ORDER BY title LIMIT ?", [term, input.limit]) };
+      return { games: store().all<any>("SELECT id, slug, title, description FROM games WHERE title LIKE ? ORDER BY title LIMIT ?", [term, input.limit]), distributions: store().all<any>("SELECT id, slug, name AS title, family AS description FROM distributions WHERE name LIKE ? ORDER BY name LIMIT ?", [term, input.limit]), hardware: detectedHardwareOptions().filter((item) => `${item.manufacturer} ${item.model}`.toLocaleLowerCase("pt-BR").includes(input.q.toLocaleLowerCase("pt-BR"))).slice(0, input.limit), guides: store().all<any>("SELECT id, slug, title, description FROM setup_guides WHERE title LIKE ? ORDER BY title LIMIT ?", [term, input.limit]) };
     }),
   }),
   benchmarks: router({
@@ -156,8 +214,10 @@ export const desktopRouter = router({
     exportLocalData: publicProcedure.query(() => store().exportLocalData()),
     localDatabaseStatus: publicProcedure.query(() => getDesktopStoreHealth()),
     reports: router({ list: publicProcedure.query(() => store().all<any>("SELECT id, subject_type AS subjectType, subject_id AS subjectId, type, description, status, created_at AS createdAt FROM reports ORDER BY created_at DESC")), create: publicProcedure.input(z.any()).mutation(({ input }) => { const result = store().run("INSERT INTO reports (subject_type, subject_id, type, description) VALUES (?, ?, ?, ?)", [input.subjectType, input.subjectId, input.type, input.description]); return { id: Number(result.lastInsertRowid), status: "open" as const }; }) }),
-    hardwareOptions: publicProcedure.query(() => []), compatibilityForActiveProfile: publicProcedure.input(z.object({ gameId: z.number() })).query(() => ({ profile: null, records: [] })),
+    hardwareOptions: publicProcedure.query(() => detectedHardwareOptions()),
+    compatibilityForActiveProfile: publicProcedure.input(z.object({ gameId: z.number() })).query(() => ({ profile: store().one<any>("SELECT id, name, cpu_id AS cpuId, gpu_id AS gpuId, distribution_id AS distributionId, kernel_version AS kernelVersion, driver_version AS driverVersion, proton_version AS protonVersion FROM profiles WHERE is_active = 1 ORDER BY updated_at DESC LIMIT 1") ?? null, records: [] })),
+    recommendations: publicProcedure.query(() => ({ profile: store().one<any>("SELECT id, name, cpu_id AS cpuId, gpu_id AS gpuId, distribution_id AS distributionId, kernel_version AS kernelVersion, driver_version AS driverVersion, proton_version AS protonVersion FROM profiles WHERE is_active = 1 ORDER BY updated_at DESC LIMIT 1") ?? null, items: [] })),
   }),
-  chat: router({ history: publicProcedure.query(() => []), ask: publicProcedure.input(z.object({ question: z.string().trim().min(2).max(2500) })).mutation(({ input }) => desktopAiAnswer(input.question)) }),
+  chat: router({ history: publicProcedure.query(() => []), ask: publicProcedure.input(z.object({ question: z.string().trim().min(2).max(2500) })).mutation(({ input }) => desktopAiAnswer(input.question)), askPublic: publicProcedure.input(z.object({ question: z.string().trim().min(2).max(2500) })).mutation(({ input }) => desktopAiAnswer(input.question)) }),
   admin: router({ overview: publicProcedure.query(() => ({ ...store().counts(), hardware: 0, pendingBenchmarks: store().one<{ count: number }>("SELECT count(*) as count FROM benchmarks WHERE verification_status = 'submitted'")?.count ?? 0, openReports: store().one<{ count: number }>("SELECT count(*) as count FROM reports WHERE status = 'open'")?.count ?? 0 })), listUsers: publicProcedure.query(() => [localUser]) }),
 });

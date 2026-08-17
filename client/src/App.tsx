@@ -1,13 +1,14 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Route, Switch, useLocation } from "wouter";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useRef } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { RouteMeta } from "./components/RouteMeta";
 import { StrayEntryGate } from "./components/StrayEntryGate";
 import { ProductWorkspace } from "./components/platform/ProductWorkspace";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
+import { trpc } from "./lib/trpc";
 
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const DistroAtlas = lazy(() => import("@/pages/DistroAtlas"));
@@ -103,11 +104,42 @@ function App() {
 
 function ApplicationSurface() {
   const [location] = useLocation();
-  if (location === "/") return <Home />;
-  if (location === "/download") return <DownloadPage />;
-  if (location === "/uninstall") return <Uninstall />;
-  if (location === "/support") return <Support />;
-  return <StrayEntryGate><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate>;
+  const publicPage = location === "/" || location === "/download" || location === "/uninstall" || location === "/support";
+  if (publicPage) return location === "/" ? <Home /> : location === "/download" ? <DownloadPage /> : location === "/uninstall" ? <Uninstall /> : <Support />;
+  return <StrayEntryGate><DesktopStartupScanner /><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate>;
+}
+
+function DesktopStartupScanner() {
+  const started = useRef(false);
+  const utils = trpc.useUtils();
+  const saveSnapshot = trpc.user.snapshots.create.useMutation({
+    onSuccess: () => {
+      void utils.user.snapshots.list.invalidate();
+      void utils.user.profiles.list.invalidate();
+      void utils.user.hardwareOptions.invalidate();
+      void utils.user.dashboard.invalidate();
+    },
+  });
+
+  useEffect(() => {
+    const desktop = window.strayDesktop;
+    if (!desktop?.scanner || started.current) return;
+    started.current = true;
+    const storageKey = "stray-linux:last-automatic-scan";
+    const lastRun = Number(window.localStorage.getItem(storageKey) ?? 0);
+    if (Date.now() - lastRun < 15 * 60 * 1000) return;
+    void desktop.scanner.run()
+      .then((rawScan: unknown) => {
+        const scan = rawScan as Parameters<typeof saveSnapshot.mutate>[0]["scan"];
+        window.localStorage.setItem(storageKey, String(Date.now()));
+        saveSnapshot.mutate({ label: `Leitura automática ${new Date().toLocaleString("pt-BR")}`, scan });
+      })
+      .catch(() => {
+        // A coleta manual continua disponível; a inicialização não é bloqueada por uma leitura parcial.
+      });
+  }, [saveSnapshot]);
+
+  return null;
 }
 
 export default App;

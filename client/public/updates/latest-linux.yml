@@ -1,17 +1,17 @@
-version: 1.1.8
+version: 1.1.9
 files:
-  - url: Stray-Linux-1.1.8-x86_64.AppImage
-    sha512: NgwZm2hw3BLFPWuLyHN2LpDvdgJkUAAeX4ulWKigVrx2WHV7/FF2sqiwRwG1SU2ASw3Fmw8qDBKdxMSacYTJ3Q==
-    size: 176132659
-  - url: Stray-Linux-1.1.8-amd64.deb
-    sha512: o1Cbl3qjqbZuzgrWeE9/TmZ/NPK7kf+Zj6Ed/WRy1VoWlqTVoWeJv8dHgVtUykz3LjLH131hNH0uXpFaQAtXLg==
-    size: 132578696
-  - url: Stray-Linux-1.1.8-x86_64.rpm
-    sha512: pnthBOFcGPNreI2Ib0/2neEHJl/l/sU+N8DQU9e+61YgRyMen8CMOAqZrHQRsiElg7zqqjj8pd/LLWW5/9SRMg==
-    size: 108630273
-  - url: Stray-Linux-1.1.8-x64.pacman
-    sha512: ZWyH11q/qRlNmmOKDNKBGgyw+IhgaFzo/tbTZFOl81aWeR9zr92Mh7wMmXm26s8rZcI++JpqdoH+7zS1jRUOhg==
-    size: 173353596
-path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.8-x86_64_e94bc095.AppImage
-sha512: NgwZm2hw3BLFPWuLyHN2LpDvdgJkUAAeX4ulWKigVrx2WHV7/FF2sqiwRwG1SU2ASw3Fmw8qDBKdxMSacYTJ3Q==
-releaseDate: '2026-08-17T02:20:00.000Z'
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/DtVhWQVFDrpSfXbT.AppImage
+    sha512: FMBdy8R4jvE1eTqeR5dpmv3PR8qqSLP8t0bacuCCfOovZnFIVUpMakX3r02uVkiCA9L/YsifRsHfbXBJ7nyuPA==
+    size: 176136535
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/sewnpfplypuhscRe.deb
+    sha512: iJCkzkBiRjURFJfvSG7mqQV5BvSyOeW2XOPuiidIpJWLdAzpZ6Ml6zbuw/sTybChKQMrGFlDmebguKPVo2jBkw==
+    size: 132582348
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/VGQPLXStHfkTFUPq.rpm
+    sha512: HLO3IOkEURMzF4gTNkQq9m1npdBbqeBKIvT/sAsa0NVbQ4cL4qaIWUI7Hq2WROqQPzRHqnNVFZjMDY9s2g6/mg==
+    size: 108607693
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/aCeCPSwiDsOpwktV.pacman
+    sha512: BE1Rz6fYseacCgPLbNnY5m+S8lr6IyWCQxcIPqdb3g6ipY3z2LeutJVvFV9m4d7bTR8Hnnl4WYszjnMFcW9Rvw==
+    size: 173361399
+path: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/DtVhWQVFDrpSfXbT.AppImage
+sha512: FMBdy8R4jvE1eTqeR5dpmv3PR8qqSLP8t0bacuCCfOovZnFIVUpMakX3r02uVkiCA9L/YsifRsHfbXBJ7nyuPA==
+releaseDate: '2026-08-17T03:15:33.000Z'

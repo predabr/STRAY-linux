@@ -25,4 +25,16 @@ describe("contrato local do desktop", () => {
     expect(Array.isArray(snapshots)).toBe(true);
     expect(["ready", "recovered", "unavailable"]).toContain(health.status);
   });
+
+  it("expõe jogos do catálogo local e resolve instalações por título", async () => {
+    const caller = desktopRouter.createCaller({} as never);
+    const showcase = await caller.games.showcase({ limit: 1 });
+    expect(showcase.featured).toHaveLength(1);
+    const game = showcase.featured[0];
+    expect(game.title).toBeTruthy();
+    expect(game.coverImageUrl).toContain("steamstatic.com/steam/apps/");
+    const resolved = await caller.games.resolveInstalled({ steamAppIds: [], titles: [game.title] });
+    expect(resolved).toHaveLength(1);
+    expect(resolved[0]).toMatchObject({ id: game.id, slug: game.slug, title: game.title });
+  });
 });

@@ -28,10 +28,11 @@ describe("landing pública", () => {
 
   it("mantém a página inicial fora do shell operacional", () => {
     const app = read("client/src/App.tsx");
-    expect(app).toContain('if (location === "/") return <Home />;');
+    expect(app).toContain('const publicPage = location === "/" || location === "/download" || location === "/uninstall" || location === "/support";');
+    expect(app).toContain('if (publicPage) return location === "/" ? <Home />');
     expect(app).toContain('const DownloadPage = lazy(() => import("@/pages/Home")');
-    expect(app).toContain('if (location === "/download") return <DownloadPage />;');
-    expect(app).toContain('if (location === "/uninstall") return <Uninstall />;');
+    expect(app).toContain('location === "/download" ? <DownloadPage />');
+    expect(app).toContain('location === "/uninstall" ? <Uninstall />');
     expect(app).toContain("<ProductWorkspace><Router /></ProductWorkspace>");
   });
 

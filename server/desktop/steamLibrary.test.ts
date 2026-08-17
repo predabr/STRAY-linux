@@ -25,8 +25,8 @@ describe("biblioteca Steam local", () => {
       installationType: "flatpak",
       launcher: "steam",
       store: "steam",
-      coverUrl: null,
-      coverSource: null,
+      coverUrl: "https://cdn.cloudflare.steamstatic.com/steam/apps/620/library_600x900.jpg",
+      coverSource: "steam-public-cdn",
     }]);
   });
 });
