@@ -411,3 +411,8 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Ampliar o Scanner Linux com mais fallbacks seguros para GPU, monitores, armazenamento, runtimes e ferramentas de gaming sem coletar ou enviar dados pessoais.
 - [x] Fortalecer a descoberta de biblioteca e o enriquecimento do catálogo local para Steam, Heroic e jogos externos, mantendo capas e metadados com origem rastreável.
 - [x] Validar testes, build, pacote desktop, feeds de atualização e GitHub após a revisão.
+
+## Pesquisa de evolução visual e produto
+- [x] Pesquisar referências de UX para dashboards técnicos, launchers de jogos, diagnóstico local e visualização honesta de hardware.
+- [x] Avaliar padrões de gráficos, botões, estados vazios, navegação e microinterações por impacto e adequação ao Stray Linux.
+- [x] Converter a pesquisa em roteiro priorizado de melhorias implementáveis, sem introduzir benchmarks ou compatibilidades inventados.
