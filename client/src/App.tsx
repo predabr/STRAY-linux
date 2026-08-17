@@ -48,6 +48,7 @@ const SearchPage = lazy(() => import("@/pages/Search"));
 const Scanner = lazy(() => import("@/pages/Scanner"));
 const Status = lazy(() => import("@/pages/Status"));
 const Support = lazy(() => import("@/pages/Support"));
+const ProjectSupport = lazy(() => import("@/pages/ProjectSupport"));
 const Sync = lazy(() => import("@/pages/Sync"));
 const Uninstall = lazy(() => import("@/pages/Uninstall"));
 const WindowsHub = lazy(() => import("@/pages/WindowsHub"));
@@ -58,7 +59,8 @@ function Router() {
     <Route path="/games" component={Games} />
     <Route path="/games/:slug" component={GameDetail} />
     <Route path="/benchmark" component={Benchmark} />
-    <Route path="/compare" component={Compare} />
+    <Route path="/support" component={Support} />
+    <Route path="/project-support" component={ProjectSupport} />
     <Route path="/controllers" component={Controllers} />
     <Route path="/diagnostics" component={Diagnostics} />
     <Route path="/snapshots" component={Snapshots} />

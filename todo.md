@@ -478,3 +478,8 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Adicionar templates de issue para bug, segurança e conteúdo/distribuição, solicitando evidência sem expor dados privados.
 - [x] Criar auditoria reproduzível dos downloads Arch com validação de redirect, sidecar SHA-256 e inspeção do pacote; executar a validação local e documentar que o sandbox não é Arch.
 - [x] Validar workflows e templates, salvar checkpoint e sincronizar tudo no GitHub; workflows remotos confirmados e `main` está no commit `074e7d5`.
+
+## Área de apoio ao projeto
+- [x] Implementar seção destacada de apoio no site e no app, com mensagem transparente, GitHub oficial e chave Pix copiável.
+- [x] Tratar a chave Pix-CPF como dado sensível: exibir aviso, copiar por ação explícita e não processar pagamentos automaticamente.
+- [x] Validar acessibilidade, link oficial, cópia da chave, traduções, testes e publicação da área de apoio.

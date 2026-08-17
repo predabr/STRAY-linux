@@ -2,7 +2,7 @@ import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { productShellCopy } from "@/i18n/productShellCopy";
-import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Camera, Gamepad2, Gauge, LayoutDashboard, Library, MonitorCog, Network, Settings, ShieldCheck, Wrench } from "lucide-react";
+import { Activity, BarChart3, BookOpenCheck, BotMessageSquare, Boxes, Camera, Gamepad2, Gauge, HeartHandshake, LayoutDashboard, Library, MonitorCog, Network, Settings, ShieldCheck, Wrench } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useLocation } from "wouter";
 import { WorkspaceDisclosureGroup, WorkspaceNavGroup } from "./WorkspaceNavGroup";
@@ -20,7 +20,7 @@ export function ProductWorkspace({ children }: { children: ReactNode }) {
   const workspace: WorkspaceNavigationItem[] = [{ href: "/dashboard", label: t("overview"), icon: LayoutDashboard }, { href: "/games", label: t("gameHub"), icon: Gamepad2 }, { href: "/library", label: t("installedGames"), icon: Library }, { href: "/linuxfix", label: t("linuxFix"), icon: Wrench }, { href: "/assistant", label: "Stray AI", icon: BotMessageSquare }];
   const system: WorkspaceNavigationItem[] = [{ href: "/dashboard/pc", label: "Informações do sistema", icon: MonitorCog }, { href: "/scanner", label: t("scanner"), icon: ShieldCheck }, { href: "/diagnostics", label: "Diagnóstico", icon: Activity }, { href: "/performance", label: "Performance", icon: Activity }];
   const advancedTools: WorkspaceNavigationItem[] = [{ href: "/mods", label: "Mods", icon: Boxes }, { href: "/compare", label: copy.compare, icon: BarChart3 }, { href: "/benchmark", label: t("benchmark"), icon: Gauge }, { href: "/setup", label: t("setup"), icon: BookOpenCheck }, { href: "/snapshots", label: "Snapshots", icon: Camera }, { href: "/system-graph", label: "System Graph", icon: Network }, { href: "/system-timeline", label: "Timeline", icon: Activity }, { href: "/preflight", label: "Pré-voo", icon: ShieldCheck }, { href: "/regression", label: "Regressão", icon: Gauge }, { href: "/recovery", label: "Recuperação", icon: ShieldCheck }, { href: "/logs", label: "Logs", icon: Activity }, { href: "/notifications", label: "Alertas", icon: Activity }, { href: "/controllers", label: "Controles", icon: Gamepad2 }];
-  const personal: WorkspaceNavigationItem[] = [{ href: "/dashboard/activity", label: "Atividade local", icon: Activity }, { href: "/settings", label: t("settings"), icon: Settings }];
+  const personal: WorkspaceNavigationItem[] = [{ href: "/dashboard/activity", label: "Atividade local", icon: Activity }, { href: "/project-support", label: "Apoie o projeto", icon: HeartHandshake }, { href: "/settings", label: t("settings"), icon: Settings }];
   if (user?.role === "moderator" || user?.role === "admin") personal.unshift({ href: "/moderation", label: t("reports"), icon: ShieldCheck });
   const bottomNavigation = [workspace[0]!, workspace[1]!, workspace[2]!, system[1]!];
   const advancedRouteActive = advancedTools.some((item) => location === item.href || location.startsWith(`${item.href}/`));
