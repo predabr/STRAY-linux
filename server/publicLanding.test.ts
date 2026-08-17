@@ -17,7 +17,7 @@ describe("landing pública", () => {
     expect(distribution).toContain("downloads/stray-linux/linux-x64.AppImage");
     expect(distribution).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(distribution).toContain("sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y");
-    expect(distribution).toContain("sha256sum -c -");
+    expect(distribution).toContain("sha256sum --check --status -");
     expect(windowsDownload).toContain('import { distributionAssets } from "@/lib/distribution";');
     expect(windowsDownload).toContain('href={distributionAssets.exe}');
     expect(landing).not.toContain('href={assets.deb}');
@@ -74,7 +74,7 @@ describe("landing pública", () => {
     expect(workspace).toContain("advancedOpen || advancedRouteActive");
     expect(workspace).toContain('href: "/assistant", label: "Stray AI"');
     expect(copy).toContain('tools: "MAIS FERRAMENTAS"');
-    expect(copy).toContain('version: "Versão 1.1.11"');
+    expect(copy).toContain('version: "Versão 1.1.13"');
   });
 
   it("documenta remoção segura sem limpar dados locais automaticamente", () => {

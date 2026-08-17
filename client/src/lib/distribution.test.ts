@@ -12,8 +12,8 @@ describe("manifesto de distribuição pública", () => {
   it("verifica integridade antes de cada instalação Linux e não alega repositório Arch", () => {
     for (const installer of linuxInstallers) {
       expect(installer.command).toMatch(/^bash -c '/);
-      expect(installer.command).toContain("sha256sum -c -");
-      expect(installer.command).toContain("curl -fL");
+      expect(installer.command).toContain("sha256sum --check --status -");
+      expect(installer.command).toContain("curl --fail --location --show-error --silent --retry 3");
     }
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).toContain("sudo pacman -U /tmp/stray-linux.pacman");
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).not.toContain("dpkg");

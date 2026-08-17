@@ -483,3 +483,10 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Implementar seção destacada de apoio no site e no app, com mensagem transparente, GitHub oficial e chave Pix copiável.
 - [x] Tratar a chave Pix-CPF como dado sensível: exibir aviso, copiar por ação explícita e não processar pagamentos automaticamente.
 - [x] Validar acessibilidade, link oficial, cópia da chave, traduções, testes e publicação da área de apoio.
+
+## Regressão de instaladores e animações
+- [x] Reproduzir a falha Arch distinguindo caracteres de controle do shell, resposta vazia, sidecar inválido e pacote incompleto.
+- [x] Corrigir e auditar redirects, sidecars, comandos e artefatos de DEB, RPM, Pacman, AppImage e Windows.
+- [x] Verificar app.asar, updater, versão, permissões e instalação/desinstalação sem executar ações destrutivas no host.
+- [x] Adicionar animações leves, profissionais e compatíveis com prefers-reduced-motion ao site.
+- [x] Validar todos os formatos, testes, build, domínio público e sincronização GitHub.

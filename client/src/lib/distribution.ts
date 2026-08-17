@@ -12,15 +12,19 @@ export const distributionAssets = {
 
 export const appImageInstallPath = "$HOME/.local/bin/stray-linux";
 
-const verifyCommand = (artifactPath: string, checksumPath: string) => `curl -fL ${distributionOrigin}${checksumPath} -o /tmp/stray-linux.sha256
-expected="$(awk '{print $1}' /tmp/stray-linux.sha256)"
-printf '%s  %s\\n' "$expected" ${artifactPath} | sha256sum -c -
-rm -f /tmp/stray-linux.sha256`;
+const installerCommand = (
+  artifactUrl: string,
+  artifactPath: string,
+  checksumPath: string,
+  artifactName: string,
+  installCommand: string,
+  preparation = "",
+) => `bash -c '\nset -euo pipefail\numask 022\nartifact="${artifactPath}"\nchecksum="$(mktemp /tmp/stray-linux.XXXXXX.sha256)"\ncleanup() { rm -f "$artifact" "$checksum"; }\ntrap cleanup EXIT\n${preparation ? `${preparation}\\n` : ""}curl --fail --location --show-error --silent --retry 3 --retry-delay 2 "${distributionOrigin}${artifactUrl}" -o "$artifact"\ntest -s "$artifact"\ncurl --fail --location --show-error --silent --retry 3 --retry-delay 2 "${distributionOrigin}${checksumPath}" -o "$checksum"\ntest -s "$checksum"\nexpected="$(awk '\\''NF { print $1; exit }'\\'' "$checksum")"\nprintf '%s\\n' "$expected" | grep -Eq '\\''^[0-9a-fA-F]{64}$'\\''\nprintf '%s  %s\\n' "$expected" "$artifact" | sha256sum --check --status -\nprintf 'Stray Linux ${releaseManifest.version}: ${artifactName} verificado\\n'\n${installCommand}\n'`;
 
 export const linuxInstallers = [
-  { id: "debian", name: "Debian / Ubuntu", signal: "apt", description: "Debian, Ubuntu, Linux Mint e derivadas.", command: `bash -c '\nset -e\ncurl -fL ${distributionOrigin}${distributionAssets.deb} -o /tmp/stray-linux.deb\n${verifyCommand("/tmp/stray-linux.deb", releaseManifest.integrityAssets.deb)}\nsudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y\nrm -f /tmp/stray-linux.deb\n'` },
-  { id: "fedora", name: "Fedora / RHEL", signal: "dnf", description: "Fedora, RHEL e distribuições compatíveis.", command: `bash -c '\nset -e\ncurl -fL ${distributionOrigin}${distributionAssets.rpm} -o /tmp/stray-linux.rpm\n${verifyCommand("/tmp/stray-linux.rpm", releaseManifest.integrityAssets.rpm)}\nsudo dnf install /tmp/stray-linux.rpm\nrm -f /tmp/stray-linux.rpm\n'` },
-  { id: "opensuse", name: "openSUSE", signal: "zypper", description: "Tumbleweed, Leap e variantes com Zypper.", command: `bash -c '\nset -e\ncurl -fL ${distributionOrigin}${distributionAssets.rpm} -o /tmp/stray-linux.rpm\n${verifyCommand("/tmp/stray-linux.rpm", releaseManifest.integrityAssets.rpm)}\nsudo zypper install /tmp/stray-linux.rpm\nrm -f /tmp/stray-linux.rpm\n'` },
-  { id: "arch", name: "Arch / derivadas", signal: "pacman", description: "Arch, CachyOS, EndeavourOS e derivados.", command: `bash -c '\nset -e\ncurl -fL ${distributionOrigin}${distributionAssets.pacman} -o /tmp/stray-linux.pacman\n${verifyCommand("/tmp/stray-linux.pacman", releaseManifest.integrityAssets.pacman)}\nsudo pacman -U /tmp/stray-linux.pacman\nrm -f /tmp/stray-linux.pacman\n'` },
-  { id: "appimage", name: "Qualquer distribuição", signal: "AppImage", description: "Alternativa portátil para Linux x64.", command: `bash -c '\nset -e\nmkdir -p "$HOME/.local/bin"\ncurl -fL ${distributionOrigin}${distributionAssets.appImage} -o "${appImageInstallPath}"\n${verifyCommand(appImageInstallPath, releaseManifest.integrityAssets.appImage)}\nchmod +x "${appImageInstallPath}"\n"${appImageInstallPath}"\n'` },
+  { id: "debian", name: "Debian / Ubuntu", signal: "apt", description: "Debian, Ubuntu, Linux Mint e derivadas.", command: installerCommand(distributionAssets.deb, "/tmp/stray-linux.deb", releaseManifest.integrityAssets.deb, ".deb", "sudo dpkg -i /tmp/stray-linux.deb || sudo apt-get -f install -y") },
+  { id: "fedora", name: "Fedora / RHEL", signal: "dnf", description: "Fedora, RHEL e distribuições compatíveis.", command: installerCommand(distributionAssets.rpm, "/tmp/stray-linux.rpm", releaseManifest.integrityAssets.rpm, ".rpm", "sudo dnf install -y /tmp/stray-linux.rpm") },
+  { id: "opensuse", name: "openSUSE", signal: "zypper", description: "Tumbleweed, Leap e variantes com Zypper.", command: installerCommand(distributionAssets.rpm, "/tmp/stray-linux.rpm", releaseManifest.integrityAssets.rpm, ".rpm", "sudo zypper --non-interactive install --allow-unsigned-rpm /tmp/stray-linux.rpm") },
+  { id: "arch", name: "Arch / derivadas", signal: "pacman", description: "Arch, CachyOS, EndeavourOS e derivados.", command: installerCommand(distributionAssets.pacman, "/tmp/stray-linux.pacman", releaseManifest.integrityAssets.pacman, ".pacman", "sudo pacman -U /tmp/stray-linux.pacman") },
+  { id: "appimage", name: "Qualquer distribuição", signal: "AppImage", description: "Alternativa portátil para Linux x64.", command: installerCommand(distributionAssets.appImage, appImageInstallPath, releaseManifest.integrityAssets.appImage, "AppImage", `mkdir -p "$(dirname "${appImageInstallPath}")"\nchmod +x "${appImageInstallPath}"\n"${appImageInstallPath}"`) },
 ] as const;
