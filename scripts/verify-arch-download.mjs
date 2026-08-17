@@ -19,7 +19,7 @@ async function get(path, options = {}) {
 const redirect = await fetch(`${base}${stablePath}`, { redirect: "manual" });
 if (redirect.status !== 302) throw new Error(`redirect Arch esperado: HTTP 302, recebido ${redirect.status}`);
 const location = redirect.headers.get("location") ?? "";
-if (!location.includes("Stray-Linux-1.1.13") || !location.endsWith(".pacman")) throw new Error(`destino inesperado: ${location}`);
+if (!location.includes("Stray-Linux-1.2.0") || !location.endsWith(".pacman")) throw new Error(`destino inesperado: ${location}`);
 
 const artifact = Buffer.from(await (await get(stablePath)).arrayBuffer());
 if (artifact.length < 1_000_000) throw new Error(`pacote pequeno demais: ${artifact.length} bytes`);

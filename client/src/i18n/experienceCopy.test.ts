@@ -46,7 +46,7 @@ describe("experience copy", () => {
       expect(moderation.description.trim()).not.toBe("");
       expect(moderation.accept.trim()).not.toBe("");
       expect(landing.heroMain.trim()).not.toBe("");
-      expect(landing.downloadsEyebrow).toContain("1.1.13");
+      expect(landing.downloadsEyebrow).toContain("1.2.0");
       expect(landing.cards).toHaveLength(3);
       expect(landing.evidenceCards).toHaveLength(3);
     }

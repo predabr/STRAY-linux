@@ -8,9 +8,9 @@
 
 O **Stray Linux** combina um site institucional com um aplicativo desktop. O aplicativo é voltado a jogadores Linux que precisam entender o próprio ambiente, organizar a biblioteca local, consultar conteúdo técnico com origem visível e registrar sessões sem converter suposições em métricas. A interface utiliza React e TypeScript; o servidor usa Express/tRPC. No Electron, os dados operacionais ficam em um SQLite local, portanto **não é necessário fornecer `DATABASE_URL`**.
 
-## Versão 1.1.13
+## Versão 1.2.0
 
-A versão **1.1.13** consolida o aplicativo como uma estação local de diagnóstico para Linux gaming. GameHub e Biblioteca toleram metadados parciais, normalizam capas a uma proporção consistente e mantêm fallback quando não há mídia disponível. A Biblioteca lê manifestos Steam e instalações Heroic locais para Epic, GOG e Amazon; títulos externos continuam exigindo escolha consciente do usuário. Quando o App ID ou o título encontra um registro no catálogo empacotado, o app declara o método da correspondência e apresenta detalhes, capa disponível e acesso ao GameHub. O Stray não lê credenciais, não modifica bibliotecas e não percorre o disco inteiro.
+A versão **1.2.0** consolida o polimento do Stray Linux como estação local de diagnóstico para Linux gaming. O GameHub recebeu hierarquia de descoberta, filtros e cartões mais claros; a pesquisa global passou a estar disponível também no cabeçalho mobile; e a ferramenta **Comparar** foi restaurada no roteador do aplicativo, deixando de cair em uma tela de rota inexistente. A revisão preserva o funcionamento local, os limites de evidência e os dados já publicados: não cria benchmarks, compatibilidades ou relatos artificiais.
 
 O Scanner é executado automaticamente no aplicativo desktop e também pode ser iniciado manualmente. Ele usa fallbacks locais seguros para distribuição, kernel, CPU, GPU, telas, armazenamento, sessão Wayland/X11, APIs gráficas, drivers e runtimes de gaming. Campos que uma ferramenta não conseguiu observar permanecem como **não informados**, em vez de serem adivinhados. Snapshots alimentam Meu PC, Diagnóstico, Stray AI e a visão geral, e continuam no dispositivo até uma exportação explícita.
 
@@ -56,7 +56,7 @@ Para remover o aplicativo ou entender a diferença entre removê-lo e apagar dad
 
 ## Atualizações
 
-O aplicativo consulta o feed HTTPS em `https://linuxtoys-ckuyvpj5.manus.space/updates/`. Ele não depende da API de Releases do GitHub. Quando existir uma atualização compatível, o usuário vê a proposta, confere o artefato e confirma antes do reinício. A release **1.1.13** publica feed, blockmap Windows e cinco artefatos com SHA-256 para os comandos Linux e SHA-512 para o atualizador Electron. Os comandos usam um manifesto único, e os links estáveis redirecionam aos arquivos hashed da mesma release. O pipeline foi mantido em Node/TypeScript e Electron; não foi embutido um segundo runtime sem benefício medido, evitando aumentar o tamanho e a superfície de falha dos instaladores.
+O aplicativo consulta o feed HTTPS em `https://linuxtoys-ckuyvpj5.manus.space/updates/`. Ele não depende da API de Releases do GitHub. Quando existir uma atualização compatível, o usuário vê a proposta, confere o artefato e confirma antes do reinício. A release **1.2.0** publica feed, blockmap Windows e cinco artefatos com SHA-256 para os comandos Linux e SHA-512 para o atualizador Electron. Os comandos usam um manifesto único, e os links estáveis redirecionam aos arquivos hashed da mesma release. O pipeline foi mantido em Node/TypeScript e Electron; não foi embutido um segundo runtime sem benefício medido, evitando aumentar o tamanho e a superfície de falha dos instaladores.
 
 ## Diagnóstico de instalação e inicialização
 

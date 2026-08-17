@@ -1,0 +1,524 @@
+=== package and builder version ===
+{
+  version: '1.1.13',
+  build: 'Stray Linux',
+  artifactName: undefined,
+  publish: {
+    provider: 'generic',
+    url: 'https://linuxtoys-ckuyvpj5.manus.space/updates',
+    publishAutoUpdate: true
+  }
+}
+=== version references ===
+./.github/workflows/windows-installer.yml:15:          node-version: 22
+./.github/workflows/ci.yml:22:          node-version: 22
+./.github/workflows/quality.yml:28:          version: 10
+./.github/workflows/quality.yml:33:          node-version: 22
+./.github/workflows/distribution.yml:26:          node-version: 22
+./.github/ISSUE_TEMPLATE/bug.yml:13:      placeholder: "1.1.13"
+./README.md:11:## Versão 1.1.13
+./README.md:13:A versão **1.1.13** consolida o aplicativo como uma estação local de diagnóstico para Linux gaming. GameHub e Biblioteca toleram metadados parciais, normalizam capas a uma proporção consistente e mantêm fallback quando não há mídia disponível. A Biblioteca lê manifestos Steam e instalações Heroic locais para Epic, GOG e Amazon; títulos externos continuam exigindo escolha consciente do usuário. Quando o App ID ou o título encontra um registro no catálogo empacotado, o app declara o método da correspondência e apresenta detalhes, capa disponível e acesso ao GameHub. O Stray não lê credenciais, não modifica bibliotecas e não percorre o disco inteiro.
+./README.md:59:O aplicativo consulta o feed HTTPS em `https://linuxtoys-ckuyvpj5.manus.space/updates/`. Ele não depende da API de Releases do GitHub. Quando existir uma atualização compatível, o usuário vê a proposta, confere o artefato e confirma antes do reinício. A release **1.1.13** publica feed, blockmap Windows e cinco artefatos com SHA-256 para os comandos Linux e SHA-512 para o atualizador Electron. Os comandos usam um manifesto único, e os links estáveis redirecionam aos arquivos hashed da mesma release. O pipeline foi mantido em Node/TypeScript e Electron; não foi embutido um segundo runtime sem benefício medido, evitando aumentar o tamanho e a superfície de falha dos instaladores.
+./client/public/__manus__/debug-collector.js:815:    version: "2.0-no-rrweb",
+./client/public/updates/latest.yml:1:version: 1.1.13
+./client/public/updates/latest.yml:3:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe
+./client/public/updates/latest.yml:6:path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe
+./client/public/updates/latest-linux.yml:1:version: 1.1.13
+./client/public/updates/latest-linux.yml:3:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-x86_64_5f65e407.AppImage
+./client/public/updates/latest-linux.yml:7:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-amd64_4cc6cfcc.deb
+./client/public/updates/latest-linux.yml:10:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-x86_64_e4008bd7.rpm
+./client/public/updates/latest-linux.yml:13:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-x64_680cc9f6.pacman
+./client/public/updates/latest-linux.yml:16:path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-x86_64_5f65e407.AppImage
+./client/src/components/platform/WorkspaceStatus.tsx:4:export function WorkspaceStatus({ label, version }: { label: string; version: string }) {
+./client/src/components/site/WindowsDownloadCard.tsx:10:  return <article className="group relative overflow-hidden rounded-[1.25rem] bg-[#0b0c10] p-6 text-[#f5f5f0] sm:p-8"><div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-[#91b7ff]/20 blur-3xl transition-transform duration-500 group-hover:scale-125" aria-hidden="true" /><div className="relative"><p className="font-tech text-[10px] tracking-[.16em] text-white/48">{copy.windowsEyebrow}</p><h3 className="mt-10 text-4xl font-medium leading-none tracking-[-.06em]">{copy.windowsMain}<br />{copy.windowsAccent}</h3><p className="mt-5 max-w-xs text-sm leading-6 text-white/61">{copy.windowsBody}</p><a href={distributionAssets.exe} download="Stray-Linux-1.1.13-Setup.exe" className="mt-10 flex"><Button className="h-12 w-full rounded-full bg-[#f5f5f0] text-[#0b0c10] hover:bg-[#b7d3ff]"><Download className="mr-2 h-4 w-4" />{copy.downloadExe}</Button></a><p className="mt-5 text-xs leading-5 text-white/42">{copy.windowsFootnote}</p></div></article>;
+./client/src/lib/distribution.test.ts:22:    expect(releaseManifest.version).toBe("1.1.13");
+./client/src/lib/systemGraph.test.ts:4:const scan: SystemGraphScan = { system: { distribution: { name: "Arch Linux", version: null }, kernelVersion: "6.16", desktopEnvironment: "KDE", gpu: { model: "GPU observada" }, graphics: { driverVersion: "Mesa 25", mesaVersion: "25", vulkanVersion: "1.3", vulkanApiVersion: "1.3", vulkanDeviceName: "GPU observada", vulkanDriverName: "Mesa", vulkanDeviceCount: 1, vulkanSummaryAvailable: true }, runtime: { wineVersion: null, protonVersion: "Proton 10", steamDetected: true, installedGameCount: 3, discovery: { heroicDetected: false, heroicInstalledGameCount: 0 }, gaming: { sessionType: "wayland", waylandDetected: true, x11Detected: false, vulkanToolsDetected: true, gameModeDetected: true, gameModeServiceActive: true, mangoHudDetected: false, gamescopeDetected: false, renderGroupDetected: true } } } };
+./client/src/lib/systemGraph.ts:3:    distribution: { name: string | null; version: string | null };
+./client/src/lib/preflight.test.ts:5:const scan: SystemGraphScan = { system: { distribution: { name: "Distro", version: null }, kernelVersion: "6.16", gpu: { model: "GPU", driverVersion: "Driver" }, graphics: { driverVersion: "Driver", mesaVersion: null, vulkanVersion: null }, runtime: { wineVersion: null, protonVersion: "Proton", steamDetected: true, gaming: { sessionType: "wayland", waylandDetected: true, x11Detected: false, vulkanToolsDetected: true, gameModeDetected: false, gameModeServiceActive: null, mangoHudDetected: false, gamescopeDetected: false, renderGroupDetected: true } } } };
+./client/src/lib/snapshotComparison.test.ts:4:const base = { schemaVersion: 1 as const, scannerVersion: "1.4.0", generatedAt: "2026-08-15T15:00:00.000Z", system: { distribution: { id: "arch", name: "Arch", version: null }, kernelVersion: "6.16", cpu: { model: "CPU" }, gpu: { model: "GPU", vramMb: null }, memoryGb: 16, graphics: { driverVersion: "Mesa 25", mesaVersion: "25", vulkanVersion: "1.3", openGlVersion: null }, runtime: { wineVersion: null, protonVersion: "Proton 10", steamDetected: true, gaming: { sessionType: "wayland", waylandDetected: true, x11Detected: false, vulkanToolsDetected: true, gameModeDetected: true, gameModeServiceActive: true, mangoHudDetected: false, gamescopeDetected: false, flatpakDetected: false, renderGroupDetected: true } } } };
+./client/src/lib/releaseManifest.ts:2:  version: "1.1.13",
+./client/src/i18n/experienceCopy.test.ts:49:      expect(landing.downloadsEyebrow).toContain("1.1.13");
+./client/src/i18n/productShellCopy.ts:3:type ProductShellCopy = { workspace: string; system: string; personal: string; tools: string; compare: string; status: string; version: string; };
+./client/src/i18n/productShellCopy.ts:6:  "pt-BR": { workspace: "WORKSPACE", system: "SISTEMA", personal: "PESSOAL", tools: "MAIS FERRAMENTAS", compare: "Comparar", status: "Sistema online", version: "Versão 1.1.13" },
+./client/src/i18n/productShellCopy.ts:7:  en: { workspace: "WORKSPACE", system: "SYSTEM", personal: "PERSONAL", tools: "MORE TOOLS", compare: "Compare", status: "System online", version: "Version 1.1.13" },
+./client/src/i18n/productShellCopy.ts:8:  es: { workspace: "ESPACIO DE TRABAJO", system: "SISTEMA", personal: "PERSONAL", tools: "MÁS HERRAMIENTAS", compare: "Comparar", status: "Sistema en línea", version: "Versión 1.1.13" },
+./client/src/i18n/productShellCopy.ts:9:  fr: { workspace: "ESPACE DE TRAVAIL", system: "SYSTÈME", personal: "PERSONNEL", tools: "PLUS D'OUTILS", compare: "Comparer", status: "Système en ligne", version: "Version 1.1.13" },
+./client/src/i18n/productShellCopy.ts:10:  de: { workspace: "ARBEITSBEREICH", system: "SYSTEM", personal: "PERSÖNLICH", tools: "WEITERE WERKZEUGE", compare: "Vergleichen", status: "System online", version: "Version 1.1.13" },
+./client/src/i18n/productShellCopy.ts:11:  it: { workspace: "AREA DI LAVORO", system: "SISTEMA", personal: "PERSONALE", tools: "ALTRI STRUMENTI", compare: "Confronta", status: "Sistema online", version: "Versione 1.1.13" },
+./client/src/i18n/productShellCopy.ts:12:  ru: { workspace: "РАБОЧЕЕ ПРОСТРАНСТВО", system: "СИСТЕМА", personal: "ЛИЧНОЕ", tools: "БОЛЬШЕ ИНСТРУМЕНТОВ", compare: "Сравнить", status: "Система онлайн", version: "Версия 1.1.13" },
+./client/src/i18n/productShellCopy.ts:13:  "zh-CN": { workspace: "工作区", system: "系统", personal: "个人", tools: "更多工具", compare: "比较", status: "系统在线", version: "版本 1.1.13" },
+./client/src/i18n/productShellCopy.ts:14:  ja: { workspace: "ワークスペース", system: "システム", personal: "個人", tools: "その他のツール", compare: "比較", status: "システムオンライン", version: "バージョン 1.1.13" },
+./client/src/i18n/productShellCopy.ts:15:  ko: { workspace: "작업 공간", system: "시스템", personal: "개인", tools: "추가 도구", compare: "비교", status: "시스템 온라인", version: "버전 1.1.13" },
+./client/src/i18n/productShellCopy.ts:16:  ar: { workspace: "مساحة العمل", system: "النظام", personal: "شخصي", tools: "المزيد من الأدوات", compare: "مقارنة", status: "النظام متصل", version: "الإصدار 1.1.13" },
+./client/src/i18n/landingCopy.ts:31:    downloadsEyebrow: "DOWNLOADS VERIFICÁVEIS / V1.1.13", downloadsLead: "Selecione a família correta. O comando completo baixa o pacote, valida o checksum e instala apenas aquele formato.", downloadsMain: "Pronto para", downloadsAccent: "a sua máquina.", uninstallLead: "Já instalou o aplicativo? Veja o desinstalador por plataforma.",
+./client/src/i18n/landingCopy.ts:44:    downloadsEyebrow: "VERIFIABLE DOWNLOADS / V1.1.13", downloadsLead: "Choose the right family. The complete command downloads the package, verifies its checksum and installs only that format.", downloadsMain: "Ready for", downloadsAccent: "your machine.", uninstallLead: "Already installed it? See the uninstaller by platform.",
+./client/src/i18n/landingCopy.ts:57:    downloadsEyebrow: "DESCARGAS VERIFICABLES / V1.1.13", downloadsLead: "Elige la familia correcta. El comando descarga el paquete, verifica el checksum e instala solo ese formato.", downloadsMain: "Listo para", downloadsAccent: "tu máquina.", uninstallLead: "¿Ya instalaste la aplicación? Consulta el desinstalador por plataforma.",
+./client/src/i18n/landingCopy.ts:70:    downloadsEyebrow: "TÉLÉCHARGEMENTS VÉRIFIABLES / V1.1.13", downloadsLead: "Choisissez la bonne famille. La commande télécharge le paquet, vérifie le checksum et installe uniquement ce format.", downloadsMain: "Prêt pour", downloadsAccent: "votre machine.", uninstallLead: "Déjà installé ? Consultez le désinstallateur par plateforme.",
+./client/src/i18n/landingCopy.ts:83:    downloadsEyebrow: "ÜBERPRÜFBARE DOWNLOADS / V1.1.13", downloadsLead: "Wählen Sie die richtige Familie. Der Befehl lädt das Paket, prüft die Prüfsumme und installiert nur dieses Format.", downloadsMain: "Bereit für", downloadsAccent: "Ihre Maschine.", uninstallLead: "Bereits installiert? Sehen Sie die Deinstallation nach Plattform.",
+./client/src/i18n/landingCopy.ts:96:    downloadsEyebrow: "DOWNLOAD VERIFICABILI / V1.1.13", downloadsLead: "Scegli la famiglia corretta. Il comando scarica il pacchetto, verifica il checksum e installa solo quel formato.", downloadsMain: "Pronto per", downloadsAccent: "la tua macchina.", uninstallLead: "Hai già installato l’app? Vedi la disinstallazione per piattaforma.",
+./client/src/i18n/landingCopy.ts:109:    downloadsEyebrow: "ПРОВЕРЯЕМЫЕ ЗАГРУЗКИ / V1.1.13", downloadsLead: "Выберите правильное семейство. Команда скачивает пакет, проверяет checksum и устанавливает только этот формат.", downloadsMain: "Готово для", downloadsAccent: "вашей машины.", uninstallLead: "Уже установили? Смотрите удаление по платформам.",
+./client/src/i18n/landingCopy.ts:122:    downloadsEyebrow: "可验证下载 / V1.1.13", downloadsLead: "选择正确的发行版家族。命令会下载软件包、验证校验和并仅安装该格式。", downloadsMain: "为你的", downloadsAccent: "设备准备就绪。", uninstallLead: "已安装应用？查看各平台卸载说明。",
+./client/src/i18n/landingCopy.ts:135:    downloadsEyebrow: "検証可能なダウンロード / V1.1.13", downloadsLead: "正しいファミリーを選択してください。コマンドはパッケージを取得し、チェックサムを検証してその形式だけをインストールします。", downloadsMain: "あなたの", downloadsAccent: "マシンへ。", uninstallLead: "すでにインストール済みですか？プラットフォーム別の削除手順を確認してください。",
+./client/src/i18n/landingCopy.ts:148:    downloadsEyebrow: "검증 가능한 다운로드 / V1.1.13", downloadsLead: "올바른 계열을 선택하세요. 명령은 패키지를 받고 체크섬을 확인한 뒤 해당 형식만 설치합니다.", downloadsMain: "내", downloadsAccent: "장비를 위해 준비됨.", uninstallLead: "이미 설치했나요? 플랫폼별 제거 방법을 확인하세요.",
+./client/src/i18n/landingCopy.ts:161:    downloadsEyebrow: "تنزيلات قابلة للتحقق / V1.1.13", downloadsLead: "اختر العائلة الصحيحة. ينزّل الأمر الحزمة ويتحقق من المجموع ويثبت هذا التنسيق فقط.", downloadsMain: "جاهز", downloadsAccent: "لجهازك.", uninstallLead: "هل ثبّت التطبيق بالفعل؟ راجع إزالة التثبيت حسب المنصة.",
+./client/src/i18n/landingCopy.ts:168:const currentPublicRelease = "1.1.13";
+./desktop/bin/stray-scan.cjs:31:  return { id: values.ID || null, name: values.PRETTY_NAME || values.NAME || null, version: values.VERSION_ID || null };
+./desktop/bin/stray-scan.cjs:100:  const openGl = graphicsInfo.match(/OpenGL version string:\s*(.+)$/im)?.[1]?.trim() || graphicsInfo.match(/OpenGL version:\s*(.+)$/im)?.[1]?.trim() || null;
+./desktop/updater.cjs:6:  let status = { state: "idle", version: app.getVersion(), progress: 0, detail: null };
+./desktop/updater.cjs:32:    setStatus({ state: "downloading", version: info.version, detail: "Atualização encontrada; validando download.", progress: 0 });
+./desktop/updater.cjs:33:    log("info", "Atualização disponível", { version: info.version });
+./desktop/updater.cjs:36:    setStatus({ state: "up-to-date", version: info.version || app.getVersion(), detail: "O aplicativo já está atualizado.", progress: 100 });
+./desktop/updater.cjs:41:    setStatus({ state: "ready", version: info.version, progress: 100, detail: "Atualização validada e pronta para instalar." });
+./desktop/updater.cjs:42:    log("info", "Atualização baixada", { version: info.version });
+./docs/CI_AND_DISTRIBUTION.md:19:O script não instala o pacote e não altera o sistema. Ele exige redirect HTTP 302 para um artefato da release 1.1.13, baixa o pacote, compara o SHA-256 calculado com o sidecar público, verifica o contêiner gzip usado pelo alvo `pacman` atual do electron-builder e confirma que o arquivo contém `opt/Stray Linux/`. O resultado validado no sandbox foi um pacote de 173390860 bytes com SHA-256 `4e84346a67af2dd45d1c9fbcf93a1a863bdb23306b3fa65a4c80e4727b440f0a`. O sandbox não é Arch, portanto a inspeção `pacman -Qp` precisa ser executada pelo colaborador em uma máquina Arch.
+./drizzle/schema.ts:229:    version: varchar("version", { length: 100 }).notNull(),
+./package.json:3:  "version": "1.1.13",
+./package.json:33:    "@radix-ui/react-collapsible": "^1.1.12",
+./package.json:50:    "@radix-ui/react-tabs": "^1.1.13",
+./pnpm-lock.yaml:13:        version: 3.1110.0
+./pnpm-lock.yaml:16:        version: 3.1110.0
+./pnpm-lock.yaml:19:        version: 5.2.2(react-hook-form@7.64.0(react@19.2.1))
+./pnpm-lock.yaml:22:        version: 1.2.12(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:25:        version: 1.1.15(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:28:        version: 1.1.7(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:31:        version: 1.1.10(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:34:        version: 1.3.3(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:36:        specifier: ^1.1.12
+./pnpm-lock.yaml:37:        version: 1.1.12(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:40:        version: 2.2.16(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:43:        version: 1.1.15(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:46:        version: 2.1.16(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:49:        version: 1.1.15(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:52:        version: 2.1.7(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:55:        version: 1.1.16(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:58:        version: 1.2.14(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:61:        version: 1.1.15(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:64:        version: 1.1.7(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:67:        version: 1.3.8(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:70:        version: 1.2.10(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:73:        version: 2.2.6(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:76:        version: 1.1.7(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:79:        version: 1.3.6(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:82:        version: 1.2.3(@types/react@19.2.1)(react@19.2.1)
+./pnpm-lock.yaml:85:        version: 1.2.6(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:87:        specifier: ^1.1.13
+./pnpm-lock.yaml:88:        version: 1.1.13(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:91:        version: 1.1.10(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:94:        version: 1.1.11(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:97:        version: 1.2.8(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:100:        version: 5.90.2(react@19.2.1)
+./pnpm-lock.yaml:103:        version: 11.18.0(@trpc/server@11.18.0(typescript@5.9.3))(typescript@5.9.3)
+./pnpm-lock.yaml:106:        version: 11.18.0(@tanstack/react-query@5.90.2(react@19.2.1))(@trpc/client@11.18.0(@trpc/server@11.18.0(typescript@5.9.3))(typescript@5.9.3))(@trpc/server@11.18.0(typescript@5.9.3))(react@19.2.1)(typescript@5.9.3)
+./pnpm-lock.yaml:109:        version: 11.18.0(typescript@5.9.3)
+./pnpm-lock.yaml:112:        version: 1.4.11
+./pnpm-lock.yaml:115:        version: 1.19.0
+./pnpm-lock.yaml:118:        version: 0.7.1
+./pnpm-lock.yaml:121:        version: 2.1.1
+./pnpm-lock.yaml:124:        version: 1.1.1(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:127:        version: 1.0.2
+./pnpm-lock.yaml:130:        version: 4.1.0
+./pnpm-lock.yaml:133:        version: 17.2.3
+./pnpm-lock.yaml:136:        version: 0.45.2(@types/better-sqlite3@9.6.0)(@types/sql.js@1.4.11)(better-sqlite3@13.0.3)(mysql2@3.15.1)(sql.js@1.14.1)
+./pnpm-lock.yaml:139:        version: 6.8.9
+./pnpm-lock.yaml:142:        version: 8.6.0(react@19.2.1)
+./pnpm-lock.yaml:145:        version: 4.22.2
+./pnpm-lock.yaml:148:        version: 12.23.22(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:151:        version: 1.4.2(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:154:        version: 6.1.0
+./pnpm-lock.yaml:157:        version: 0.453.0(react@19.2.1)
+./pnpm-lock.yaml:160:        version: 3.15.1
+./pnpm-lock.yaml:163:        version: 6.0.1
+./pnpm-lock.yaml:166:        version: 0.4.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:169:        version: 19.2.1
+./pnpm-lock.yaml:172:        version: 9.11.1(react@19.2.1)
+./pnpm-lock.yaml:175:        version: 19.2.1(react@19.2.1)
+./pnpm-lock.yaml:178:        version: 7.64.0(react@19.2.1)
+./pnpm-lock.yaml:181:        version: 3.0.6(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:184:        version: 2.15.4(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:187:        version: 2.0.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:190:        version: 1.14.1
+./pnpm-lock.yaml:193:        version: 2.5.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:196:        version: 1.13.3
+./pnpm-lock.yaml:199:        version: 3.3.1
+./pnpm-lock.yaml:202:        version: 1.0.7(tailwindcss@4.1.14)
+./pnpm-lock.yaml:205:        version: 1.1.2(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:208:        version: 3.7.1(react@19.2.1)
+./pnpm-lock.yaml:211:        version: 4.1.12
+./pnpm-lock.yaml:215:        version: 0.1.1(vite@7.3.6(@types/node@24.7.0)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.20.6))
+./pnpm-lock.yaml:218:        version: 0.5.19(tailwindcss@4.1.14)
+./pnpm-lock.yaml:221:        version: 4.1.14(vite@7.3.6(@types/node@24.7.0)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.20.6))
+./pnpm-lock.yaml:224:        version: 4.17.21
+./pnpm-lock.yaml:227:        version: 3.58.1
+./pnpm-lock.yaml:230:        version: 24.7.0
+./pnpm-lock.yaml:233:        version: 19.2.1
+./pnpm-lock.yaml:236:        version: 19.2.1(@types/react@19.2.1)
+./pnpm-lock.yaml:239:        version: 5.0.4(vite@7.3.6(@types/node@24.7.0)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.20.6))
+./pnpm-lock.yaml:242:        version: 2.0.6
+./pnpm-lock.yaml:245:        version: 10.4.21(postcss@8.5.26)
+./pnpm-lock.yaml:248:        version: 0.31.5
+./pnpm-lock.yaml:251:        version: 39.8.10
+./pnpm-lock.yaml:254:        version: 26.15.3(electron-builder-squirrel-windows@26.15.3)
+./pnpm-lock.yaml:257:        version: 0.25.10
+./pnpm-lock.yaml:260:        version: 10.34.5
+./pnpm-lock.yaml:263:        version: 8.5.26
+./pnpm-lock.yaml:266:        version: 3.6.2
+./pnpm-lock.yaml:269:        version: 4.1.14
+./pnpm-lock.yaml:272:        version: 4.20.6
+./pnpm-lock.yaml:275:        version: 1.4.0
+./pnpm-lock.yaml:278:        version: 5.9.3
+./pnpm-lock.yaml:281:        version: 7.3.6(@types/node@24.7.0)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.20.6)
+./pnpm-lock.yaml:284:        version: 0.0.59
+./pnpm-lock.yaml:287:        version: 3.2.7(@types/debug@4.1.13)(@types/node@24.7.0)(jiti@2.6.1)(lightningcss@1.30.1)(tsx@4.20.6)
+./pnpm-lock.yaml:1046:  '@peculiar/json-schema@1.1.12':
+./pnpm-lock.yaml:1141:  '@radix-ui/react-collapsible@1.1.12':
+./pnpm-lock.yaml:1520:  '@radix-ui/react-tabs@1.1.13':
+./pnpm-lock.yaml:5198:      compare-version: 0.1.2
+./pnpm-lock.yaml:5212:      node-api-version: 0.2.1
+./pnpm-lock.yaml:5558:  '@peculiar/json-schema@1.1.12':
+./pnpm-lock.yaml:5569:      '@peculiar/json-schema': 1.1.12
+./pnpm-lock.yaml:5581:      '@radix-ui/react-collapsible': 1.1.12(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./pnpm-lock.yaml:5656:  '@radix-ui/react-collapsible@1.1.12(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+./pnpm-lock.yaml:6093:  '@radix-ui/react-tabs@1.1.13(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+./pnpm-lock.yaml:9746:      '@peculiar/json-schema': 1.1.12
+./scripts/verify-arch-download.mjs:22:if (!location.includes("Stray-Linux-1.1.13") || !location.endsWith(".pacman")) throw new Error(`destino inesperado: ${location}`);
+./server/desktop/updater.test.ts:29:    autoUpdater.emit("update-available", { version: "1.1.0" });
+./server/desktop/updater.test.ts:31:    expect(updater.getStatus()).toMatchObject({ state: "downloading", progress: 50, version: "1.1.0" });
+./server/desktop/updater.test.ts:32:    autoUpdater.emit("update-downloaded", { version: "1.1.0" });
+./server/lib/scannerReport.test.ts:11:        distribution: { id: "arch", name: "Arch Linux", version: null },
+./server/scannerReport.test.ts:10:    distribution: { id: "arch", name: "Arch Linux", version: null },
+./server/publicApi.ts:21:  app.get("/api/v1", (_req, res) => res.json({ version: "v1", readOnly: true, resources: ["/games", "/compatibility", "/benchmarks", "/hardware", "/distros", "/linuxfix", "/widgets/games/:slug", "/badges/games/:slug.svg"] }));
+./server/publicLanding.test.ts:77:    expect(copy).toContain('version: "Versão 1.1.13"');
+./server/publicDownloads.ts:4:  "/downloads/stray-linux/windows-x64.exe": "/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe",
+./server/publicDownloads.ts:5:  "/downloads/stray-linux/windows-x64.exe.sha256": "/manus-storage/Stray-Linux-1.1.13-Setup.exe_17eef105.sha256",
+./server/publicDownloads.ts:6:  "/downloads/stray-linux/debian-amd64.deb": "/manus-storage/Stray-Linux-1.1.13-amd64_4cc6cfcc.deb",
+./server/publicDownloads.ts:7:  "/downloads/stray-linux/debian-amd64.deb.sha256": "/manus-storage/Stray-Linux-1.1.13-amd64.deb_0c65b1cd.sha256",
+./server/publicDownloads.ts:8:  "/downloads/stray-linux/rpm-x64.rpm": "/manus-storage/Stray-Linux-1.1.13-x86_64_e4008bd7.rpm",
+./server/publicDownloads.ts:9:  "/downloads/stray-linux/rpm-x64.rpm.sha256": "/manus-storage/Stray-Linux-1.1.13-x86_64.rpm_409048d6.sha256",
+./server/publicDownloads.ts:10:  "/downloads/stray-linux/arch-x64.pacman": "/manus-storage/Stray-Linux-1.1.13-x64_680cc9f6.pacman",
+./server/publicDownloads.ts:11:  "/downloads/stray-linux/arch-x64.pacman.sha256": "/manus-storage/Stray-Linux-1.1.13-x64.pacman_33e19d30.sha256",
+./server/publicDownloads.ts:12:  "/downloads/stray-linux/linux-x64.AppImage": "/manus-storage/Stray-Linux-1.1.13-x86_64_5f65e407.AppImage",
+./server/publicDownloads.ts:13:  "/downloads/stray-linux/linux-x64.AppImage.sha256": "/manus-storage/Stray-Linux-1.1.13-x86_64.AppImage_60b5f0c0.sha256",
+./server/publicDownloads.test.ts:5:  it("mantém artefatos e sidecars finais 1.1.13 por plataforma", () => {
+./server/publicDownloads.test.ts:7:    expect(publicDownloadTargets["/downloads/stray-linux/windows-x64.exe"]).toBe("/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe");
+./server/publicDownloads.test.ts:8:    expect(publicDownloadTargets["/downloads/stray-linux/windows-x64.exe.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-Setup.exe_17eef105.sha256");
+./server/publicDownloads.test.ts:9:    expect(publicDownloadTargets["/downloads/stray-linux/debian-amd64.deb"]).toBe("/manus-storage/Stray-Linux-1.1.13-amd64_4cc6cfcc.deb");
+./server/publicDownloads.test.ts:10:    expect(publicDownloadTargets["/downloads/stray-linux/debian-amd64.deb.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-amd64.deb_0c65b1cd.sha256");
+./server/publicDownloads.test.ts:11:    expect(publicDownloadTargets["/downloads/stray-linux/rpm-x64.rpm"]).toBe("/manus-storage/Stray-Linux-1.1.13-x86_64_e4008bd7.rpm");
+./server/publicDownloads.test.ts:12:    expect(publicDownloadTargets["/downloads/stray-linux/rpm-x64.rpm.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-x86_64.rpm_409048d6.sha256");
+./server/publicDownloads.test.ts:13:    expect(publicDownloadTargets["/downloads/stray-linux/arch-x64.pacman"]).toBe("/manus-storage/Stray-Linux-1.1.13-x64_680cc9f6.pacman");
+./server/publicDownloads.test.ts:14:    expect(publicDownloadTargets["/downloads/stray-linux/arch-x64.pacman.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-x64.pacman_33e19d30.sha256");
+./server/publicDownloads.test.ts:15:    expect(publicDownloadTargets["/downloads/stray-linux/linux-x64.AppImage"]).toBe("/manus-storage/Stray-Linux-1.1.13-x86_64_5f65e407.AppImage");
+./server/publicDownloads.test.ts:16:    expect(publicDownloadTargets["/downloads/stray-linux/linux-x64.AppImage.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-x86_64.AppImage_60b5f0c0.sha256");
+./server/publicUpdates.ts:4:  "/updates/Stray-Linux-1.1.13-Setup.exe": "/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe",
+./server/publicUpdates.ts:5:  "/updates/Stray-Linux-1.1.13-Setup.exe.blockmap": "/manus-storage/Stray-Linux-1.1.13-Setup.exe_8848e572.blockmap",
+./server/publicUpdates.ts:6:  "/updates/Stray-Linux-1.1.13-amd64.deb": "/manus-storage/Stray-Linux-1.1.13-amd64_4cc6cfcc.deb",
+./server/publicUpdates.ts:7:  "/updates/Stray-Linux-1.1.13-x86_64.rpm": "/manus-storage/Stray-Linux-1.1.13-x86_64_e4008bd7.rpm",
+./server/publicUpdates.ts:8:  "/updates/Stray-Linux-1.1.13-x64.pacman": "/manus-storage/Stray-Linux-1.1.13-x64_680cc9f6.pacman",
+./server/publicUpdates.ts:9:  "/updates/Stray-Linux-1.1.13-x86_64.AppImage": "/manus-storage/Stray-Linux-1.1.13-x86_64_5f65e407.AppImage",
+./server/publicUpdates.test.ts:5:  it("mantém blockmap e cinco artefatos 1.1.13 sob caminhos estáveis", () => {
+./server/publicUpdates.test.ts:7:    expect(publicUpdateTargets["/updates/Stray-Linux-1.1.13-Setup.exe"]).toBe("/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe");
+./server/publicUpdates.test.ts:8:    expect(Object.values(publicUpdateTargets).every((target) => target.includes("1.1.13"))).toBe(true);
+./shared/scannerReport.ts:10:    distribution: z.object({ id: nullableText, name: nullableText, version: nullableText }).strict(),
+./template.json:11:    "package.json": "{\n  \"name\": \"linux-gaming-hub\",\n  \"version\": \"1.0.0\",\n  \"type\": \"module\",\n  \"license\": \"MIT\",\n  \"scripts\": {\n    \"dev\": \"NODE_ENV=development tsx watch server/_core/index.ts\",\n    \"build\": \"vite build && esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist\",\n    \"start\": \"NODE_ENV=production node dist/index.js\",\n    \"check\": \"tsc --noEmit\",\n    \"format\": \"prettier --write .\",\n    \"test\": \"vitest run\",\n    \"db:push\": \"drizzle-kit generate && drizzle-kit migrate\"\n  },\n  \"dependencies\": {\n    \"@aws-sdk/client-s3\": \"^3.693.0\",\n    \"@aws-sdk/s3-request-presigner\": \"^3.693.0\",\n    \"@hookform/resolvers\": \"^5.2.2\",\n    \"@radix-ui/react-accordion\": \"^1.2.12\",\n    \"@radix-ui/react-alert-dialog\": \"^1.1.15\",\n    \"@radix-ui/react-aspect-ratio\": \"^1.1.7\",\n    \"@radix-ui/react-avatar\": \"^1.1.10\",\n    \"@radix-ui/react-checkbox\": \"^1.3.3\",\n    \"@radix-ui/react-collapsible\": \"^1.1.12\",\n    \"@radix-ui/react-context-menu\": \"^2.2.16\",\n    \"@radix-ui/react-dialog\": \"^1.1.15\",\n    \"@radix-ui/react-dropdown-menu\": \"^2.1.16\",\n    \"@radix-ui/react-hover-card\": \"^1.1.15\",\n    \"@radix-ui/react-label\": \"^2.1.7\",\n    \"@radix-ui/react-menubar\": \"^1.1.16\",\n    \"@radix-ui/react-navigation-menu\": \"^1.2.14\",\n    \"@radix-ui/react-popover\": \"^1.1.15\",\n    \"@radix-ui/react-progress\": \"^1.1.7\",\n    \"@radix-ui/react-radio-group\": \"^1.3.8\",\n    \"@radix-ui/react-scroll-area\": \"^1.2.10\",\n    \"@radix-ui/react-select\": \"^2.2.6\",\n    \"@radix-ui/react-separator\": \"^1.1.7\",\n    \"@radix-ui/react-slider\": \"^1.3.6\",\n    \"@radix-ui/react-slot\": \"^1.2.3\",\n    \"@radix-ui/react-switch\": \"^1.2.6\",\n    \"@radix-ui/react-tabs\": \"^1.1.13\",\n    \"@radix-ui/react-toggle\": \"^1.1.10\",\n    \"@radix-ui/react-toggle-group\": \"^1.1.11\",\n    \"@radix-ui/react-tooltip\": \"^1.2.8\",\n    \"@tanstack/react-query\": \"^5.90.2\",\n    \"@trpc/client\": \"^11.6.0\",\n    \"@trpc/react-query\": \"^11.6.0\",\n    \"@trpc/server\": \"^11.6.0\",\n    \"axios\": \"^1.12.0\",\n    \"class-variance-authority\": \"^0.7.1\",\n    \"clsx\": \"^2.1.1\",\n    \"cmdk\": \"^1.1.1\",\n    \"cookie\": \"^1.0.2\",\n    \"date-fns\": \"^4.1.0\",\n    \"dotenv\": \"^17.2.2\",\n    \"drizzle-orm\": \"^0.44.5\",\n    \"embla-carousel-react\": \"^8.6.0\",\n    \"express\": \"^4.21.2\",\n    \"framer-motion\": \"^12.23.22\",\n    \"input-otp\": \"^1.4.2\",\n    \"jose\": \"6.1.0\",\n    \"lucide-react\": \"^0.453.0\",\n    \"mysql2\": \"^3.15.0\",\n    \"nanoid\": \"^5.1.5\",\n    \"next-themes\": \"^0.4.6\",\n    \"react\": \"^19.2.1\",\n    \"react-day-picker\": \"^9.11.1\",\n    \"react-dom\": \"^19.2.1\",\n    \"react-hook-form\": \"^7.64.0\",\n    \"react-resizable-panels\": \"^3.0.6\",\n    \"recharts\": \"^2.15.2\",\n    \"sonner\": \"^2.0.7\",\n    \"streamdown\": \"^1.4.0\",\n    \"superjson\": \"^1.13.3\",\n    \"tailwind-merge\": \"^3.3.1\",\n    \"tailwindcss-animate\": \"^1.0.7\",\n    \"vaul\": \"^1.1.2\",\n    \"wouter\": \"^3.3.5\",\n    \"zod\": \"^4.1.12\"\n  },\n  \"devDependencies\": {\n    \"@builder.io/vite-plugin-jsx-loc\": \"^0.1.1\",\n    \"@tailwindcss/typography\": \"^0.5.15\",\n    \"@tailwindcss/vite\": \"^4.1.3\",\n    \"@types/express\": \"4.17.21\",\n    \"@types/google.maps\": \"^3.58.1\",\n    \"@types/node\": \"^24.7.0\",\n    \"@types/react\": \"^19.2.1\",\n    \"@types/react-dom\": \"^19.2.1\",\n    \"@vitejs/plugin-react\": \"^5.0.4\",\n    \"add\": \"^2.0.6\",\n    \"autoprefixer\": \"^10.4.20\",\n    \"drizzle-kit\": \"^0.31.4\",\n    \"esbuild\": \"^0.25.0\",\n    \"pnpm\": \"^10.15.1\",\n    \"postcss\": \"^8.4.47\",\n    \"prettier\": \"^3.6.2\",\n    \"tailwindcss\": \"^4.1.14\",\n    \"tsx\": \"^4.19.1\",\n    \"tw-animate-css\": \"^1.4.0\",\n    \"typescript\": \"5.9.3\",\n    \"vite\": \"^7.1.7\",\n    \"vite-plugin-manus-runtime\": \"0.0.59\",\n    \"vitest\": \"^2.1.4\"\n  },\n  \"packageManager\": \"pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af\",\n  \"pnpm\": {\n    \"patchedDependencies\": {\n      \"wouter@3.7.1\": \"patches/wouter@3.7.1.patch\"\n    },\n    \"overrides\": {\n      \"tailwindcss>nanoid\": \"3.3.7\"\n    }\n  }\n}",
+./todo.md:444:## Release 1.1.13 — correção de distribuição
+./todo.md:445:- [x] Diagnosticar a divergência de checksum do download Pacman 1.1.12: o hash hardcoded era circular e o redirect apontava para artefato anterior.
+./todo.md:447:- [x] Construir a release 1.1.13 com cinco instaladores, feeds SHA-512 e sidecars SHA-256 derivados dos artefatos finais.
+./todo.md:449:- [x] Publicar o checkpoint da 1.1.13 e validar os downloads reais no domínio público após a propagação; os cinco formatos passaram SHA-256.
+./todo.md:450:- [x] Sincronizar o commit da release 1.1.13 com o GitHub quando a autenticação remota estiver válida; `main` recebeu o commit `1dafa84`.
+./todo.md:464:- [x] Validar arquitetura, interfaces, testes e build após a reconstrução modular; os instaladores, downloads públicos e GitHub permanecem na release 1.1.13 previamente auditada e sincronizada.
+./.manus-logs/devserver.log:1891:[2026-08-17T11:15:35.139Z] > stray-linux@1.1.12 dev /home/ubuntu/linux-gaming-hub
+./.manus-logs/devserver.log:1929:[2026-08-17T11:51:28.030Z] > stray-linux@1.1.13 dev /home/ubuntu/linux-gaming-hub
+./.release-1-2-inventory.txt:3:  version: '1.1.13',
+./.release-1-2-inventory.txt:13:./.github/workflows/windows-installer.yml:15:          node-version: 22
+./.release-1-2-inventory.txt:14:./.github/workflows/ci.yml:22:          node-version: 22
+./.release-1-2-inventory.txt:15:./.github/workflows/quality.yml:28:          version: 10
+./.release-1-2-inventory.txt:16:./.github/workflows/quality.yml:33:          node-version: 22
+./.release-1-2-inventory.txt:17:./.github/workflows/distribution.yml:26:          node-version: 22
+./.release-1-2-inventory.txt:18:./.github/ISSUE_TEMPLATE/bug.yml:13:      placeholder: "1.1.13"
+./.release-1-2-inventory.txt:19:./README.md:11:## Versão 1.1.13
+./.release-1-2-inventory.txt:20:./README.md:13:A versão **1.1.13** consolida o aplicativo como uma estação local de diagnóstico para Linux gaming. GameHub e Biblioteca toleram metadados parciais, normalizam capas a uma proporção consistente e mantêm fallback quando não há mídia disponível. A Biblioteca lê manifestos Steam e instalações Heroic locais para Epic, GOG e Amazon; títulos externos continuam exigindo escolha consciente do usuário. Quando o App ID ou o título encontra um registro no catálogo empacotado, o app declara o método da correspondência e apresenta detalhes, capa disponível e acesso ao GameHub. O Stray não lê credenciais, não modifica bibliotecas e não percorre o disco inteiro.
+./.release-1-2-inventory.txt:21:./README.md:59:O aplicativo consulta o feed HTTPS em `https://linuxtoys-ckuyvpj5.manus.space/updates/`. Ele não depende da API de Releases do GitHub. Quando existir uma atualização compatível, o usuário vê a proposta, confere o artefato e confirma antes do reinício. A release **1.1.13** publica feed, blockmap Windows e cinco artefatos com SHA-256 para os comandos Linux e SHA-512 para o atualizador Electron. Os comandos usam um manifesto único, e os links estáveis redirecionam aos arquivos hashed da mesma release. O pipeline foi mantido em Node/TypeScript e Electron; não foi embutido um segundo runtime sem benefício medido, evitando aumentar o tamanho e a superfície de falha dos instaladores.
+./.release-1-2-inventory.txt:22:./client/public/__manus__/debug-collector.js:815:    version: "2.0-no-rrweb",
+./.release-1-2-inventory.txt:23:./client/public/updates/latest.yml:1:version: 1.1.13
+./.release-1-2-inventory.txt:24:./client/public/updates/latest.yml:3:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe
+./.release-1-2-inventory.txt:25:./client/public/updates/latest.yml:6:path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe
+./.release-1-2-inventory.txt:26:./client/public/updates/latest-linux.yml:1:version: 1.1.13
+./.release-1-2-inventory.txt:27:./client/public/updates/latest-linux.yml:3:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-x86_64_5f65e407.AppImage
+./.release-1-2-inventory.txt:28:./client/public/updates/latest-linux.yml:7:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-amd64_4cc6cfcc.deb
+./.release-1-2-inventory.txt:29:./client/public/updates/latest-linux.yml:10:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-x86_64_e4008bd7.rpm
+./.release-1-2-inventory.txt:30:./client/public/updates/latest-linux.yml:13:  - url: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-x64_680cc9f6.pacman
+./.release-1-2-inventory.txt:31:./client/public/updates/latest-linux.yml:16:path: https://linuxtoys-ckuyvpj5.manus.space/manus-storage/Stray-Linux-1.1.13-x86_64_5f65e407.AppImage
+./.release-1-2-inventory.txt:32:./client/src/components/platform/WorkspaceStatus.tsx:4:export function WorkspaceStatus({ label, version }: { label: string; version: string }) {
+./.release-1-2-inventory.txt:33:./client/src/components/site/WindowsDownloadCard.tsx:10:  return <article className="group relative overflow-hidden rounded-[1.25rem] bg-[#0b0c10] p-6 text-[#f5f5f0] sm:p-8"><div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-[#91b7ff]/20 blur-3xl transition-transform duration-500 group-hover:scale-125" aria-hidden="true" /><div className="relative"><p className="font-tech text-[10px] tracking-[.16em] text-white/48">{copy.windowsEyebrow}</p><h3 className="mt-10 text-4xl font-medium leading-none tracking-[-.06em]">{copy.windowsMain}<br />{copy.windowsAccent}</h3><p className="mt-5 max-w-xs text-sm leading-6 text-white/61">{copy.windowsBody}</p><a href={distributionAssets.exe} download="Stray-Linux-1.1.13-Setup.exe" className="mt-10 flex"><Button className="h-12 w-full rounded-full bg-[#f5f5f0] text-[#0b0c10] hover:bg-[#b7d3ff]"><Download className="mr-2 h-4 w-4" />{copy.downloadExe}</Button></a><p className="mt-5 text-xs leading-5 text-white/42">{copy.windowsFootnote}</p></div></article>;
+./.release-1-2-inventory.txt:34:./client/src/lib/distribution.test.ts:22:    expect(releaseManifest.version).toBe("1.1.13");
+./.release-1-2-inventory.txt:35:./client/src/lib/systemGraph.test.ts:4:const scan: SystemGraphScan = { system: { distribution: { name: "Arch Linux", version: null }, kernelVersion: "6.16", desktopEnvironment: "KDE", gpu: { model: "GPU observada" }, graphics: { driverVersion: "Mesa 25", mesaVersion: "25", vulkanVersion: "1.3", vulkanApiVersion: "1.3", vulkanDeviceName: "GPU observada", vulkanDriverName: "Mesa", vulkanDeviceCount: 1, vulkanSummaryAvailable: true }, runtime: { wineVersion: null, protonVersion: "Proton 10", steamDetected: true, installedGameCount: 3, discovery: { heroicDetected: false, heroicInstalledGameCount: 0 }, gaming: { sessionType: "wayland", waylandDetected: true, x11Detected: false, vulkanToolsDetected: true, gameModeDetected: true, gameModeServiceActive: true, mangoHudDetected: false, gamescopeDetected: false, renderGroupDetected: true } } } };
+./.release-1-2-inventory.txt:36:./client/src/lib/systemGraph.ts:3:    distribution: { name: string | null; version: string | null };
+./.release-1-2-inventory.txt:37:./client/src/lib/preflight.test.ts:5:const scan: SystemGraphScan = { system: { distribution: { name: "Distro", version: null }, kernelVersion: "6.16", gpu: { model: "GPU", driverVersion: "Driver" }, graphics: { driverVersion: "Driver", mesaVersion: null, vulkanVersion: null }, runtime: { wineVersion: null, protonVersion: "Proton", steamDetected: true, gaming: { sessionType: "wayland", waylandDetected: true, x11Detected: false, vulkanToolsDetected: true, gameModeDetected: false, gameModeServiceActive: null, mangoHudDetected: false, gamescopeDetected: false, renderGroupDetected: true } } } };
+./.release-1-2-inventory.txt:38:./client/src/lib/snapshotComparison.test.ts:4:const base = { schemaVersion: 1 as const, scannerVersion: "1.4.0", generatedAt: "2026-08-15T15:00:00.000Z", system: { distribution: { id: "arch", name: "Arch", version: null }, kernelVersion: "6.16", cpu: { model: "CPU" }, gpu: { model: "GPU", vramMb: null }, memoryGb: 16, graphics: { driverVersion: "Mesa 25", mesaVersion: "25", vulkanVersion: "1.3", openGlVersion: null }, runtime: { wineVersion: null, protonVersion: "Proton 10", steamDetected: true, gaming: { sessionType: "wayland", waylandDetected: true, x11Detected: false, vulkanToolsDetected: true, gameModeDetected: true, gameModeServiceActive: true, mangoHudDetected: false, gamescopeDetected: false, flatpakDetected: false, renderGroupDetected: true } } } };
+./.release-1-2-inventory.txt:39:./client/src/lib/releaseManifest.ts:2:  version: "1.1.13",
+./.release-1-2-inventory.txt:40:./client/src/i18n/experienceCopy.test.ts:49:      expect(landing.downloadsEyebrow).toContain("1.1.13");
+./.release-1-2-inventory.txt:41:./client/src/i18n/productShellCopy.ts:3:type ProductShellCopy = { workspace: string; system: string; personal: string; tools: string; compare: string; status: string; version: string; };
+./.release-1-2-inventory.txt:42:./client/src/i18n/productShellCopy.ts:6:  "pt-BR": { workspace: "WORKSPACE", system: "SISTEMA", personal: "PESSOAL", tools: "MAIS FERRAMENTAS", compare: "Comparar", status: "Sistema online", version: "Versão 1.1.13" },
+./.release-1-2-inventory.txt:43:./client/src/i18n/productShellCopy.ts:7:  en: { workspace: "WORKSPACE", system: "SYSTEM", personal: "PERSONAL", tools: "MORE TOOLS", compare: "Compare", status: "System online", version: "Version 1.1.13" },
+./.release-1-2-inventory.txt:44:./client/src/i18n/productShellCopy.ts:8:  es: { workspace: "ESPACIO DE TRABAJO", system: "SISTEMA", personal: "PERSONAL", tools: "MÁS HERRAMIENTAS", compare: "Comparar", status: "Sistema en línea", version: "Versión 1.1.13" },
+./.release-1-2-inventory.txt:45:./client/src/i18n/productShellCopy.ts:9:  fr: { workspace: "ESPACE DE TRAVAIL", system: "SYSTÈME", personal: "PERSONNEL", tools: "PLUS D'OUTILS", compare: "Comparer", status: "Système en ligne", version: "Version 1.1.13" },
+./.release-1-2-inventory.txt:46:./client/src/i18n/productShellCopy.ts:10:  de: { workspace: "ARBEITSBEREICH", system: "SYSTEM", personal: "PERSÖNLICH", tools: "WEITERE WERKZEUGE", compare: "Vergleichen", status: "System online", version: "Version 1.1.13" },
+./.release-1-2-inventory.txt:47:./client/src/i18n/productShellCopy.ts:11:  it: { workspace: "AREA DI LAVORO", system: "SISTEMA", personal: "PERSONALE", tools: "ALTRI STRUMENTI", compare: "Confronta", status: "Sistema online", version: "Versione 1.1.13" },
+./.release-1-2-inventory.txt:48:./client/src/i18n/productShellCopy.ts:12:  ru: { workspace: "РАБОЧЕЕ ПРОСТРАНСТВО", system: "СИСТЕМА", personal: "ЛИЧНОЕ", tools: "БОЛЬШЕ ИНСТРУМЕНТОВ", compare: "Сравнить", status: "Система онлайн", version: "Версия 1.1.13" },
+./.release-1-2-inventory.txt:49:./client/src/i18n/productShellCopy.ts:13:  "zh-CN": { workspace: "工作区", system: "系统", personal: "个人", tools: "更多工具", compare: "比较", status: "系统在线", version: "版本 1.1.13" },
+./.release-1-2-inventory.txt:50:./client/src/i18n/productShellCopy.ts:14:  ja: { workspace: "ワークスペース", system: "システム", personal: "個人", tools: "その他のツール", compare: "比較", status: "システムオンライン", version: "バージョン 1.1.13" },
+./.release-1-2-inventory.txt:51:./client/src/i18n/productShellCopy.ts:15:  ko: { workspace: "작업 공간", system: "시스템", personal: "개인", tools: "추가 도구", compare: "비교", status: "시스템 온라인", version: "버전 1.1.13" },
+./.release-1-2-inventory.txt:52:./client/src/i18n/productShellCopy.ts:16:  ar: { workspace: "مساحة العمل", system: "النظام", personal: "شخصي", tools: "المزيد من الأدوات", compare: "مقارنة", status: "النظام متصل", version: "الإصدار 1.1.13" },
+./.release-1-2-inventory.txt:53:./client/src/i18n/landingCopy.ts:31:    downloadsEyebrow: "DOWNLOADS VERIFICÁVEIS / V1.1.13", downloadsLead: "Selecione a família correta. O comando completo baixa o pacote, valida o checksum e instala apenas aquele formato.", downloadsMain: "Pronto para", downloadsAccent: "a sua máquina.", uninstallLead: "Já instalou o aplicativo? Veja o desinstalador por plataforma.",
+./.release-1-2-inventory.txt:54:./client/src/i18n/landingCopy.ts:44:    downloadsEyebrow: "VERIFIABLE DOWNLOADS / V1.1.13", downloadsLead: "Choose the right family. The complete command downloads the package, verifies its checksum and installs only that format.", downloadsMain: "Ready for", downloadsAccent: "your machine.", uninstallLead: "Already installed it? See the uninstaller by platform.",
+./.release-1-2-inventory.txt:55:./client/src/i18n/landingCopy.ts:57:    downloadsEyebrow: "DESCARGAS VERIFICABLES / V1.1.13", downloadsLead: "Elige la familia correcta. El comando descarga el paquete, verifica el checksum e instala solo ese formato.", downloadsMain: "Listo para", downloadsAccent: "tu máquina.", uninstallLead: "¿Ya instalaste la aplicación? Consulta el desinstalador por plataforma.",
+./.release-1-2-inventory.txt:56:./client/src/i18n/landingCopy.ts:70:    downloadsEyebrow: "TÉLÉCHARGEMENTS VÉRIFIABLES / V1.1.13", downloadsLead: "Choisissez la bonne famille. La commande télécharge le paquet, vérifie le checksum et installe uniquement ce format.", downloadsMain: "Prêt pour", downloadsAccent: "votre machine.", uninstallLead: "Déjà installé ? Consultez le désinstallateur par plateforme.",
+./.release-1-2-inventory.txt:57:./client/src/i18n/landingCopy.ts:83:    downloadsEyebrow: "ÜBERPRÜFBARE DOWNLOADS / V1.1.13", downloadsLead: "Wählen Sie die richtige Familie. Der Befehl lädt das Paket, prüft die Prüfsumme und installiert nur dieses Format.", downloadsMain: "Bereit für", downloadsAccent: "Ihre Maschine.", uninstallLead: "Bereits installiert? Sehen Sie die Deinstallation nach Plattform.",
+./.release-1-2-inventory.txt:58:./client/src/i18n/landingCopy.ts:96:    downloadsEyebrow: "DOWNLOAD VERIFICABILI / V1.1.13", downloadsLead: "Scegli la famiglia corretta. Il comando scarica il pacchetto, verifica il checksum e installa solo quel formato.", downloadsMain: "Pronto per", downloadsAccent: "la tua macchina.", uninstallLead: "Hai già installato l’app? Vedi la disinstallazione per piattaforma.",
+./.release-1-2-inventory.txt:59:./client/src/i18n/landingCopy.ts:109:    downloadsEyebrow: "ПРОВЕРЯЕМЫЕ ЗАГРУЗКИ / V1.1.13", downloadsLead: "Выберите правильное семейство. Команда скачивает пакет, проверяет checksum и устанавливает только этот формат.", downloadsMain: "Готово для", downloadsAccent: "вашей машины.", uninstallLead: "Уже установили? Смотрите удаление по платформам.",
+./.release-1-2-inventory.txt:60:./client/src/i18n/landingCopy.ts:122:    downloadsEyebrow: "可验证下载 / V1.1.13", downloadsLead: "选择正确的发行版家族。命令会下载软件包、验证校验和并仅安装该格式。", downloadsMain: "为你的", downloadsAccent: "设备准备就绪。", uninstallLead: "已安装应用？查看各平台卸载说明。",
+./.release-1-2-inventory.txt:61:./client/src/i18n/landingCopy.ts:135:    downloadsEyebrow: "検証可能なダウンロード / V1.1.13", downloadsLead: "正しいファミリーを選択してください。コマンドはパッケージを取得し、チェックサムを検証してその形式だけをインストールします。", downloadsMain: "あなたの", downloadsAccent: "マシンへ。", uninstallLead: "すでにインストール済みですか？プラットフォーム別の削除手順を確認してください。",
+./.release-1-2-inventory.txt:62:./client/src/i18n/landingCopy.ts:148:    downloadsEyebrow: "검증 가능한 다운로드 / V1.1.13", downloadsLead: "올바른 계열을 선택하세요. 명령은 패키지를 받고 체크섬을 확인한 뒤 해당 형식만 설치합니다.", downloadsMain: "내", downloadsAccent: "장비를 위해 준비됨.", uninstallLead: "이미 설치했나요? 플랫폼별 제거 방법을 확인하세요.",
+./.release-1-2-inventory.txt:63:./client/src/i18n/landingCopy.ts:161:    downloadsEyebrow: "تنزيلات قابلة للتحقق / V1.1.13", downloadsLead: "اختر العائلة الصحيحة. ينزّل الأمر الحزمة ويتحقق من المجموع ويثبت هذا التنسيق فقط.", downloadsMain: "جاهز", downloadsAccent: "لجهازك.", uninstallLead: "هل ثبّت التطبيق بالفعل؟ راجع إزالة التثبيت حسب المنصة.",
+./.release-1-2-inventory.txt:64:./client/src/i18n/landingCopy.ts:168:const currentPublicRelease = "1.1.13";
+./.release-1-2-inventory.txt:65:./desktop/bin/stray-scan.cjs:31:  return { id: values.ID || null, name: values.PRETTY_NAME || values.NAME || null, version: values.VERSION_ID || null };
+./.release-1-2-inventory.txt:66:./desktop/bin/stray-scan.cjs:100:  const openGl = graphicsInfo.match(/OpenGL version string:\s*(.+)$/im)?.[1]?.trim() || graphicsInfo.match(/OpenGL version:\s*(.+)$/im)?.[1]?.trim() || null;
+./.release-1-2-inventory.txt:67:./desktop/updater.cjs:6:  let status = { state: "idle", version: app.getVersion(), progress: 0, detail: null };
+./.release-1-2-inventory.txt:68:./desktop/updater.cjs:32:    setStatus({ state: "downloading", version: info.version, detail: "Atualização encontrada; validando download.", progress: 0 });
+./.release-1-2-inventory.txt:69:./desktop/updater.cjs:33:    log("info", "Atualização disponível", { version: info.version });
+./.release-1-2-inventory.txt:70:./desktop/updater.cjs:36:    setStatus({ state: "up-to-date", version: info.version || app.getVersion(), detail: "O aplicativo já está atualizado.", progress: 100 });
+./.release-1-2-inventory.txt:71:./desktop/updater.cjs:41:    setStatus({ state: "ready", version: info.version, progress: 100, detail: "Atualização validada e pronta para instalar." });
+./.release-1-2-inventory.txt:72:./desktop/updater.cjs:42:    log("info", "Atualização baixada", { version: info.version });
+./.release-1-2-inventory.txt:73:./docs/CI_AND_DISTRIBUTION.md:19:O script não instala o pacote e não altera o sistema. Ele exige redirect HTTP 302 para um artefato da release 1.1.13, baixa o pacote, compara o SHA-256 calculado com o sidecar público, verifica o contêiner gzip usado pelo alvo `pacman` atual do electron-builder e confirma que o arquivo contém `opt/Stray Linux/`. O resultado validado no sandbox foi um pacote de 173390860 bytes com SHA-256 `4e84346a67af2dd45d1c9fbcf93a1a863bdb23306b3fa65a4c80e4727b440f0a`. O sandbox não é Arch, portanto a inspeção `pacman -Qp` precisa ser executada pelo colaborador em uma máquina Arch.
+./.release-1-2-inventory.txt:74:./drizzle/schema.ts:229:    version: varchar("version", { length: 100 }).notNull(),
+./.release-1-2-inventory.txt:75:./package.json:3:  "version": "1.1.13",
+./.release-1-2-inventory.txt:76:./package.json:33:    "@radix-ui/react-collapsible": "^1.1.12",
+./.release-1-2-inventory.txt:77:./package.json:50:    "@radix-ui/react-tabs": "^1.1.13",
+./.release-1-2-inventory.txt:78:./pnpm-lock.yaml:13:        version: 3.1110.0
+./.release-1-2-inventory.txt:79:./pnpm-lock.yaml:16:        version: 3.1110.0
+./.release-1-2-inventory.txt:80:./pnpm-lock.yaml:19:        version: 5.2.2(react-hook-form@7.64.0(react@19.2.1))
+./.release-1-2-inventory.txt:81:./pnpm-lock.yaml:22:        version: 1.2.12(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:82:./pnpm-lock.yaml:25:        version: 1.1.15(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:83:./pnpm-lock.yaml:28:        version: 1.1.7(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:84:./pnpm-lock.yaml:31:        version: 1.1.10(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:85:./pnpm-lock.yaml:34:        version: 1.3.3(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:86:./pnpm-lock.yaml:36:        specifier: ^1.1.12
+./.release-1-2-inventory.txt:87:./pnpm-lock.yaml:37:        version: 1.1.12(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:88:./pnpm-lock.yaml:40:        version: 2.2.16(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:89:./pnpm-lock.yaml:43:        version: 1.1.15(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:90:./pnpm-lock.yaml:46:        version: 2.1.16(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:91:./pnpm-lock.yaml:49:        version: 1.1.15(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:92:./pnpm-lock.yaml:52:        version: 2.1.7(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:93:./pnpm-lock.yaml:55:        version: 1.1.16(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:94:./pnpm-lock.yaml:58:        version: 1.2.14(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:95:./pnpm-lock.yaml:61:        version: 1.1.15(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:96:./pnpm-lock.yaml:64:        version: 1.1.7(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:97:./pnpm-lock.yaml:67:        version: 1.3.8(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:98:./pnpm-lock.yaml:70:        version: 1.2.10(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:99:./pnpm-lock.yaml:73:        version: 2.2.6(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:100:./pnpm-lock.yaml:76:        version: 1.1.7(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:101:./pnpm-lock.yaml:79:        version: 1.3.6(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:102:./pnpm-lock.yaml:82:        version: 1.2.3(@types/react@19.2.1)(react@19.2.1)
+./.release-1-2-inventory.txt:103:./pnpm-lock.yaml:85:        version: 1.2.6(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:104:./pnpm-lock.yaml:87:        specifier: ^1.1.13
+./.release-1-2-inventory.txt:105:./pnpm-lock.yaml:88:        version: 1.1.13(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:106:./pnpm-lock.yaml:91:        version: 1.1.10(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:107:./pnpm-lock.yaml:94:        version: 1.1.11(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:108:./pnpm-lock.yaml:97:        version: 1.2.8(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+./.release-1-2-inventory.txt:109:./pnpm-lock.yaml:100:        version: 5.90.2(react@19.2.1)
+./.release-1-2-inventory.txt:110:./pnpm-lock.yaml:103:        version: 11.18.0(@trpc/server@11.18.0(typescript@5.9.3))(typescript@5.9.3)
+./.release-1-2-inventory.txt:111:./pnpm-lock.yaml:106:        version: 11.18.0(@tanstack/react-query@5.90.2(react@19.2.1))(@trpc/client@11.18.0(@trpc/server@11.18.0(typescript@5.9.3))(typescript@5.9.3))(@trpc/server@11.18.0(typescript@5.9.3))(react@19.2.1)(typescript@5.9.3)
+./.release-1-2-inventory.txt:112:./pnpm-lock.yaml:109:        version: 11.18.0(typescript@5.9.3)
+./.release-1-2-inventory.txt:113:./pnpm-lock.yaml:112:        version: 1.4.11
+=== distribution scripts ===
+client/src/lib/atlasNavigationCopy.test.ts
+client/src/lib/benchmarkComparison.ts
+client/src/lib/distribution.test.ts
+client/src/lib/distribution.ts
+client/src/lib/distroProfile.install.test.ts
+client/src/lib/performanceRegression.test.ts
+client/src/lib/performanceRegression.ts
+client/src/lib/preflight.test.ts
+client/src/lib/preflight.ts
+client/src/lib/releaseManifest.ts
+client/src/lib/routeAccess.test.ts
+client/src/lib/routeAccess.ts
+client/src/lib/routePreload.ts
+client/src/lib/snapshotComparison.test.ts
+client/src/lib/snapshotComparison.ts
+client/src/lib/systemGraph.test.ts
+client/src/lib/systemGraph.ts
+client/src/lib/trpc.ts
+client/src/lib/utils.ts
+scripts/audit-dependencies.mjs
+scripts/build-distro-registry.mjs
+scripts/export-desktop-seed.mjs
+scripts/extract-ui-strings.mjs
+scripts/import-steam-catalog.mjs
+scripts/inspect-steam-dataset.mjs
+scripts/refresh-steam-istore.mjs
+scripts/seed-linux-knowledge.mjs
+scripts/translate-ui-static.mjs
+scripts/verify-arch-download.mjs
+scripts/verify-desktop-snapshot.mjs
+scripts/verify-sqlite-driver.mjs
+server/_core/context.ts
+server/_core/cookies.ts
+server/_core/dataApi.ts
+server/_core/dev.ts
+server/_core/env.ts
+server/_core/heartbeat.ts
+server/_core/imageGeneration.ts
+server/_core/index.ts
+server/_core/llm.ts
+server/_core/map.ts
+server/_core/notification.ts
+server/_core/oauth.ts
+server/_core/sdk.ts
+server/_core/static.ts
+server/_core/storageProxy.ts
+server/_core/systemRouter.ts
+server/_core/trpc.ts
+server/_core/types/cookie.d.ts
+server/_core/types/manusTypes.ts
+server/_core/vite.ts
+server/_core/voiceTranscription.ts
+server/appTitle.test.ts
+server/assistantPresentation.test.ts
+server/auth.logout.test.ts
+server/benchmarkComparison.test.ts
+server/benchmarkEvidence.test.ts
+server/comparePresentation.test.ts
+server/db.ts
+server/dependencySecurity.test.ts
+server/designNarrative.test.ts
+server/desktop/launcher.test.ts
+server/desktop/localStore.test.ts
+server/desktop/localStore.ts
+server/desktop/maintenance.preview.test.ts
+server/desktop/navigationPolicy.test.ts
+server/desktop/productionRuntime.test.ts
+server/desktop/router.ai.test.ts
+server/desktop/router.ts
+server/desktop/steamLibrary.test.ts
+server/desktop/updater.test.ts
+server/externalLibrary.test.ts
+server/gameCardPresentation.test.ts
+server/heroic-library.test.ts
+server/languageCatalog.test.ts
+server/lib/benchmarkEvidence.ts
+server/lib/linuxHealth.ts
+server/lib/operationalStatus.ts
+server/lib/requestRateLimit.ts
+server/lib/scannerReport.test.ts
+server/lib/scannerReport.ts
+server/lib/serverBinding.test.ts
+server/lib/serverBinding.ts
+server/lib/steamCatalogRefresh.ts
+server/lib/steamWebApi.ts
+server/lib/strayAiScope.ts
+server/libraryPresentation.test.ts
+server/operationalStatus.test.ts
+server/packageMetadata.test.ts
+server/productPolishPresentation.test.ts
+server/productWorkspacePresentation.test.ts
+server/publicApi.ts
+server/publicDownloads.test.ts
+server/publicDownloads.ts
+server/publicLanding.test.ts
+server/publicUpdates.test.ts
+server/publicUpdates.ts
+server/requestRateLimit.test.ts
+server/routers.ts
+server/routers/_guards.ts
+server/routers/admin.ts
+server/routers/admin.validation.test.ts
+server/routers/benchmarks.ts
+server/routers/brand.test.ts
+server/routers/brand.ts
+server/routers/chat.router.test.ts
+server/routers/chat.ts
+server/routers/compatibility.test.ts
+server/routers/compatibility.ts
+server/routers/engagement.router.test.ts
+server/routers/engagement.ts
+server/routers/games.filters.test.ts
+server/routers/games.ts
+server/routers/guards.integration.test.ts
+server/routers/knowledge.ts
+server/routers/linuxFixCommunity.router.test.ts
+server/routers/linuxFixCommunity.ts
+server/routers/moderation.router.test.ts
+server/routers/personal.router.test.ts
+server/routers/policies.test.ts
+server/routers/policies.ts
+server/routers/user.ts
+server/scannerReport.test.ts
+server/scheduled/sourceRefresh.test.ts
+server/scheduled/sourceRefresh.ts
+server/steamCatalogRefresh.test.ts
+server/steamCredentials.test.ts
+server/steamWebApi.test.ts
+server/storage.ts
+server/supportDonationPresentation.test.ts
+server/windowsCatalog.test.ts
+=== release/directories ===
+./dist/latest-linux.yml
+./dist/latest.yml
+./docs/CHECKSUMS-1.0.0-production-roadmap.sha256
+./docs/CHECKSUMS-1.0.0-self-hosted-status.sha256
+=== public release redirects ===
+server/lib/steamCatalogRefresh.ts:19:    const inputHash = createHash("sha256").update(JSON.stringify(page.apps)).digest("hex");
+server/publicLanding.test.ts:13:    expect(distribution).toContain("downloads/stray-linux/windows-x64.exe");
+server/publicLanding.test.ts:14:    expect(distribution).toContain("downloads/stray-linux/debian-amd64.deb");
+server/publicLanding.test.ts:15:    expect(distribution).toContain("downloads/stray-linux/rpm-x64.rpm");
+server/publicLanding.test.ts:16:    expect(distribution).toContain("downloads/stray-linux/arch-x64.pacman");
+server/publicLanding.test.ts:17:    expect(distribution).toContain("downloads/stray-linux/linux-x64.AppImage");
+server/publicLanding.test.ts:20:    expect(distribution).toContain("sha256sum --check --status -");
+server/publicDownloads.ts:4:  "/downloads/stray-linux/windows-x64.exe": "/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe",
+server/publicDownloads.ts:5:  "/downloads/stray-linux/windows-x64.exe.sha256": "/manus-storage/Stray-Linux-1.1.13-Setup.exe_17eef105.sha256",
+server/publicDownloads.ts:6:  "/downloads/stray-linux/debian-amd64.deb": "/manus-storage/Stray-Linux-1.1.13-amd64_4cc6cfcc.deb",
+server/publicDownloads.ts:7:  "/downloads/stray-linux/debian-amd64.deb.sha256": "/manus-storage/Stray-Linux-1.1.13-amd64.deb_0c65b1cd.sha256",
+server/publicDownloads.ts:8:  "/downloads/stray-linux/rpm-x64.rpm": "/manus-storage/Stray-Linux-1.1.13-x86_64_e4008bd7.rpm",
+server/publicDownloads.ts:9:  "/downloads/stray-linux/rpm-x64.rpm.sha256": "/manus-storage/Stray-Linux-1.1.13-x86_64.rpm_409048d6.sha256",
+server/publicDownloads.ts:10:  "/downloads/stray-linux/arch-x64.pacman": "/manus-storage/Stray-Linux-1.1.13-x64_680cc9f6.pacman",
+server/publicDownloads.ts:11:  "/downloads/stray-linux/arch-x64.pacman.sha256": "/manus-storage/Stray-Linux-1.1.13-x64.pacman_33e19d30.sha256",
+server/publicDownloads.ts:12:  "/downloads/stray-linux/linux-x64.AppImage": "/manus-storage/Stray-Linux-1.1.13-x86_64_5f65e407.AppImage",
+server/publicDownloads.ts:13:  "/downloads/stray-linux/linux-x64.AppImage.sha256": "/manus-storage/Stray-Linux-1.1.13-x86_64.AppImage_60b5f0c0.sha256",
+server/publicDownloads.test.ts:5:  it("mantém artefatos e sidecars finais 1.1.13 por plataforma", () => {
+server/publicDownloads.test.ts:7:    expect(publicDownloadTargets["/downloads/stray-linux/windows-x64.exe"]).toBe("/manus-storage/Stray-Linux-1.1.13-Setup_f3e1e60e.exe");
+server/publicDownloads.test.ts:8:    expect(publicDownloadTargets["/downloads/stray-linux/windows-x64.exe.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-Setup.exe_17eef105.sha256");
+server/publicDownloads.test.ts:9:    expect(publicDownloadTargets["/downloads/stray-linux/debian-amd64.deb"]).toBe("/manus-storage/Stray-Linux-1.1.13-amd64_4cc6cfcc.deb");
+server/publicDownloads.test.ts:10:    expect(publicDownloadTargets["/downloads/stray-linux/debian-amd64.deb.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-amd64.deb_0c65b1cd.sha256");
+server/publicDownloads.test.ts:11:    expect(publicDownloadTargets["/downloads/stray-linux/rpm-x64.rpm"]).toBe("/manus-storage/Stray-Linux-1.1.13-x86_64_e4008bd7.rpm");
+server/publicDownloads.test.ts:12:    expect(publicDownloadTargets["/downloads/stray-linux/rpm-x64.rpm.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-x86_64.rpm_409048d6.sha256");
+server/publicDownloads.test.ts:13:    expect(publicDownloadTargets["/downloads/stray-linux/arch-x64.pacman"]).toBe("/manus-storage/Stray-Linux-1.1.13-x64_680cc9f6.pacman");
+server/publicDownloads.test.ts:14:    expect(publicDownloadTargets["/downloads/stray-linux/arch-x64.pacman.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-x64.pacman_33e19d30.sha256");
+server/publicDownloads.test.ts:15:    expect(publicDownloadTargets["/downloads/stray-linux/linux-x64.AppImage"]).toBe("/manus-storage/Stray-Linux-1.1.13-x86_64_5f65e407.AppImage");
+server/publicDownloads.test.ts:16:    expect(publicDownloadTargets["/downloads/stray-linux/linux-x64.AppImage.sha256"]).toBe("/manus-storage/Stray-Linux-1.1.13-x86_64.AppImage_60b5f0c0.sha256");
+client/src/components/site/SiteTrustGrid.tsx:6:  { code: "03 / ENTREGA", icon: PackageCheck, title: "Um formato para cada sistema.", body: "Downloads estáveis usam o pacote correto por família e sidecar SHA-256. O atualizador usa feed HTTPS separado e pede confirmação antes de reiniciar.", href: "/download", action: "Abrir downloads" },
+client/src/lib/distribution.ts:6:  exe: "/downloads/stray-linux/windows-x64.exe",
+client/src/lib/distribution.ts:7:  deb: "/downloads/stray-linux/debian-amd64.deb",
+client/src/lib/distribution.ts:8:  rpm: "/downloads/stray-linux/rpm-x64.rpm",
+client/src/lib/distribution.ts:9:  pacman: "/downloads/stray-linux/arch-x64.pacman",
+client/src/lib/distribution.ts:10:  appImage: "/downloads/stray-linux/linux-x64.AppImage",
+client/src/lib/distribution.ts:22:) => `bash -c '\nset -euo pipefail\numask 022\nartifact="${artifactPath}"\nchecksum="$(mktemp /tmp/stray-linux.XXXXXX.sha256)"\ncleanup() { rm -f "$artifact" "$checksum"; }\ntrap cleanup EXIT\n${preparation ? `${preparation}\\n` : ""}curl --fail --location --show-error --silent --retry 3 --retry-delay 2 "${distributionOrigin}${artifactUrl}" -o "$artifact"\ntest -s "$artifact"\ncurl --fail --location --show-error --silent --retry 3 --retry-delay 2 "${distributionOrigin}${checksumPath}" -o "$checksum"\ntest -s "$checksum"\nexpected="$(awk '\\''NF { print $1; exit }'\\'' "$checksum")"\nprintf '%s\\n' "$expected" | grep -Eq '\\''^[0-9a-fA-F]{64}$'\\''\nprintf '%s  %s\\n' "$expected" "$artifact" | sha256sum --check --status -\nprintf 'Stray Linux ${releaseManifest.version}: ${artifactName} verificado\\n'\n${installCommand}\n'`;
+client/src/lib/distribution.test.ts:8:    expect(distributionAssets.exe).toBe("/downloads/stray-linux/windows-x64.exe");
+client/src/lib/distribution.test.ts:15:      expect(installer.command).toContain("sha256sum --check --status -");
+client/src/lib/distroProfile.install.test.ts:9:    expect(profile.install).toContain("sha256sum --check --status");
+client/src/lib/distroProfile.install.test.ts:18:    expect(profile.install).toContain("sha256sum --check --status");
+client/src/lib/releaseManifest.ts:4:    exe: "/downloads/stray-linux/windows-x64.exe.sha256",
+client/src/lib/releaseManifest.ts:5:    deb: "/downloads/stray-linux/debian-amd64.deb.sha256",
+client/src/lib/releaseManifest.ts:6:    rpm: "/downloads/stray-linux/rpm-x64.rpm.sha256",
+client/src/lib/releaseManifest.ts:7:    pacman: "/downloads/stray-linux/arch-x64.pacman.sha256",
+client/src/lib/releaseManifest.ts:8:    appImage: "/downloads/stray-linux/linux-x64.AppImage.sha256",
+scripts/import-steam-catalog.mjs:58:  const inputHash = createHash("sha256").update(raw).digest("hex");
+scripts/refresh-steam-istore.mjs:38:  const inputHash = createHash("sha256").update(JSON.stringify(apps)).digest("hex");
+scripts/verify-arch-download.mjs:9:const stablePath = "/downloads/stray-linux/arch-x64.pacman";
+scripts/verify-arch-download.mjs:10:const sidecarPath = `${stablePath}.sha256`;
+scripts/verify-arch-download.mjs:26:const sha256 = createHash("sha256").update(artifact).digest("hex");
+scripts/verify-arch-download.mjs:27:const sidecar = await (await get(sidecarPath)).text();
+scripts/verify-arch-download.mjs:28:const expected = sidecar.match(/\b[a-f0-9]{64}\b/i)?.[0]?.toLowerCase();
+scripts/verify-arch-download.mjs:29:if (!expected) throw new Error("sidecar não contém SHA-256 válido");
+scripts/verify-arch-download.mjs:30:if (sha256 !== expected) throw new Error(`SHA-256 divergente: calculado ${sha256}, publicado ${expected}`);
+scripts/verify-arch-download.mjs:57:console.log(JSON.stringify({ base, redirect: location, bytes: artifact.length, sha256, sidecar: expected, container: archiveFormat, packageInspection: archiveFormat === "gzip" ? "tar -tzf" : existsSync("/usr/bin/pacman") ? "pacman -Qp" : "skipped-non-arch" }, null, 2));

@@ -497,3 +497,10 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Aplicar refinamentos priorizados de design system, navegação, páginas, estados, imagens, formulários e textos preservando dados e recursos existentes.
 - [x] Auditar e otimizar somente gargalos comprovados de performance, robustez, código e segurança, com cobertura de regressão quando aplicável.
 - [x] Concluir duas passagens de QA funcional, visual e técnico em rotas públicas e operacionais, com testes, build, logs e revisão responsiva.
+
+## Release 1.2
+- [x] Inventariar referências de versão, manifestos, feeds, redirects, sidecars e scripts de distribuição da release atual.
+- [x] Atualizar aplicativo, site, textos, documentação, feeds e updater para a versão 1.2 de maneira consistente.
+- [x] Gerar e auditar os cinco artefatos 1.2, com inspeção de metadados, `app.asar` e integridade por formato.
+- [x] Preparar os artefatos, sidecars SHA-256, redirects e feeds da release 1.2 para publicação no domínio público.
+- [ ] Executar testes, build, auditorias de downloads, revisão do site e sincronização de GitHub para a release 1.2.

@@ -74,7 +74,7 @@ describe("landing pública", () => {
     expect(workspace).toContain("advancedOpen || advancedRouteActive");
     expect(workspace).toContain('href: "/assistant", label: "Stray AI"');
     expect(copy).toContain('tools: "MAIS FERRAMENTAS"');
-    expect(copy).toContain('version: "Versão 1.1.13"');
+    expect(copy).toContain('version: "Versão 1.2.0"');
   });
 
   it("documenta remoção segura sem limpar dados locais automaticamente", () => {

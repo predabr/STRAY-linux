@@ -165,7 +165,7 @@ const landingCopySource: Record<Locale, LandingCopy> = {
   },
 };
 
-const currentPublicRelease = "1.1.13";
+const currentPublicRelease = "1.2.0";
 
 export const landingCopy: Record<Locale, LandingCopy> = Object.fromEntries(
   Object.entries(landingCopySource).map(([locale, copy]) => [locale, {

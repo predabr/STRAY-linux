@@ -16,7 +16,7 @@ Em uma instalação Arch real, execute sem `ALLOW_NON_ARCH` para habilitar a ins
 pnpm verify:arch-download
 ```
 
-O script não instala o pacote e não altera o sistema. Ele exige redirect HTTP 302 para um artefato da release 1.1.13, baixa o pacote, compara o SHA-256 calculado com o sidecar público, verifica o contêiner gzip usado pelo alvo `pacman` atual do electron-builder e confirma que o arquivo contém `opt/Stray Linux/`. O resultado validado no sandbox foi um pacote de 173390860 bytes com SHA-256 `4e84346a67af2dd45d1c9fbcf93a1a863bdb23306b3fa65a4c80e4727b440f0a`. O sandbox não é Arch, portanto a inspeção `pacman -Qp` precisa ser executada pelo colaborador em uma máquina Arch.
+O script não instala o pacote e não altera o sistema. Ele exige redirect HTTP 302 para um artefato da release 1.2.0, baixa o pacote, compara o SHA-256 calculado com o sidecar público, verifica o contêiner gzip usado pelo alvo `pacman` atual do electron-builder e confirma que o arquivo contém `opt/Stray Linux/`. O pacote 1.2.0 gerado localmente tem 173026370 bytes e SHA-256 `8286cc23716650719b9199d74af9c1f61afc7f758e9b87421054c361699f97eb`; esses valores serão revalidados pelo script no domínio publicado. O sandbox não é Arch, portanto a inspeção `pacman -Qp` precisa ser executada pelo colaborador em uma máquina Arch.
 
 ## Política de dependências
 
