@@ -471,4 +471,4 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 
 ## Incidente de disponibilidade pública
 - [x] Reproduzir a falha de abertura do domínio público e identificar o ponto de indisponibilidade: uma dependência circular criada pela divisão manual de chunks falhava em `recharts` antes da montagem React.
-- [ ] Restaurar o site, validar as rotas públicas e registrar a correção no GitHub.
+- [x] Restaurar o site, validar as rotas públicas e registrar a correção no GitHub: a landing voltou a montar no domínio público após a propagação do bundle corrigido.
