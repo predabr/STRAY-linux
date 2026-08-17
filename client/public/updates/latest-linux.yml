@@ -1,17 +1,17 @@
 version: 1.1.9
 files:
-  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/DtVhWQVFDrpSfXbT.AppImage
-    sha512: FMBdy8R4jvE1eTqeR5dpmv3PR8qqSLP8t0bacuCCfOovZnFIVUpMakX3r02uVkiCA9L/YsifRsHfbXBJ7nyuPA==
-    size: 176136535
-  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/sewnpfplypuhscRe.deb
-    sha512: iJCkzkBiRjURFJfvSG7mqQV5BvSyOeW2XOPuiidIpJWLdAzpZ6Ml6zbuw/sTybChKQMrGFlDmebguKPVo2jBkw==
-    size: 132582348
-  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/VGQPLXStHfkTFUPq.rpm
-    sha512: HLO3IOkEURMzF4gTNkQq9m1npdBbqeBKIvT/sAsa0NVbQ4cL4qaIWUI7Hq2WROqQPzRHqnNVFZjMDY9s2g6/mg==
-    size: 108607693
-  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/aCeCPSwiDsOpwktV.pacman
-    sha512: BE1Rz6fYseacCgPLbNnY5m+S8lr6IyWCQxcIPqdb3g6ipY3z2LeutJVvFV9m4d7bTR8Hnnl4WYszjnMFcW9Rvw==
-    size: 173361399
-path: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/DtVhWQVFDrpSfXbT.AppImage
-sha512: FMBdy8R4jvE1eTqeR5dpmv3PR8qqSLP8t0bacuCCfOovZnFIVUpMakX3r02uVkiCA9L/YsifRsHfbXBJ7nyuPA==
-releaseDate: '2026-08-17T03:15:33.000Z'
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/AdFQIaqcdiVxQgMb.AppImage
+    sha512: muYttCBSmkvz9NFuRICoH67jEX2qEVt7+B+2xJNaO9Vq4ar923vLQZOgs+UulNJHqPGRGeixi/YumLiDat0JqA==
+    size: 176136690
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/ojgJFRnsUWKrTkct.deb
+    sha512: ybsQk5pjRwTsv2uXFsHLL8jpa2rCDeLY4NHFizNpNqG0hSDMF5jYZUEMlANekel1vT73IQAQU+RMzbXuhPvX5A==
+    size: 132582596
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/HvwiBlUkvPXorGhE.rpm
+    sha512: 0lv0yGIfXWdLa4DvfJ7b8Gu3DSSLrAvgXuzn2hzuZiA7zK+deixZPyB7gIJWSwvcpAwqsrL/cCv8iouCBW35nQ==
+    size: 108619881
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/cbKNPmMzAhshaKsX.pacman
+    sha512: ys7Cvy2kTQbUUGLxm1SFWuN6ZmmSoWbT2fjcMBzDva2yO5v30SbaseUBnzMBBaSbLAMOCgGr/UkbpHLHyD9Kyw==
+    size: 173362307
+path: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/AdFQIaqcdiVxQgMb.AppImage
+sha512: muYttCBSmkvz9NFuRICoH67jEX2qEVt7+B+2xJNaO9Vq4ar923vLQZOgs+UulNJHqPGRGeixi/YumLiDat0JqA==
+releaseDate: '2026-08-17T03:30:00.000Z'
