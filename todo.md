@@ -521,4 +521,4 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Reproduzir cada download público, redirect e sidecar para identificar divergências de SHA, tamanho, URL ou comando.
 - [x] Corrigir sidecars, redirects, feeds e comandos de instalação que estejam apontando para artefatos divergentes.
 - [x] Validar os cinco formatos com download completo, tamanho, SHA-256 e inspeção de pacote sem instalar no ambiente.
-- [ ] Publicar a correção de integridade e sincronizar GitHub `main`.
+- [x] Publicar a correção de integridade e sincronizar GitHub `main`.
