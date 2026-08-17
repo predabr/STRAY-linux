@@ -504,3 +504,14 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Gerar e auditar os cinco artefatos 1.2, com inspeção de metadados, `app.asar` e integridade por formato.
 - [x] Preparar os artefatos, sidecars SHA-256, redirects e feeds da release 1.2 para publicação no domínio público.
 - [x] Executar testes, build, auditorias de downloads, revisão do site e sincronização de GitHub para a release 1.2.
+
+## Doação Pix segura
+- [ ] Auditar as superfícies de apoio existentes e remover a exposição direta da chave Pix/CPF.
+- [ ] Integrar um provedor de pagamento autorizado para criação de cobrança Pix pelo servidor, com checkout hospedado ou QR dinâmico.
+- [ ] Validar confirmação de pagamento somente por webhook autenticado, sem confiar no navegador nem armazenar dados financeiros sensíveis.
+- [ ] Adicionar estados claros de redirecionamento, pagamento pendente, confirmação e falha, com acessibilidade, privacidade e testes.
+
+## Sincronização adicional do site e GitHub
+- [x] Revisar arquivos rastreados, links públicos, referências de versão e documentação para a release 1.2.0.
+- [x] Atualizar as superfícies de apoio para não expor a chave Pix/CPF antes da configuração de checkout autenticado.
+- [x] Validar site, testes, build, downloads e sincronizar o estado atualizado no GitHub `main`.

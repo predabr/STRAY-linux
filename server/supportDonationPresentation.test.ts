@@ -6,12 +6,14 @@ const appPage = readFileSync("client/src/pages/ProjectSupport.tsx", "utf8");
 const nav = readFileSync("client/src/components/platform/ProductWorkspace.tsx", "utf8");
 
 describe("área de apoio do projeto", () => {
-  it("expõe Pix e GitHub com confirmação explícita e sem checkout", () => {
+  it("não expõe chave Pix/CPF antes de um checkout autenticado", () => {
     for (const source of [supportPage, appPage]) {
-      expect(source).toContain("53205895819");
       expect(source).toContain("https://github.com/predabr/STRAY-linux");
-      expect(source).toContain("navigator.clipboard.writeText");
-      expect(source).toContain("dado sensível");
+      expect(source).toContain("Checkout");
+      expect(source).toContain("webhook autenticado");
+      expect(source).not.toContain("53205895819");
+      expect(source).not.toContain("navigator.clipboard.writeText");
+      expect(source).not.toContain("CHAVE PIX");
       expect(source).not.toContain("processPayment");
       expect(source).not.toContain("stripe.confirm");
     }
