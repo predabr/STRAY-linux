@@ -1,4 +1,5 @@
 import { appImageInstallPath, distributionAssets, distributionOrigin, linuxInstallers } from "./distribution";
+import { releaseManifest } from "./releaseManifest";
 import { describe, expect, it } from "vitest";
 
 describe("manifesto de distribuição pública", () => {
@@ -18,8 +19,12 @@ describe("manifesto de distribuição pública", () => {
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).not.toContain("dpkg");
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).not.toContain("apt-get");
     expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).not.toContain("pacman -S stray-linux");
-    expect(linuxInstallers.find((installer) => installer.id === "debian")?.command).toContain("5adb2804ccba121ddf5f65604e0623edca4191dbd93e8d40dd61ffe3f6759a0a");
-    expect(linuxInstallers.find((installer) => installer.id === "appimage")?.command).toContain("705fe9aeb16f103f0c26e87aa7954aa804b52a4302a7838b953d16d26ae0cf06");
+    expect(releaseManifest.version).toBe("1.1.13");
+    expect(linuxInstallers.find((installer) => installer.id === "debian")?.command).toContain(releaseManifest.integrityAssets.deb);
+    expect(linuxInstallers.find((installer) => installer.id === "fedora")?.command).toContain(releaseManifest.integrityAssets.rpm);
+    expect(linuxInstallers.find((installer) => installer.id === "opensuse")?.command).toContain(releaseManifest.integrityAssets.rpm);
+    expect(linuxInstallers.find((installer) => installer.id === "arch")?.command).toContain(releaseManifest.integrityAssets.pacman);
+    expect(linuxInstallers.find((installer) => installer.id === "appimage")?.command).toContain(releaseManifest.integrityAssets.appImage);
     expect(linuxInstallers.find((installer) => installer.id === "appimage")?.command).toContain(appImageInstallPath);
   });
 });

@@ -440,3 +440,11 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Reestruturar Performance com importação local opt-in de log MangoHud, gráfico de sessões reais e estados honestos quando não houver métricas.
 - [x] Substituir Favoritos por uma área operacional, aprimorar relatórios com console local somente leitura e corrigir configurações, idiomas, botões, imagens e menu nativo.
 - [x] Validar testes, build, desktop, pacotes, feeds, checksums, rotas públicas e publicação após as correções.
+
+## Release 1.1.13 — correção de distribuição
+- [x] Diagnosticar a divergência de checksum do download Pacman 1.1.12: o hash hardcoded era circular e o redirect apontava para artefato anterior.
+- [x] Corrigir a cadeia de distribuição por formato com sidecars SHA-256 externos, redirects, manifestos e comandos Bash compatíveis com Fish para Arch, Debian/Ubuntu, Fedora/RHEL/openSUSE, AppImage e Windows.
+- [x] Construir a release 1.1.13 com cinco instaladores, feeds SHA-512 e sidecars SHA-256 derivados dos artefatos finais.
+- [x] Avaliar linguagens adicionais: não introduzir runtime externo sem benefício mensurável; manter Node/TypeScript/Electron evita complexidade e incompatibilidade nos instaladores.
+- [ ] Publicar o checkpoint da 1.1.13 e validar os downloads reais no domínio público após a propagação.
+- [ ] Sincronizar o commit da release 1.1.13 com o GitHub quando a autenticação remota estiver válida.
