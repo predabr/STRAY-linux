@@ -6,7 +6,7 @@ const os = require("node:os");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process");
 
-const SCANNER_VERSION = "1.4.0";
+const SCANNER_VERSION = "1.5.0";
 
 function readText(file) { try { return fs.readFileSync(file, "utf8"); } catch { return null; } }
 
@@ -63,10 +63,20 @@ function detectGpuAdapters() {
     return { model: model || null, vendor: "NVIDIA", vramMb: Number.parseInt(memory, 10) || null, driverVersion: driverVersion || null };
   });
   const pci = commandOutput("lspci", ["-nn"]);
-  return (pci || "").split("\n").filter((line) => /VGA compatible controller|3D controller|Display controller/i.test(line)).slice(0, 4).map((line) => {
+  const fromPci = (pci || "").split("\n").filter((line) => /VGA compatible controller|3D controller|Display controller/i.test(line)).slice(0, 4).map((line) => {
     const model = line.replace(/^[^:]+:\s*/, "").trim() || null;
     return { model, vendor: inferGpuVendor(model), vramMb: null, driverVersion: null };
   });
+  if (fromPci.length) return fromPci;
+  const lshw = commandOutput("lshw", ["-json", "-C", "display"]);
+  try {
+    const entries = JSON.parse(lshw || "[]");
+    return (Array.isArray(entries) ? entries : [entries]).slice(0, 4).map((entry) => {
+      const model = typeof entry?.product === "string" ? entry.product : typeof entry?.description === "string" ? entry.description : null;
+      const vendor = typeof entry?.vendor === "string" ? inferGpuVendor(entry.vendor) || entry.vendor : inferGpuVendor(model);
+      return { model, vendor: vendor || null, vramMb: null, driverVersion: null };
+    }).filter((entry) => entry.model || entry.vendor);
+  } catch { return []; }
 }
 
 function detectGpu() {
@@ -78,17 +88,19 @@ function detectGpu() {
 function detectGraphics(gpu) {
   const nvidiaDriver = firstLine("nvidia-smi", ["--query-gpu=driver_version", "--format=csv,noheader,nounits"]);
   const glx = commandOutput("glxinfo", ["-B"]);
+  const egl = glx ? null : commandOutput("eglinfo", ["-B"]);
+  const graphicsInfo = glx || egl || "";
   const vulkan = commandOutput("vulkaninfo", ["--summary"]);
-  const mesa = (glx || "").match(/Mesa\s+([0-9][\w.-]+)/i)?.[1] || null;
-  const openGl = (glx || "").match(/OpenGL version string:\s*(.+)$/im)?.[1]?.trim() || null;
-  const openGlRenderer = (glx || "").match(/OpenGL renderer string:\s*(.+)$/im)?.[1]?.trim() || null;
+  const mesa = graphicsInfo.match(/Mesa\s+([0-9][\w.-]+)/i)?.[1] || null;
+  const openGl = graphicsInfo.match(/OpenGL version string:\s*(.+)$/im)?.[1]?.trim() || graphicsInfo.match(/OpenGL version:\s*(.+)$/im)?.[1]?.trim() || null;
+  const openGlRenderer = graphicsInfo.match(/OpenGL renderer string:\s*(.+)$/im)?.[1]?.trim() || graphicsInfo.match(/OpenGL renderer:\s*(.+)$/im)?.[1]?.trim() || null;
   const vulkanVersion = (vulkan || "").match(/Vulkan Instance Version:\s*([0-9.]+)/i)?.[1] || null;
   const vulkanApiVersion = (vulkan || "").match(/apiVersion\s*=\s*([0-9.]+)/i)?.[1] || null;
   const vulkanDeviceName = (vulkan || "").match(/deviceName\s*=\s*(.+)$/im)?.[1]?.trim() || null;
   const vulkanDriverName = (vulkan || "").match(/driverName\s*=\s*(.+)$/im)?.[1]?.trim() || null;
   const vulkanDeviceCount = (vulkan || "").match(/^GPU\d+:/gim)?.length || 0;
   const driverVersion = nvidiaDriver || gpu.driverVersion || (mesa ? `Mesa ${mesa}` : null);
-  return { driverVersion, driverProvider: nvidiaDriver ? "nvidia-smi" : mesa ? "mesa/glxinfo" : null, mesaVersion: mesa, vulkanVersion, vulkanApiVersion, vulkanDeviceName, vulkanDriverName, vulkanDeviceCount, openGlVersion: openGl, openGlRenderer, vulkanSummaryAvailable: Boolean(vulkan), glxInfoAvailable: Boolean(glx) };
+  return { driverVersion, driverProvider: nvidiaDriver ? "nvidia-smi" : mesa ? glx ? "mesa/glxinfo" : "mesa/eglinfo" : null, mesaVersion: mesa, vulkanVersion, vulkanApiVersion, vulkanDeviceName, vulkanDriverName, vulkanDeviceCount, openGlVersion: openGl, openGlRenderer, vulkanSummaryAvailable: Boolean(vulkan), glxInfoAvailable: Boolean(glx || egl) };
 }
 
 function steamRoots() {
@@ -168,7 +180,7 @@ function detectHeroic() {
 function detectDesktopEnvironment() { return process.env.XDG_CURRENT_DESKTOP || process.env.DESKTOP_SESSION || process.env.GDMSESSION || null; }
 
 function detectStorage() {
-  const output = firstLine("df", ["-Pk", "/"]);
+  const output = firstLine("df", ["-Pk", os.homedir()]) || firstLine("df", ["-Pk", "/"]);
   const line = (output || "").split("\n").at(-1) || "";
   const values = line.trim().split(/\s+/);
   if (values.length < 6 || !/^\d+$/.test(values[1])) return null;
@@ -177,13 +189,19 @@ function detectStorage() {
 
 function detectDisplays() {
   const output = firstLine("xrandr", ["--current"]);
-  if (!output) return [];
-  return output.split("\n").flatMap((line) => {
+  const x11Displays = (output || "").split("\n").flatMap((line) => {
     const match = line.match(/^([\w.-]+)\s+connected(?:\s+primary)?\s+(\d+)x(\d+)\+[-\d]+\+[-\d]+/);
     if (!match) return [];
     const refresh = (line.match(/\s(\d+(?:\.\d+)?)\*\+?/) || [])[1];
     return [{ name: match[1], resolution: `${match[2]}×${match[3]}`, refreshHz: refresh ? Number(refresh) : null }];
   });
+  if (x11Displays.length) return x11Displays;
+  const wlr = commandOutput("wlr-randr", []);
+  return (wlr || "").split(/\n(?=\S)/).flatMap((block) => {
+    const name = block.match(/^([^\s].*)$/m)?.[1]?.trim();
+    const mode = block.match(/(\d+)x(\d+)\s+px,\s*(\d+(?:\.\d+)?)\s+Hz\s*\(current\)/i);
+    return name && mode ? [{ name, resolution: `${mode[1]}×${mode[2]}`, refreshHz: Number(mode[3]) }] : [];
+  }).slice(0, 8);
 }
 
 function hasCommand(command) { return Boolean(firstLine("sh", ["-lc", `command -v ${command}`])); }
@@ -204,7 +222,7 @@ function detectControllers() {
     for (const id of handlers.match(/js\d+/g) || []) names.set(id, name);
   }
   const devices = [];
-  try { for (const id of fs.readdirSync("/dev/input")) if (/^js\d+$/.test(id)) devices.push({ id, name: names.get(id) || null, path: `/dev/input/${id}` }); } catch {}
+  try { for (const id of fs.readdirSync("/dev/input")) if (/^js\d+$/.test(id)) devices.push({ id, name: names.get(id) || readText(`/sys/class/input/${id}/device/name`)?.trim() || null, path: `/dev/input/${id}` }); } catch {}
   return { detected: devices.length > 0, devices: devices.slice(0, 16), source: "procfs/dev-input" };
 }
 

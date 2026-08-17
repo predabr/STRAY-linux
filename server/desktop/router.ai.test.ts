@@ -33,8 +33,13 @@ describe("contrato local do desktop", () => {
     const game = showcase.featured[0];
     expect(game.title).toBeTruthy();
     expect(game.coverImageUrl).toContain("steamstatic.com/steam/apps/");
+    const searched = await caller.games.list({ page: 1, pageSize: 12, q: ` ${game.title.toLocaleUpperCase("pt-BR")} !!! ` });
+    expect(searched.data.some((item) => item.id === game.id)).toBe(true);
     const resolved = await caller.games.resolveInstalled({ steamAppIds: [], titles: [game.title] });
     expect(resolved).toHaveLength(1);
     expect(resolved[0]).toMatchObject({ id: game.id, slug: game.slug, title: game.title });
+    const normalized = await caller.games.resolveInstalled({ steamAppIds: [], titles: [`  ${game.title.toLocaleUpperCase("pt-BR")} !!!  `] });
+    expect(normalized).toHaveLength(1);
+    expect(normalized[0]).toMatchObject({ id: game.id, matchMethod: "normalized-title" });
   });
 });

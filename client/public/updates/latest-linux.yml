@@ -1,17 +1,18 @@
-version: 1.1.9
+version: 1.1.10
 files:
-  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/tZLjNMTiJUKYwuFB.AppImage
-    sha512: 6f02bbbb95ba6ed00eebbd5cd7905f55543a40cb6afad2f9e38585f3e6ced580832bce9dd76ecff70bc97c7d81d907d7832b3e6b5f73179380fb00f406729c13
-    size: 176136601
-  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/woPEVqDeUfPzGQSn.deb
-    sha512: 42270d23080228c6d7af9190fd1592ff73b3f2daf494c741cf08d5c4af364ef841e4a4c48d9200dc2060611322aa92ac4c8f31ebb7751f83a8299ac8738146cb
-    size: 132583260
-  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/RVSVsDMstknxbDCm.rpm
-    sha512: 84a181a2d62b1fd974e63d42cb8915f7e808a611ac42801c259da302c6f461e9a7de1fe9dd3a4b5f8a5da5b3f93e58bc2ed16c161c5471424a7df0f7a45f7414
-    size: 108605781
-  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/mKbTdhMpNcwgAjkM.pacman
-    sha512: 59dbe73b8c0a4645419b9223b8507af3974f781ee40593f55a50989435cb76726d4e142bf0c87ccd76e7a9a061ac55ce3a4df33a234adfbb5233da433e76641b
-    size: 173360050
-path: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/tZLjNMTiJUKYwuFB.AppImage
-sha512: 6f02bbbb95ba6ed00eebbd5cd7905f55543a40cb6afad2f9e38585f3e6ced580832bce9dd76ecff70bc97c7d81d907d7832b3e6b5f73179380fb00f406729c13
-releaseDate: '2026-08-17T03:40:00.000Z'
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/KEpvLmpIgwJMpuVM.AppImage
+    sha512: pXHZbIBjkH7OWBXvUEKl9SE9wRem2FuFqCwZXVYWjWApmpKAlMznsvT5GhMBABdQZcfawonTx+tNtXIZYG9qcA==
+    size: 176147652
+    blockMapSize: 183512
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/aofiWiAdYHsgMhMU.deb
+    sha512: EzxWSwMn0w9bupTdBM3c37w9jf0o6JEjnXX/pmYWvNjJlCN45/uiB++XlafuUV/JWj4ki7fvIl3BBh2KRnpKWw==
+    size: 132588744
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/UMHdlePHNbFxNqQW.rpm
+    sha512: Cd0l5v98Xn1NS3ecSDKedUoBxE5UHMIJsZUjm0Fc+xkPG9Uy3fpcSs3Vs5Vy3M053P6a2MLHI7LizQeJX+Jasg==
+    size: 108611813
+  - url: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/fiiPVGUxscDvZuhO.pacman
+    sha512: nrx6x7BEOz5dxs1wgIyNH50mgxUWtcTB0CqbeVrDFtYtaZkaQDYus4l1GWnznHtqwfW5YJpxeDJ1h7F+LQ46EA==
+    size: 173366549
+path: https://files.manuscdn.com/user_upload_by_module/session_file/310519663289073401/KEpvLmpIgwJMpuVM.AppImage
+sha512: pXHZbIBjkH7OWBXvUEKl9SE9wRem2FuFqCwZXVYWjWApmpKAlMznsvT5GhMBABdQZcfawonTx+tNtXIZYG9qcA==
+releaseDate: '2026-08-17T03:58:49.011Z'

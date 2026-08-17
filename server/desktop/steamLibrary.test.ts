@@ -29,4 +29,16 @@ describe("biblioteca Steam local", () => {
       coverSource: "steam-public-cdn",
     }]);
   });
+
+  it("detecta uma instalação GOG registrada pelo Heroic sem acessar dados de autenticação", () => {
+    const home = fs.mkdtempSync(path.join(os.tmpdir(), "stray-heroic-gog-"));
+    tempRoots.push(home);
+    const heroicStore = path.join(home, ".config", "heroic", "gog_store");
+    const installDir = path.join(home, "Games", "Exemplo GOG");
+    fs.mkdirSync(installDir, { recursive: true });
+    fs.mkdirSync(heroicStore, { recursive: true });
+    fs.writeFileSync(path.join(heroicStore, "installed.json"), JSON.stringify({ gog_example: { install_path: installDir, title: "Exemplo GOG" } }), "utf8");
+    const raw = execFileSync(process.execPath, [path.resolve(process.cwd(), "desktop/bin/stray-library.cjs"), "--home", home], { encoding: "utf8" });
+    expect(JSON.parse(raw).games).toEqual([expect.objectContaining({ id: "heroic:gog:gog_example", name: "Exemplo GOG", installDir, launcher: "heroic", store: "gog", installationType: "native", coverUrl: null, coverSource: null })]);
+  });
 });

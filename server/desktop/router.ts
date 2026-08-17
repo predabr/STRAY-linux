@@ -22,6 +22,10 @@ function publicGame(game: any) {
   };
 }
 
+function normalizedTitle(value: string) {
+  return value.toLocaleLowerCase("pt-BR").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/gi, " ").trim().replace(/\s+/g, " ");
+}
+
 function stableHardwareId(kind: string, value: string) {
   let hash = 0;
   for (const character of `${kind}:${value}`) hash = ((hash * 31) + character.charCodeAt(0)) >>> 0;
@@ -50,9 +54,26 @@ function detectedHardwareOptions() {
   return Array.from(options.values()).sort((left, right) => left.kind.localeCompare(right.kind) || left.model.localeCompare(right.model, "pt-BR"));
 }
 
+function localRecommendations() {
+  const profile = store().one<any>("SELECT id, name, cpu_id AS cpuId, gpu_id AS gpuId, distribution_id AS distributionId, kernel_version AS kernelVersion, driver_version AS driverVersion, proton_version AS protonVersion FROM profiles WHERE is_active = 1 ORDER BY updated_at DESC LIMIT 1") ?? null;
+  const latestSnapshot = store().one<{ reportJson: string }>("SELECT report_json AS reportJson FROM scanner_snapshots ORDER BY created_at DESC LIMIT 1");
+  if (!latestSnapshot) return { profile, items: [] };
+  try {
+    const scan = scannerReportInput.parse(JSON.parse(latestSnapshot.reportJson));
+    const items: { kind: "scanner"; id: string; title: string; detail: string; href: string; status: "attention" | "review" }[] = [];
+    if (!scan.system.graphics.vulkanVersion) items.push({ kind: "scanner", id: "vulkan", title: "Vulkan não foi detectado", detail: "O Scanner não encontrou uma versão Vulkan. Abra o Diagnóstico para consultar causas e passos por distribuição.", href: "/diagnostics", status: "attention" });
+    if (!scan.system.runtime.gaming?.renderGroupDetected) items.push({ kind: "scanner", id: "render-group", title: "Acesso ao grupo de renderização não foi confirmado", detail: "O relatório não confirmou os grupos render ou video da sessão atual. Revise o Diagnóstico antes de alterar permissões.", href: "/diagnostics", status: "review" });
+    if (!scan.system.runtime.steamDetected && !scan.system.runtime.discovery?.heroicDetected) items.push({ kind: "scanner", id: "launchers", title: "Nenhum launcher foi detectado", detail: "Steam e Heroic não foram localizados pelos caminhos suportados. A Biblioteca continua disponível para pastas adicionadas conscientemente.", href: "/library", status: "review" });
+    return { profile, items };
+  } catch { return { profile, items: [] }; }
+}
+
 function gameList(input: { q?: string; page: number; pageSize: number }) {
-  const query = input.q?.trim() ? `%${input.q.trim()}%` : "%";
-  const games = store().all<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games WHERE title LIKE ? ORDER BY source_positive_reviews DESC, title", [query]);
+  const fields = "id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews";
+  const term = input.q?.trim() ? normalizedTitle(input.q) : "";
+  const games = term
+    ? store().all<any>(`SELECT ${fields} FROM games ORDER BY source_positive_reviews DESC, title`).filter((game) => normalizedTitle(String(game.title)).includes(term))
+    : store().all<any>(`SELECT ${fields} FROM games ORDER BY source_positive_reviews DESC, title`);
   return paginate(games.map(publicGame), input.page, input.pageSize);
 }
 
@@ -111,9 +132,14 @@ export const desktopRouter = router({
     }),
     resolveInstalled: publicProcedure.input(z.object({ steamAppIds: z.array(z.number().int().positive()).max(512).default([]), titles: z.array(z.string().trim().min(1).max(240)).max(512).default([]) })).query(({ input }) => {
       const steamIds = new Set(input.steamAppIds);
-      const titles = new Set(input.titles.map((title) => title.toLocaleLowerCase("pt-BR")));
+      const titles = new Set(input.titles.map(normalizedTitle).filter(Boolean));
       const rows = store().all<any>("SELECT id, slug, title, description AS shortDescription, steam_app_id AS steamAppId, source_positive_reviews AS sourcePositiveReviews FROM games");
-      return rows.filter((game) => steamIds.has(game.steamAppId) || titles.has(String(game.title).toLocaleLowerCase("pt-BR"))).map(publicGame);
+      return rows.flatMap((game) => {
+        const bySteamAppId = typeof game.steamAppId === "number" && steamIds.has(game.steamAppId);
+        const byNormalizedTitle = titles.has(normalizedTitle(String(game.title)));
+        if (!bySteamAppId && !byNormalizedTitle) return [];
+        return [{ ...publicGame(game), matchMethod: bySteamAppId ? "steam-app-id" as const : "normalized-title" as const }];
+      });
     }),
     filterOptions: publicProcedure.query(() => ({ genres: [] })),
   }),
@@ -216,7 +242,7 @@ export const desktopRouter = router({
     reports: router({ list: publicProcedure.query(() => store().all<any>("SELECT id, subject_type AS subjectType, subject_id AS subjectId, type, description, status, created_at AS createdAt FROM reports ORDER BY created_at DESC")), create: publicProcedure.input(z.any()).mutation(({ input }) => { const result = store().run("INSERT INTO reports (subject_type, subject_id, type, description) VALUES (?, ?, ?, ?)", [input.subjectType, input.subjectId, input.type, input.description]); return { id: Number(result.lastInsertRowid), status: "open" as const }; }) }),
     hardwareOptions: publicProcedure.query(() => detectedHardwareOptions()),
     compatibilityForActiveProfile: publicProcedure.input(z.object({ gameId: z.number() })).query(() => ({ profile: store().one<any>("SELECT id, name, cpu_id AS cpuId, gpu_id AS gpuId, distribution_id AS distributionId, kernel_version AS kernelVersion, driver_version AS driverVersion, proton_version AS protonVersion FROM profiles WHERE is_active = 1 ORDER BY updated_at DESC LIMIT 1") ?? null, records: [] })),
-    recommendations: publicProcedure.query(() => ({ profile: store().one<any>("SELECT id, name, cpu_id AS cpuId, gpu_id AS gpuId, distribution_id AS distributionId, kernel_version AS kernelVersion, driver_version AS driverVersion, proton_version AS protonVersion FROM profiles WHERE is_active = 1 ORDER BY updated_at DESC LIMIT 1") ?? null, items: [] })),
+    recommendations: publicProcedure.query(() => localRecommendations()),
   }),
   chat: router({ history: publicProcedure.query(() => []), ask: publicProcedure.input(z.object({ question: z.string().trim().min(2).max(2500) })).mutation(({ input }) => desktopAiAnswer(input.question)), askPublic: publicProcedure.input(z.object({ question: z.string().trim().min(2).max(2500) })).mutation(({ input }) => desktopAiAnswer(input.question)) }),
   admin: router({ overview: publicProcedure.query(() => ({ ...store().counts(), hardware: 0, pendingBenchmarks: store().one<{ count: number }>("SELECT count(*) as count FROM benchmarks WHERE verification_status = 'submitted'")?.count ?? 0, openReports: store().one<{ count: number }>("SELECT count(*) as count FROM reports WHERE status = 'open'")?.count ?? 0 })), listUsers: publicProcedure.query(() => [localUser]) }),

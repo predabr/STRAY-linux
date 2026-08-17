@@ -404,3 +404,10 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Melhorar o fluxo de download do site, os feeds de atualização e a estratégia de atualização automática do aplicativo.
 - [x] Atualizar o README do GitHub com arquitetura, recursos, instalação, atualizações, limitações e diagnóstico.
 - [x] Validar no pacote desktop e nos cinco instaladores todos os fluxos corrigidos antes de publicar.
+
+## Revisão de gráficos, Scanner e catálogo
+- [x] Auditar as visualizações de hardware, benchmark e diagnóstico para eliminar gráficos genéricos, vazios ou visualmente pouco informativos.
+- [x] Redesenhar os gráficos do Scanner e do painel técnico com hierarquia, comparações somente entre leituras compatíveis e estados de ausência explícitos.
+- [x] Ampliar o Scanner Linux com mais fallbacks seguros para GPU, monitores, armazenamento, runtimes e ferramentas de gaming sem coletar ou enviar dados pessoais.
+- [x] Fortalecer a descoberta de biblioteca e o enriquecimento do catálogo local para Steam, Heroic e jogos externos, mantendo capas e metadados com origem rastreável.
+- [x] Validar testes, build, pacote desktop, feeds de atualização e GitHub após a revisão.
