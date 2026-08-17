@@ -446,5 +446,5 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Corrigir a cadeia de distribuição por formato com sidecars SHA-256 externos, redirects, manifestos e comandos Bash compatíveis com Fish para Arch, Debian/Ubuntu, Fedora/RHEL/openSUSE, AppImage e Windows.
 - [x] Construir a release 1.1.13 com cinco instaladores, feeds SHA-512 e sidecars SHA-256 derivados dos artefatos finais.
 - [x] Avaliar linguagens adicionais: não introduzir runtime externo sem benefício mensurável; manter Node/TypeScript/Electron evita complexidade e incompatibilidade nos instaladores.
-- [ ] Publicar o checkpoint da 1.1.13 e validar os downloads reais no domínio público após a propagação.
-- [ ] Sincronizar o commit da release 1.1.13 com o GitHub quando a autenticação remota estiver válida.
+- [x] Publicar o checkpoint da 1.1.13 e validar os downloads reais no domínio público após a propagação; os cinco formatos passaram SHA-256.
+- [x] Sincronizar o commit da release 1.1.13 com o GitHub quando a autenticação remota estiver válida; `main` recebeu o commit `1dafa84`.
