@@ -51,7 +51,8 @@ describe("landing pública", () => {
     expect(installer).toContain('{installer.name} · pacote {installer.signal}');
     expect(installer).toContain("SELEÇÃO OBRIGATÓRIA");
     expect(method).toContain("copy.cards.map");
-    expect(installer).toContain("O bloco usa `bash -c`");
+    expect(installer).toContain("Copie o bloco inteiro diretamente no terminal");
+    expect(installer).not.toContain("O bloco usa `bash -c`");
     expect(installer).toContain("usam exclusivamente a aba");
     expect(landing).not.toContain("stray-linux-landing-original_68a8e472.png");
     expect(landing).not.toContain("87 FPS");
