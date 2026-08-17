@@ -462,3 +462,9 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Reestruturar a landing institucional, downloads, desinstalação e status para narrativa clara, desempenho e confiabilidade de distribuição.
 - [x] Avaliar linguagens e ferramentas por superfície; adotar apenas componentes compilados ou runtimes novos com ganho mensurável e compatibilidade de pacote.
 - [x] Validar arquitetura, interfaces, testes e build após a reconstrução modular; os instaladores, downloads públicos e GitHub permanecem na release 1.1.13 previamente auditada e sincronizada.
+
+## Sincronização integral de repositório e site
+- [x] Auditar arquivos rastreados, estado Git, branches, workflows, documentação, licença, metadados e domínio publicado.
+- [x] Atualizar README, arquivos de contribuição e metadados públicos para refletir arquitetura, segurança local, downloads e release atual.
+- [x] Ampliar o site institucional com conteúdo de produto, navegação e estados úteis sem simular resultados, compatibilidade ou telemetria.
+- [ ] Validar tipos, testes, build, rotas públicas e sincronizar todos os arquivos atualizados no GitHub.

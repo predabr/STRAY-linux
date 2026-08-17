@@ -4,6 +4,8 @@
 
 [Site oficial](https://linuxtoys-ckuyvpj5.manus.space) · [Downloads verificados](https://linuxtoys-ckuyvpj5.manus.space/download) · [Desinstalação](https://linuxtoys-ckuyvpj5.manus.space/uninstall)
 
+[Arquitetura](docs/ARCHITECTURE.md) · [Contribuição](CONTRIBUTING.md) · [Segurança](SECURITY.md) · [Conduta](CODE_OF_CONDUCT.md)
+
 O **Stray Linux** combina um site institucional com um aplicativo desktop. O aplicativo é voltado a jogadores Linux que precisam entender o próprio ambiente, organizar a biblioteca local, consultar conteúdo técnico com origem visível e registrar sessões sem converter suposições em métricas. A interface utiliza React e TypeScript; o servidor usa Express/tRPC. No Electron, os dados operacionais ficam em um SQLite local, portanto **não é necessário fornecer `DATABASE_URL`**.
 
 ## Versão 1.1.13
@@ -91,9 +93,13 @@ pnpm desktop:packages
 
 O servidor de desenvolvimento fica em `server/_core/dev.ts`; o servidor de produção em `server/_core/index.ts` não importa Vite. O router de desktop fica em `server/desktop/router.ts`, o armazenamento local em `server/desktop/localStore.ts` e o contrato compartilhado de Scanner em `shared/scannerReport.ts`. A lógica de saúde usada por Scanner e Diagnóstico está em `shared/linuxHealth.ts`.
 
+## Arquitetura e interface
+
+O site e o aplicativo compartilham princípios visuais, mas não a mesma finalidade. O site é institucional: explica o produto, mostra limites e entrega downloads por formato. O aplicativo é operacional: usa uma navegação própria, pré-carrega rotas de uso frequente e separa estado, evidência e ações locais. A reconstrução modular atual distribui landing, navegação desktop, estados vazios, métricas e carregamento de rotas em componentes menores. Consulte [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) para a divisão completa de camadas.
+
 ## Fontes e contribuição
 
-Os artigos, guias e runbooks preservam URLs e proveniência. Steam no Flatpak é identificado como um pacote comunitário sem suporte oficial da Valve, conforme a página do Flathub.[2] Os comandos Flatpak seguem a documentação oficial.[3] O fluxo de moderação e contribuição está em [`docs/MODERATION.md`](docs/MODERATION.md); as regras de contribuição de código estão em [`CONTRIBUTING.md`](CONTRIBUTING.md).
+Os artigos, guias e runbooks preservam URLs e proveniência. Steam no Flatpak é identificado como um pacote comunitário sem suporte oficial da Valve, conforme a página do Flathub.[2] Os comandos Flatpak seguem a documentação oficial.[3] O fluxo de moderação e contribuição está em [`docs/MODERATION.md`](docs/MODERATION.md); as regras de contribuição de código estão em [`CONTRIBUTING.md`](CONTRIBUTING.md). Consulte também a política de [`segurança`](SECURITY.md) e o [`código de conduta`](CODE_OF_CONDUCT.md).
 
 ## Referências
 

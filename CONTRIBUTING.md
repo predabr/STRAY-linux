@@ -13,7 +13,7 @@ pnpm test
 pnpm dev
 ```
 
-Antes de abrir uma alteração, execute `pnpm check`, `pnpm test` e `pnpm build`. Para alterações de schema, gere a migration, revise o SQL e aplique-a no banco de desenvolvimento pelo fluxo de migrations.
+Antes de abrir uma alteração, execute `pnpm check`, `pnpm test` e `pnpm build`. Para alterações de schema, gere a migration, revise o SQL e aplique-a no banco de desenvolvimento pelo fluxo de migrations. Alterações na ponte Electron, no atualizador, em comandos de pacote ou na importação de arquivos devem acrescentar regressão específica e nunca ampliar permissões por conveniência.
 
 ## Dados e conteúdo
 
@@ -21,4 +21,4 @@ Inclua uma fonte para qualquer novo benchmark, compatibilidade, guia, solução 
 
 ## Pull requests
 
-Explique o problema resolvido, o impacto em proveniência e os testes executados. Alterações de UI devem manter navegação por teclado, contraste, estados de carregamento/erro/vazio e responsividade. Para conteúdo técnico, identifique a distribuição e versão afetadas.
+Explique o problema resolvido, o impacto em proveniência e os testes executados. Alterações de UI devem manter navegação por teclado, contraste, estados de carregamento/erro/vazio e responsividade. Para conteúdo técnico, identifique a distribuição e versão afetadas. Consulte [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md), [`SECURITY.md`](SECURITY.md) e [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) antes de abrir uma contribuição ampla.
