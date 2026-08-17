@@ -477,4 +477,4 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Adicionar CI de segurança e dependências com checks de lockfile, auditoria de dependências, typecheck, testes e build.
 - [x] Adicionar templates de issue para bug, segurança e conteúdo/distribuição, solicitando evidência sem expor dados privados.
 - [x] Criar auditoria reproduzível dos downloads Arch com validação de redirect, sidecar SHA-256 e inspeção do pacote; executar a validação local e documentar que o sandbox não é Arch.
-- [ ] Validar workflows e templates, salvar checkpoint e sincronizar tudo no GitHub.
+- [x] Validar workflows e templates, salvar checkpoint e sincronizar tudo no GitHub; workflows remotos confirmados e `main` está no commit `074e7d5`.
