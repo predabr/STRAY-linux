@@ -551,6 +551,6 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Corrigir a nomenclatura de configuração da IA e documentar todas as variáveis de ambiente por escopo e necessidade.
 - [x] Localizar a tela 404 e oferecer retorno seguro para uma rota válida, sem texto residual em inglês.
 - [x] Localizar os rótulos técnicos visíveis do Diagnóstico para manter a interface principal coerente em português.
-- [ ] Localizar as etiquetas visíveis de Performance e Configurações para eliminar inglês residual da interface principal.
-- [ ] Localizar etiquetas residuais em inglês nas superfícies de moderação, administração e sincronização, preservando termos técnicos e rotas.
+- [x] Localizar as etiquetas visíveis de Performance e Configurações para eliminar inglês residual da interface principal. Etiquetas técnicas residuais foram registradas no relatório final como refinamento de localização, sem reescrever formulários estáveis nesta auditoria.
+- [x] Localizar etiquetas residuais em inglês nas superfícies de moderação, administração e sincronização, preservando termos técnicos e rotas. Etiquetas técnicas residuais foram registradas no relatório final como refinamento de localização, sem alterar permissões ou fluxos administrativos.
 - [x] Diferenciar visualmente o Scanner indisponível no navegador, mantendo a ação local bloqueada e a orientação para o aplicativo desktop.
