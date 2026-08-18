@@ -1,0 +1,16 @@
+import { releaseManifest } from "@/lib/releaseManifest";
+import { currentReleaseNotes } from "@/lib/releaseNotes";
+import { SiteFooter } from "@/components/site/SiteFooter";
+import { SiteNav } from "@/components/site/SiteNav";
+import { CheckCircle2, CircleAlert, Download, History, ShieldCheck } from "lucide-react";
+import { Link } from "wouter";
+
+function ReleaseContent({ compact = false }: { compact?: boolean }) {
+  return <main className={compact ? "container py-7 md:py-10" : "mx-auto max-w-[1280px] px-4 py-14 sm:px-6 sm:py-20 lg:px-8"}><div className="max-w-3xl"><p className="stray-kicker">RELEASE / {releaseManifest.version}</p><h1 className="mt-4 font-serif text-5xl leading-[.9] tracking-[-.07em] sm:text-7xl">O que mudou,<br /><em className="font-normal text-primary">com evidência.</em></h1><p className="mt-7 max-w-2xl text-base leading-8 text-muted-foreground">{currentReleaseNotes.summary} Esta página separa mudanças publicadas, verificações executadas e o que ainda depende de ambiente real.</p></div><section className="mt-12 grid gap-4 lg:grid-cols-3">{currentReleaseNotes.groups.map((group, index) => <article key={group.title} className="stray-surface rounded-2xl p-5"><span className="grid h-9 w-9 place-items-center rounded-xl border border-border bg-muted text-primary">{index === 0 ? <History className="h-4 w-4" /> : index === 1 ? <ShieldCheck className="h-4 w-4" /> : <Download className="h-4 w-4" />}</span><h2 className="mt-6 text-lg font-semibold">{group.title}</h2><ul className="mt-4 space-y-3 text-sm leading-6 text-muted-foreground">{group.items.map((item) => <li key={item} className="flex gap-2"><CheckCircle2 className="mt-1 h-3.5 w-3.5 shrink-0 text-primary" />{item}</li>)}</ul></article>)}</section><section className="mt-10 rounded-2xl border border-border bg-card p-5 sm:p-7"><div className="flex flex-col gap-3 border-b border-border pb-5 sm:flex-row sm:items-end sm:justify-between"><div><p className="stray-kicker">VALIDAÇÃO DA RELEASE</p><h2 className="mt-2 text-2xl font-semibold">O que foi confirmado</h2></div><Link href="/download" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline">Ver downloads e checksums <Download className="h-4 w-4" /></Link></div><div className="mt-2 divide-y divide-border">{currentReleaseNotes.verification.map((item) => <div key={item.label} className="grid gap-2 py-5 sm:grid-cols-[minmax(0,1fr)_8rem_minmax(0,1.5fr)] sm:items-start"><p className="font-medium">{item.label}</p><p className={item.status === "Confirmado" ? "text-sm text-emerald-500" : "text-sm text-amber-500"}>{item.status}</p><p className="text-sm leading-6 text-muted-foreground">{item.detail}</p></div>)}</div><p className="mt-5 flex gap-2 text-xs leading-5 text-muted-foreground"><CircleAlert className="mt-0.5 h-3.5 w-3.5 shrink-0" />Não execute o comando de outra distribuição. No Arch, o teste final de metadados deve ocorrer na própria distribuição.</p></section></main>;
+}
+
+export default function Changelog() {
+  const isDesktop = Boolean(window.strayDesktop);
+  if (isDesktop) return <ReleaseContent compact />;
+  return <div className="min-h-screen bg-[#f0f0ec] text-[#0b0c10]"><SiteNav inverse /><ReleaseContent /><SiteFooter inverse /></div>;
+}

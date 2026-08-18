@@ -1,6 +1,7 @@
 "use strict";
 
 const UPDATE_FEED_URL = "https://linuxtoys-ckuyvpj5.manus.space/updates";
+const UPDATE_CHANNEL_NOTE = "O canal de atualização é comum; a aplicação final deve respeitar o formato compatível com sua distribuição.";
 
 function createDesktopUpdater({ app, autoUpdater, dialog, logger = console }) {
   let status = { state: "idle", version: app.getVersion(), progress: 0, detail: null };
@@ -29,7 +30,7 @@ function createDesktopUpdater({ app, autoUpdater, dialog, logger = console }) {
 
   autoUpdater.on("checking-for-update", () => setStatus({ state: "checking", detail: null, progress: 0 }));
   autoUpdater.on("update-available", (info) => {
-    setStatus({ state: "downloading", version: info.version, detail: "Atualização encontrada; validando download.", progress: 0 });
+    setStatus({ state: "downloading", version: info.version, detail: `Atualização encontrada; validando download. ${UPDATE_CHANNEL_NOTE}`, progress: 0 });
     log("info", "Atualização disponível", { version: info.version });
   });
   autoUpdater.on("update-not-available", (info) => {
@@ -47,7 +48,7 @@ function createDesktopUpdater({ app, autoUpdater, dialog, logger = console }) {
       cancelId: 1,
       title: "Atualização pronta",
       message: `Stray Linux ${info.version} foi baixado e validado.`,
-      detail: "O aplicativo só será fechado se você confirmar. Em pacotes Linux, o sistema pode solicitar sua senha para concluir a atualização.",
+      detail: `O aplicativo só será fechado se você confirmar. Em pacotes Linux, o sistema pode solicitar sua senha para concluir a atualização. ${UPDATE_CHANNEL_NOTE}`,
       noLink: true,
     }).then(({ response }) => {
       if (response !== 0) return;
@@ -72,4 +73,4 @@ function createDesktopUpdater({ app, autoUpdater, dialog, logger = console }) {
   };
 }
 
-module.exports = { UPDATE_FEED_URL, createDesktopUpdater };
+module.exports = { UPDATE_FEED_URL, UPDATE_CHANNEL_NOTE, createDesktopUpdater };

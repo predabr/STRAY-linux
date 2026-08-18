@@ -20,6 +20,16 @@
 - [x] Publicar a reescrita do histórico Git com push forçado controlado e revalidar a ausência do dado financeiro no GitHub remoto.
 - [x] Executar testes, build, validação visual, empacotamento, publicação e sincronização GitHub desta rodada.
 
+## Changelog e distribuição — nova solicitação
+- [x] Inventariar versões, notas de release, updater, instaladores e orientações de desinstalação existentes.
+- [x] Criar um changelog visual acessível no site e aplicativo com somente mudanças verificáveis da versão atual.
+- [x] Atualizar a orientação de instalação por distribuição no site e na documentação operacional, distinguindo validações realizadas e a etapa `pacman -Qp` que exige Arch real.
+- [x] Documentar no updater que a verificação automática usa um canal comum, enquanto a instalação e a validação final permanecem específicas de cada distribuição.
+- [x] Cobrir por regressão a orientação de atualização do canal comum e seus limites por distribuição.
+- [x] Cobrir por regressão a orientação explícita de validação Arch nas superfícies de download.
+- [x] Validar interface, testes, build, pacote e download Arch público no modo compatível com sandbox.
+- [ ] Salvar checkpoint publicado e sincronizar esta rodada de changelog e orientação de distribuição no GitHub.
+
 - [x] Definir a arquitetura híbrida web/Electron, a estratégia de banco local e o modo de operação sem serviços externos obrigatórios.
 - [x] Mapear fontes públicas permitidas para catálogo de jogos, compatibilidade, benchmarks e documentação oficial de distribuições.
 - [x] Modelar e aplicar o schema Drizzle para jogos, tags, plataformas, distros, versões, hardware, compatibilidade, benchmarks, wiki, guias, LinuxFix, perfis, favoritos, reports e auditoria.
