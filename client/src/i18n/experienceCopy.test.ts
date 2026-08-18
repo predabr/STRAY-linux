@@ -1,4 +1,5 @@
 import { SUPPORTED_LOCALES } from "@/contexts/LanguageContext";
+import generatedStaticTranslations from "@/i18n/generatedStaticTranslations.json";
 import { distroProfileCopy } from "@/i18n/distroProfileCopy";
 import { homeDiagnosticsCopy } from "@/i18n/homeDiagnosticsCopy";
 import { introCopy } from "@/i18n/introCopy";
@@ -7,6 +8,7 @@ import { linuxFixContributionCopy, linuxFixCopy, linuxFixModerationCopy } from "
 import { landingCopy } from "@/i18n/landingCopy";
 import { overviewCopy } from "@/i18n/overviewCopy";
 import { productShellCopy } from "@/i18n/productShellCopy";
+import { settingsCopy } from "@/i18n/settingsCopy";
 import { distroRegistry } from "@shared/distro-registry";
 import { describe, expect, it } from "vitest";
 
@@ -23,6 +25,7 @@ describe("experience copy", () => {
       const contribution = linuxFixContributionCopy[locale];
       const moderation = linuxFixModerationCopy[locale];
       const landing = landingCopy[locale];
+      const settings = settingsCopy[locale];
       expect(profile.backToAtlas.trim()).not.toBe("");
       expect(profile.bigLinuxTitle.trim()).not.toBe("");
       expect(profile.installArtifact(".deb")).toContain(".deb");
@@ -34,6 +37,13 @@ describe("experience copy", () => {
       expect(diagnostics.credit).not.toMatch(/Henrique|14 anos/i);
       expect(shell.workspace.trim()).not.toBe("");
       expect(shell.status.trim()).not.toBe("");
+      expect(shell.systemInformation.trim()).not.toBe("");
+      expect(shell.diagnostics.trim()).not.toBe("");
+      expect(shell.supportProject.trim()).not.toBe("");
+      expect(Object.values(settings).every((value) => value.trim().length > 0)).toBe(true);
+      expect(settings.blackTheme.trim()).not.toBe("");
+      expect(settings.languageHint.trim()).not.toBe("");
+      expect(settings.resetConfirm.trim()).not.toBe("");
       expect(overview.title.trim()).not.toBe("");
       expect(overview.scannerAction.trim()).not.toBe("");
       expect(gameCard.catalogRecord.trim()).not.toBe("");
@@ -61,5 +71,15 @@ describe("experience copy", () => {
       installer: "pacman",
       support: "package-family",
     });
+  });
+
+  it("keeps every static translation catalog aligned with the Portuguese baseline", () => {
+    const baseline = generatedStaticTranslations["pt-BR"];
+    const baselineKeys = Object.keys(baseline).sort();
+    for (const locale of SUPPORTED_LOCALES) {
+      const catalog = generatedStaticTranslations[locale];
+      expect(Object.keys(catalog).sort()).toEqual(baselineKeys);
+      expect(Object.values(catalog).every((value) => value.trim().length > 0)).toBe(true);
+    }
   });
 });

@@ -104,7 +104,7 @@ function Router() {
 }
 
 function App() {
-  return <ErrorBoundary><LanguageProvider><ThemeProvider defaultTheme="dark" switchable><TooltipProvider><RouteMeta /><ApplicationSurface /><Toaster /></TooltipProvider></ThemeProvider></LanguageProvider></ErrorBoundary>;
+  return <ErrorBoundary><LanguageProvider><ThemeProvider defaultTheme="dark"><TooltipProvider><RouteMeta /><ApplicationSurface /><Toaster /></TooltipProvider></ThemeProvider></LanguageProvider></ErrorBoundary>;
 }
 
 function ApplicationSurface() {

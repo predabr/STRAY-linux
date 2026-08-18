@@ -1,6 +1,5 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { startLogin } from "@/const";
-import { useTheme } from "@/contexts/ThemeContext";
 import { localeMeta, SUPPORTED_LOCALES, useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { StrayBrandMark } from "@/components/platform/StrayBrandMark";
@@ -8,7 +7,7 @@ import { GlobalCommandPalette } from "@/components/platform/GlobalCommandPalette
 import { atlasNavigationCopy } from "@/i18n/atlasNavigationCopy";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Languages, Menu, Moon, Search, Sun, UserRound } from "lucide-react";
+import { Languages, Menu, Search, UserRound } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
 
@@ -21,7 +20,6 @@ const allNavigation = [
 export function SiteHeader() {
   const [location, setLocation] = useLocation();
   const { user, loading } = useAuth();
-  const { theme, resolvedTheme, setTheme } = useTheme();
   const { locale, setLocale, t } = useLanguage();
   const copy = atlasNavigationCopy[locale];
   const [commandOpen, setCommandOpen] = useState(false);
@@ -39,10 +37,6 @@ export function SiteHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label={t("language")}><Languages className="h-4 w-4" /></Button></DropdownMenuTrigger>
           <DropdownMenuContent align="end"><DropdownMenuRadioGroup value={locale} onValueChange={(value) => setLocale(value as typeof locale)}>{SUPPORTED_LOCALES.map((item) => <DropdownMenuRadioItem key={item} value={item}>{localeMeta[item].nativeName}</DropdownMenuRadioItem>)}</DropdownMenuRadioGroup></DropdownMenuContent>
-        </DropdownMenu>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" aria-label={t("theme")}>{resolvedTheme === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}</Button></DropdownMenuTrigger>
-          <DropdownMenuContent align="end"><DropdownMenuRadioGroup value={theme} onValueChange={(value) => setTheme(value as "light" | "dark" | "system")}><DropdownMenuRadioItem value="dark">{t("dark")}</DropdownMenuRadioItem><DropdownMenuRadioItem value="light">{t("light")}</DropdownMenuRadioItem><DropdownMenuRadioItem value="system">{t("system")}</DropdownMenuRadioItem></DropdownMenuRadioGroup></DropdownMenuContent>
         </DropdownMenu>
         {!loading && (user ? <Button size="sm" onClick={() => setLocation("/dashboard")}><UserRound className="mr-2 h-4 w-4" />{t("dashboard")}</Button> : <Button size="sm" onClick={() => startLogin()}>{t("signIn")}</Button>)}
         <Button variant="ghost" size="icon" className="lg:hidden" aria-label={copy.openMenu} onClick={() => setMenuOpen(true)}><Menu className="h-4 w-4" /></Button>

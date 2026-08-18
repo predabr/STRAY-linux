@@ -23,7 +23,7 @@ describe("área de apoio do projeto", () => {
 
   it("mantém o acesso destacado na navegação do aplicativo", () => {
     expect(nav).toContain('href: "/project-support"');
-    expect(nav).toContain('label: "Apoie o projeto"');
+    expect(nav).toContain('label: copy.supportProject');
   });
 
   it("documenta que a ativação exige provedor autorizado e webhook autenticado", () => {

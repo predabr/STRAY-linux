@@ -25,6 +25,10 @@ declare global {
         scanMods: () => Promise<{ source: "steam-workshop-local"; entries: Array<{ appId: number; modCount: number; path: string; installationType: "native" | "flatpak" }> }>;
         pickExternal: () => Promise<{ cancelled: boolean; game: { id: string; appId: null; externalId: string; name: string; installDir: string; libraryPath: string; installationType: "external"; launcher: "external"; store: "external"; coverUrl: null; coverSource: null } | null }>;
       };
+      updates?: {
+        status: () => Promise<{ state: string; version?: string; progress?: number; detail?: string }>;
+        check: () => Promise<{ state: string; version?: string; progress?: number; detail?: string }>;
+      };
     };
   }
 }

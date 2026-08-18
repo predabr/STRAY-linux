@@ -74,7 +74,7 @@ describe("landing pública", () => {
     expect(workspace).toContain("const advancedTools: WorkspaceNavigationItem[]");
     expect(workspace).toContain("WorkspaceDisclosureGroup");
     expect(workspace).toContain("advancedOpen || advancedRouteActive");
-    expect(workspace).toContain('href: "/assistant", label: "Stray AI"');
+    expect(workspace).toContain('href: "/assistant", label: copy.assistant');
     expect(copy).toContain('tools: "MAIS FERRAMENTAS"');
     expect(copy).toContain('version: "Versão 1.2.0"');
   });

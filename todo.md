@@ -1,5 +1,14 @@
 # Project TODO
 
+## Redesign preto e localização integral — nova solicitação
+- [x] Inventariar textos visíveis, chaves de tradução, fallback de idioma e superfícies do aplicativo desktop; confirmado que o catálogo estático contém 493 entradas por localidade, mas rótulos estruturais do shell não fazem parte dele.
+- [x] Verificar novamente código, banco local, configurações e documentação por CPF, chave Pix ou outro dado financeiro residual; a varredura de código e documentação não encontrou dado publicado, somente nomes de variáveis e orientações de segurança.
+- [x] Inspecionar explicitamente o SQLite local, seeds, backups e exportações do desktop por CPF, chave Pix ou outro dado financeiro residual antes de encerrar a auditoria de privacidade; não há banco SQLite, backup ou exportação persistida no checkout, e o seed foi verificado sem identificador financeiro.
+- [x] Definir e aplicar tokens de design preto minimalista, hierarquia de superfícies, botões e animações curtas acessíveis para todo o shell do app; o tema claro foi removido do aplicativo e os controles principais agora usam superfícies pretas e contraste em branco.
+- [x] Auditar e localizar explicitamente as páginas desktop além do shell e Configurações — Dashboard, Assistente, Knowledge/LinuxFix, Diagnóstico, Performance e Biblioteca — removendo rótulos visíveis literais que não pertencem ao sistema de localização; a análise sintática final encontrou zero textos JSX visíveis fora do catálogo.
+- [x] Adicionar regressões de localização que confirmem cobertura das páginas principais e falhem caso novos rótulos visíveis sejam deixados fora dos catálogos das 11 localidades; o teste sintático percorre páginas e componentes operacionais e o catálogo agora contém 938 entradas alinhadas por localidade.
+- [ ] Executar testes de localização, segurança, build, empacotamento, revisão desktop/mobile e publicar a reformulação no GitHub; 169 testes, typecheck, build, auditoria de dependências, cinco pacotes Electron e revisões visual desktop/mobile concluídos nesta etapa; publicação e sincronização GitHub seguem pendentes.
+
 ## GameHub e GitHub institucional — nova solicitação
 - [x] Auditar a disponibilidade, origem autorizada, proporção e fallback das capas do GameHub e da Biblioteca local.
 - [x] Melhorar a hierarquia dos botões e das informações de jogo sem fabricar metadados ou mídia ausente.
