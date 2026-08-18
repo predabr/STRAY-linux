@@ -6,6 +6,6 @@ describe("QR institucional do GitHub", () => {
     const result = await buildGithubQrStatus();
     expect(result.githubUrl).toBe(STRAY_LINUX_GITHUB_URL);
     expect(result.qrCodeSvg).toContain("<svg");
-    expect(result.qrCodeSvg).not.toContain("53205895819");
+    expect(result.qrCodeSvg).not.toContain("[REMOVIDO]");
   });
 });

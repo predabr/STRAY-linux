@@ -31,7 +31,7 @@ vi.mock("../_core/llm", () => ({
 
 import { invokeLLM } from "../_core/llm";
 import { appRouter } from "../routers";
-import { buildStrayAiSystemPrompt, extractContextTerms } from "./chat";
+import { buildStrayAiSystemPrompt, contextUnavailableFallback, extractContextTerms } from "./chat";
 import { isStrayAiDomainQuestion, STRAY_AI_OUT_OF_SCOPE_RESPONSE } from "../lib/strayAiScope";
 
 function caller() {
@@ -98,6 +98,13 @@ describe("assistente: continuidade, contexto e autorização", () => {
     const result = await visitorCaller().chat.askPublic({ question: "Como verificar Vulkan no Linux?" });
     expect(result.answer).toContain("O provedor do Stray AI não respondeu neste momento.");
     expect(result.answer).toContain("### Limites");
+  });
+
+  it("explica indisponibilidade do contexto sem inventar uma resposta técnica", () => {
+    const answer = contextUnavailableFallback();
+    expect(answer).toContain("base de conteúdo do Stray AI não está disponível");
+    expect(answer).toContain("### Limites");
+    expect(answer).toContain("Nenhum comando, causa, compatibilidade, FPS ou resultado");
   });
 
 });

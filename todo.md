@@ -8,6 +8,18 @@
 - [x] Salvar checkpoint publicado para a rodada de GameHub e QR institucional após as validações aprovadas.
 - [x] Sincronizar o checkpoint desta rodada no GitHub `main` e registrar o hash publicado (`62cc714`).
 
+## Referência visual, privacidade e Stray AI — nova solicitação
+- [x] Remover qualquer CPF, chave Pix ou dado financeiro das telas públicas, aplicativo e documentação atual; manter Pix inativo sem configuração server-side válida.
+- [x] Sanear o histórico Git local que ainda contém o dado financeiro removido, validando refs e blobs após a reescrita controlada; publicação forçada permanece pendente.
+- [x] Revalidar a presença e a finalidade do QR institucional do GitHub no site, aplicativo e README, sem confundi-lo com Pix ou pagamento.
+- [x] Adaptar o shell operacional ao estilo dark minimalista da referência, com superfícies sóbrias, hierarquia simples e animações curtas acessíveis.
+- [x] Diagnosticar o fluxo Stray AI no web e desktop, corrigindo somente indisponibilidades e erros comprovados, sem respostas ou dados simulados.
+- [x] Validar por testes o fallback seguro da Stray AI e corrigir o backend web quando o contexto interno estiver indisponível.
+- [x] Executar uma chamada standalone real da Stray AI no desktop/local, registrar a resposta sem usar modelo externo e corrigir a integração se falhar.
+- [x] Executar uma validação funcional real da rota web em modo seguro, sem disparar um modelo de linguagem, e registrar o comportamento de recuperação.
+- [ ] Publicar a reescrita do histórico Git com push forçado controlado e revalidar a ausência do dado financeiro no GitHub remoto.
+- [ ] Executar testes, build, validação visual, empacotamento, publicação e sincronização GitHub desta rodada.
+
 - [x] Definir a arquitetura híbrida web/Electron, a estratégia de banco local e o modo de operação sem serviços externos obrigatórios.
 - [x] Mapear fontes públicas permitidas para catálogo de jogos, compatibilidade, benchmarks e documentação oficial de distribuições.
 - [x] Modelar e aplicar o schema Drizzle para jogos, tags, plataformas, distros, versões, hardware, compatibilidade, benchmarks, wiki, guias, LinuxFix, perfis, favoritos, reports e auditoria.

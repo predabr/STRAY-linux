@@ -38,6 +38,10 @@ function evidenceFallback(context: { citations: Citation[]; profileAvailable: bo
   return `### Leitura do caso\nO provedor do Stray AI não respondeu neste momento. Para não criar uma resposta especulativa, esta sessão permanece limitada ao conteúdo publicado disponível.\n\n### Evidência disponível\n${sourceList}\n\n### Ações seguras\nConsulte as fontes internas listadas e confirme a versão da distribuição, o runtime e o erro exibido antes de aplicar qualquer ajuste.\n\n### Limites\nNão foi possível gerar uma síntese pelo modelo agora. Nenhum comando, causa, compatibilidade ou resultado foi inferido sem evidência.`;
 }
 
+export function contextUnavailableFallback() {
+  return "### Leitura do caso\nA base de conteúdo do Stray AI não está disponível neste momento. Para não transformar uma falha técnica em orientação especulativa, a conversa foi mantida em modo seguro.\n\n### Evidência disponível\nNenhuma fonte interna pôde ser consultada agora.\n\n### Ações seguras\nVerifique a conexão do aplicativo, reinicie o Stray Linux e execute o Scanner novamente no desktop antes de tentar outra pergunta.\n\n### Limites\nNenhum comando, causa, compatibilidade, FPS ou resultado foi produzido sem contexto verificável.";
+}
+
 function buildExplanation(context: { citations: Citation[]; profileAvailable: boolean }, memoryUsed = false): AiExplanation {
   return {
     facts: [context.profileAvailable ? "Um perfil técnico ativo foi incluído no contexto." : "Nenhum perfil técnico ativo foi usado.", context.citations.length ? `${context.citations.length} fonte(s) interna(s) relacionada(s) foram recuperadas.` : "Nenhuma fonte interna diretamente relacionada foi recuperada."],
@@ -48,7 +52,8 @@ function buildExplanation(context: { citations: Citation[]; profileAvailable: bo
   };
 }
 
-async function answerFromModel(question: string, context: { citations: Citation[]; text: string; profileAvailable: boolean }) {
+async function answerFromModel(question: string, context: { citations: Citation[]; text: string; profileAvailable: boolean; contextUnavailable?: boolean }) {
+  if (context.contextUnavailable) return contextUnavailableFallback();
   try {
     const response = await invokeLLM({ model: "claude-haiku-4-5", messages: [{ role: "system", content: buildStrayAiSystemPrompt(context.text) }, { role: "user", content: question }], maxTokens: 900 });
     return llmText(response.choices[0]?.message.content ?? "") || evidenceFallback(context);
@@ -58,7 +63,7 @@ async function answerFromModel(question: string, context: { citations: Citation[
   }
 }
 
-async function retrieveContext(question: string, userId?: number) {
+async function retrieveContextUnsafe(question: string, userId?: number) {
   const db = await requireDatabase();
   const terms = extractContextTerms(question);
   const searchTerms = terms.length ? terms : [question.trim().slice(0, 120).toLowerCase()];
@@ -86,6 +91,15 @@ async function retrieveContext(question: string, userId?: number) {
     ...fixes.map((item) => `LINUXFIX: ${item.title}\nSintomas: ${item.symptoms}\nCausas: ${item.possibleCauses}`),
   ].join("\n\n---\n\n");
   return { citations, text, profileAvailable: Boolean(activeProfile) };
+}
+
+async function retrieveContext(question: string, userId?: number) {
+  try {
+    return await retrieveContextUnsafe(question, userId);
+  } catch (error) {
+    console.error("[Stray AI] Contexto interno indisponível; resposta segura será usada.", error);
+    return { citations: [] as Citation[], text: "CONTEXTO INTERNO: indisponível por falha temporária de leitura.", profileAvailable: false, contextUnavailable: true };
+  }
 }
 
 const questionInput = z.object({ sessionId: z.number().int().positive().optional(), question: z.string().trim().min(2).max(2500) });

@@ -13,7 +13,7 @@ describe("área de apoio do projeto", () => {
       expect(source).toContain("https://github.com/predabr/STRAY-linux");
       expect(source).toContain("Checkout");
       expect(source).toContain("webhook autenticado");
-      expect(source).not.toContain("53205895819");
+      expect(source).not.toContain("[REMOVIDO]");
       expect(source).not.toContain("navigator.clipboard.writeText");
       expect(source).not.toContain("CHAVE PIX");
       expect(source).not.toContain("processPayment");
@@ -29,7 +29,7 @@ describe("área de apoio do projeto", () => {
   it("documenta que a ativação exige provedor autorizado e webhook autenticado", () => {
     expect(paymentSecurity).toContain("provedor de pagamentos autorizado");
     expect(paymentSecurity).toContain("assinatura do webhook");
-    expect(paymentSecurity).not.toContain("53205895819");
+    expect(paymentSecurity).not.toContain("[REMOVIDO]");
   });
 
   it("mantém o QR opcional sem payload Pix copiável no cliente", () => {
