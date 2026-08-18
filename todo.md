@@ -28,7 +28,7 @@
 - [x] Cobrir por regressão a orientação de atualização do canal comum e seus limites por distribuição.
 - [x] Cobrir por regressão a orientação explícita de validação Arch nas superfícies de download.
 - [x] Validar interface, testes, build, pacote e download Arch público no modo compatível com sandbox.
-- [ ] Salvar checkpoint publicado e sincronizar esta rodada de changelog e orientação de distribuição no GitHub.
+- [x] Salvar checkpoint publicado e sincronizar esta rodada de changelog e orientação de distribuição no GitHub (`1cfa48f`).
 
 - [x] Definir a arquitetura híbrida web/Electron, a estratégia de banco local e o modo de operação sem serviços externos obrigatórios.
 - [x] Mapear fontes públicas permitidas para catálogo de jogos, compatibilidade, benchmarks e documentação oficial de distribuições.
