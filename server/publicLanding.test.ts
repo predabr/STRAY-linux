@@ -89,6 +89,7 @@ describe("landing pública", () => {
     expect(uninstall).toContain("artefatos publicados da versão atual");
     expect(uninstall).not.toContain("artefatos da versão 1.0.0");
     expect(nav).toContain('href="/uninstall"');
+    expect(nav).toContain('href="/changelog"');
     expect(installer).toContain("pacman -Q stray-linux");
     expect(installer).toContain("which stray-linux");
     expect(landing).toContain("landingCopy");

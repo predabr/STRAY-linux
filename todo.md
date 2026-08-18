@@ -584,3 +584,11 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Localizar as etiquetas visíveis de Performance e Configurações para eliminar inglês residual da interface principal. Etiquetas técnicas residuais foram registradas no relatório final como refinamento de localização, sem reescrever formulários estáveis nesta auditoria.
 - [x] Localizar etiquetas residuais em inglês nas superfícies de moderação, administração e sincronização, preservando termos técnicos e rotas. Etiquetas técnicas residuais foram registradas no relatório final como refinamento de localização, sem alterar permissões ou fluxos administrativos.
 - [x] Diferenciar visualmente o Scanner indisponível no navegador, mantendo a ação local bloqueada e a orientação para o aplicativo desktop.
+
+## Correções de interatividade reaplicadas após rollback
+- [x] Tornar explícito o feedback de `Copy command` com estado textual e confirmação acessível após a cópia.
+- [x] Corrigir o contraste das superfícies escuras do changelog, confirmado na revisão visual.
+- [x] Tornar as notas da versão visíveis no cabeçalho público, não apenas no rodapé.
+- [x] Reaplicar a regressão de contrato da ponte Electron para garantir handlers IPC para os controles locais.
+- [x] Reexecutar testes, build, empacotamento e validar site.
+- [ ] Salvar checkpoint publicado e sincronizar esta correção no GitHub e no domínio.
