@@ -591,4 +591,4 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Tornar as notas da versão visíveis no cabeçalho público, não apenas no rodapé.
 - [x] Reaplicar a regressão de contrato da ponte Electron para garantir handlers IPC para os controles locais.
 - [x] Reexecutar testes, build, empacotamento e validar site.
-- [ ] Salvar checkpoint publicado e sincronizar esta correção no GitHub e no domínio.
+- [x] Salvar checkpoint publicado e sincronizar esta correção no GitHub (`e253376f`) e no domínio.
