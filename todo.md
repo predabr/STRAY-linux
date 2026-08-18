@@ -543,7 +543,7 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Auditar backend, autenticação, APIs, banco, variáveis de ambiente, integrações, Pix, logs e segurança contra divergências ou exposição indevida.
 - [x] Corrigir exclusivamente problemas comprovados e atualizar documentação/contratos correspondentes, preservando funcionalidades existentes.
 - [x] Executar segunda varredura: TypeScript, testes, build, política de dependências, distribuição, logs e revisão visual desktop/mobile.
-- [ ] Publicar a auditoria final, sincronizar GitHub e registrar limitações reais de serviços externos não configurados.
+- [x] Publicar a auditoria final, sincronizar GitHub e registrar limitações reais de serviços externos não configurados.
 - [x] Remover stack trace exposto e texto em inglês do limite global de erros, preservando recuperação acessível da aplicação.
 - [x] Corrigir feedback, reversão de erro e rótulo de revisão na sincronização de preferências da conta.
 - [x] Tipar as mutações locais permissivas e impedir que a revisão de benchmark declare verificação sem validação persistida.
