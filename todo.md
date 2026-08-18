@@ -17,8 +17,8 @@
 - [x] Validar por testes o fallback seguro da Stray AI e corrigir o backend web quando o contexto interno estiver indisponível.
 - [x] Executar uma chamada standalone real da Stray AI no desktop/local, registrar a resposta sem usar modelo externo e corrigir a integração se falhar.
 - [x] Executar uma validação funcional real da rota web em modo seguro, sem disparar um modelo de linguagem, e registrar o comportamento de recuperação.
-- [ ] Publicar a reescrita do histórico Git com push forçado controlado e revalidar a ausência do dado financeiro no GitHub remoto.
-- [ ] Executar testes, build, validação visual, empacotamento, publicação e sincronização GitHub desta rodada.
+- [x] Publicar a reescrita do histórico Git com push forçado controlado e revalidar a ausência do dado financeiro no GitHub remoto.
+- [x] Executar testes, build, validação visual, empacotamento, publicação e sincronização GitHub desta rodada.
 
 - [x] Definir a arquitetura híbrida web/Electron, a estratégia de banco local e o modo de operação sem serviços externos obrigatórios.
 - [x] Mapear fontes públicas permitidas para catálogo de jogos, compatibilidade, benchmarks e documentação oficial de distribuições.
