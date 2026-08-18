@@ -26,20 +26,43 @@ export default function Diagnostics() {
   const databaseStatus = trpc.user.localDatabaseStatus.useQuery(undefined, { enabled: desktopAvailable, retry: false });
   const exportLocalData = trpc.user.exportLocalData.useQuery(undefined, { enabled: false, retry: false });
   const createSnapshot = trpc.user.snapshots.create.useMutation();
+
   const run = async () => {
     if (!window.strayDesktop?.scanner) return;
-    setRunning(true); setError(null);
-    try { const candidate = await window.strayDesktop.scanner.run(); setRawScan(candidate); const parsed = scannerReportInput.safeParse(candidate); if (!parsed.success) { const issues = parsed.error.issues.slice(0, 4).map((issue) => (issue.path.join(".") || "relatório") + ": " + issue.message).join("; "); setScan(null); setError("O Scanner coletou dados, mas alguns campos variaram nesta máquina: " + issues + ". O relatório bruto foi preservado para exportação."); return; } setScan(parsed.data); await createSnapshot.mutateAsync({ label: "Scanner local " + new Date(parsed.data.generatedAt).toLocaleString("pt-BR"), scan: parsed.data }); } catch (cause) { setError(cause instanceof Error ? "Falha ao coletar o PC: " + cause.message : "O Scanner não conseguiu ler o sistema. Nenhuma alteração foi aplicada."); }
-    finally { setRunning(false); }
+    setRunning(true);
+    setError(null);
+    try {
+      const candidate = await window.strayDesktop.scanner.run();
+      setRawScan(candidate);
+      const parsed = scannerReportInput.safeParse(candidate);
+      if (!parsed.success) {
+        const issues = parsed.error.issues.slice(0, 4).map((issue) => (issue.path.join(".") || "relatório") + ": " + issue.message).join("; ");
+        setScan(null);
+        setError("O Scanner coletou dados, mas alguns campos variaram nesta máquina: " + issues + ". O relatório bruto foi preservado para exportação.");
+        return;
+      }
+      setScan(parsed.data);
+      await createSnapshot.mutateAsync({ label: "Scanner local " + new Date(parsed.data.generatedAt).toLocaleString("pt-BR"), scan: parsed.data });
+    } catch (cause) {
+      setError(cause instanceof Error ? "Falha ao coletar o PC: " + cause.message : "O Scanner não conseguiu ler o sistema. Nenhuma alteração foi aplicada.");
+    } finally {
+      setRunning(false);
+    }
   };
-  const findings = scan ? assessLinuxGamingEnvironment(scan) : [];
+
   const previewMaintenance = async () => {
     if (!window.strayDesktop?.maintenance) return;
-    setMaintenanceLoading(true); setMaintenanceError(null);
-    try { setMaintenance(await window.strayDesktop.maintenance.preview()); }
-    catch (cause) { setMaintenanceError(cause instanceof Error ? cause.message : "Não foi possível gerar a prévia de manutenção local."); }
-    finally { setMaintenanceLoading(false); }
+    setMaintenanceLoading(true);
+    setMaintenanceError(null);
+    try {
+      setMaintenance(await window.strayDesktop.maintenance.preview());
+    } catch (cause) {
+      setMaintenanceError(cause instanceof Error ? cause.message : "Não foi possível gerar a prévia de manutenção local.");
+    } finally {
+      setMaintenanceLoading(false);
+    }
   };
+
   const exportDiagnostic = async () => {
     if (!desktopAvailable) return;
     setExporting(true);
@@ -61,15 +84,66 @@ export default function Diagnostics() {
       setExporting(false);
     }
   };
-  return <div className="min-h-screen bg-background"><SiteHeader /><main className="container max-w-[1440px] technical-grid py-5 md:py-7"><div className="space-y-6"><PageBreadcrumbs items={[{ label: "Sistema", href: "/dashboard/pc" }, { label: "Diagnóstico" }]} /><header className="stray-surface flex flex-wrap items-end justify-between gap-4 rounded-2xl p-5"><div><p className="stray-kicker">WHAT'S WRONG? / LOCAL DIAGNOSTICS</p><h1 className="mt-2 text-3xl font-semibold tracking-tight">Entenda o que o relatório mostra.</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">Scan → evidence → diagnosis → recommendation → verify. O Stray explica campos observados, não inventa a causa de um problema e não executa ações automaticamente.</p></div><div className="flex flex-wrap gap-2"><Button variant="outline" onClick={() => void previewMaintenance()} disabled={maintenanceLoading || !window.strayDesktop?.maintenance}><PackageSearch className="mr-2 h-4 w-4" />{maintenanceLoading ? "Lendo pacotes…" : "Analisar pacotes"}</Button><Button variant="outline" onClick={() => void exportDiagnostic()} disabled={exporting || !desktopAvailable}><Download className="mr-2 h-4 w-4" />{exporting ? "Preparando…" : "Exportar diagnóstico"}</Button><Button onClick={run} disabled={running || !desktopAvailable}><ScanLine className="mr-2 h-4 w-4" />{running ? "Analisando relatório…" : scan ? "Verificar novamente" : "Executar Scanner local"}</Button></div></header>{!desktopAvailable ? <Card className="border-dashed"><CardContent className="flex flex-col items-center gap-3 p-8 text-center"><FileSearch className="h-7 w-7 text-primary" /><p className="font-medium">Diagnóstico local disponível no aplicativo desktop.</p><p className="max-w-xl text-sm leading-6 text-muted-foreground">Abra esta tela no Stray Linux instalado ou use a página Scanner para revisar um relatório JSON gerado localmente.</p><Link href="/scanner"><Button variant="outline">Abrir Scanner</Button></Link></CardContent></Card> : null}{maintenanceError ? <Card className="border-destructive/30"><CardContent className="flex gap-3 p-5 text-sm text-destructive"><AlertTriangle className="h-5 w-5 shrink-0" />{maintenanceError}</CardContent></Card> : null}{maintenance ? <MaintenancePreview data={maintenance} /> : null}{databaseStatus.data?.status === "recovered" ? <Card className="border-amber-400/30 bg-amber-400/[0.05]"><CardContent className="flex gap-3 p-5"><DatabaseBackup className="h-5 w-5 shrink-0 text-amber-200" /><div><p className="font-medium text-amber-100">Banco local recuperado com segurança.</p><p className="mt-1 text-sm leading-6 text-muted-foreground">O Stray preservou o arquivo anterior como backup e recriou a base local. Revise a Central de Recuperação antes de descartar qualquer arquivo antigo.</p></div></CardContent></Card> : null}{databaseStatus.isError ? <Card className="border-destructive/30"><CardContent className="flex gap-3 p-5"><AlertTriangle className="h-5 w-5 shrink-0 text-destructive" /><div><p className="font-medium text-destructive">Não foi possível confirmar o estado do banco local.</p><p className="mt-1 text-sm leading-6 text-muted-foreground">O Stray tentou a reconexão automática. Exporte o diagnóstico quando disponível e abra a Central de Recuperação se o aviso persistir.</p></div></CardContent></Card> : null}{exportError ? <Card className="border-destructive/30"><CardContent className="flex gap-3 p-5 text-sm text-destructive"><AlertTriangle className="h-5 w-5 shrink-0" />{exportError}</CardContent></Card> : null}{error ? <Card className="border-destructive/30"><CardContent className="flex gap-3 p-5 text-sm text-destructive"><AlertTriangle className="h-5 w-5 shrink-0" />{error}</CardContent></Card> : null}{scan && findings.length ? <DiagnosticResults report={scan} findings={findings} run={run} running={running} /> : scan ? <Card className="border-emerald-400/25 bg-emerald-400/[0.04]"><CardContent className="flex gap-3 p-6"><CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-300" /><div><p className="font-medium text-emerald-200">Nenhum alerta técnico verificável neste relatório.</p><p className="mt-1 text-sm leading-6 text-muted-foreground">Isso não promete compatibilidade ou desempenho: apenas indica que os campos disponíveis não produziram uma recomendação de atenção.</p></div></CardContent></Card> : <EmptyDiagnostic />}</div></main></div>;
+
+  const findings = scan ? assessLinuxGamingEnvironment(scan) : [];
+
+  return (
+    <div className="min-h-screen bg-background">
+      <SiteHeader />
+      <main className="container max-w-[1440px] technical-grid py-5 md:py-7">
+        <div className="space-y-6">
+          <PageBreadcrumbs items={[{ label: "Sistema", href: "/dashboard/pc" }, { label: "Diagnóstico" }]} />
+          <header className="stray-surface flex flex-wrap items-end justify-between gap-4 rounded-2xl p-5">
+            <div>
+              <p className="stray-kicker">O QUE HÁ DE ERRADO? / DIAGNÓSTICO LOCAL</p>
+              <h1 className="mt-2 text-3xl font-semibold tracking-tight">Entenda o que o relatório mostra.</h1>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">Leitura → evidência → diagnóstico → recomendação → verificação. O Stray explica campos observados, não inventa a causa de um problema e não executa ações automaticamente.</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" onClick={() => void previewMaintenance()} disabled={maintenanceLoading || !window.strayDesktop?.maintenance}><PackageSearch className="mr-2 h-4 w-4" />{maintenanceLoading ? "Lendo pacotes…" : "Analisar pacotes"}</Button>
+              <Button variant="outline" onClick={() => void exportDiagnostic()} disabled={exporting || !desktopAvailable}><Download className="mr-2 h-4 w-4" />{exporting ? "Preparando…" : "Exportar diagnóstico"}</Button>
+              <Button variant={desktopAvailable ? "default" : "outline"} onClick={run} disabled={running || !desktopAvailable}><ScanLine className="mr-2 h-4 w-4" />{!desktopAvailable ? "Scanner no app desktop" : running ? "Analisando relatório…" : scan ? "Verificar novamente" : "Executar Scanner local"}</Button>
+            </div>
+          </header>
+
+          {!desktopAvailable ? <Card className="border-dashed"><CardContent className="flex flex-col items-center gap-3 p-8 text-center"><FileSearch className="h-7 w-7 text-primary" /><p className="font-medium">Diagnóstico local disponível no aplicativo desktop.</p><p className="max-w-xl text-sm leading-6 text-muted-foreground">Abra esta tela no Stray Linux instalado ou use a página Scanner para revisar um relatório JSON gerado localmente.</p><Link href="/scanner"><Button variant="outline">Abrir Scanner</Button></Link></CardContent></Card> : null}
+          {maintenanceError ? <Card className="border-destructive/30"><CardContent className="flex gap-3 p-5 text-sm text-destructive"><AlertTriangle className="h-5 w-5 shrink-0" />{maintenanceError}</CardContent></Card> : null}
+          {maintenance ? <MaintenancePreview data={maintenance} /> : null}
+          {databaseStatus.data?.status === "recovered" ? <Card className="border-amber-400/30 bg-amber-400/[0.05]"><CardContent className="flex gap-3 p-5"><DatabaseBackup className="h-5 w-5 shrink-0 text-amber-200" /><div><p className="font-medium text-amber-100">Banco local recuperado com segurança.</p><p className="mt-1 text-sm leading-6 text-muted-foreground">O Stray preservou o arquivo anterior como backup e recriou a base local. Revise a Central de Recuperação antes de descartar qualquer arquivo antigo.</p></div></CardContent></Card> : null}
+          {databaseStatus.isError ? <Card className="border-destructive/30"><CardContent className="flex gap-3 p-5"><AlertTriangle className="h-5 w-5 shrink-0 text-destructive" /><div><p className="font-medium text-destructive">Não foi possível confirmar o estado do banco local.</p><p className="mt-1 text-sm leading-6 text-muted-foreground">O Stray tentou a reconexão automática. Exporte o diagnóstico quando disponível e abra a Central de Recuperação se o aviso persistir.</p></div></CardContent></Card> : null}
+          {exportError ? <Card className="border-destructive/30"><CardContent className="flex gap-3 p-5 text-sm text-destructive"><AlertTriangle className="h-5 w-5 shrink-0" />{exportError}</CardContent></Card> : null}
+          {error ? <Card className="border-destructive/30"><CardContent className="flex gap-3 p-5 text-sm text-destructive"><AlertTriangle className="h-5 w-5 shrink-0" />{error}</CardContent></Card> : null}
+          {scan && findings.length ? <DiagnosticResults report={scan} findings={findings} run={run} running={running} /> : scan ? <Card className="border-emerald-400/25 bg-emerald-400/[0.04]"><CardContent className="flex gap-3 p-6"><CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-300" /><div><p className="font-medium text-emerald-200">Nenhum alerta técnico verificável neste relatório.</p><p className="mt-1 text-sm leading-6 text-muted-foreground">Isso não promete compatibilidade ou desempenho: apenas indica que os campos disponíveis não produziram uma recomendação de atenção.</p></div></CardContent></Card> : <EmptyDiagnostic />}
+        </div>
+      </main>
+    </div>
+  );
 }
 
-function MaintenancePreview({ data }: { data: MaintenancePreviewData }) { return <Card className="border-primary/20 bg-primary/[0.025]"><CardHeader><p className="evidence-label text-primary">MANUTENÇÃO / PRÉVIA LOCAL</p><CardTitle className="mt-1 flex items-center gap-2"><PackageSearch className="h-5 w-5 text-primary" />Pacotes e cache de {data.manager || "gerenciador não detectado"}</CardTitle><CardDescription>{data.warning} Leitura em {new Date(data.generatedAt).toLocaleString("pt-BR")} · privilégio atual: {data.privilege.elevated ? "elevado" : "padrão"}.</CardDescription></CardHeader><CardContent className="grid gap-3 lg:grid-cols-3">{data.categories.length ? data.categories.map((category) => <div key={category.id} className="rounded-xl border bg-background/60 p-4"><p className="font-tech text-[10px] tracking-[.13em] text-primary">{category.label}</p><p className="mt-2 text-sm font-medium">{category.sizeMb !== undefined && category.sizeMb !== null ? `${category.sizeMb} MB observados` : `${category.items.length} item(ns) listado(s)`}</p><p className="mt-2 text-xs leading-5 text-muted-foreground">{category.note}</p>{category.items.length ? <details className="mt-3"><summary className="cursor-pointer text-xs font-medium">Ver itens</summary><pre className="mt-2 max-h-36 overflow-auto rounded-md bg-black/60 p-2 text-[10px] text-white/70">{category.items.slice(0, 80).join("\n")}</pre></details> : null}<p className="mt-3 border-t pt-3 font-mono text-[10px] text-muted-foreground">{category.command}</p></div>) : <p className="lg:col-span-3 text-sm text-muted-foreground">Nenhum gerenciador de pacotes suportado foi detectado nesta sessão.</p>}</CardContent></Card>; }
+function MaintenancePreview({ data }: { data: MaintenancePreviewData }) {
+  return <Card className="border-primary/20 bg-primary/[0.025]"><CardHeader><p className="evidence-label text-primary">MANUTENÇÃO / PRÉVIA LOCAL</p><CardTitle className="mt-1 flex items-center gap-2"><PackageSearch className="h-5 w-5 text-primary" />Pacotes e cache de {data.manager || "gerenciador não detectado"}</CardTitle><CardDescription>{data.warning} Leitura em {new Date(data.generatedAt).toLocaleString("pt-BR")} · privilégio atual: {data.privilege.elevated ? "elevado" : "padrão"}.</CardDescription></CardHeader><CardContent className="grid gap-3 lg:grid-cols-3">{data.categories.length ? data.categories.map((category) => <div key={category.id} className="rounded-xl border bg-background/60 p-4"><p className="font-tech text-[10px] tracking-[.13em] text-primary">{category.label}</p><p className="mt-2 text-sm font-medium">{category.sizeMb !== undefined && category.sizeMb !== null ? `${category.sizeMb} MB observados` : `${category.items.length} item(ns) listado(s)`}</p><p className="mt-2 text-xs leading-5 text-muted-foreground">{category.note}</p>{category.items.length ? <details className="mt-3"><summary className="cursor-pointer text-xs font-medium">Ver itens</summary><pre className="mt-2 max-h-36 overflow-auto rounded-md bg-black/60 p-2 text-[10px] text-white/70">{category.items.slice(0, 80).join("\n")}</pre></details> : null}<p className="mt-3 border-t pt-3 font-mono text-[10px] text-muted-foreground">{category.command}</p></div>) : <p className="lg:col-span-3 text-sm text-muted-foreground">Nenhum gerenciador de pacotes suportado foi detectado nesta sessão.</p>}</CardContent></Card>;
+}
 
-function EmptyDiagnostic() { return <Card className="border-dashed"><CardContent className="grid gap-4 p-6 md:grid-cols-5">{[["01", "SCAN", "Coleta local e consentida."], ["02", "EVIDENCE", "Campos realmente observados."], ["03", "DIAGNOSIS", "Sinal técnico específico."], ["04", "RECOMMEND", "Próximo passo sem execução."], ["05", "VERIFY", "Nova leitura local."]].map(([id, title, text]) => <div key={id} className="rounded-xl border bg-card/40 p-4"><p className="font-tech text-[10px] tracking-[.14em] text-primary">{id} / {title}</p><p className="mt-3 text-sm leading-6 text-muted-foreground">{text}</p></div>)}</CardContent></Card>; }
+function EmptyDiagnostic() {
+  const steps = [["01", "LEITURA", "Coleta local e consentida."], ["02", "EVIDÊNCIA", "Campos realmente observados."], ["03", "DIAGNÓSTICO", "Sinal técnico específico."], ["04", "RECOMENDAÇÃO", "Próximo passo sem execução."], ["05", "VERIFICAÇÃO", "Nova leitura local."]];
+  return <Card className="border-dashed"><CardContent className="grid gap-4 p-6 md:grid-cols-5">{steps.map(([id, title, text]) => <div key={id} className="rounded-xl border bg-card/40 p-4"><p className="font-tech text-[10px] tracking-[.14em] text-primary">{id} / {title}</p><p className="mt-3 text-sm leading-6 text-muted-foreground">{text}</p></div>)}</CardContent></Card>;
+}
 
-function DiagnosticResults({ report, findings, run, running }: { report: ScannerReport; findings: LinuxHealthFinding[]; run: () => void; running: boolean }) { const attention = findings.filter((finding) => finding.severity === "attention"); const information = findings.filter((finding) => finding.severity === "info"); return <section className="grid gap-5 xl:grid-cols-[1.25fr_.75fr]"><Card className="border-amber-400/25 bg-amber-400/[0.04]"><CardHeader><p className="evidence-label text-amber-200">{findings.length} ACHADO(S) OBSERVADO(S)</p><CardTitle className="mt-1 flex items-center gap-2 text-xl"><AlertTriangle className="h-5 w-5 text-amber-200" />Sinais técnicos para revisar</CardTitle><CardDescription>Todos os achados abaixo usam somente campos presentes no relatório atual. Eles não provam uma causa raiz ou compatibilidade de jogo.</CardDescription></CardHeader><CardContent className="space-y-4"><FindingGroup label="REQUER ATENÇÃO" findings={attention} /><FindingGroup label="INFORMAÇÕES DE CONTEXTO" findings={information} /><Detail label="SOURCE" value={`Stray Scan ${report.scannerVersion} · ${new Date(report.generatedAt).toLocaleString("pt-BR")}`} /><p className="rounded-xl border border-white/10 bg-background/60 p-3 text-xs leading-5 text-muted-foreground">Risco: cada recomendação pode exigir leitura da documentação da distribuição. O Stray não executa comandos, instala pacotes ou modifica permissões por esta tela.</p><div className="flex flex-wrap gap-3"><Link href="/linuxfix"><Button variant="outline"><Wrench className="mr-2 h-4 w-4" />Consultar LinuxFix</Button></Link><Button onClick={run} disabled={running} variant="secondary"><RefreshCw className="mr-2 h-4 w-4" />Verificar novamente</Button></div></CardContent></Card><Card><CardHeader><p className="evidence-label text-primary">ANALYSIS FLOW</p><CardTitle className="mt-1 text-xl">O que sabemos e o que ainda não sabemos</CardTitle></CardHeader><CardContent className="space-y-3"><Flow title="SCAN" value="Relatório local concluído por ação explícita." icon={ScanLine} /><Flow title="EVIDENCE" value={`${findings.length} sinal(is) derivado(s) de campos detectados.`} icon={FileSearch} /><Flow title="DIAGNOSIS" value="O Stray lista sinais e limites; não define causa raiz sem evidência adicional." icon={Activity} /><Flow title="VERIFY" value="Execute novamente após qualquer mudança para comparar apenas leituras reais." icon={ShieldCheck} /></CardContent></Card></section>; }
-function FindingGroup({ label, findings }: { label: string; findings: LinuxHealthFinding[] }) { if (!findings.length) return null; return <section><p className="font-tech text-[10px] tracking-[.13em] text-muted-foreground">{label}</p><div className="mt-2 space-y-2">{findings.map((finding) => <div key={finding.id} className="rounded-xl border bg-background/50 p-4"><p className="font-medium">{finding.title}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{finding.detail}</p><p className="mt-2 text-sm leading-6"><strong>Ação recomendada:</strong> {finding.recommendedAction}</p></div>)}</div></section>; }
+function DiagnosticResults({ report, findings, run, running }: { report: ScannerReport; findings: LinuxHealthFinding[]; run: () => void; running: boolean }) {
+  const attention = findings.filter((finding) => finding.severity === "attention");
+  const information = findings.filter((finding) => finding.severity === "info");
+  return <section className="grid gap-5 xl:grid-cols-[1.25fr_.75fr]"><Card className="border-amber-400/25 bg-amber-400/[0.04]"><CardHeader><p className="evidence-label text-amber-200">{findings.length} ACHADO(S) OBSERVADO(S)</p><CardTitle className="mt-1 flex items-center gap-2 text-xl"><AlertTriangle className="h-5 w-5 text-amber-200" />Sinais técnicos para revisar</CardTitle><CardDescription>Todos os achados abaixo usam somente campos presentes no relatório atual. Eles não provam uma causa raiz ou compatibilidade de jogo.</CardDescription></CardHeader><CardContent className="space-y-4"><FindingGroup label="REQUER ATENÇÃO" findings={attention} /><FindingGroup label="INFORMAÇÕES DE CONTEXTO" findings={information} /><Detail label="ORIGEM" value={`Stray Scan ${report.scannerVersion} · ${new Date(report.generatedAt).toLocaleString("pt-BR")}`} /><p className="rounded-xl border border-white/10 bg-background/60 p-3 text-xs leading-5 text-muted-foreground">Risco: cada recomendação pode exigir leitura da documentação da distribuição. O Stray não executa comandos, instala pacotes ou modifica permissões por esta tela.</p><div className="flex flex-wrap gap-3"><Link href="/linuxfix"><Button variant="outline"><Wrench className="mr-2 h-4 w-4" />Consultar LinuxFix</Button></Link><Button onClick={run} disabled={running} variant="secondary"><RefreshCw className="mr-2 h-4 w-4" />Verificar novamente</Button></div></CardContent></Card><Card><CardHeader><p className="evidence-label text-primary">FLUXO DE ANÁLISE</p><CardTitle className="mt-1 text-xl">O que sabemos e o que ainda não sabemos</CardTitle></CardHeader><CardContent className="space-y-3"><Flow title="LEITURA" value="Relatório local concluído por ação explícita." icon={ScanLine} /><Flow title="EVIDÊNCIA" value={`${findings.length} sinal(is) derivado(s) de campos detectados.`} icon={FileSearch} /><Flow title="DIAGNÓSTICO" value="O Stray lista sinais e limites; não define causa raiz sem evidência adicional." icon={Activity} /><Flow title="VERIFICAÇÃO" value="Execute novamente após qualquer mudança para comparar apenas leituras reais." icon={ShieldCheck} /></CardContent></Card></section>;
+}
 
-function Detail({ label, value }: { label: string; value: string }) { return <div className="rounded-xl border bg-background/50 p-4"><p className="font-tech text-[9px] tracking-[.13em] text-muted-foreground">{label}</p><p className="mt-2 text-sm leading-6">{value}</p></div>; }
-function Flow({ title, value, icon: Icon }: { title: string; value: string; icon: typeof Activity }) { return <div className="flex gap-3 rounded-xl border bg-card/40 p-4"><Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><div><p className="font-tech text-[9px] tracking-[.13em] text-primary">{title}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{value}</p></div></div>; }
+function FindingGroup({ label, findings }: { label: string; findings: LinuxHealthFinding[] }) {
+  if (!findings.length) return null;
+  return <section><p className="font-tech text-[10px] tracking-[.13em] text-muted-foreground">{label}</p><div className="mt-2 space-y-2">{findings.map((finding) => <div key={finding.id} className="rounded-xl border bg-background/50 p-4"><p className="font-medium">{finding.title}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{finding.detail}</p><p className="mt-2 text-sm leading-6"><strong>Ação recomendada:</strong> {finding.recommendedAction}</p></div>)}</div></section>;
+}
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return <div className="rounded-xl border bg-background/50 p-4"><p className="font-tech text-[9px] tracking-[.13em] text-muted-foreground">{label}</p><p className="mt-2 text-sm leading-6">{value}</p></div>;
+}
+
+function Flow({ title, value, icon: Icon }: { title: string; value: string; icon: typeof Activity }) {
+  return <div className="flex gap-3 rounded-xl border bg-card/40 p-4"><Icon className="mt-0.5 h-4 w-4 shrink-0 text-primary" /><div><p className="font-tech text-[9px] tracking-[.13em] text-primary">{title}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{value}</p></div></div>;
+}

@@ -4,7 +4,7 @@
 
 [Site oficial](https://linuxtoys-ckuyvpj5.manus.space) · [Downloads verificados](https://linuxtoys-ckuyvpj5.manus.space/download) · [Desinstalação](https://linuxtoys-ckuyvpj5.manus.space/uninstall)
 
-[Arquitetura](docs/ARCHITECTURE.md) · [Contribuição](CONTRIBUTING.md) · [Segurança](SECURITY.md) · [Conduta](CODE_OF_CONDUCT.md)
+[Arquitetura](docs/ARCHITECTURE.md) · [Ambiente](docs/ENVIRONMENT.md) · [Auditoria final](docs/FINAL_AUDIT_2026-08-18.md) · [Contribuição](CONTRIBUTING.md) · [Segurança](SECURITY.md) · [Conduta](CODE_OF_CONDUCT.md)
 
 O **Stray Linux** combina um site institucional com um aplicativo desktop. O aplicativo é voltado a jogadores Linux que precisam entender o próprio ambiente, organizar a biblioteca local, consultar conteúdo técnico com origem visível e registrar sessões sem converter suposições em métricas. A interface utiliza React e TypeScript; o servidor usa Express/tRPC. No Electron, os dados operacionais ficam em um SQLite local, portanto **não é necessário fornecer `DATABASE_URL`**.
 

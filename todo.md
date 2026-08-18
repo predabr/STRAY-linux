@@ -536,3 +536,21 @@ Incidente confirmado pelo usuário em 16/08/2026: instalação Pacman concluía,
 - [x] Preparar contrato de cobrança dinâmica futura com segredo de webhook, validação de assinatura e idempotência, sem ativar integração inexistente.
 - [x] Testar payload, QR, ausência de segredo público, interface responsiva, TypeScript, build e regressões.
 - [x] Validar estrutura TLV, CRC16, tamanho do BR Code, renderização QR e indicação explícita de que não existe confirmação automática sem gateway.
+
+## Auditoria final profunda
+- [x] Inventariar funcionalidades, rotas, componentes, contratos tRPC, scripts, dependências, documentação e configurações sem alterar comportamentos.
+- [x] Auditar todas as superfícies públicas e operacionais para navegação, links, botões, loading, erro, vazio, feedback, responsividade, foco e acessibilidade.
+- [x] Auditar backend, autenticação, APIs, banco, variáveis de ambiente, integrações, Pix, logs e segurança contra divergências ou exposição indevida.
+- [x] Corrigir exclusivamente problemas comprovados e atualizar documentação/contratos correspondentes, preservando funcionalidades existentes.
+- [x] Executar segunda varredura: TypeScript, testes, build, política de dependências, distribuição, logs e revisão visual desktop/mobile.
+- [ ] Publicar a auditoria final, sincronizar GitHub e registrar limitações reais de serviços externos não configurados.
+- [x] Remover stack trace exposto e texto em inglês do limite global de erros, preservando recuperação acessível da aplicação.
+- [x] Corrigir feedback, reversão de erro e rótulo de revisão na sincronização de preferências da conta.
+- [x] Tipar as mutações locais permissivas e impedir que a revisão de benchmark declare verificação sem validação persistida.
+- [x] Alinhar a documentação pública da API v1 à rota de descoberta e às respostas SVG de badge.
+- [x] Corrigir a nomenclatura de configuração da IA e documentar todas as variáveis de ambiente por escopo e necessidade.
+- [x] Localizar a tela 404 e oferecer retorno seguro para uma rota válida, sem texto residual em inglês.
+- [x] Localizar os rótulos técnicos visíveis do Diagnóstico para manter a interface principal coerente em português.
+- [ ] Localizar as etiquetas visíveis de Performance e Configurações para eliminar inglês residual da interface principal.
+- [ ] Localizar etiquetas residuais em inglês nas superfícies de moderação, administração e sincronização, preservando termos técnicos e rotas.
+- [x] Diferenciar visualmente o Scanner indisponível no navegador, mantendo a ação local bloqueada e a orientação para o aplicativo desktop.

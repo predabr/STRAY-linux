@@ -42,4 +42,14 @@ describe("contrato local do desktop", () => {
     expect(normalized).toHaveLength(1);
     expect(normalized[0]).toMatchObject({ id: game.id, matchMethod: "normalized-title" });
   });
+
+  it("rejeita entradas locais fora do contrato e não simula revisão de benchmark", async () => {
+    const caller = desktopRouter.createCaller({} as never);
+    await expect(caller.user.profiles.upsert({ name: "", isActive: true })).rejects.toThrow();
+    await expect(caller.user.reports.create({ subjectType: "game", subjectId: 1, type: "other", description: "curto" })).rejects.toThrow();
+    await expect(caller.benchmarks.submit({ gameId: 1, sourceLabel: "", results: [] })).rejects.toThrow();
+
+    const review = await caller.benchmarks.review({ id: 1 });
+    expect(review).toMatchObject({ success: false, status: "unavailable" });
+  });
 });
