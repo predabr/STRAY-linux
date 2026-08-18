@@ -8,7 +8,7 @@ const read = (relativePath: string) => fs.readFileSync(path.join(projectRoot, re
 describe("apresentação de jogos", () => {
   it("usa fallback próprio quando não há mídia registrada", () => {
     const card = read("client/src/components/platform/GameCard.tsx");
-    expect(card).toContain("FALLBACK DE CATÁLOGO");
+    expect(card).toContain("SEM MÍDIA AUTORIZADA");
     expect(card).toContain("STRAY / CATALOG OBJECT");
     expect(card).toContain("game.coverImageUrl");
   });

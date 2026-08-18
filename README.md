@@ -6,6 +6,12 @@
 
 [Arquitetura](docs/ARCHITECTURE.md) · [Ambiente](docs/ENVIRONMENT.md) · [Auditoria final](docs/FINAL_AUDIT_2026-08-18.md) · [Contribuição](CONTRIBUTING.md) · [Segurança](SECURITY.md) · [Conduta](CODE_OF_CONDUCT.md)
 
+## GitHub oficial
+
+O código-fonte, as releases documentadas e as contribuições do projeto estão em [**github.com/predabr/STRAY-linux**](https://github.com/predabr/STRAY-linux). O QR Code abaixo aponta somente para esse repositório oficial; **não é um QR de pagamento**.
+
+<a href="https://github.com/predabr/STRAY-linux"><img src="https://linuxtoys-ckuyvpj5.manus.space/manus-storage/stray-linux-github-qr_29fbff19.svg" width="168" alt="QR Code do GitHub oficial do Stray Linux" /></a>
+
 O **Stray Linux** combina um site institucional com um aplicativo desktop. O aplicativo é voltado a jogadores Linux que precisam entender o próprio ambiente, organizar a biblioteca local, consultar conteúdo técnico com origem visível e registrar sessões sem converter suposições em métricas. A interface utiliza React e TypeScript; o servidor usa Express/tRPC. No Electron, os dados operacionais ficam em um SQLite local, portanto **não é necessário fornecer `DATABASE_URL`**.
 
 ## Versão 1.2.0

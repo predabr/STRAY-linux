@@ -1,5 +1,13 @@
 # Project TODO
 
+## GameHub e GitHub institucional — nova solicitação
+- [x] Auditar a disponibilidade, origem autorizada, proporção e fallback das capas do GameHub e da Biblioteca local.
+- [x] Melhorar a hierarquia dos botões e das informações de jogo sem fabricar metadados ou mídia ausente.
+- [x] Adicionar QR Code institucional que direcione exclusivamente ao GitHub oficial no site, no aplicativo e no README.
+- [x] Validar em desktop e mobile, executar testes/build/empacotamento desta rodada.
+- [ ] Salvar checkpoint publicado para a rodada de GameHub e QR institucional após as validações aprovadas.
+- [ ] Sincronizar o checkpoint desta rodada no GitHub `main` e registrar o hash publicado.
+
 - [x] Definir a arquitetura híbrida web/Electron, a estratégia de banco local e o modo de operação sem serviços externos obrigatórios.
 - [x] Mapear fontes públicas permitidas para catálogo de jogos, compatibilidade, benchmarks e documentação oficial de distribuições.
 - [x] Modelar e aplicar o schema Drizzle para jogos, tags, plataformas, distros, versões, hardware, compatibilidade, benchmarks, wiki, guias, LinuxFix, perfis, favoritos, reports e auditoria.

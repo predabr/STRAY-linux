@@ -1,6 +1,7 @@
 import { ExternalLink, Github, HeartHandshake, LockKeyhole, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PixContributionPanel } from "@/components/PixContributionPanel";
+import { GithubProjectQr } from "@/components/GithubProjectQr";
 
 const GITHUB_URL = "https://github.com/predabr/STRAY-linux";
 
@@ -22,6 +23,7 @@ export default function ProjectSupport() {
               <Button asChild variant="outline" className="h-11"><a href={GITHUB_URL} target="_blank" rel="noreferrer"><Github className="mr-2 h-4 w-4" />Abrir GitHub oficial <ExternalLink className="ml-2 h-3.5 w-3.5" /></a></Button>
             </div>
             <div className="mt-6 max-w-xl"><PixContributionPanel tone="light" /></div>
+            <GithubProjectQr className="mt-4 max-w-xl" tone="light" />
           </div>
           <aside className="rounded-3xl border border-primary/25 bg-primary/[.06] p-6 sm:p-8">
             <p className="font-tech text-[10px] tracking-[.18em] text-primary">PAGAMENTO / PROTEÇÃO</p>
