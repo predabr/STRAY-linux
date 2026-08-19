@@ -1,7 +1,9 @@
 # Project TODO
 
 ## Integração de PRD e prompt operacional
-- [ ] Executar as fases aprovadas autonomamente, sem solicitar aprovações intermediárias, comunicando somente progresso, bloqueios reais e entrega validada.
+- [x] Executar as fases aprovadas autonomamente, sem solicitar aprovações intermediárias, comunicando somente progresso, bloqueios reais e entrega validada.
+- [x] Registrar em documentação/checkpoint final um resumo verificável da execução autônoma e da entrega validada, vinculando fases concluídas, validações finais e publicação 1.3.0.
+- [x] Adicionar uma regressão simples que confirme a presença do documento de fechamento e seus registros de validação da versão 1.3.0.
 - [x] Concluir a integração institucional do roadmap antes de iniciar os pilares funcionais de Centro de Operações, Biblioteca, Diagnóstico/LinuxFix e Stray AI.
 - [x] Mapear e transformar o PRD 1.3 em conteúdo de visão, princípios e roadmap distinguindo claramente capacidades atuais de planejamento; a versão editorial foi incorporada em `docs/PRODUCT_VISION_1_3.md` com compromissos, fases de intenção e limites explícitos.
 - [x] Renderizar na rota `/roadmap` as fases reais do PRD 1.3, critérios de confiança e limites do produto, distinguindo planejamento de funcionalidades já entregues.
@@ -17,8 +19,8 @@
 - [x] Incluir no resumo do roadmap o aviso específico e localizado de que status de produto não garantem funcionamento universal em cada computador.
 - [x] Exibir no resumo da página inicial os três estados de roadmap com explicação curta e localizada dos estados, distinta do texto genérico de evidência, e acesso ao detalhamento das cinco fases, critérios, limites e princípios.
 - [x] Organizar os três estados do resumo em etiquetas discretas, alinhadas e responsivas, em vez de uma linha extensa.
-- [ ] Após as validações finais, publicar o site atualizado e sincronizar integralmente o branch `main` no GitHub com o checkpoint correspondente.
-- [ ] Manter a versão atual até concluir funcionalidades reais da 1.3; então alinhar versão, site, artefatos de instalação, feeds e GitHub em uma única publicação validada.
+- [x] Após as validações finais, publicar o site atualizado e sincronizar integralmente o branch `main` no GitHub com o checkpoint correspondente; o GitHub recebeu o commit `810c7ff` e o domínio foi revalidado.
+- [x] Manter a versão atual até concluir funcionalidades reais da 1.3; então alinhar versão, site, artefatos de instalação, feeds e GitHub em uma única publicação validada; a release 1.3.0 publicou os cinco formatos, feeds, redirects e sidecars SHA-256.
 
 ## Stray Linux 1.3 — Operação Local Confiável
 - [x] Concluir todos os pilares reais da 1.3 — Centro de Operações, Biblioteca, Diagnóstico/LinuxFix, Stray AI, qualidade, localização e distribuição — antes de atualizar a versão ou publicar novos instaladores; a matriz 1.3.0 foi criada somente após testes, typecheck, build, auditoria, revisão visual e validação dos sidecars.
@@ -40,7 +42,7 @@
 - [x] Preservar cobertura das 11 localidades, acessibilidade, contratos IPC e limites de privacidade para cada alteração; as novas mensagens foram cobertas no catálogo, a regressão sintática não encontrou texto JSX sem catálogo e a suíte inclui contrato da ponte desktop.
 - [x] Adicionar regressões específicas de acessibilidade para Biblioteca, Diagnóstico e Stray AI, incluindo estados desabilitados, feedback, rótulos e navegação acionável.
 - [x] Adicionar regressões de privacidade que comprovem Biblioteca local-first, Diagnóstico sem automação destrutiva e Stray AI sem envio indevido de contexto.
-- [ ] Executar testes, typecheck, build, auditoria de dependências, revisão visual, empacotamento aplicável, checkpoint e sincronização GitHub.
+- [x] Executar testes, typecheck, build, auditoria de dependências, revisão visual, empacotamento aplicável, checkpoint e sincronização GitHub; foram aprovados 187 testes, TypeScript, build, auditoria, revisão desktop/mobile, cinco pacotes e auditoria pública Pacman por redirect/SHA-256/contêiner.
 
 ## Redesign preto e localização integral — nova solicitação
 - [x] Inventariar textos visíveis, chaves de tradução, fallback de idioma e superfícies do aplicativo desktop; confirmado que o catálogo estático contém 493 entradas por localidade, mas rótulos estruturais do shell não fazem parte dele.
