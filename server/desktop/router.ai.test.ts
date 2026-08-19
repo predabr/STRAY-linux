@@ -18,6 +18,15 @@ describe("Stray AI no modo desktop", () => {
 
 describe("contrato local do desktop", () => {
   beforeAll(async () => { process.env.DESKTOP_DATA_DIR = fs.mkdtempSync(path.join(os.tmpdir(), "stray-router-test-")); process.env.DESKTOP_SEED_PATH = path.resolve("desktop/seed/initial-data.json"); await initializeDesktopStore(); });
+  it("organiza orientação local por evidência, lacunas, pré-requisitos, risco e reversão", async () => {
+    const caller = desktopRouter.createCaller({} as never);
+    const result = await caller.chat.ask({ question: "Como verificar Vulkan no Linux?" });
+    expect(result.answer).toContain("### Evidência disponível");
+    expect(result.answer).toContain("### Lacunas e pré-requisitos");
+    expect(result.answer).toContain("### Risco e reversão");
+    expect(result.answer).toContain("Nenhuma alteração é executada pelo Stray AI");
+  });
+
   it("expõe snapshots e saúde SQLite pelos caminhos user usados pelo cliente", async () => {
     const caller = desktopRouter.createCaller({} as never);
     const snapshots = await caller.user.snapshots.list();

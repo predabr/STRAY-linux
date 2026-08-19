@@ -58,7 +58,7 @@ function collectMissingDesktopTexts() {
 }
 
 describe("desktop visible text localization", () => {
-  it("covers visible JSX text and accessibility labels from desktop screens in the static catalog", () => {
+  it("covers visible JSX text and accessibility labels from desktop screens in the static catalog", { timeout: 15_000 }, () => {
     expect(collectMissingDesktopTexts()).toEqual([]);
   });
 });

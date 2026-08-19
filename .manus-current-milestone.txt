@@ -1,0 +1,5 @@
+operations=validated
+library=feedback-regression-validated; art-state-pending
+technical-flows=baseline-validated
+tests=180 typecheck=passed
+next=complete-library-art-state-and-technical-flows

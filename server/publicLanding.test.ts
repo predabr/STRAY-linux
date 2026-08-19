@@ -29,12 +29,13 @@ describe("landing pública", () => {
 
   it("mantém a página inicial fora do shell operacional", () => {
     const app = read("client/src/App.tsx");
-    expect(app).toContain('const publicPage = location === "/" || location === "/download" || location === "/uninstall" || location === "/support" || (location === "/changelog" && !window.strayDesktop);');
+    expect(app).toContain('const publicPage = location === "/" || location === "/download" || location === "/uninstall" || location === "/support" || location === "/roadmap" || (location === "/changelog" && !window.strayDesktop);');
     expect(app).toContain('if (publicPage) return location === "/" ? <Home />');
     expect(app).toContain('const DownloadPage = lazy(() => import("@/pages/Home")');
     expect(app).toContain('location === "/download" ? <DownloadPage />');
     expect(app).toContain('location === "/uninstall" ? <Uninstall />');
     expect(app).toContain('location === "/changelog" ? <Changelog />');
+    expect(app).toContain('location === "/roadmap" ? <Roadmap />');
     expect(app).toContain("<ProductWorkspace><Router /></ProductWorkspace>");
   });
 
@@ -76,7 +77,7 @@ describe("landing pública", () => {
     expect(workspace).toContain("advancedOpen || advancedRouteActive");
     expect(workspace).toContain('href: "/assistant", label: copy.assistant');
     expect(copy).toContain('tools: "MAIS FERRAMENTAS"');
-    expect(copy).toContain('version: "Versão 1.2.0"');
+    expect(copy).toContain('version: "Versão 1.3.0"');
   });
 
   it("documenta remoção segura sem limpar dados locais automaticamente", () => {

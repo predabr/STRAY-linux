@@ -17,6 +17,10 @@ describe("experiência Stray AI", () => {
   it("mantém a explicação de escopo e limitações no console", () => {
     const assistant = read("client/src/pages/Assistant.tsx");
     expect(assistant).toContain("Escopo técnico controlado");
+    expect(assistant).toContain("Perfil, Scanner e fontes internas entram somente quando existem.");
     expect(assistant).toContain("A IA não executa comandos nem inventa resultados");
+    expect(assistant).toContain("Pedidos de código, jogos e temas externos ficam fora do escopo");
+    expect(assistant).toContain("Ausência de evidência continua sendo ausência");
+    expect(assistant).toContain("verifique a evidência antes de mudar o sistema");
   });
 });

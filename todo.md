@@ -1,5 +1,47 @@
 # Project TODO
 
+## Integração de PRD e prompt operacional
+- [ ] Executar as fases aprovadas autonomamente, sem solicitar aprovações intermediárias, comunicando somente progresso, bloqueios reais e entrega validada.
+- [x] Concluir a integração institucional do roadmap antes de iniciar os pilares funcionais de Centro de Operações, Biblioteca, Diagnóstico/LinuxFix e Stray AI.
+- [x] Mapear e transformar o PRD 1.3 em conteúdo de visão, princípios e roadmap distinguindo claramente capacidades atuais de planejamento; a versão editorial foi incorporada em `docs/PRODUCT_VISION_1_3.md` com compromissos, fases de intenção e limites explícitos.
+- [x] Renderizar na rota `/roadmap` as fases reais do PRD 1.3, critérios de confiança e limites do produto, distinguindo planejamento de funcionalidades já entregues.
+- [x] Expor na interface uma seção de “Princípios de desenvolvimento” derivada da versão segura do prompt operacional, sem credenciais, segredos ou instruções inseguras.
+- [x] Criar cópias tipadas próprias para `/roadmap` e sua navegação nas 11 localidades, usando-as explicitamente em rota, site e aplicativo, com regressões e revisão visual desktop/mobile.
+- [x] Usar “Roadmap” — com equivalente localizado quando apropriado — como rótulo principal tipado de navegação para a visão de produto em site e aplicativo.
+- [x] Adicionar o Roadmap em Mais ferramentas no aplicativo com ícone, cópia localizada e rota preservada.
+- [x] Exibir integralmente as cinco fases do roadmap, os critérios de publicação e os limites de dados/automação tanto no site quanto no aplicativo.
+- [x] Exibir status explícito e localizado por fase — em planejamento, em desenvolvimento ou validada — sem usar status para prometer funcionalidades inexistentes.
+- [x] Aplicar etiquetas de status suaves, discretas e acessíveis, com baixa saturação e contraste suficiente, sem introduzir cores agressivas no tema preto minimalista.
+- [x] Adicionar à página inicial um resumo localizado dos status do roadmap com acesso à visão detalhada, sem substituir conteúdo de downloads ou prometer entrega futura.
+- [x] Implementar o acesso ao Roadmap como link editorial discreto com linha de status resumida na página inicial, mantendo as fases e critérios detalhados exclusivamente na rota dedicada.
+- [x] Incluir no resumo do roadmap o aviso específico e localizado de que status de produto não garantem funcionamento universal em cada computador.
+- [x] Exibir no resumo da página inicial os três estados de roadmap com explicação curta e localizada dos estados, distinta do texto genérico de evidência, e acesso ao detalhamento das cinco fases, critérios, limites e princípios.
+- [x] Organizar os três estados do resumo em etiquetas discretas, alinhadas e responsivas, em vez de uma linha extensa.
+- [ ] Após as validações finais, publicar o site atualizado e sincronizar integralmente o branch `main` no GitHub com o checkpoint correspondente.
+- [ ] Manter a versão atual até concluir funcionalidades reais da 1.3; então alinhar versão, site, artefatos de instalação, feeds e GitHub em uma única publicação validada.
+
+## Stray Linux 1.3 — Operação Local Confiável
+- [x] Concluir todos os pilares reais da 1.3 — Centro de Operações, Biblioteca, Diagnóstico/LinuxFix, Stray AI, qualidade, localização e distribuição — antes de atualizar a versão ou publicar novos instaladores; a matriz 1.3.0 foi criada somente após testes, typecheck, build, auditoria, revisão visual e validação dos sidecars.
+- [x] Inventariar o baseline de Centro de Operações, Scanner, Biblioteca, Diagnóstico, LinuxFix e Stray AI, incluindo controles Electron e estados indisponíveis no navegador; Dashboard consulta snapshots e recomendações, Scanner/Dados locais dependem da ponte Electron, Biblioteca já lê Steam/Heroic/pastas consentidas, Diagnóstico preserva prévia/exportação e LinuxFix/Stray AI mantêm ações explícitas e limites de evidência.
+- [x] Ajustar o cartão de leitura local do Centro de Operações; a ausência agora encaminha diretamente ao Scanner e leituras existentes expõem sistema, CPU, GPU, Vulkan, biblioteca e continuidade para Scanner/Diagnóstico com regressão dedicada.
+- [x] Validar os limites de ação da Biblioteca: Steam abre somente por URI autorizado, enquanto Heroic e pastas externas mantêm descoberta e abertura local explícitas, sem launch simulado.
+- [x] Reforçar a regressão do Centro de Operações para cobrir encaminhamento de snapshot ausente para Scanner, Biblioteca e Diagnóstico.
+- [x] Reorganizar de forma verificável o dashboard/Centro de Operações inteiro — hero, métricas, leitura recente, campos ausentes e recomendações seguras — sem confundir ausência de leitura com falha de consulta; o hero agora deriva de um modelo de decisão com leitura pendente, consulta indisponível, perfil pendente e evidências disponíveis.
+- [x] Adicionar regressões de apresentação para o fluxo completo do Centro de Operações, cobrindo ausência de leitura, erro de consulta e recomendações seguras do overview; `Dashboard.presentation.test.tsx` renderiza o overview completo nos três cenários e confirma hero, métricas, leitura recente, recomendações e CTAs.
+- [x] Reorganizar o hero e as métricas do Centro de Operações com estados explícitos calculados apenas de dados locais existentes, sem inferir saúde, desempenho ou compatibilidade; ausência de snapshot aparece como travessão, e não como zero.
+- [x] Adicionar testes de apresentação renderizados para os três estados do overview: sem leitura, consulta de recomendações indisponível e recomendações disponíveis, conferindo conteúdo e ações acessíveis; cada cenário é renderizado estaticamente a partir do componente real e verifica destinos dos controles e afirmações de evidência.
+- [x] Validar visualmente e por regressão que métricas, campos ausentes e recomendações não confundem falta de dados com falha de consulta; a captura desktop confirmou o estado sem snapshot com métricas em travessão, e os estados de consulta indisponível e evidências disponíveis foram confirmados pelo markup renderizado do overview completo.
+- [x] Aprimorar Biblioteca e detalhes de jogos locais com origem, ações explícitas, feedback e estados honestos de arte ausente; Steam mantém URI explícita, Heroic/pastas mantêm ações locais e o cartão não inventa arte indisponível.
+- [x] Na Biblioteca local, propagar o estado de abertura de pasta ao cartão e identificar explicitamente quando não há arte disponível nesta leitura.
+- [x] Estruturar Diagnóstico, LinuxFix e Stray AI por evidência observada, lacunas, pré-requisitos, risco e reversão, sem automação destrutiva; o Diagnóstico classifica campos nulos como lacunas, LinuxFix exibe pré-requisito/risco/verificação/reversão por passo e a IA mantém contexto condicional e recusa fora de escopo.
+- [x] No Diagnóstico, separar campos observados de lacunas de leitura e declarar que a reversão é desnecessária quando nenhuma ação foi aplicada.
+- [x] Estruturar as respostas da Stray AI com seções explícitas de evidência disponível, lacunas, pré-requisitos, risco e reversão quando aplicável, sem executar ações no sistema.
+- [x] Adicionar regressão da Stray AI cobrindo essas seções e garantindo que ausência de evidência não vire diagnóstico, risco ou reversão inventados.
+- [x] Preservar cobertura das 11 localidades, acessibilidade, contratos IPC e limites de privacidade para cada alteração; as novas mensagens foram cobertas no catálogo, a regressão sintática não encontrou texto JSX sem catálogo e a suíte inclui contrato da ponte desktop.
+- [x] Adicionar regressões específicas de acessibilidade para Biblioteca, Diagnóstico e Stray AI, incluindo estados desabilitados, feedback, rótulos e navegação acionável.
+- [x] Adicionar regressões de privacidade que comprovem Biblioteca local-first, Diagnóstico sem automação destrutiva e Stray AI sem envio indevido de contexto.
+- [ ] Executar testes, typecheck, build, auditoria de dependências, revisão visual, empacotamento aplicável, checkpoint e sincronização GitHub.
+
 ## Redesign preto e localização integral — nova solicitação
 - [x] Inventariar textos visíveis, chaves de tradução, fallback de idioma e superfícies do aplicativo desktop; confirmado que o catálogo estático contém 493 entradas por localidade, mas rótulos estruturais do shell não fazem parte dele.
 - [x] Verificar novamente código, banco local, configurações e documentação por CPF, chave Pix ou outro dado financeiro residual; a varredura de código e documentação não encontrou dado publicado, somente nomes de variáveis e orientações de segurança.

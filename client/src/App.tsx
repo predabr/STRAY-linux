@@ -53,6 +53,7 @@ const Sync = lazy(() => import("@/pages/Sync"));
 const Uninstall = lazy(() => import("@/pages/Uninstall"));
 const WindowsHub = lazy(() => import("@/pages/WindowsHub"));
 const Changelog = lazy(() => import("@/pages/Changelog"));
+const Roadmap = lazy(() => import("@/pages/Roadmap"));
 
 function Router() {
   return <Suspense fallback={<div className="min-h-screen bg-background"><div className="container py-14"><div className="h-5 w-32 animate-pulse rounded bg-muted" /><div className="mt-5 h-12 max-w-xl animate-pulse rounded bg-muted" /><div className="mt-7 h-72 animate-pulse rounded-2xl bg-muted" /></div></div>}><Switch>
@@ -63,6 +64,7 @@ function Router() {
     <Route path="/benchmark" component={Benchmark} />
     <Route path="/support" component={Support} />
     <Route path="/changelog" component={Changelog} />
+    <Route path="/roadmap" component={Roadmap} />
     <Route path="/project-support" component={ProjectSupport} />
     <Route path="/controllers" component={Controllers} />
     <Route path="/diagnostics" component={Diagnostics} />
@@ -109,8 +111,8 @@ function App() {
 
 function ApplicationSurface() {
   const [location] = useLocation();
-  const publicPage = location === "/" || location === "/download" || location === "/uninstall" || location === "/support" || (location === "/changelog" && !window.strayDesktop);
-  if (publicPage) return location === "/" ? <Home /> : location === "/download" ? <DownloadPage /> : location === "/uninstall" ? <Uninstall /> : location === "/changelog" ? <Changelog /> : <Support />;
+  const publicPage = location === "/" || location === "/download" || location === "/uninstall" || location === "/support" || location === "/roadmap" || (location === "/changelog" && !window.strayDesktop);
+  if (publicPage) return location === "/" ? <Home /> : location === "/download" ? <DownloadPage /> : location === "/uninstall" ? <Uninstall /> : location === "/changelog" ? <Changelog /> : location === "/roadmap" ? <Roadmap /> : <Support />;
   return <StrayEntryGate><DesktopStartupScanner /><ProductWorkspace><Router /></ProductWorkspace></StrayEntryGate>;
 }
 

@@ -1,5 +1,5 @@
 export const releaseManifest = {
-  version: "1.2.0",
+  version: "1.3.0",
   integrityAssets: {
     exe: "/downloads/stray-linux/windows-x64.exe.sha256",
     deb: "/downloads/stray-linux/debian-amd64.deb.sha256",

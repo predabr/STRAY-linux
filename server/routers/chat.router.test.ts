@@ -65,11 +65,13 @@ describe("assistente: continuidade, contexto e autorização", () => {
     expect(harness.writes[2]).toMatchObject({ role: "assistant", content: STRAY_AI_OUT_OF_SCOPE_RESPONSE });
   });
 
-  it("exige diagnóstico estruturado, evidência e limites sem prometer resultado", () => {
+  it("exige diagnóstico estruturado, evidência, lacunas, pré-requisitos, risco e limites sem prometer resultado", () => {
     const prompt = buildStrayAiSystemPrompt("PERFIL TÉCNICO ATIVO: indisponível.");
     expect(prompt).toContain("Leitura do caso");
     expect(prompt).toContain("Evidência disponível");
+    expect(prompt).toContain("Lacunas e pré-requisitos");
     expect(prompt).toContain("Ações seguras");
+    expect(prompt).toContain("Risco e reversão");
     expect(prompt).toContain("Limites");
     expect(prompt).toContain("guia da distribuição ativa");
     expect(prompt).toContain("MODO DE SESSÃO: visitante");
@@ -97,12 +99,16 @@ describe("assistente: continuidade, contexto e autorização", () => {
     vi.mocked(invokeLLM).mockRejectedValueOnce(new Error("upstream unavailable"));
     const result = await visitorCaller().chat.askPublic({ question: "Como verificar Vulkan no Linux?" });
     expect(result.answer).toContain("O provedor do Stray AI não respondeu neste momento.");
+    expect(result.answer).toContain("### Lacunas e pré-requisitos");
+    expect(result.answer).toContain("### Risco e reversão");
     expect(result.answer).toContain("### Limites");
   });
 
   it("explica indisponibilidade do contexto sem inventar uma resposta técnica", () => {
     const answer = contextUnavailableFallback();
     expect(answer).toContain("base de conteúdo do Stray AI não está disponível");
+    expect(answer).toContain("### Lacunas e pré-requisitos");
+    expect(answer).toContain("### Risco e reversão");
     expect(answer).toContain("### Limites");
     expect(answer).toContain("Nenhum comando, causa, compatibilidade, FPS ou resultado");
   });

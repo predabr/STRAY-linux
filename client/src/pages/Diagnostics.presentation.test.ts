@@ -10,6 +10,9 @@ describe("diagnóstico", () => {
     expect(source).toContain('variant={desktopAvailable ? "default" : "outline"}');
     expect(source).toContain("Scanner no app desktop");
     expect(source).toContain("disabled={running || !desktopAvailable}");
+    expect(source).toContain("maintenance.preview()");
+    expect(source).toContain("Exportar diagnóstico");
+    expect(source).toContain("O Stray não executa comandos, instala pacotes ou modifica permissões por esta tela.");
     expect(source).not.toContain("WHAT'S WRONG?");
     expect(source).not.toContain("LOCAL DIAGNOSTICS");
   });
