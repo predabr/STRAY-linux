@@ -4,6 +4,8 @@
 - [x] Executar as fases aprovadas autonomamente, sem solicitar aprovações intermediárias, comunicando somente progresso, bloqueios reais e entrega validada.
 - [x] Registrar em documentação/checkpoint final um resumo verificável da execução autônoma e da entrega validada, vinculando fases concluídas, validações finais e publicação 1.3.0.
 - [x] Adicionar uma regressão simples que confirme a presença do documento de fechamento e seus registros de validação da versão 1.3.0.
+- [x] Executar auditoria final de código, runtime, build, dependências, rotas publicadas, downloads e integridade da versão 1.3.0; não houve erro funcional reproduzível nesta rodada.
+- [ ] Corrigir apenas erros comprovados, registrar achados e sincronizar integralmente o GitHub após a revalidação.
 - [x] Concluir a integração institucional do roadmap antes de iniciar os pilares funcionais de Centro de Operações, Biblioteca, Diagnóstico/LinuxFix e Stray AI.
 - [x] Mapear e transformar o PRD 1.3 em conteúdo de visão, princípios e roadmap distinguindo claramente capacidades atuais de planejamento; a versão editorial foi incorporada em `docs/PRODUCT_VISION_1_3.md` com compromissos, fases de intenção e limites explícitos.
 - [x] Renderizar na rota `/roadmap` as fases reais do PRD 1.3, critérios de confiança e limites do produto, distinguindo planejamento de funcionalidades já entregues.
